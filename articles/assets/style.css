@@ -1,0 +1,232 @@
+/* Base reset */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 16px;
+}
+
+body {
+    margin: 0;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    line-height: 1.6;
+    color: #111827;
+    background-color: #ffffff;
+}
+
+/* Layout */
+.container {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 0 1.5rem;
+}
+
+/* Article layout */
+.article {
+    padding: 2rem 0 3rem;
+}
+
+.article-header {
+    margin-bottom: 1.5rem;
+}
+
+.article-category {
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.75rem;
+    color: #6b7280;
+    margin-bottom: 0.5rem;
+}
+
+.article-title {
+    font-size: 2.3rem;
+    line-height: 1.1;
+    margin: 0 0 0.5rem;
+}
+
+.article-subtitle {
+    margin: 0 0 0.75rem;
+    font-size: 1rem;
+    color: #4b5563;
+}
+
+.article-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+/* Hero image */
+.article-hero {
+    margin: 1.5rem 0 2rem;
+}
+
+.article-hero img {
+    width: 100%;
+    height: auto;
+    border-radius: 0.75rem;
+}
+
+.article-hero figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+/* Article content */
+.article-content h2 {
+    margin-top: 2.25rem;
+    margin-bottom: 0.75rem;
+    font-size: 1.6rem;
+}
+
+.article-content h3 {
+    margin-top: 1.75rem;
+    margin-bottom: 0.5rem;
+    font-size: 1.25rem;
+}
+
+.article-content p {
+    margin: 0 0 1rem;
+    font-size: 1rem;
+}
+
+.article-content a {
+    color: #2563eb;
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+}
+
+.article-content a:hover {
+    text-decoration-thickness: 2px;
+}
+
+/* Code blocks and inline code */
+code {
+    font-family: "JetBrains Mono", "Fira Code", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 0.9em;
+    background-color: #f3f4f6;
+    padding: 0.1em 0.3em;
+    border-radius: 0.25rem;
+}
+
+pre {
+    margin: 1.25rem 0;
+    padding: 1rem 1.25rem;
+    background-color: #0b1020;
+    color: #e5e7eb;
+    border-radius: 0.75rem;
+    overflow-x: auto;
+    font-size: 0.9rem;
+    line-height: 1.5;
+}
+
+pre code {
+    background: none;
+    padding: 0;
+}
+
+/* Optional caption below code blocks */
+.code-caption {
+    font-size: 0.85rem;
+    color: #6b7280;
+    margin-top: -0.5rem;
+    margin-bottom: 1.25rem;
+}
+
+/* Embeds */
+.embed {
+    margin: 1.5rem 0;
+}
+
+.embed-video {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 */
+    height: 0;
+    overflow: hidden;
+    border-radius: 0.75rem;
+    background-color: #000;
+}
+
+.embed-video iframe {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
+
+/* Link preview card */
+.link-card {
+    margin: 1.5rem 0;
+    border-radius: 0.75rem;
+    border: 1px solid #e5e7eb;
+    background-color: #f9fafb;
+    overflow: hidden;
+}
+
+.link-card-main {
+    display: block;
+    padding: 1rem 1.25rem;
+    text-decoration: none;
+    color: inherit;
+}
+
+.link-card-main:hover {
+    background-color: #f3f4f6;
+}
+
+.link-card-title {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.link-card-description {
+    font-size: 0.95rem;
+    color: #4b5563;
+    margin-bottom: 0.5rem;
+}
+
+.link-card-domain {
+    font-size: 0.85rem;
+    color: #6b7280;
+}
+
+/* Gist wrapper */
+.embed-gist {
+    margin: 1.5rem 0;
+}
+
+/* Article footer */
+.article-footer {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+    font-size: 0.9rem;
+    color: #6b7280;
+}
+
+.article-footer a {
+    color: #4b5563;
+    text-decoration: none;
+}
+
+.article-footer a:hover {
+    text-decoration: underline;
+}
+
+.article-footer-copy {
+    margin-top: 0.5rem;
+}
+
+/* Responsive */
+@media (max-width: 640px) {
+    .article-title {
+        font-size: 1.9rem;
+    }
+}

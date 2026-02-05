@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>How I Built Seamless Watch ↔ Phone Handover in Wear OS</title>
+    <meta name="description"
+          content="How to implement seamless handover between Wear OS watch and phone using WearableListenerService, DataClient, and MessageClient—covering paths, data sync, and pitfalls.">
+    <meta name="author" content="James Cullimore">
+
+    <link rel="canonical" href="https://jamescullimore.dev/articles/wear-os-seamless-handover.html">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="How I Built Seamless Watch ↔ Phone Handover in Wear OS">
+    <meta property="og:description"
+          content="How to implement seamless handover between Wear OS watch and phone using WearableListenerService, DataClient, and MessageClient—covering paths, data sync, and pitfalls.">
+    <meta property="og:url" content="https://jamescullimore.dev/articles/wear-os-seamless-handover.html">
+    <meta property="og:image" content="https://jamescullimore.dev/articles/assets/phone-handover-in-wear-os.webp">
+    <meta property="og:site_name" content="James Cullimore - Software Engineering">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32x32.png">
+    <link rel="stylesheet" href="/articles/assets/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@mariusbongarts/previewbox/dist/index.min.js"></script>
+
+    <link rel="stylesheet" href="/articles/assets/prism.css">
+    <script src="/articles/assets/prism.js"></script>
+</head>
+<body>
+<main class="article">
+    <article class="container">
+        <header class="article-header">
+            <p class="article-category">Android • Wear OS • Handover</p>
+            <h1 class="article-title">How I Built Seamless Watch ↔ Phone Handover in Wear OS</h1>
+            <div class="article-meta">
+                <span>By <span class="article-author">James Cullimore</span></span>
+                <span>•</span>
+                <time datetime="2025-07-02">Jul 2, 2025</time>
+                <span>•</span>
+                <span>8 min read</span>
+            </div>
+        </header>
+
+        <figure class="article-hero">
+            <img src="/articles/assets/phone-handover-in-wear-os.webp"
+                 alt="Cover image illustrating Wear OS watch to phone handover">
+        </figure>
+
+        <section class="article-content">
+            <p>I recently worked on extending an existing Android app to include a Wear OS counterpart. The goal was to
+                build a “handover” feature, basically a way to block app usage on either the phone or the watch when the
+                other one takes control.</p>
+            <p>If the user starts a task on the phone, the watch should stop responding. If the watch initiates
+                something, the phone should lock itself out. Sounds simple, but it needs solid communication between the
+                two devices, and that’s where the fun begins.</p>
+            <p>This post breaks down how I handled communication between a Wear OS watch and its paired phone using
+                WearableListenerService, DataClient, and MessageClient. I’ll walk through each part of the
+                implementation and highlight things to watch out for, like message paths, service lifecycle, and when
+                you should start thinking about encryption if you’re passing anything sensitive.</p>
+
+            <h2>Required Dependencies</h2>
+            <p>To enable communication between your phone and watch apps, you’ll need the Wearable Data Layer API from
+                Google Play Services.</p>
+            <p>Add this to your module-level <code>build.gradle</code> or <code>build.gradle.kts</code> file:</p>
+            <p><strong>Groovy:</strong></p>
+            <pre><code
+                    class="language-groovy">implementation 'com.google.android.gms:play-services-wearable:19.0.0'</code></pre>
+            <p><strong>Kotlin DSL (using version catalog):</strong></p>
+            <pre><code class="language-kotlin">implementation(libs.play.services.wearable)</code></pre>
+            <p>And in your <code>libs.versions.toml</code>:</p>
+            <pre><code class="language-toml">play-services-wearable = { module = "com.google.android.gms:play-services-wearable", version = "19.0.0" }</code></pre>
+            <p>Without this, you won’t be able to use <code>Wearable.getDataClient()</code>,
+                <code>getMessageClient()</code>, or <code>getNodeClient()</code>, which means no messages, no data sync,
+                and no communication between devices.</p>
+
+            <h2>Listening for Data and Messages with <code>WearDataListenerService</code></h2>
+            <p>At the core of the communication is a custom <code>WearableListenerService</code>. This service runs in
+                the background and listens for messages and data changes sent between the phone and the watch.</p>
+            <p>Here’s what it looks like:</p>
+            <div class="embed embed-gist">
+                <div class="embed-gist-js">
+                    <script src="https://gist.github.com/LethalMaus/b5e6d55140cc449d7838ed0b594da22e.js?file=WearDataListenerService.kt"></script>
+                </div>
+                <noscript>
+                    <p>View the full code here: <a
+                            href="https://gist.github.com/LethalMaus/b5e6d55140cc449d7838ed0b594da22e#file-weardatalistenerservice-kt"
+                            target="_blank" rel="noopener">https://gist.github.com/LethalMaus/b5e6d55140cc449d7838ed0b594da22e#file-weardatalistenerservice-kt</a>
+                    </p>
+                </noscript>
+            </div>
+            <p>This <code>onCreate()</code> block is just a sanity check to log the connected nodes. It tells us which
+                devices are connected and ready for communication. Nothing fancy here, but useful during debugging to
+                know the service is alive and connected to something.</p>
+            <p>This service handles two kinds of callbacks:</p>
+            <ul>
+                <li><code>onMessageReceived</code> for lightweight messages</li>
+                <li><code>onDataChanged</code> for larger, structured data updates</li>
+            </ul>
+            <p>We’ll walk through both.</p>
+
+            <h2>Handling Messages with <code>onMessageReceived</code></h2>
+            <p>Messages are great for quick, one-off signals, like telling the other device to take an action. That’s
+                what <code>onMessageReceived()</code> handles.</p>
+            <div class="embed embed-gist">
+                <div class="embed-gist-js">
+                    <script src="https://gist.github.com/LethalMaus/9b58c6876853a119cc25305fa8b30ddd.js?file=WearDataListenerService.kt"></script>
+                </div>
+                <noscript>
+                    <p>View the full code here: <a
+                            href="https://gist.github.com/LethalMaus/9b58c6876853a119cc25305fa8b30ddd#file-weardatalistenerservice-kt"
+                            target="_blank" rel="noopener">https://gist.github.com/LethalMaus/9b58c6876853a119cc25305fa8b30ddd#file-weardatalistenerservice-kt</a>
+                    </p>
+                </noscript>
+            </div>
+            <p>Here, we’re listening for messages on a specific path <code>/somePath</code>. When a message comes in, we
+                respond by calling <code>publishData()</code>, which we’ll break down in a second.</p>
+            <p>The message itself doesn’t need to carry any heavy data, just the fact that it arrived is enough to
+                trigger something useful. In this case, it kicks off a data sync.</p>
+            <p>Make sure the path matches exactly on both the sender and receiver, or nothing happens. No error, no log,
+                just silence. Easy to miss during debugging.</p>
+
+            <h2>Sending Structured Data with <code>publishData()</code></h2>
+            <p>Messages are fine for triggers, but if you need to actually pass structured information, like text,
+                timestamps, or state, you’ll want to use the DataClient.</p>
+            <p>Here’s how that looks in publishData():</p>
+            <div class="embed embed-gist">
+                <div class="embed-gist-js">
+                    <script src="https://gist.github.com/LethalMaus/ead45344805dde04592b98f6c2a00c87.js?file=WearDataListenerService.kt"></script>
+                </div>
+                <noscript>
+                    <p>View the full code here: <a
+                            href="https://gist.github.com/LethalMaus/ead45344805dde04592b98f6c2a00c87#file-weardatalistenerservice-kt"
+                            target="_blank" rel="noopener">https://gist.github.com/LethalMaus/ead45344805dde04592b98f6c2a00c87#file-weardatalistenerservice-kt</a>
+                    </p>
+                </noscript>
+            </div>
+            <p>We build a PutDataMapRequest and mark it as urgent so it syncs immediately. In this case, we’re sending a
+                key-value pair ("foo": "bar") and a timestamp. Once the data is synced successfully, we locally update
+                the device using setData("Hello").</p>
+            <p>This pattern lets both devices stay in sync without having to constantly poll each other. Data gets
+                pushed only when something changes.</p>
+            <p>If your app is dealing with sensitive data, this is where you should pause and think about encryption,
+                especially if you’re storing or transmitting anything private. The Wear OS data layer doesn’t encrypt
+                payloads by default.</p>
+
+            <h2>Receiving Data with <code>onDataChanged()</code></h2>
+            <div>
+                <previewbox-link
+                        href="https://developer.android.com/training/wearables/data/data-items"></previewbox-link>
+                <noscript>
+                    <p>
+                        <a href="https://developer.android.com/training/wearables/data/data-items" target="_blank"
+                           rel="noopener">
+                            Sync Data Items with the Data Layer API (developer.android.com)
+                        </a>
+                    </p>
+                </noscript>
+            </div>
+            <p>When the other device pushes data, it lands in <code>onDataChanged()</code>. This is your entry point for
+                reacting to updates from the data layer.</p>
+            <p>Here’s the relevant code:</p>
+            <div class="embed embed-gist">
+                <div class="embed-gist-js">
+                    <script src="https://gist.github.com/LethalMaus/449f1f0214e53e0187b8a070d61758e3.js?file=WearDataListenerService.kt"></script>
+                </div>
+                <noscript>
+                    <p>View the full code here: <a
+                            href="https://gist.github.com/LethalMaus/449f1f0214e53e0187b8a070d61758e3#file-weardatalistenerservice-kt"
+                            target="_blank" rel="noopener">https://gist.github.com/LethalMaus/449f1f0214e53e0187b8a070d61758e3#file-weardatalistenerservice-kt</a>
+                    </p>
+                </noscript>
+            </div>
+            <p>Every time data is updated, this gets called. We loop through each <code>DataEvent</code>, check if it’s
+                a change, and look at the path. If it matches something we care about (in this case,
+                <code>/data-path-1</code>), we pass the item to <code>setData()</code>.</p>
+            <p>Again, paths need to match perfectly between sender and receiver. I can’t stress this enough, most “it’s
+                not working” issues in Wear data sync come down to mismatched paths.</p>
+            <p>You can also listen for deleted data if your app needs cleanup behavior, but it’s optional.</p>
+
+            <h2>Applying Received Data with <code>setData()</code></h2>
+            <p>Once data comes in and matches our expected path, we need to do something with it. That’s the job of
+                <code>setData()</code>:</p>
+            <div class="embed embed-gist">
+                <div class="embed-gist-js">
+                    <script src="https://gist.github.com/LethalMaus/02d7e471e3558ed998534f1de2790610.js?file=WearDataListenerService.kt"></script>
+                </div>
+                <noscript>
+                    <p>View the full code here: <a
+                            href="https://gist.github.com/LethalMaus/02d7e471e3558ed998534f1de2790610#file-weardatalistenerservice-kt"
+                            target="_blank" rel="noopener">https://gist.github.com/LethalMaus/02d7e471e3558ed998534f1de2790610#file-weardatalistenerservice-kt</a>
+                    </p>
+                </noscript>
+            </div>
+            <p>We extract the data using <code>DataMapItem.fromDataItem()</code>, then grab the value tied to <code>"foo"</code>.
+                In this example, it’s just stored in shared preferences, but you can adapt this to trigger UI changes,
+                update state, or whatever fits your use case.</p>
+            <p>Finally, we broadcast an intent to restart the app. This is a pattern we used to reset the app when a
+                handover happens. Either the watch or the phone gets a signal, saves the data, and restarts itself into
+                the correct state.</p>
+            <p>This kind of pattern is especially helpful when you want the devices to act like extensions of each
+                other, rather than two independent apps.</p>
+
+            <h2>Restarting the App with a Broadcast Receiver</h2>
+            <p>When a handover happens, we want the app to restart itself to reflect the new state. That’s triggered by
+                this broadcast:</p>
+            <pre><code class="language-kotlin">sendBroadcast(Intent("restartApp"))</code></pre>
+            <p>And here’s how we catch that on the receiving side:</p>
+            <div class="embed embed-gist">
+                <div class="embed-gist-js">
+                    <script src="https://gist.github.com/LethalMaus/8154efd2306f65c791704b7881a4239c.js?file=RestartAppBroadcastReceiver.kt"></script>
+                </div>
+                <noscript>
+                    <p>View the full code here: <a
+                            href="https://gist.github.com/LethalMaus/8154efd2306f65c791704b7881a4239c#file-restartappbroadcastreceiver-kt"
+                            target="_blank" rel="noopener">https://gist.github.com/LethalMaus/8154efd2306f65c791704b7881a4239c#file-restartappbroadcastreceiver-kt</a>
+                    </p>
+                </noscript>
+            </div>
+            <p>The receiver is registered like this:</p>
+            <pre><code class="language-kotlin">ContextCompat.registerReceiver(
+  this,
+  restartAppBroadcastReceiver,
+  IntentFilter("restartApp"),
+  ContextCompat.RECEIVER_EXPORTED
+)</code></pre>
+            <p>We register this receiver to listen for the <code>"restartApp"</code> action. When it fires, we
+                unregister it to avoid leaks and call <code>triggerRebirth()</code>, which restarts the app cleanly.</p>
+            <p>We use <code>ContextCompat.registerReceiver()</code> so it works across Android versions and on both the
+                watch and phone.</p>
+            <p>This setup gives us a clean handoff: the device receives data, updates its local state, and restarts to
+                reflect the new mode. No manual refreshes, no stale UI.</p>
+
+            <h2>Declaring and Starting the Listener Service</h2>
+            <p>To make everything work, we need to declare the <code>WearDataListenerService</code> in the manifest and
+                ensure it’s properly wired to receive messages and data changes.</p>
+            <p>Here’s the manifest snippet:</p>
+            <div class="embed embed-gist">
+                <div class="embed-gist-js">
+                    <script src="https://gist.github.com/LethalMaus/f9149979310df47798e5e5d3e76004dd.js?file=WearDataListenerServiceManifest.xml"></script>
+                </div>
+                <noscript>
+                    <p>View the full code here: <a
+                            href="https://gist.github.com/LethalMaus/f9149979310df47798e5e5d3e76004dd#file-weardatalistenerservicemanifest-xml"
+                            target="_blank" rel="noopener">https://gist.github.com/LethalMaus/f9149979310df47798e5e5d3e76004dd#file-weardatalistenerservicemanifest-xml</a>
+                    </p>
+                </noscript>
+            </div>
+            <p>This declares the service and the intent filters it should listen for. You need separate filters for
+                messages and data events, each with the correct paths. These must match what you’re using in your code —
+                if the paths differ, the system just ignores the messages.</p>
+            <p>To start the service manually (if needed), you can do:</p>
+            <pre><code class="language-kotlin">private fun startWearableService() {
+  val intent = Intent(this, WearDataListenerService::class.java)
+  startService(intent)
+}</code></pre>
+            <p>In most cases, Wear OS will start the service automatically when a message or data event is received.
+                Manually starting it is mainly useful during initial setup or debugging.</p>
+
+            <h2>Only Start the Listener When a Watch is Connected</h2>
+            <p>On the phone side, we use the same <code>WearDataListenerService</code>, but we don’t want it running
+                unless there’s actually a watch connected. No point wasting resources on a background service that has
+                nothing to talk to.</p>
+            <p>That’s where <code>WearableManager</code> comes in:</p>
+            <div class="embed embed-gist">
+                <div class="embed-gist-js">
+                    <script src="https://gist.github.com/LethalMaus/f417c4276b616bd588429d5cc80d531a.js?file=WearableManager.kt"></script>
+                </div>
+                <noscript>
+                    <p>View the full code here: <a
+                            href="https://gist.github.com/LethalMaus/f417c4276b616bd588429d5cc80d531a#file-wearablemanager-kt"
+                            target="_blank" rel="noopener">https://gist.github.com/LethalMaus/f417c4276b616bd588429d5cc80d531a#file-wearablemanager-kt</a>
+                    </p>
+                </noscript>
+            </div>
+            <p>Before doing anything, like syncing profile data or starting the listener, we check if a wearable is
+                connected. This avoids unnecessary service startups and keeps things efficient.</p>
+            <p>The <code>wearableIsConnected()</code> function checks for connected nodes. If none are found, the
+                service isn’t started, and data isn’t pushed. Clean and simple.</p>
+
+            <h2>Setting Up Emulators: Pairing Phone and Watch</h2>
+            <p>To test your handover feature locally, you’ll want paired emulators for phone and watch. Here’s how I set
+                it up, following Android’s official guide and emulator pairing assistant.</p>
+            <div>
+                <previewbox-link
+                        href="https://developer.android.com/training/wearables/get-started/connect-phone?hl=en"></previewbox-link>
+                <noscript>
+                    <p>
+                        <a href="https://developer.android.com/training/wearables/get-started/connect-phone?hl=en"
+                           target="_blank" rel="noopener">Connect a watch to a phone | Wear OS | Android Developers</a>
+                    </p>
+                </noscript>
+            </div>
+
+            <h3>1. Create Your Emulators</h3>
+            <ul>
+                <li>In Android Studio’s <strong>Device Manager</strong>, create two AVDs: one <strong>Wear OS</strong>
+                    device and one <strong>Phone</strong> device.
+                </li>
+                <li>For the watch, choose API level 28+ (Wear OS 3+). For the phone emulator, use Android 11+ so it
+                    supports the Wear companion app.
+                </li>
+            </ul>
+
+            <h3>2. Launch Both Emulators</h3>
+            <ul>
+                <li>Start both your phone and watch emulators before pairing. They need to be running for Android Studio
+                    to recognize them.
+                </li>
+            </ul>
+
+            <h3>3. Enable Debugging Options</h3>
+            <ul>
+                <li>On the watch emulator: go to <strong>Settings → System → About</strong>, tap <em>Build number</em>
+                    seven times to unlock Developer Options.
+                </li>
+                <li>In Developer Options, enable <strong>ADB debugging</strong> and <strong>Debug over
+                    Bluetooth</strong>.
+                </li>
+            </ul>
+
+            <h3>4. Forward ADB Port</h3>
+            <p>Forward the profiler port from the device to your host:</p>
+            <pre><code class="language-bash">adb -d forward tcp:5601 tcp:5601</code></pre>
+            <p>Adjust if prompted. This links the watch’s ADB port to the phone.</p>
+
+            <h3>5. Use the Pairing Assistant</h3>
+            <ul>
+                <li>In Device Manager, click the three‑dot overflow menu for either device and select <strong>Pair
+                    Wearable</strong>. Choose the other emulator in the wizard.
+                </li>
+                <li>On the phone emulator, open the <strong>Wear OS</strong> companion app, go to the overflow menu, and
+                    select <strong>Pair with emulator</strong>.
+                </li>
+            </ul>
+
+            <h3>6. Confirm Pairing</h3>
+            <ul>
+                <li>Android Studio will indicate pairing with a small icon by each emulator. The phone’s Wear OS app
+                    will show “Connecting…” and then “Paired”.
+                </li>
+            </ul>
+
+            <h3>Why This Matters</h3>
+            <ul>
+                <li>This setup ensures your <strong>WearDataListenerService</strong> can actually detect messages and
+                    data changes.
+                </li>
+                <li>Without pairing, <code>Wearable.getNodeClient()</code> won’t see any nodes, so your service won’t
+                    start.
+                </li>
+                <li>It replicates real‑world conditions, ensuring your handover logic behaves the same way it will on
+                    actual devices.
+                </li>
+            </ul>
+
+            <h3>Troubleshooting</h3>
+            <ul>
+                <li><strong>No devices shown in pairing:</strong> Ensure both emulators are running, debugging enabled,
+                    and the port is forwarded.
+                </li>
+                <li><strong>Pairing stuck on “Connecting…”:</strong> Re‑run the ADB forward command and retry pairing
+                    within the Wear OS app.
+                </li>
+            </ul>
+
+            <h2>Wrapping Up</h2>
+            <p>This setup gives you a reliable, maintainable pattern for watch ↔ phone handover on Wear OS. Use messages
+                for triggers, data items for state, and make sure the service lifecycle is well-managed. With emulator
+                pairing and a few sanity checks, you can test the full flow locally.</p>
+            <p>The whole setup was designed to support a clean handover experience. When the phone takes control, the
+                watch locks itself. When the watch takes over, the phone blocks access. The <code>"restartApp"</code>
+                broadcast helps force the app into the right state, usually to show a blocking screen, based on who’s
+                currently in charge.</p>
+            <p>Both devices run the same <code>WearDataListenerService</code>, but the logic ensures they only activate
+                when needed. When the phone wants control, it sends a message to the watch. The watch then publishes the
+                latest data back. That update is picked up by the phone, which sets its own state accordingly. It’s a
+                deliberate round‑trip to make sure both devices are always working off the same data.</p>
+            <p>One subtle but important piece is the timestamp. If you send the same data twice, Wear OS won’t trigger
+                an update unless something actually changes. That’s great if you want to reduce noise, but if your app
+                logic depends on reacting every time, regardless of content, you can add a timestamp to force a change
+                event. If that’s not needed, skip the timestamp and let the system optimize for you.</p>
+            <p>This setup can also be extended to share login data between the devices. If a user logs in on the phone,
+                you can securely pass a token or auth state to the watch, so it doesn’t have to prompt again.</p>
+            <div>
+                <previewbox-link
+                        href="https://developer.android.com/design/ui/wear/guides/m2-5/behaviors-and-patterns/sign-in?hl=en"></previewbox-link>
+                <noscript>
+                    <p>
+                        <a href="https://developer.android.com/design/ui/wear/guides/m2-5/behaviors-and-patterns/sign-in?hl=en"
+                           target="_blank" rel="noopener">Sign-in | Wear | Android Developers</a></p>
+                </noscript>
+            </div>
+            <p>Just keep in mind: for anything sensitive, add proper encryption. The data layer isn’t encrypted by
+                default.</p>
+        </section>
+
+        <footer class="article-footer">
+            <p>Last updated:
+                <time datetime="2025-07-02">Jul 2, 2025</time>
+            </p>
+            <p>Tags: Android, Android App Development, Kotlin, Wearables, Watches</p>
+            <p class="article-footer-copy">&copy; 2025 James Cullimore</p>
+        </footer>
+    </article>
+</main>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TYPWQYLWYH"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+
+    function gtag() {
+        dataLayer.push(arguments);
+    }
+
+    gtag('js', new Date());
+    gtag('config', 'G-TYPWQYLWYH');
+</script>
+</body>
+</html>

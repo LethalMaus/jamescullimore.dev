@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>My Awesome Android Article Title</title>
+    <meta name="description" content="Short, compelling summary of this article for search engines and previews.">
+    <meta name="author" content="James Cullimore">
+
+    <link rel="canonical" href="https:/jamescullimore.dev/articles/my-awesome-article.html">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="My Awesome Android Article Title">
+    <meta property="og:description" content="Short summary of the article, ideally similar to meta description.">
+    <meta property="og:url" content="https:/jamescullimore.dev/articles/my-awesome-article.html">
+    <meta property="og:image" content="https:/jamescullimore.dev/articles/assets/article-cover.jpg">
+    <meta property="og:site_name" content="James Cullimore - Software Engineering">
+
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+    <link rel="stylesheet" href="/articles/assets/style.css">
+
+    <script src="https://cdn.jsdelivr.net/npm/@mariusbongarts/previewbox/dist/link/index.min.js"></script>
+</head>
+<body>
+
+<main class="article">
+    <article class="container">
+
+        <!-- Article header -->
+        <header class="article-header">
+            <p class="article-category">Android • Jetpack Compose • Retrofit</p>
+            <h1 class="article-title">My Awesome Android Article Title</h1>
+
+            <div class="article-meta">
+                <span>By <span class="article-author">James Cullimore</span></span>
+                <span>•</span>
+                <time datetime="2025-12-01">Dec 1, 2025</time>
+                <span>•</span>
+                <span>10 min read</span>
+            </div>
+        </header>
+
+        <figure class="article-hero">
+            <img src="/articles/assets/my-awesome-article.webp">
+        </figure>
+
+        <section class="article-content">
+
+            <h2>1. Introduction</h2>
+            <p>
+                This is your introduction paragraph. Explain the problem, who this article is for,
+                and what readers will get out of it.
+            </p>
+
+            <p>
+                You can include <a href="https://medium.com" target="_blank" rel="noopener">external links</a>
+                to references, documentation, or related posts.
+            </p>
+
+            <h2>2. Link preview (Medium-style)</h2>
+            <p>
+                This card is a manual link preview that works without JavaScript.
+            </p>
+
+            <div>
+                <previewbox-link href="https://developer.android.com/training/wearables/data/data-items"> </previewbox-link>
+                <noscript>
+                    <p>
+                        <a href="https://developer.android.com/training/wearables/data/data-items" target="_blank" rel="noopener">
+                            Sync Data Items with the Data Layer API (developer.android.com)
+                        </a>
+                    </p>
+                </noscript>
+            </div>
+
+            <h2>3. Code examples</h2>
+            <p>
+                Use inline <code>&lt;code&gt;</code> for small pieces and blocks for full listings.
+            </p>
+
+            <pre><code class="language-kotlin">
+data class Movie(
+    val id: Int,
+    val title: String,
+    val overview: String
+)
+
+interface MovieApi {
+    @GET("movies/popular")
+    suspend fun getPopularMovies(): List&lt;Movie&gt;
+}
+      </code></pre>
+
+            <p class="code-caption">
+                Listing 1: Simple Retrofit API interface in Kotlin.
+            </p>
+
+            <pre><code class="language-kotlin">
+@Composable
+fun MovieListScreen(
+    viewModel: MovieListViewModel = hiltViewModel()
+) {
+    val state by viewModel.state.collectAsState()
+
+    LazyColumn {
+        items(state.movies) { movie ->
+            Text(text = movie.title)
+        }
+    }
+}
+      </code></pre>
+
+            <h2>4. Embeds</h2>
+
+            <h3>4.1. YouTube video (no custom JS needed)</h3>
+            <p>
+                Replace <code>VIDEO_ID</code> with your own video.
+            </p>
+
+            <div class="embed embed-video">
+                <iframe
+                        src="https://www.youtube.com/embed/gaW31lMdf9I"
+                        title="YouTube video player"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                        allowfullscreen>
+                </iframe>
+            </div>
+
+            <h3>4.2. GitHub Gist with <code>&lt;noscript&gt;</code> fallback</h3>
+            <p>
+                JS users get the official Gist embed. No-JS users get code + a link.
+            </p>
+
+            <figure class="embed embed-gist">
+                <div class="embed-gist-js">
+                    <script src="https://gist.github.com/LethalMaus/33ed7dc21ed1c3db77a4fe2ec0a540e9.js"></script>
+                </div>
+                <noscript>
+                    <p>
+                        View the full code here:
+                        <a href="https://gist.github.com/LethalMaus/33ed7dc21ed1c3db77a4fe2ec0a540e9" target="_blank" rel="noopener">
+                            https://gist.github.com/LethalMaus/33ed7dc21ed1c3db77a4fe2ec0a540e9
+                        </a>
+                    </p>
+                </noscript>
+            </figure>
+
+            <h2>5. Conclusion</h2>
+            <p>
+                Summarize the main takeaways and link to related resources or your newsletter.
+            </p>
+
+        </section>
+
+        <footer class="article-footer">
+            <p>Last updated: <time datetime="2025-12-01">Dec 1, 2025</time></p>
+            <p>
+                Tags: Android, Jetpack Compose, Retrofit
+            </p>
+            <p class="article-footer-copy">
+                &copy; 2025 James Cullimore
+            </p>
+        </footer>
+
+    </article>
+</main>
+
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-TYPWQYLWYH"></script>
+<script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-TYPWQYLWYH');
+</script>
+
+</body>
+</html>
