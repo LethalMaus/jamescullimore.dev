@@ -131,7 +131,8 @@ a {
 
 .cta-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  align-items: center;
   gap: 12px;
   margin-bottom: 18px;
 }
@@ -342,6 +343,48 @@ a {
   margin: 0 8px;
 }
 
+.policy-hero .hero-copy p {
+  color: var(--muted);
+  margin: 0;
+}
+
+.policy-content {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.01));
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  padding: clamp(20px, 3vw, 36px);
+  box-shadow: var(--shadow);
+}
+
+.policy-content h2 {
+  margin-top: 28px;
+}
+
+.policy-content h2:first-of-type {
+  margin-top: 0;
+}
+
+.policy-content p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.policy-content ul {
+  margin: 12px 0 18px;
+  padding-left: 20px;
+  color: var(--muted);
+}
+
+.policy-content li {
+  margin-bottom: 8px;
+}
+
+.policy-content a {
+  color: var(--text);
+  text-decoration: underline;
+  text-decoration-color: rgba(255, 255, 255, 0.35);
+}
+
 @keyframes float {
   0%,
   100% {
@@ -382,8 +425,17 @@ a {
   }
 
   .cta-row {
-    flex-direction: column;
-    align-items: stretch;
+    justify-content: center;
+    gap: clamp(6px, 2vw, 10px);
+  }
+
+  .badge-link {
+    flex: 0 1 auto;
+  }
+
+  .store-badge {
+    height: clamp(28px, 8vw, 46px);
+    width: auto;
   }
 
   .hero-media {
