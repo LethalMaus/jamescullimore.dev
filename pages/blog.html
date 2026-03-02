@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Blog – James Cullimore</title>
+  <link rel="stylesheet" href="../styles.css">
+  <style>
+    /* Layout: push footer to page bottom on blog pages */
+    body {
+      display: flex;
+      min-height: 100vh;
+      flex-direction: column;
+    }
+    main {
+      flex: 1;
+    }
+
+    /* Keep Blog nav button in its hover/active state on this page */
+    .nav-cta.active {
+      background: var(--color-primary);
+      color: var(--color-btn-primary-text) !important;
+    }
+
+    .blog-header {
+      text-align: center;
+      padding-bottom: 2rem;
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .blog-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+    .blog-card {
+      background: var(--bg-alt);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 1.5rem;
+      transition: all 0.15s ease;
+    }
+    .blog-card:hover {
+      border-color: var(--navy);
+      box-shadow: 0 4px 12px rgba(18, 58, 117, 0.08);
+    }
+    .blog-date {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-bottom: 0.3rem;
+    }
+    .blog-title {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 0.5rem;
+    }
+    .blog-excerpt {
+      font-size: 0.95rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-bottom: 1rem;
+    }
+    .blog-tags {
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .blog-tag {
+      font-size: 0.8rem;
+      padding: 0.2rem 0.6rem;
+      background: var(--navy-lighter);
+      color: var(--navy);
+      border-radius: 999px;
+    }
+  /* Disable global fade overlay on blog pages */
+body::before,
+body::after {
+  content: none !important;
+  display: none !important;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <div class="brand">
+      <div class="brand-mark">JC</div>
+      <div class="brand-text">
+        <div class="brand-name">James Cullimore</div>
+        <div class="brand-role">Software Engineering</div>
+      </div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="../index.html#overview">Overview</a></li>
+      <li><a href="../index.html#services">Services</a></li>
+      <li><a href="../index.html#how-we-work">How we work</a></li>
+      <li><a href="../index.html#projects">Projects</a></li>
+      <li><a href="../index.html#insights">Insights</a></li>
+      <li><a href="../index.html#contact">Contact</a></li>
+      <li><a href="blog.html" class="nav-cta active">Blog</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main style="padding: 3.5rem 1.25rem;">
+  <div class="section-inner" style="max-width: 800px; margin: 0 auto;">
+    <div class="blog-header">
+      <h1 class="section-heading" style="margin-bottom: 0.5rem;">Blog</h1>
+      <p class="section-text" style="margin: 0;">Thoughts on Android development, architecture, and building better software.</p>
+    </div>
+
+    <div class="blog-grid" style="max-width: 100%;">
+      <!-- Post 1 -->
+      <div class="blog-card">
+        <div class="blog-date">January 15, 2026 • 8 min read</div>
+        <div class="blog-title">
+          <a href="articles/modular-architecture.html" style="color: var(--ink); text-decoration: none;">
+            Modular Architecture at Scale
+          </a>
+        </div>
+        <div class="blog-excerpt">
+          How we restructured a 200K+ line monolith into a modular architecture. Includes practical patterns for dependency management and build optimization.
+        </div>
+        <div class="blog-tags">
+          <span class="blog-tag">Architecture</span>
+          <span class="blog-tag">Kotlin</span>
+          <span class="blog-tag">Performance</span>
+        </div>
+      </div>
+
+      <!-- Post 2 -->
+      <div class="blog-card">
+        <div class="blog-date">January 8, 2026 • 6 min read</div>
+        <div class="blog-title">Testing Strategies for Complex UIs</div>
+        <div class="blog-excerpt">
+          Advanced testing techniques for complex UI components. From unit tests to integration tests, ensuring reliability without brittleness.
+        </div>
+        <div class="blog-tags">
+          <span class="blog-tag">Testing</span>
+          <span class="blog-tag">Best Practices</span>
+          <span class="blog-tag">Quality</span>
+        </div>
+      </div>
+
+      <!-- Post 3 -->
+      <div class="blog-card">
+        <div class="blog-date">December 30, 2025 • 10 min read</div>
+        <div class="blog-title">Data Synchronization Patterns</div>
+        <div class="blog-excerpt">
+          Building reliable real-time sync layers. Handling conflicts, offline scenarios, and ensuring data consistency at scale.
+        </div>
+        <div class="blog-tags">
+          <span class="blog-tag">Architecture</span>
+          <span class="blog-tag">Real-time</span>
+          <span class="blog-tag">Databases</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<footer>
+  <div class="footer-inner">
+    <div>© 2026 James Cullimore. All rights reserved.</div>
+    <ul class="footer-links">
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="impressum.html">Impressum</a></li>
+      <li><a href="datenschutz.html">Datenschutz</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>
