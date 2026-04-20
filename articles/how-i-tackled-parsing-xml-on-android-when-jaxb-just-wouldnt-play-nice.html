@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>How I Tackled Parsing XML on Android When JAXB Just Wouldn’t Play Nice</title>
+<meta content="If you’ve ever tried using JAXB (Java Architecture for XML Binding) on Android, you probably know that it doesn’t exactly play well with…" name="description"/>
+<meta content="James Cullimore" name="author"/>
+<link href="https://jamescullimore.dev/articles/how-i-tackled-parsing-xml-on-android-when-jaxb-just-wouldnt-play-nice.html" rel="canonical"/>
+<meta content="article" property="og:type"/>
+<meta content="How I Tackled Parsing XML on Android When JAXB Just Wouldn’t Play Nice" property="og:title"/>
+<meta content="If you’ve ever tried using JAXB (Java Architecture for XML Binding) on Android, you probably know that it doesn’t exactly play well with…" property="og:description"/>
+<meta content="https://jamescullimore.dev/articles/how-i-tackled-parsing-xml-on-android-when-jaxb-just-wouldnt-play-nice.html" property="og:url"/>
+<meta content="https://miro.medium.com/v2/resize:fit:1200/1*mziQNQoSKqidensELjUk8g.png" property="og:image"/>
+<meta content="James Cullimore - Software Engineering" property="og:site_name"/>
+<link href="../img/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="assets/style.css" rel="stylesheet"/>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "How I Tackled Parsing XML on Android When JAXB Just Wouldn’t Play Nice",
+  "author": {
+    "@type": "Person",
+    "name": "James Cullimore"
+  },
+  "mainEntityOfPage": "https://jamescullimore.dev/articles/how-i-tackled-parsing-xml-on-android-when-jaxb-just-wouldnt-play-nice.html",
+  "description": "If you’ve ever tried using JAXB (Java Architecture for XML Binding) on Android, you probably know that it doesn’t exactly play well with…",
+  "publisher": {
+    "@type": "Organization",
+    "name": "James Cullimore - Software Engineering"
+  },
+  "datePublished": "2025-04-14",
+  "dateModified": "2025-04-14",
+  "image": "https://miro.medium.com/v2/resize:fit:1200/1*mziQNQoSKqidensELjUk8g.png"
+}</script></head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="../index.html">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="../index.html#overview">Overview</a></li>
+<li><a href="../index.html#services">Services</a></li>
+<li><a href="../index.html#how-we-work">How we work</a></li>
+<li><a href="../index.html#projects">Projects</a></li>
+<li><a href="../index.html#insights">Insights</a></li>
+<li><a href="../index.html#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+<article class="container">
+<header class="article-header">
+<h1 class="article-title">How I Tackled Parsing XML on Android When JAXB Just Wouldn’t Play Nice</h1>
+<div class="article-meta">
+<span>By <span class="article-author">James Cullimore</span></span>
+<span>•</span>
+<time datetime="2025-04-14">Apr 14, 2025</time>
+<span>•</span>
+<span>9 min read</span>
+</div>
+</header>
+<figure class="article-hero">
+<img alt="How I Tackled Parsing XML on Android When JAXB Just Wouldn’t Play Nice" src="https://miro.medium.com/v2/resize:fit:1200/1*mziQNQoSKqidensELjUk8g.png"/>
+</figure>
+<section class="article-content">
+<p><strong>How I Tackled Parsing XML on Android When JAXB Just Wouldn’t Play Nice</strong></p>
+<p>If you’ve ever tried using JAXB (Java Architecture for XML Binding) on Android, you probably know that it doesn’t exactly play well with the platform. I ran into this issue recently while working with a shared library that required JAXB for XML parsing. Unfortunately, I quickly found out that JAXB was more finicky than I had hoped, and it just wouldn’t work on Android as expected.</p>
+<p>After a fair amount of trial and error, I decided to switch gears and use Android’s native <code>XmlPullParser</code> to manually handle the parsing. But that decision led to its own set of challenges—getting everything to work smoothly and testing it out wasn’t as straightforward as I thought it would be. All of this was necessary because I was working with a cross-platform library, which made the situation a bit more complicated.</p>
+<p>In this article, I’ll walk you through the steps I took, the code I wrote, and the struggles I faced along the way. I’ll also point out areas where I think the code could be further optimized and offer suggestions for improvement.</p>
+<h2>The Frustration of JAXB and the Road to Manual Parsing</h2>
+<p>When I first set out to parse XML data in Android, I thought using <strong>JAXB</strong> would be a smooth solution. I quickly learned it wasn’t — JAXB just didn’t work well with Android. As much as I hoped to use it to automatically bind XML data to Java objects, it didn’t cooperate, which led me to fall back on <strong>manual parsing</strong> using Android’s <code>XmlPullParser</code>.</p>
+<p>The real challenge started with setting up the parser, reading from the input stream, and processing the XML tags. What I was left with was a basic XML parsing loop that checked the tags and mapped them to fields of the desired class instance. Here’s the approach I took for this part:</p>
+<p><strong>Why this hurt</strong></p>
+<p>At this point, I was simply setting up the parser, reading the XML, and mapping each tag to the class. The real pain came later when I had to handle <strong>map fields</strong> and manually map the values to class fields. But here, it was still relatively straightforward: check the tags, read the text, and set the values. The frustration kicked in when I couldn’t fully utilize JAXB’s automatic binding capabilities, and that’s when the real pain started to show up.</p>
+<h2>Annotations &amp; Reflection &amp; Default Values, Oh My!</h2>
+<p>When parsing XML manually like this, the biggest frustration — beyond the general complexity — was using <strong>reflection</strong> to access and set private fields. Here’s the core of the process:</p>
+<p>In this method, I’m checking whether the field name matches the <code>tagName</code> from the XML. If it does, I use <strong>reflection</strong> to access the private field and set its value. Normally, <strong>JAXB</strong> or similar libraries handle this behind the scenes, but in this case, I had to do it manually.</p>
+<h3>Reflection Headache</h3>
+<p>The biggest pain here was using <strong>reflection</strong> to access fields that were marked as <code>private</code>. Reflection is powerful but incredibly tricky to get right when you’re dealing with types and values that don’t always match up as expected. It's also <strong>fragile</strong> because it bypasses compile-time checks. This is something I really felt the sting of when dealing with data types and field names that didn’t quite line up.</p>
+<h3>Dealing with <code>##default</code></h3>
+<p>Values</p>
+<p>One of the more <strong>head-scratching</strong> problems was dealing with the annotation value <code>##default</code></p>
+<p>—which is generated by JAXB for fields that have default values in the schema. The catch? The parser would pick up <code>##default</code> and treat it as an actual value, which was far from ideal:</p>
+<p>The <code>getFieldName()</code> method checks whether the annotation's name is empty or set to <code>##default</code>. If it’s set to <code>##default</code>, it skips it, otherwise it uses the name provided in the annotation. This was a necessary workaround since <code>##default</code> would have otherwise made my reflection process much more complicated than it needed to be.</p>
+<p><strong>Lesson learned</strong></p>
+<p>If you’re working with JAXB in Android (or in any project with manual parsing), <strong>watch out for </strong><strong>##default</strong><strong> values</strong>—it can cause unnecessary headaches and wasted time. In this case, I had to ensure these default values didn’t get mistaken for real data, otherwise the class fields would have been incorrectly populated.</p>
+<h2>Oh look, a Map</h2>
+<h3>Before Map Handling</h3>
+<p>This is the initial version where there was no map handling logic. The focus was solely on parsing regular fields and populating them in the <code>instance</code>:</p>
+<p><strong>Explanation</strong>:</p>
+<ul>
+<li>The code simply reads through the XML file, parses each tag, and assigns the parsed values to fields in the instance using
+        <code>setField()</code>.</li>
+<li>No map-specific logic is involved here; it assumes all fields are simple types and can be directly set from XML.</li>
+</ul>
+<h3>After Map Handling</h3>
+<p>The updated version incorporates logic for parsing <strong>map</strong> fields (key-value pairs) by detecting map fields in the class, storing key-value pairs, and using a more complex approach for handling the map data.</p>
+<p><strong>Explanation</strong>:</p>
+<ul>
+<li><strong>Detect Map Fields</strong>: The<code>isMapField()</code> method is used to detect if a tag corresponds to a map field in the class. If it does,<code>currentMapField</code> is set.</li>
+<li><strong>Handle Key-Value Pairs</strong>: In the<code>TEXT</code> event, if<code>currentKey</code> is set, it means we are inside a map and need to handle key-value pairs. The<code>handleMapKeyValueEntry()</code> method processes the key and value, ensuring they are added to the map properly.</li>
+<li><strong>Reset Keys After Parsing</strong>: Once the map key-value pair is processed,<code>currentKey</code> and<code>currentMapField</code> are reset when the<code>END_TAG</code> for the respective key and map fields is encountered.</li>
+</ul>
+<h3>Map-Specific Logic Explained</h3>
+<p>Here’s a breakdown of the key changes made to handle maps, starting with the <code>handleMapKeyValueEntry</code> method:</p>
+<p><strong>Key-Value Handling</strong>: This method checks if we’ve already captured a key or not. If the key is still empty, it stores the current value as the key. Once both the key and the value are ready, it calls<code>addToMap()</code> to store them in the appropriate map.</p>
+<h3>Identifying Map Fields</h3>
+<p>The <code>isMapField()</code> method checks if a given field is a map. If the field is a map, it returns <code>true</code>, indicating that special handling is required for the field.</p>
+<p><strong>Map Detection</strong>: The method loops through all declared fields and checks if any field is a<code>Map</code>. It compares the<code>tagName</code> from the XML with the field name to decide if that field should be treated as a map.</p>
+<h3>Adding Key-Value Pairs to the Map</h3>
+<p>Once we detect a map field, the <code>addToMap()</code> method is used to add the parsed key-value pair to the map:</p>
+<p><strong>Map Population</strong>: This method uses reflection to access the map field. It ensures that the field is accessible and that the map is initialized. Then, it adds the parsed key-value pair to the map using the correct data type for the value.</p>
+<h3>Pain Points with Maps</h3>
+<p><strong>1. Complexity of Reflection with Maps</strong>: Dealing with maps required additional reflection, which is error-prone and led to more complexity. Each time we encountered a map field, we had to ensure that the key-value pairs were added correctly, without messing up field access.</p>
+<h2>The Joys of Writing Tests</h2>
+<p>Once the tests for the XML parsing functionality were written, it became clear that <code>XmlPullParser</code> wasn’t working in the JUnit testing environment. The issue? <code>XmlPullParser</code> relies on Android-specific components and requires an Android context, meaning it only works in an <strong>instrumented test</strong> (one that runs on a real or virtual device, not in a JUnit test on the JVM).</p>
+<p>This posed a significant challenge because the module being tested was encapsulated as a service with no UI — so switching to instrumented tests wasn’t a simple option. After struggling with this limitation and trying to adjust the setup to run instrumented tests (which didn’t work for various other reasons), I found myself walking away from the code multiple times for a breather and more research.</p>
+<p>In the end, after a bit of desperation and a couple of walks to clear my head, I stumbled upon the solution: <strong>KXML2</strong>.</p>
+<h3>Solution: Adding KXML2</h3>
+<p>To resolve this issue, I added the following dependency to the project:</p>
+<pre><code>
+                        testImplementation(libs.kxml2)
+                        kxml2 = "2.3.0" kxml2 = { module = "net.sf.kxml:kxml2", version.ref = "kxml2" }
+                        </code></pre>
+<p>This brought in <strong>KXML2</strong>, a lightweight XML parser that works seamlessly in both Android and Java environments.</p>
+<h3>Why KXML2 Was Required</h3>
+<ul>
+<li><strong>XmlPullParser</strong></li>
+<li><strong>and the Need for Context</strong>: As mentioned,<code>XmlPullParser</code> from Android requires an Android context to function properly. When trying to run JUnit tests, the test environment doesn’t have the necessary context to work with the Android-based parser. Instrumented tests, which are designed to run on Android devices, are required to handle the context, but this wasn’t feasible in our case due to the nature of the module and other issues with setting up the instrumented tests.</li>
+<li><strong>KXML2 as a Standalone Solution</strong>: KXML2 doesn’t require an Android context and can be used directly in JUnit tests on the JVM. This made it the perfect solution to run XML parsing tests in a pure Java environment. The library supports pull-based parsing just like<code>XmlPullParser</code></li>
+</ul>
+<p>, but it works independently of Android-specific dependencies, which allowed the tests to be executed in JUnit.<strong>Cross-Platform Compatibility</strong>: KXML2 ensures compatibility with both Android and Java, making it a great tool for cross-platform projects like this one. It’s lightweight and does exactly what’s needed for our XML parsing without the overhead of Android-specific context requirements.</p>
+<p>Switching to KXML2 solved the issues with <code>XmlPullParser</code> in JUnit tests. It allowed us to run the tests in a standard Java environment without relying on an Android context, making it a perfect fit for unit testing XML parsing functionality. After some frustration and trial and error, KXML2 emerged as the hero to save the day and restore sanity.</p>
+<h2>Conclusion</h2>
+<p>In the end, the journey from writing the code to overcoming the testing hurdles proved to be both challenging and enlightening. The initial assumption that <code>XmlPullParser</code> would work seamlessly in JUnit tests was quickly shattered when we realized it required an Android context—something that wasn't available in a pure JUnit setup. This led to frustration, multiple attempts to switch to instrumented tests, and several walks away from the code to clear my head.</p>
+<p>However, through some research, persistence, and a bit of luck, the solution came in the form of <strong>KXML2</strong>. This lightweight XML parser allowed us to bypass the need for an Android context and provided a straightforward way to run XML parsing tests on the JVM. By switching to KXML2, we could seamlessly run our unit tests without the overhead and complexity of Android-specific dependencies.</p>
+<p>This experience reinforced a valuable lesson: even when things don’t go as planned, sometimes the solution is just a bit of research away. With KXML2, we found a reliable solution to our testing issues, allowing us to continue improving our XML parsing functionality while keeping the tests fast and efficient.</p>
+<p>The struggle was worth it, and now we have a more robust setup for testing XML-related features in a non-UI service module, ensuring that our application behaves as expected in a variety of environments.</p>
+</section>
+<section class="related-articles"><h2>More articles</h2><ul><li><a href="editable-config-files-a-ui-less-way-to-configure-android-apps-and-services.html">Editable Config Files: A UI-less Way to Configure Android Apps and Services</a></li><li><a href="one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html">One Piece of Code: Picking and Reading Files like a True Pirate King</a></li><li><a href="room-to-grow-walking-through-the-gardens-of-android-databases.html">Room to Grow: Walking Through the Gardens of Android Databases</a></li></ul></section><footer class="article-footer">
+<p>Last updated: <time datetime="2025-04-14">Apr 14, 2025</time></p>
+<p>
+        Tags: Android, Gradle, Kotlin
+      </p>
+<p class="article-footer-copy">
+        © 2026 James Cullimore
+      </p>
+</footer>
+</article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

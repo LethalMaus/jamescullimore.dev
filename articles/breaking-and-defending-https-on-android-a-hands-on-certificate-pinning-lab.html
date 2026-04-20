@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Breaking and Defending HTTPS on Android: A Hands-On Certificate Pinning Lab</title>
+<meta content="HTTPS is no longer a nice to have in Android apps. It is the baseline expectation. It protects users from passive eavesdropping, active…" name="description"/>
+<meta content="James Cullimore" name="author"/>
+<link href="https://jamescullimore.dev/articles/breaking-and-defending-https-on-android-a-hands-on-certificate-pinning-lab.html" rel="canonical"/>
+<meta content="article" property="og:type"/>
+<meta content="Breaking and Defending HTTPS on Android: A Hands-On Certificate Pinning Lab" property="og:title"/>
+<meta content="HTTPS is no longer a nice to have in Android apps. It is the baseline expectation. It protects users from passive eavesdropping, active…" property="og:description"/>
+<meta content="https://jamescullimore.dev/articles/breaking-and-defending-https-on-android-a-hands-on-certificate-pinning-lab.html" property="og:url"/>
+<meta content="https://miro.medium.com/v2/resize:fit:1200/1*U1Ba8FgdtoEGGqQMpIlkTw.png" property="og:image"/>
+<meta content="James Cullimore - Software Engineering" property="og:site_name"/>
+<link href="../img/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="assets/style.css" rel="stylesheet"/>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Breaking and Defending HTTPS on Android: A Hands-On Certificate Pinning Lab",
+  "author": {
+    "@type": "Person",
+    "name": "James Cullimore"
+  },
+  "mainEntityOfPage": "https://jamescullimore.dev/articles/breaking-and-defending-https-on-android-a-hands-on-certificate-pinning-lab.html",
+  "description": "HTTPS is no longer a nice to have in Android apps. It is the baseline expectation. It protects users from passive eavesdropping, active…",
+  "publisher": {
+    "@type": "Organization",
+    "name": "James Cullimore - Software Engineering"
+  },
+  "datePublished": "2026-02-16",
+  "dateModified": "2026-02-16",
+  "image": "https://miro.medium.com/v2/resize:fit:1200/1*U1Ba8FgdtoEGGqQMpIlkTw.png"
+}</script></head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="../index.html">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="../index.html#overview">Overview</a></li>
+<li><a href="../index.html#services">Services</a></li>
+<li><a href="../index.html#how-we-work">How we work</a></li>
+<li><a href="../index.html#projects">Projects</a></li>
+<li><a href="../index.html#insights">Insights</a></li>
+<li><a href="../index.html#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+<article class="container">
+<header class="article-header">
+<h1 class="article-title">Breaking and Defending HTTPS on Android: A Hands-On Certificate Pinning Lab</h1>
+<div class="article-meta">
+<span>By <span class="article-author">James Cullimore</span></span>
+<span>•</span>
+<time datetime="2026-02-16">Feb 16, 2026</time>
+<span>•</span>
+<span>14 min read</span>
+</div>
+</header>
+<figure class="article-hero">
+<img alt="Breaking and Defending HTTPS on Android: A Hands-On Certificate Pinning Lab" src="https://miro.medium.com/v2/resize:fit:1200/1*U1Ba8FgdtoEGGqQMpIlkTw.png"/>
+</figure>
+<section class="article-content">
+<p>HTTPS is no longer a nice to have in Android apps. It is the baseline expectation. It protects users from passive eavesdropping, active tampering, and a wide class of network level attacks that become trivial the moment traffic drops back to cleartext. Yet HTTPS alone does not solve every problem. If an attacker can convince a device to trust a malicious certificate authority or if the app is written to accept anything that looks like TLS, the lock icon becomes decorative rather than meaningful.</p>
+<p>This is where certificate pinning usually enters the conversation. Pinning narrows trust from the entire public CA ecosystem down to a specific set of expected certificates or public keys. On paper, this sounds like an obvious upgrade. In practice, it comes with tradeoffs that are easy to underestimate.</p>
+<p>Personally, I am not a big fan of certificate pinning as a default strategy. Certificate Transparency, when available, is often a better first line of defense. It provides visibility into misissued certificates without hard coding cryptographic assumptions into the app. More importantly, it avoids one of the most painful failure modes of pinning: certificate rotation and revocation. I have been on the receiving end of a revoked or expired certificate that instantly broke production apps because a pin was no longer valid. That is not a great experience for users or for the engineers on call.</p>
+<p>That said, there are cases where pinning is justified or even required. High risk applications, regulated environments, or threat models that explicitly include compromised CAs sometimes leave no alternative. The key is understanding exactly what pinning does, how it fails, and how to implement it in a way that is intentional rather than cargo culted.</p>
+<p>This article is based on material from the Android Security Training project. The project ships paired secure and deliberately vulnerable implementations for each topic so readers can compare behaviors side by side. The certificate pinning and HTTPS lab follows this approach closely. Secure flavors enforce trust using OkHttp’s CertificatePinner or a manual TrustManager, while vulnerable flavors are designed to trust everything and be intercepted with a proxy during demos.</p>
+<p>The lab is driven by build time switches. A MANUAL_PIN flag controls whether pinning is enforced by OkHttp or by a custom TrustManager. A PIN_MODE flag toggles between good pins, bad pins, certificate transparency only, or a demo friendly MITM mode. Secure builds default to HTTPS only traffic, distrust user installed CAs except for debug overrides, and can enable Certificate Transparency via Network Security Config.</p>
+<p>In the sections that follow, we will break down each of these pieces in detail, starting with how the build switches route requests through different network helpers.</p>
+<h2>Build switches and routing network behavior</h2>
+<p>One of the most useful aspects of the Android Security Training project is that all of the behavior is explicit and switchable. Nothing is hidden behind magic defaults. Whether the app enforces certificate pinning, how it enforces it, or whether it deliberately disables verification is controlled by build time flags. This makes it easy to demonstrate attacks, compare implementations, and reason about the security posture of each variant.</p>
+<p>At the center of this setup are two BuildConfig flags: <code>MANUAL_PIN</code> and <code>PIN_MODE</code>.</p>
+<p>The <code>MANUAL_PIN</code> flag determines <em>how</em> pinning is enforced. When it is disabled, the app relies on OkHttp’s built in <code>CertificatePinner</code>. This is the path most developers are familiar with and generally the safer option when pinning is required. When <code>MANUAL_PIN</code> is enabled, the app takes a lower level approach and enforces pins inside a custom <code>TrustManager</code>. This exists primarily as a learning tool. It shows what OkHttp is doing under the hood and why rolling your own TLS stack is easy to get wrong.</p>
+<p>The <code>PIN_MODE</code> flag controls <em>what</em> the app is willing to trust. Different modes are compiled into the app to support both secure and insecure scenarios. A “good” mode uses valid pins that match the server’s public key and allows the connection to succeed. A “bad” mode uses incorrect pins and reliably fails, demonstrating what happens when a pinned certificate changes unexpectedly. A “ct” mode relies on Certificate Transparency without pinning, aligning with a more operationally friendly security posture. Finally, a “mitm” mode exists purely for demos, allowing traffic to be intercepted by a proxy without triggering pin failures.</p>
+<p>These flags are not just configuration values. They actively route execution through different networking helpers. In secure configurations, requests flow through helpers that enforce HTTPS only connections, apply either OkHttp based or manual pinning, and respect Network Security Config constraints. In vulnerable configurations or demo modes, the app intentionally bypasses these checks so that man in the middle attacks are visible and repeatable.</p>
+<p>This routing logic is what makes the lab effective. By flipping a single flag, you can observe how the exact same API call behaves when pins are correct, when they are wrong, when Certificate Transparency is doing the heavy lifting, or when all trust checks are disabled. It also makes one point very clear: security behavior should be explicit, intentional, and easy to reason about. If you cannot explain which path your app is taking and why, you probably should not be implementing it.</p>
+<h2>OkHttp based certificate pinning</h2>
+<p>When pinning is enabled and <code>MANUAL_PIN</code> is turned off, the secure flavor relies on OkHttp’s <code>CertificatePinner</code>. This is generally the preferred way to do pinning on Android if you must do it at all. OkHttp handles the hard parts, integrates cleanly with the TLS stack, and fails closed when pins do not match.</p>
+<p>The core of this setup is the <code>CertificatePinner</code> configuration itself:</p>
+<p><code>val goodPinner = CertificatePinner.Builder()</code>.add(</p>
+<p>"api.github.com",</p>
+<p>"sha256/1EkvzibgiE3k+xdsv+7UU5vhV8kdFCQiUiFdMX5Guuk=",</p>
+<p>"sha256/fXkqYy8jL6cDXcYJvLgk0i8V0CVg28t3Tw4eBeaHeoA=",</p>
+<p>//"sha256/KAXeO3wi3a3vmfBT/Q1P6pFoMVe1CI2IC5/f8arkEXE=" //mitmproxy pin).build()</p>
+<p>This snippet pins the Subject Public Key Info (SPKI) hashes for <code>api.github.com</code>. OkHttp will verify that at least one certificate in the validated server chain matches one of these hashes. If no match is found, the connection fails immediately.</p>
+<p>First, these are <em>public key</em> pins, not full certificate pins. This is intentional. Pinning the SPKI allows the server to rotate certificates as long as the underlying key remains the same. It is still brittle, but far less so than pinning the entire certificate.</p>
+<p>Second, multiple pins are defined. This is not optional boilerplate. Operationally, you should always ship backup pins. Without them, any key rotation or emergency replacement becomes a potential app breaking event. The commented out pin in the snippet is deliberately included for demo purposes. When enabled, it allows a MITM proxy’s certificate to pass pin validation, making it obvious how dangerous even a single extra pin can be.</p>
+<p>Third, failure is explicit and loud. When pins do not match, OkHttp throws and the request fails. There is no silent fallback, no partial trust, and no opportunity for user installed CAs to sneak in if Network Security Config is set up correctly. This is both the strength and the risk of pinning. It works exactly as configured, even when that configuration is no longer correct.</p>
+<p>This is where your earlier point about Certificate Transparency becomes especially relevant. Pinning shifts risk from the CA ecosystem to your release process. If pins are wrong, expired, or revoked, the app is broken until users update. That tradeoff may be acceptable in some environments, but it should never be accidental.</p>
+<p>In the training project, OkHttp based pinning represents the “safe” end of the pinning spectrum. It is still strict, but it avoids many of the footguns that come with manual TLS handling.</p>
+<h2>Manual TrustManager path and SPKI enforcement</h2>
+<p>When <code>MANUAL_PIN</code> is enabled, the lab shifts from using OkHttp’s built in pinning to enforcing pins manually inside a custom TrustManager. This is the part of the project that is most educational and, in production, the part that should make you nervous. The goal here is not to encourage DIY TLS, but to show exactly what is involved when you step outside the guardrails.</p>
+<p>Conceptually, the flow looks like this:</p>
+<ul>
+<li>The TLS handshake produces a server certificate chain.</li>
+<li>The TrustManager validates the chain as usual.</li>
+<li>After validation, the code extracts the leaf certificate’s public key material.</li>
+<li>The code computes a SHA-256 SPKI pin from that public key.</li>
+<li>The computed pin is compared against a known allow list.</li>
+<li>If there is no match, the connection fails with a
+        <code>CertificateException</code></li>
+</ul>
+<p>The actual enforcement step is compact, but it carries a lot of security weight. In this lab, pin enforcement happens in a dedicated method that takes the server chain and decides whether to fail the connection:</p>
+<h3>The <code>mitm</code> bypass is intentional and dangerous</h3>
+<p>The very first branch checks whether <code>PIN_MODE</code> is set to <code>mitm</code>. If it is, pin enforcement is skipped entirely and the connection is allowed to proceed.</p>
+<p>That line is doing exactly what the log says: it is a bypass for debug and demo only. In the lab, this mode exists so you can demonstrate interception tooling without constantly fighting pin failures. In real apps, anything like this needs to be handled with extreme care. A bypass that ships to production, even accidentally, is effectively a trust-all implementation with better marketing.</p>
+<h3>The method fails closed by default</h3>
+<p>If there is no certificate chain, the code throws. If the computed pin does not match, the code throws. There is no attempt to “recover”, no fallback pin source, and no user prompt. That is what you want for security enforcement, but it also reinforces why pinning becomes an operational burden. You are turning a networking mismatch into a hard outage.</p>
+<h3>It pins the leaf certificate’s SPKI</h3>
+<p>The code uses the leaf certificate (<code>chain[0]</code>) and hashes the SPKI via <code>spkiSha256Pin(leaf)</code>. This lines up with the OkHttp approach conceptually, but now you are responsible for every detail around it: correct certificate selection, correct hashing, correct comparison, correct host association, and correct integration with the rest of the trust evaluation.</p>
+<p>This is where manual TrustManagers often go wrong. Many real-world implementations accidentally skip hostname validation, accept incomplete chains, or incorrectly mix “pinning” with “trusting” in ways that widen trust rather than narrowing it. Even when the logic is correct, the maintenance cost is high, and the blast radius of mistakes is large.</p>
+<p>In this project, the manual path exists to show how pinning works without relying on OkHttp abstractions, and to demonstrate why the secure flavor defaults to safer mechanisms and stricter configuration.</p>
+<h2>The vulnerable path and the cost of trusting everything</h2>
+<p>The deliberately vulnerable flavor exists for one reason: to make failure visible. It is easy to talk about “man in the middle attacks” in the abstract. It is much more convincing when you can flip a build flavor, run a proxy, and watch traffic decrypt in real time.</p>
+<h2>Network Security Config and secure defaults</h2>
+<p>Code level pinning is only one layer of the story. In the secure flavors of the lab, a significant amount of trust policy is enforced before any networking code runs, using Android’s Network Security Config. This is where defaults are locked down and where dangerous behavior is made opt-in rather than accidental.</p>
+<p>The secure profile uses the following configuration:</p>
+<h3>HTTPS-only by default</h3>
+<p>At the base level, <code>cleartextTrafficPermitted</code> is set to <code>false</code>. This ensures that all connections must use TLS. Even if a developer accidentally tries to call an <code>http://</code> endpoint, the platform blocks it. This removes an entire class of mistakes before they reach runtime.</p>
+<h3>User-added CAs are distrusted in secure builds</h3>
+<p>The base configuration trusts only system certificates. User-installed CAs are explicitly excluded. This matters because many interception tools work by installing a user CA on the device. By default, a properly configured secure build will not trust those certificates, even if the user has installed them at the OS level.</p>
+<p>At the same time, the lab includes <code>debug-overrides</code> that re-enable user CAs for debug builds. This is a deliberate compromise. It allows developers and trainers to demonstrate MITM attacks without weakening release builds. The separation is clear and enforced by the platform.</p>
+<h3>Certificate Transparency is enabled at the domain level</h3>
+<p>For <code>api.github.com</code>, Certificate Transparency is enabled directly in the config. This means the app requires that certificates presented for this domain comply with CT expectations, adding an extra layer of protection against misissued certificates.</p>
+<p>Notably, there is no <code>&lt;pin-set&gt;</code> here. That omission is intentional. Pinning is controlled in code so that the lab can switch between good pins, bad pins, CT-only, or demo modes without rebuilding XML. This reinforces a broader point: Network Security Config is excellent for setting guardrails and defaults, while more experimental or instructional behavior can live in code where it is easier to reason about and swap.</p>
+<p>Taken together, this configuration demonstrates a strong baseline: HTTPS-only traffic, minimized trust anchors, debug-only exceptions, and CT as a first-class citizen.</p>
+<h2>Lab flow and hands-on MITM walkthrough</h2>
+<p>All of the pieces described so far come together in the lab itself. The value of this setup is not in reading the code, but in watching the behavior change as you switch build flavors and modes. The lab is designed to be run end to end, with a proxy in the middle, so the security impact of each decision is immediately visible.</p>
+<h3>MITM quick setup</h3>
+<p>The lab starts with a standard man in the middle proxy setup. You follow the quick setup instructions, configure the device or emulator to route traffic through the proxy, and install the proxy’s user CA certificate on the device. At this point, the environment is ready to intercept TLS traffic if the app allows it.</p>
+<p>Nothing app-specific has changed yet. The difference comes entirely from which build flavor you run and how it is configured.</p>
+<h3>Observing a successful MITM with <code>vulnPinning</code></h3>
+<p>The first build to run is <code>vulnPinning</code>. This flavor intentionally disables meaningful certificate verification by using the trust-all TLS stack. When you launch the app and make a network request, the proxy successfully intercepts the traffic.</p>
+<p>You can inspect requests and responses in clear text, modify payloads, and replay calls. From the app’s point of view, everything looks normal. From a security point of view, the app has lost any guarantee about who it is talking to.</p>
+<p>This step is important because it establishes a baseline. It shows that the proxy is correctly configured and that interception works when the app does not defend itself.</p>
+<h3>Watching interception fail with <code>securePinning</code></h3>
+<p>Next, you build and run <code>securePinning</code>. Without changing the proxy setup, you repeat the same requests. This time, things break.</p>
+<p>Depending on the configuration, requests fail during the TLS handshake or immediately after certificate validation. If pinning is enabled and the proxy presents its own certificate, the pins do not match and the connection is rejected. If user CAs are distrusted by Network Security Config, the handshake fails even earlier.</p>
+<p>From the proxy’s perspective, traffic simply stops. This is the moment where the abstract idea of “pinning blocks MITM” becomes concrete.</p>
+<h3>Exploring modes and failure cases</h3>
+<p>The lab does not stop at a single success or failure. It is intentionally flexible so you can explore different scenarios:</p>
+<ul>
+<li>Switch
+        <code>PIN_MODE</code> to a bad pin and observe how even legitimate server traffic fails. - Switch to a CT-only mode and see how behavior changes when pinning is removed but transparency is still enforced.</li>
+<li>Enable
+        <code>mitm</code> mode to temporarily bypass pin checks for demo purposes and confirm that interception works again. - Optionally rotate the server certificate or swap SPKI pins to simulate a real-world certificate change and observe how strict pinning turns that change into an outage.</li>
+</ul>
+<p>These experiments reinforce an important lesson. Security mechanisms are not just theoretical controls. They directly affect availability, debuggability, and operational risk. The lab makes those tradeoffs visible instead of hiding them behind abstractions.</p>
+<p>This hands-on flow is what ties the entire certificate pinning and HTTPS lab together. It gives you a safe place to see both sides: how trivial interception is when trust is too broad, and how unforgiving strict pinning can be when something changes unexpectedly.</p>
+<h2>Conclusion</h2>
+<p>In this article we have walked through how the Android Security Training project approaches certificate pinning and HTTPS security. We started with the <em>why, </em>why HTTPS matters, why certificate pinning exists, and how it shapes the trust decisions an app makes on every network call. We then examined the build switches (<code>MANUAL_PIN</code> and <code>PIN_MODE</code>) that let you explore secure and vulnerable behavior side by side. We looked at how OkHttp’s <code>CertificatePinner</code> is configured and why backup pins matter, and we unpacked a manual TrustManager based SPKI enforcement path to show both its mechanics and its pitfalls. We contrasted that with a deliberately <em>trust-all</em> TLS stack that makes interception trivial. We then saw how Network Security Config provides strong defaults, HTTPS only, minimal trust anchors, and Certificate Transparency and how that ties into real world behavior.</p>
+<p>Finally, we connected all of these pieces back to a <em>hands-on lab flow</em>. By building and running both the vulnerable (<code>vulnPinning</code>) and secure (<code>securePinning</code>) variants through a proxy, you can see how interception succeeds or fails, how wrong pins break connectivity, and how toggling modes like good/bad/ct/mitm changes outcomes. This isn’t just code you read, it’s a live experiment you run to internalize the impact of each decision.</p>
+<p>All of the material and behavior described here is drawn from the Android Security Training project, an open source collection of hands-on labs that pair secure and vulnerable implementations so developers can <em>see</em> why best practices matter and <em>experience</em> the effects of common security mistakes. The project covers ten core Android security areas beyond just certificate pinning and HTTPS, with topics including end-to-end encryption, reverse-engineering resistance, runtime permissions, secure storage, and more.</p>
+<p>Whether you agree with the default of strict pinning or prefer approaches like Certificate Transparency that reduce operational headaches, the key lesson from this lab is the same: security behavior should be explicit, observable, and testable, not assumed.</p>
+</section>
+<section class="related-articles"><h2>More articles</h2><ul><li><a href="defending-against-mitm-attacks-the-android-certificate-pinning-approach.html">Defending Against MITM Attacks: The Android Certificate Pinning Approach</a></li><li><a href="defending-the-android-realm-proguards-role-in-app-security-and-efficiency.html">Defending the Android Realm: ProGuard’s Role in App Security and Efficiency</a></li><li><a href="locking-in-data-confidence-decoding-androids-encrypted-preferences-arsenal.html">Locking In Data Confidence: Decoding Android’s Encrypted Preferences Arsenal</a></li></ul></section><footer class="article-footer">
+<p>Last updated: <time datetime="2026-02-16">Feb 16, 2026</time></p>
+<p>
+        Tags: Android, Gradle, Kotlin
+      </p>
+<p class="article-footer-copy">
+        © 2026 James Cullimore
+      </p>
+</footer>
+</article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

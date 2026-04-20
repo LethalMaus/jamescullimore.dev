@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Editable Config Files: A UI-less Way to Configure Android Apps and Services</title>
+<meta content="Configuration files can play a crucial role in many Android applications, allowing users to customize settings without modifying the app’s…" name="description"/>
+<meta content="James Cullimore" name="author"/>
+<link href="https://jamescullimore.dev/articles/editable-config-files-a-ui-less-way-to-configure-android-apps-and-services.html" rel="canonical"/>
+<meta content="article" property="og:type"/>
+<meta content="Editable Config Files: A UI-less Way to Configure Android Apps and Services" property="og:title"/>
+<meta content="Configuration files can play a crucial role in many Android applications, allowing users to customize settings without modifying the app’s…" property="og:description"/>
+<meta content="https://jamescullimore.dev/articles/editable-config-files-a-ui-less-way-to-configure-android-apps-and-services.html" property="og:url"/>
+<meta content="https://miro.medium.com/v2/resize:fit:1200/1*L43s57I1ZUXgGH8XCyfLwQ.png" property="og:image"/>
+<meta content="James Cullimore - Software Engineering" property="og:site_name"/>
+<link href="../img/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="assets/style.css" rel="stylesheet"/>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Editable Config Files: A UI-less Way to Configure Android Apps and Services",
+  "author": {
+    "@type": "Person",
+    "name": "James Cullimore"
+  },
+  "mainEntityOfPage": "https://jamescullimore.dev/articles/editable-config-files-a-ui-less-way-to-configure-android-apps-and-services.html",
+  "description": "Configuration files can play a crucial role in many Android applications, allowing users to customize settings without modifying the app’s…",
+  "publisher": {
+    "@type": "Organization",
+    "name": "James Cullimore - Software Engineering"
+  },
+  "datePublished": "2025-02-04",
+  "dateModified": "2025-02-04",
+  "image": "https://miro.medium.com/v2/resize:fit:1200/1*L43s57I1ZUXgGH8XCyfLwQ.png"
+}</script></head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="../index.html">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="../index.html#overview">Overview</a></li>
+<li><a href="../index.html#services">Services</a></li>
+<li><a href="../index.html#how-we-work">How we work</a></li>
+<li><a href="../index.html#projects">Projects</a></li>
+<li><a href="../index.html#insights">Insights</a></li>
+<li><a href="../index.html#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+<article class="container">
+<header class="article-header">
+<h1 class="article-title">Editable Config Files: A UI-less Way to Configure Android Apps and Services</h1>
+<div class="article-meta">
+<span>By <span class="article-author">James Cullimore</span></span>
+<span>•</span>
+<time datetime="2025-02-04">Feb 4, 2025</time>
+<span>•</span>
+<span>10 min read</span>
+</div>
+</header>
+<figure class="article-hero">
+<img alt="Editable Config Files: A UI-less Way to Configure Android Apps and Services" src="https://miro.medium.com/v2/resize:fit:1200/1*L43s57I1ZUXgGH8XCyfLwQ.png"/>
+</figure>
+<section class="article-content">
+<p>Configuration files can play a crucial role in many Android applications, allowing users to customize settings without modifying the app’s source code. Whether adjusting UI preferences, toggling experimental features, or managing backend endpoints, a well-designed config file can offer flexibility while keeping the app dynamic. However, one challenge developers often face is ensuring that changes to these files take effect while the app or service is running, without requiring a restart.</p>
+<p>In this article, we’ll explore how to create a configuration file that users can edit in real time while an Android app or service is running. We’ll start by discussing common use cases where such an approach is beneficial, from debugging and feature toggling to adjusting app behavior based on user preferences. Next, we’ll walk through the setup process, detailing how to structure the config file and where to store it for easy access.</p>
+<p>Beyond just setting up the file, we’ll dive into how to observe changes in real time, using <code>FileObserver</code> to detect modifications and apply them dynamically. Finally, we’ll cover error handling strategies to prevent crashes or unintended behavior when the config file is edited incorrectly as well as a caveat to it all. By the end of this guide, you’ll have a clear roadmap for integrating a robust and user-friendly config system into your Android application.</p>
+<h2>Use Cases</h2>
+<p>A dynamically editable config file can be a powerful tool in various Android app development scenarios. It provides a way to modify settings, toggle features, or fine-tune an application’s behavior without rebuilding or restarting the app. This approach is especially useful in cases where a full-fledged UI for configurations is impractical or unnecessary.</p>
+<h3>Avoiding the Need for a UI</h3>
+<p>Building a user interface for every possible configuration setting can be time-consuming and may not always be justified, especially if the settings are meant for advanced users, testers, or developers. Instead of investing time in creating menus, dialogs, and preference screens, a simple text-based config file allows users to modify parameters directly. This is particularly helpful in applications where the number of configuration options is large or frequently changing.</p>
+<h3>Managing Background Services Without a UI</h3>
+<p>Many Android applications include background services that operate without a traditional user interface. For example, a media streaming service, a network monitor, or an automation tool may run continuously in the background. In such cases, an editable config file allows users to update settings — such as logging levels, server endpoints, or operational parameters — without needing an app UI or restarting the service.</p>
+<h3>Enabling Dynamic Debugging and Testing</h3>
+<p>During development and testing, developers often need to adjust settings like API keys, feature flags, or performance parameters. Instead of recompiling the app for each change, an external config file provides a way to tweak values on the fly. This is particularly useful for debugging, where you may want to enable verbose logging or switch between test and production servers without modifying source code.</p>
+<h3>Customization for Power Users</h3>
+<p>For certain applications, advanced users may appreciate the ability to customize behavior beyond what’s available in standard settings. Power users of automation apps, media players, or system utilities may want to fine-tune performance, override default behaviors, or add experimental features. A config file offers a low-barrier way for them to modify these settings while the app is running.</p>
+<h3>Remote Configuration for IoT and Enterprise Apps</h3>
+<p>In enterprise or IoT applications, administrators may need to push configuration updates remotely to multiple devices without user intervention. By using a config file stored in an accessible location, such as internal storage or an external server, the app can dynamically load new settings without requiring manual updates or app restarts.</p>
+<h2>Setting Up File Access Permissions</h2>
+<p>Before we can create and modify a configuration file, we need to ensure the app has the necessary permissions to access storage. Unlike internal app storage, which is private to the application, allowing the user to choose a directory ensures transparency and control over where the file is stored. This approach is particularly useful for apps that require persistent user configuration across updates or re-installations.</p>
+<p>The following code snippet demonstrates how to request access to a directory using Android’s <code>OpenDocumentTree()</code> contract:</p>
+<h3>How This Works</h3>
+<ul>
+<li>When the user selects a directory, the
+        <code>OpenDocumentTree()</code> contract provides a<code>uri</code> that points to the chosen location. - The
+        <code>ConfigFileUtils.saveConfigFileUri()</code> function stores this<code>uri</code></li>
+</ul>
+<p>, ensuring we can access it later. - The
+<code>ConfigFileUtils.loadConfigFile()</code> function reads the existing config file (or creates one if necessary). - The
+<code>ConfigFileUtils.registerConfigFileObserver()</code> sets up a listener to detect real-time changes to the config file.</p>
+<h3>Persisting Permissions</h3>
+<p>Once we have the <code>uri</code>, it’s recommended to persist the permissions so that the app retains access even after it’s closed. This prevents users from needing to reselect the directory every time they restart the app. Android provides a way to persist permissions using <code>takePersistableUriPermission()</code>, as outlined in the official documentation:</p>
+<h2>Persisting File Access Permissions</h2>
+<p>Once the user selects a directory for the config file, the app needs to persist the permissions to avoid requiring manual selection every time the app restarts. Android’s <code>takePersistableUriPermission()</code> method allows us to do this by granting long-term access to the chosen URI.</p>
+<h2>Ensuring a Default Config File Exists</h2>
+<p>Once we have the user-selected URI, the next step is to ensure that a default configuration file is available. This serves two purposes:</p>
+<ul>
+<li>It provides a structured template so users know what settings they can modify.</li>
+<li>It prevents errors that may occur if the application tries to load a missing or malformed config file.</li>
+</ul>
+<p>The following implementation first checks if the file exists. If not, it creates one with default parameters.</p>
+<h3>Loading the Config File</h3>
+<h3>Creating the Config File If It Doesn’t Exist</h3>
+<h3>Handling Corrupted or Missing Config Files</h3>
+<p>If the config file gets corrupted (e.g., due to incomplete edits or unexpected app behavior), the system will delete it and generate a new default file:</p>
+<h3>Checking for an Existing Config File</h3>
+<h3>Why This Matters</h3>
+<ul>
+<li><strong>Prevents crashes</strong>: Ensures the app doesn’t attempt to read a non-existent file.</li>
+<li><strong>Gives users a clear starting point</strong>: The default config file includes structured values, reducing the need to refer to documentation.</li>
+<li><strong>Self-healing mechanism</strong>: If the config file is corrupted or incomplete, the app will regenerate it automatically.</li>
+</ul>
+<h2>Optimizing JSON Parsing for Config Files</h2>
+<p>When working with a user-editable configuration file, it’s crucial to handle potential inconsistencies gracefully. Users may add extra fields, leave out optional ones, or introduce formatting variations. To make the JSON parsing process more robust, we can configure Kotlinx Serialization with settings that improve flexibility and prevent errors.</p>
+<h3>Recommended JSON Configuration</h3>
+<h2>Why These Settings Matter</h2>
+<p><strong>isLenient = true</strong></p>
+<ul>
+<li>Allows the parser to handle minor formatting inconsistencies (such as unquoted JSON keys or trailing commas).</li>
+<li>Helps when users manually edit the file and introduce small errors.</li>
+</ul>
+<p><strong>encodeDefaults = true</strong></p>
+<ul>
+<li>Ensures that when a new config file is created, all default values are explicitly written.</li>
+<li>This makes it easier for users to understand available options without referring to external documentation.</li>
+</ul>
+<p><strong>ignoreUnknownKeys = true</strong></p>
+<ul>
+<li>Prevents crashes if the config file contains extra fields that are not defined in the app’s data model.</li>
+<li>Useful when upgrading the app — older config files won’t break even if new settings are introduced.</li>
+</ul>
+<p><strong>explicitNulls = false</strong></p>
+<ul>
+<li>Avoids writing
+        <code>null</code> values to the file, keeping it cleaner and more readable. - When loading the config, missing values will fall back to their default values in the data class.</li>
+</ul>
+<h3>Using This JSON Configuration in the Config File Loader</h3>
+<p>To integrate this into our <code>loadConfigFile()</code> function:</p>
+<pre><code class="language-kotlin">
+                  val configFile: ConfigFileData = json.decodeFromString(configString
+                  </code></pre>
+<p>By implementing these settings, the configuration system becomes more user-friendly and resistant to errors.</p>
+<h2>Observing Config File Changes in Real Time</h2>
+<p>To make configuration changes apply instantly, we need a way to detect when the user edits the config file. Instead of requiring a manual restart, we can use Android’s <code>FileObserver</code> to watch for modifications and reload the configuration dynamically.</p>
+<h3>Using <code>FileObserver</code> to Detect Changes</h3>
+<p>We can register a <code>FileObserver</code> to monitor the config file and trigger a reload whenever it is modified:</p>
+<h3>How It Works</h3>
+<p><code>FileObserver</code> monitors the directory containing the config file.- When a user edits and saves the file, the
+<code>CLOSE_WRITE</code> event is triggered. - If the modified file is our
+<code>CONFIG_FILE_NAME</code>, we call<code>loadConfigFile(context)</code> to apply the new settings. <code>unregisterConfigFileObserver()</code> ensures that we clean up resources when the observer is no longer needed.</p>
+<h3>Applying Configuration Updates with an Interface</h3>
+<p>To ensure that other parts of the app or service can react to configuration changes, we use an interface:</p>
+<pre><code class="language-kotlin">
+                        fun interface ConfigFileInterface { fun onConfigFileRead(configFile: ConfigFileData)
+                        }
+                        </code></pre>
+<p>Now, any class that needs to respond to config updates can implement <code>ConfigFileInterface</code> and receive the latest config data whenever it is modified.</p>
+<h3>Why This Approach?</h3>
+<p>✅ <strong>No App Restart Required</strong> — Changes take effect immediately.</p>
+<p>✅ <strong>Efficient Resource Usage</strong> — The observer runs in the background without excessive polling.</p>
+<p>✅ <strong>Modular and Extendable</strong> — Different parts of the app can respond to changes dynamically.</p>
+<h2>Caveat: Editing the Config File</h2>
+<p>While providing users with a dynamic, editable configuration file can be incredibly useful, it’s important to consider that most users may not be familiar with directly editing raw files, especially when the config file is in an uncommon or structured format like JSON. To ensure a smooth experience for users, there are some key points to keep in mind:</p>
+<p><strong>Specialized Editing Tools Required</strong></p>
+<ul>
+<li>Editing a configuration file directly may require the user to have an appropriate app for handling JSON files or the specific format you’ve chosen. Android’s built-in file explorer won’t offer a user-friendly way to modify JSON unless the user has a compatible text editor or JSON viewer installed.</li>
+<li>If the config file is in a non-standard format, it’s essential to guide users on how to edit the file or suggest tools that can simplify the process. Consider providing links to recommended apps for this purpose.</li>
+</ul>
+<p><strong>Risk of Incorrect Modifications</strong></p>
+<ul>
+<li>Manual editing introduces the possibility of errors, such as incorrect JSON formatting, missing fields, or invalid data types. While we’ve made efforts to handle such errors gracefully through the app (e.g., using
+        <code>ignoreUnknownKeys = true</code></li>
+</ul>
+<p>), improperly edited files can still cause issues, especially if users inadvertently break the structure. - It’s important to provide clear documentation or in-app guidance to help users understand what they can modify, how to properly format the file, and how to avoid common mistakes.</p>
+<p><strong>Providing a Better Editing Experience</strong></p>
+<ul>
+<li>To minimize issues, consider integrating a simple UI in the app that can generate or modify configuration data in a structured way. This approach eliminates the need for users to manually edit the file while still offering flexibility and customization.</li>
+<li>For more advanced users, you might want to include a built-in editor that validates the data format or auto-corrects errors to some extent.</li>
+</ul>
+<p>While editing the config file directly provides flexibility, it’s essential to weigh the trade-off between giving users full control and the risk of errors. Offering guidance or better editing tools can help ensure that the experience remains smooth for both technical and non-technical users alike.</p>
+<h2>Conclusion</h2>
+<p>In this article, we explored how to create a user-editable configuration file for an Android app or service, allowing dynamic updates without requiring a restart. This approach provides flexibility, especially when a UI for managing configurations isn’t available or practical.</p>
+<h3>Key Takeaways</h3>
+<p><strong>Use Cases for a Config File</strong></p>
+<ul>
+<li>Ideal for apps or services that require user-defined settings without a complex UI.</li>
+<li>Useful for persistent configurations that remain across app updates or reinstalls.</li>
+</ul>
+<p><strong>Setting Up File Access Permissions</strong></p>
+<ul>
+<li>We request permission from the user to select a directory for storing the config file.</li>
+<li>Permissions are persisted using
+        <code>takePersistableUriPermission()</code> to retain access after app restarts.</li>
+</ul>
+<p><strong>Ensuring a Default Config File Exists</strong></p>
+<ul>
+<li>The app checks if the config file is missing or corrupted and regenerates it with default parameters.</li>
+<li>The file provides a structured template to help users understand what they can modify.</li>
+</ul>
+<p><strong>Handling JSON Parsing Safely</strong></p>
+<ul>
+<li>Kotlinx Serialization settings like
+        <code>ignoreUnknownKeys = true</code> and<code>isLenient = true</code> make JSON handling more flexible. - This prevents crashes due to missing or extra fields while ensuring clean and readable configuration files.</li>
+</ul>
+<p><strong>Observing Changes with </strong><strong>FileObserver</strong></p>
+<ul>
+<li>Instead of requiring a restart, a
+        <code>FileObserver</code> detects when the user modifies the config file. - The app reloads the configuration dynamically and applies changes instantly using an interface.</li>
+</ul>
+<p>By implementing this system, we allow users to customize the app’s behavior efficiently, making it more adaptable while maintaining stability.</p>
+</section>
+<section class="related-articles"><h2>More articles</h2><ul><li><a href="one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html">One Piece of Code: Picking and Reading Files like a True Pirate King</a></li><li><a href="how-i-tackled-parsing-xml-on-android-when-jaxb-just-wouldnt-play-nice.html">How I Tackled Parsing XML on Android When JAXB Just Wouldn’t Play Nice</a></li><li><a href="room-to-grow-walking-through-the-gardens-of-android-databases.html">Room to Grow: Walking Through the Gardens of Android Databases</a></li></ul></section><footer class="article-footer">
+<p>Last updated: <time datetime="2025-02-04">Feb 4, 2025</time></p>
+<p>
+        Tags: Android, Gradle, Kotlin
+      </p>
+<p class="article-footer-copy">
+        © 2026 James Cullimore
+      </p>
+</footer>
+</article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Modular Architecture at Scale – James Cullimore</title>
+  <title>Modular Architecture at Scale â€“ James Cullimore</title>
   <link rel="stylesheet" href="../../styles.css">
   <style>
     .article-container {
@@ -103,18 +103,21 @@ body::after {
 
 <header>
   <nav class="nav">
-    <a href="../../index.html" style="text-decoration: none; color: inherit;">
-      <div class="brand">
-        <div class="brand-mark">JC</div>
-        <div class="brand-text">
-          <div class="brand-name">James Cullimore</div>
-          <div class="brand-role">Developer</div>
-        </div>
+    <div class="brand">
+      <div class="brand-mark">JC</div>
+      <div class="brand-text">
+        <div class="brand-name">James Cullimore</div>
+        <div class="brand-role">Software Engineering</div>
       </div>
-    </a>
+    </div>
     <ul class="nav-links">
-      <li><a href="../../index.html">Home</a></li>
-      <li><a href="../blog.html">← Back to Blog</a></li>
+      <li><a href="../../index.html#overview">Overview</a></li>
+      <li><a href="../../index.html#services">Services</a></li>
+      <li><a href="../../index.html#how-we-work">How we work</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#insights">Insights</a></li>
+      <li><a href="../../index.html#contact">Contact</a></li>
+      <li><a href="../../articles.html" class="nav-cta">Blog</a></li>
     </ul>
   </nav>
 </header>
@@ -123,7 +126,7 @@ body::after {
   <article class="article-container">
     <h1 style="font-size: 2rem; margin-bottom: 0.5rem; color: var(--navy);">Modular Architecture at Scale</h1>
     <div class="article-meta">
-      January 15, 2026 • 8 min read
+      January 15, 2026 â€¢ 8 min read
       <div class="article-meta-tags">
         <span class="article-tag">Architecture</span>
         <span class="article-tag">Kotlin</span>
@@ -135,7 +138,7 @@ body::after {
 
       <h2>The Problem: Monolith Paralysis</h2>
       <p>
-        Last year, we inherited a 200K+ line Android codebase. Single monolithic module. 8-minute builds. Tests that were more aspirational than actual (coverage: 12%). Teams couldn't work independently – changes to one screen had a way of breaking another. Deploy frequency? Weeks. Feature velocity? Crawling.
+        Last year, we inherited a 200K+ line Android codebase. Single monolithic module. 8-minute builds. Tests that were more aspirational than actual (coverage: 12%). Teams couldn't work independently â€“ changes to one screen had a way of breaking another. Deploy frequency? Weeks. Feature velocity? Crawling.
       </p>
       <p>
         The team knew something had to change. We couldn't scale feature delivery with this structure.
@@ -146,10 +149,10 @@ body::after {
         The goals were concrete:
       </p>
       <ul>
-        <li><strong>Reduce build times by 50%+</strong> – Parallel module builds, incremental compilation.</li>
-        <li><strong>Enable independent feature development</strong> – Teams own their modules, deploy without coordination.</li>
-        <li><strong>Improve testability</strong> – Smaller modules, faster unit tests, higher coverage.</li>
-        <li><strong>Make the codebase navigable</strong> – Clear boundaries, explicit dependencies, easier onboarding.</li>
+        <li><strong>Reduce build times by 50%+</strong> â€“ Parallel module builds, incremental compilation.</li>
+        <li><strong>Enable independent feature development</strong> â€“ Teams own their modules, deploy without coordination.</li>
+        <li><strong>Improve testability</strong> â€“ Smaller modules, faster unit tests, higher coverage.</li>
+        <li><strong>Make the codebase navigable</strong> â€“ Clear boundaries, explicit dependencies, easier onboarding.</li>
       </ul>
 
       <h2>The Target Architecture</h2>
@@ -159,13 +162,13 @@ body::after {
 
       <h3>1. Core Layer</h3>
       <p>
-        Shared infrastructure – no business logic, no UI:
+        Shared infrastructure â€“ no business logic, no UI:
       </p>
       <ul>
-        <li><code>core-network</code> – Retrofit, OkHttp, API clients, DTOs.</li>
-        <li><code>core-database</code> – Room setup, DAOs, database schema.</li>
-        <li><code>core-ui</code> – Design system, reusable UI components, themes.</li>
-        <li><code>core-analytics</code> – Event tracking, crash reporting.</li>
+        <li><code>core-network</code> â€“ Retrofit, OkHttp, API clients, DTOs.</li>
+        <li><code>core-database</code> â€“ Room setup, DAOs, database schema.</li>
+        <li><code>core-ui</code> â€“ Design system, reusable UI components, themes.</li>
+        <li><code>core-analytics</code> â€“ Event tracking, crash reporting.</li>
       </ul>
 
       <h3>2. Feature Layer</h3>
@@ -173,10 +176,10 @@ body::after {
         Independent, self-contained features:
       </p>
       <ul>
-        <li><code>feature-auth</code> – Login, signup, password reset.</li>
-        <li><code>feature-dashboard</code> – Home screen, analytics widgets.</li>
-        <li><code>feature-payments</code> – Payment flows, transaction history.</li>
-        <li><code>feature-settings</code> – User preferences, account management.</li>
+        <li><code>feature-auth</code> â€“ Login, signup, password reset.</li>
+        <li><code>feature-dashboard</code> â€“ Home screen, analytics widgets.</li>
+        <li><code>feature-payments</code> â€“ Payment flows, transaction history.</li>
+        <li><code>feature-settings</code> â€“ User preferences, account management.</li>
       </ul>
 
       <h3>3. App Layer</h3>
@@ -184,7 +187,7 @@ body::after {
         Brings it all together:
       </p>
       <ul>
-        <li><code>app</code> – Main app module, navigation graph, dependency injection setup.</li>
+        <li><code>app</code> â€“ Main app module, navigation graph, dependency injection setup.</li>
       </ul>
 
       <p>
@@ -198,7 +201,7 @@ body::after {
 
       <h3>Phase 1: Extract Core</h3>
       <p>
-        First, we pulled out all infrastructure into core modules. No business logic – just APIs, database setup, UI components. This took 2 weeks and was low-risk.
+        First, we pulled out all infrastructure into core modules. No business logic â€“ just APIs, database setup, UI components. This took 2 weeks and was low-risk.
       </p>
 
       <h3>Phase 2: One Feature at a Time</h3>
@@ -258,21 +261,21 @@ class PaymentNavigationImpl : PaymentNavigation { ... }</code></pre>
 
       <h3>Gradle Build Cache</h3>
       <p>
-        First attempt: each module built independently, but we didn't set up Gradle's build cache. Discovered this when local builds were fast but CI was slow. Fixed it – CI now leverages the cache.
+        First attempt: each module built independently, but we didn't set up Gradle's build cache. Discovered this when local builds were fast but CI was slow. Fixed it â€“ CI now leverages the cache.
       </p>
 
       <h2>The Results</h2>
 
       <div class="stat-highlight">
         <p>
-          <strong>Build time: 8 minutes → 3 minutes</strong> (62% reduction)<br>
+          <strong>Build time: 8 minutes â†’ 3 minutes</strong> (62% reduction)<br>
           Clean builds went from 8 to 10 minutes (parallel module builds FTW).
         </p>
       </div>
 
       <div class="stat-highlight">
         <p>
-          <strong>Test coverage: 12% → 75%</strong> (in refactored modules)<br>
+          <strong>Test coverage: 12% â†’ 75%</strong> (in refactored modules)<br>
           Smaller modules meant faster tests, so developers ran them locally.
         </p>
       </div>
@@ -304,7 +307,7 @@ class PaymentNavigationImpl : PaymentNavigation { ... }</code></pre>
       <h2>What's Next</h2>
 
       <p>
-        We're monitoring build times – targeting 90 seconds for incremental builds. We're also exploring dynamic feature modules for rarely-used features. And we're documenting the module structure so new engineers understand the mental model quickly.
+        We're monitoring build times â€“ targeting 90 seconds for incremental builds. We're also exploring dynamic feature modules for rarely-used features. And we're documenting the module structure so new engineers understand the mental model quickly.
       </p>
 
       <p>
@@ -322,7 +325,7 @@ class PaymentNavigationImpl : PaymentNavigation { ... }</code></pre>
 
 <footer>
   <div class="footer-inner">
-    <div>© 2026 James Cullimore. All rights reserved.</div>
+    <div>Â© 2026 James Cullimore. All rights reserved.</div>
     <ul class="footer-links">
       <li><a href="../blog.html">Blog</a></li>
       <li><a href="../impressum.html">Impressum</a></li>

@@ -1,97 +1,34 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Blog – James Cullimore</title>
-  <link rel="stylesheet" href="../styles.css">
-  <style>
-    /* Layout: push footer to page bottom on blog pages */
-    body {
-      display: flex;
-      min-height: 100vh;
-      flex-direction: column;
-    }
-    main {
-      flex: 1;
-    }
-
-    /* Keep Blog nav button in its hover/active state on this page */
-    .nav-cta.active {
-      background: var(--color-primary);
-      color: var(--color-btn-primary-text) !important;
-    }
-
-    .blog-header {
-      text-align: center;
-      padding-bottom: 2rem;
-      margin-bottom: 2rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .blog-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-      gap: 2rem;
-    }
-    .blog-card {
-      background: var(--bg-alt);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-sm);
-      padding: 1.5rem;
-      transition: all 0.15s ease;
-    }
-    .blog-card:hover {
-      border-color: var(--navy);
-      box-shadow: 0 4px 12px rgba(18, 58, 117, 0.08);
-    }
-    .blog-date {
-      font-size: 0.85rem;
-      color: var(--muted);
-      margin-bottom: 0.3rem;
-    }
-    .blog-title {
-      font-size: 1.15rem;
-      font-weight: 600;
-      color: var(--ink);
-      margin-bottom: 0.5rem;
-    }
-    .blog-excerpt {
-      font-size: 0.95rem;
-      color: var(--muted);
-      line-height: 1.6;
-      margin-bottom: 1rem;
-    }
-    .blog-tags {
-      display: flex;
-      gap: 0.4rem;
-      flex-wrap: wrap;
-    }
-    .blog-tag {
-      font-size: 0.8rem;
-      padding: 0.2rem 0.6rem;
-      background: var(--navy-lighter);
-      color: var(--navy);
-      border-radius: 999px;
-    }
-  /* Disable global fade overlay on blog pages */
-body::before,
-body::after {
-  content: none !important;
-  display: none !important;
-}
-</style>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Articles | James Cullimore</title>
+  <meta name="description" content="Technical articles on Android, architecture, performance, testing, security, and product engineering."/>
+  <meta name="author" content="James Cullimore"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles.html"/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:title" content="Articles | James Cullimore"/>
+  <meta property="og:description" content="Technical articles on Android, architecture, performance, testing, security, and product engineering."/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*U1Ba8FgdtoEGGqQMpIlkTw.png"/>
+  <meta property="og:site_name" content="James Cullimore Software Engineering"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="../articles/assets/style.css"/>
 </head>
-<body>
-
+<body class="article-hub">
 <header>
   <nav class="nav">
-    <div class="brand">
-      <div class="brand-mark">JC</div>
-      <div class="brand-text">
-        <div class="brand-name">James Cullimore</div>
-        <div class="brand-role">Software Engineering</div>
+    <a href="../index.html" class="article-brand-link" aria-label="James Cullimore home">
+      <div class="brand">
+        <div class="brand-mark">JC</div>
+        <div class="brand-text">
+          <div class="brand-name">James Cullimore</div>
+          <div class="brand-role">Software Engineering</div>
+        </div>
       </div>
-    </div>
+    </a>
     <ul class="nav-links">
       <li><a href="../index.html#overview">Overview</a></li>
       <li><a href="../index.html#services">Services</a></li>
@@ -99,76 +36,724 @@ body::after {
       <li><a href="../index.html#projects">Projects</a></li>
       <li><a href="../index.html#insights">Insights</a></li>
       <li><a href="../index.html#contact">Contact</a></li>
-      <li><a href="blog.html" class="nav-cta active">Blog</a></li>
+      <li><a href="../articles.html" class="nav-cta active">Blog</a></li>
     </ul>
   </nav>
 </header>
 
-<main style="padding: 3.5rem 1.25rem;">
-  <div class="section-inner" style="max-width: 800px; margin: 0 auto;">
-    <div class="blog-header">
-      <h1 class="section-heading" style="margin-bottom: 0.5rem;">Blog</h1>
-      <p class="section-text" style="margin: 0;">Thoughts on Android development, architecture, and building better software.</p>
-    </div>
-
-    <div class="blog-grid" style="max-width: 100%;">
-      <!-- Post 1 -->
-      <div class="blog-card">
-        <div class="blog-date">January 15, 2026 • 8 min read</div>
-        <div class="blog-title">
-          <a href="articles/modular-architecture.html" style="color: var(--ink); text-decoration: none;">
-            Modular Architecture at Scale
-          </a>
-        </div>
-        <div class="blog-excerpt">
-          How we restructured a 200K+ line monolith into a modular architecture. Includes practical patterns for dependency management and build optimization.
-        </div>
-        <div class="blog-tags">
-          <span class="blog-tag">Architecture</span>
-          <span class="blog-tag">Kotlin</span>
-          <span class="blog-tag">Performance</span>
-        </div>
-      </div>
-
-      <!-- Post 2 -->
-      <div class="blog-card">
-        <div class="blog-date">January 8, 2026 • 6 min read</div>
-        <div class="blog-title">Testing Strategies for Complex UIs</div>
-        <div class="blog-excerpt">
-          Advanced testing techniques for complex UI components. From unit tests to integration tests, ensuring reliability without brittleness.
-        </div>
-        <div class="blog-tags">
-          <span class="blog-tag">Testing</span>
-          <span class="blog-tag">Best Practices</span>
-          <span class="blog-tag">Quality</span>
-        </div>
-      </div>
-
-      <!-- Post 3 -->
-      <div class="blog-card">
-        <div class="blog-date">December 30, 2025 • 10 min read</div>
-        <div class="blog-title">Data Synchronization Patterns</div>
-        <div class="blog-excerpt">
-          Building reliable real-time sync layers. Handling conflicts, offline scenarios, and ensuring data consistency at scale.
-        </div>
-        <div class="blog-tags">
-          <span class="blog-tag">Architecture</span>
-          <span class="blog-tag">Real-time</span>
-          <span class="blog-tag">Databases</span>
-        </div>
+<main class="article-index-main">
+  <section class="article-index-hero">
+    <div class="article-index-shell">
+      <p class="article-index-eyebrow">Engineering writing</p>
+      <h1 class="article-index-title">Articles on Android, architecture, delivery, and the work behind reliable software.</h1>
+      <p class="article-index-intro">A curated archive of hands-on engineering notes covering Compose, Gradle, testing, security, Wear OS, and shipping production systems.</p>
+      <div class="article-index-stats">
+        <span>40 articles</span>
       </div>
     </div>
+  </section>
+
+  <section class="article-index-shell article-index-featured">
+    <div class="article-section-heading">
+      <h2>Featured article</h2>
+    </div>
+    <article class="article-card article-card-featured">
+  <a href="../articles/breaking-and-defending-https-on-android-a-hands-on-certificate-pinning-lab.html" class="article-card-media article-card-media-featured">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*U1Ba8FgdtoEGGqQMpIlkTw.png" alt="Breaking and Defending HTTPS on Android: A Hands-On Certificate Pinning Lab hero image"/>
+  </a>
+  <div class="article-card-body article-card-body-featured">
+    <div class="article-card-meta">
+      <time datetime="2026-02-16">Feb 16, 2026</time>
+      <span>•</span>
+      <span>14 min read</span>
+    </div>
+    <h2 class="article-card-title article-card-title-featured">
+      <a href="../articles/breaking-and-defending-https-on-android-a-hands-on-certificate-pinning-lab.html">Breaking and Defending HTTPS on Android: A Hands-On Certificate Pinning Lab</a>
+    </h2>
+    <p class="article-card-description">HTTPS is no longer a nice to have in Android apps. It is the baseline expectation. It protects users from passive eavesdropping, active…</p>
+    <a href="../articles/breaking-and-defending-https-on-android-a-hands-on-certificate-pinning-lab.html" class="article-card-link">Read article</a>
   </div>
+</article>
+  </section>
+
+  <section class="article-index-shell article-index-listing">
+    <div class="article-section-heading">
+      <h2>All articles</h2>
+    </div>
+    <div class="article-card-grid">
+      <article class="article-card">
+  <a href="../articles/building-a-reliable-control-handoff-with-the-wear-os-data-layer.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*2ghgteXhywgmvdAeyb8N4Q.png" alt="Building a Reliable Control Handoff with the Wear OS Data Layer hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2026-02-11">Feb 11, 2026</time>
+      <span>•</span>
+      <span>11 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/building-a-reliable-control-handoff-with-the-wear-os-data-layer.html">Building a Reliable Control Handoff with the Wear OS Data Layer</a>
+    </h2>
+    <p class="article-card-description">When One Feature Has Two Masters</p>
+    <a href="../articles/building-a-reliable-control-handoff-with-the-wear-os-data-layer.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/stop-using-playerview-in-compose-media3-playersurface-done-right.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*i8xPzBIBaZwNKIVP1gyM8Q.png" alt="Stop Using PlayerView in Compose: Media3 PlayerSurface Done Right hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2026-01-19">Jan 19, 2026</time>
+      <span>•</span>
+      <span>7 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/stop-using-playerview-in-compose-media3-playersurface-done-right.html">Stop Using PlayerView in Compose: Media3 PlayerSurface Done Right</a>
+    </h2>
+    <p class="article-card-description">Modern Android development moves fast, especially around media playback. Libraries evolve, APIs shift, and examples that worked a year ago…</p>
+    <a href="../articles/stop-using-playerview-in-compose-media3-playersurface-done-right.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*dQ0hL8953SnmuvLeQOZb1A.png" alt="Goodbye AndroidView: A Real CameraX QR Scanner in Compose hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2026-01-14">Jan 14, 2026</time>
+      <span>•</span>
+      <span>18 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html">Goodbye AndroidView: A Real CameraX QR Scanner in Compose</a>
+    </h2>
+    <p class="article-card-description">In a recent project, we needed to add a QR scanner that allows users to quickly connect to a Wi-Fi network. This is not a new problem. I…</p>
+    <a href="../articles/goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/contribute-struggle-adjust-repeat-finding-work-life-balance-as-a-dev.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*AfaRx9GAVsfxwP2IjDAbbQ.jpeg" alt="Contribute, Struggle, Adjust, Repeat: Finding Work-Life Balance as a Dev hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2025-07-25">Jul 25, 2025</time>
+      <span>•</span>
+      <span>15 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/contribute-struggle-adjust-repeat-finding-work-life-balance-as-a-dev.html">Contribute, Struggle, Adjust, Repeat: Finding Work-Life Balance as a Dev</a>
+    </h2>
+    <p class="article-card-description">I’m a developer. I’m also a husband, father of 2 active boys, a freelance developer, a speaker, a writer, a coach, take part in MMA, play…</p>
+    <a href="../articles/contribute-struggle-adjust-repeat-finding-work-life-balance-as-a-dev.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/one-repo-to-rule-them-all-android-modules-with-git-submodules.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*Qfl8XebsvdWpQ4X-zi1WcA.jpeg" alt="One Repo to Rule Them All: Android Modules with Git Submodules hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2025-07-25">Jul 25, 2025</time>
+      <span>•</span>
+      <span>8 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/one-repo-to-rule-them-all-android-modules-with-git-submodules.html">One Repo to Rule Them All: Android Modules with Git Submodules</a>
+    </h2>
+    <p class="article-card-description">I was working on a project recently when I noticed something interesting. Another developer had included a springboot kotlin project, built…</p>
+    <a href="../articles/one-repo-to-rule-them-all-android-modules-with-git-submodules.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/how-i-built-seamless-watch-phone-handover-in-wear-os.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*wCbRT6rPmrUKPSP1tsCrkA.png" alt="How I Built Seamless Watch ↔ Phone Handover in Wear OS hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2025-07-02">Jul 2, 2025</time>
+      <span>•</span>
+      <span>8 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/how-i-built-seamless-watch-phone-handover-in-wear-os.html">How I Built Seamless Watch ↔ Phone Handover in Wear OS</a>
+    </h2>
+    <p class="article-card-description">I recently worked on extending an existing Android app to include a Wear OS counterpart. The goal was to build a “handover” feature…</p>
+    <a href="../articles/how-i-built-seamless-watch-phone-handover-in-wear-os.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/wear-os-seamless-handover.html" class="article-card-media">
+    <img src="/articles/assets/phone-handover-in-wear-os.webp" alt="How I Built Seamless Watch ↔ Phone Handover in Wear OS hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2025-07-02">Jul 2, 2025</time>
+      <span>•</span>
+      <span>8 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/wear-os-seamless-handover.html">How I Built Seamless Watch ↔ Phone Handover in Wear OS</a>
+    </h2>
+    <p class="article-card-description">How to implement seamless handover between Wear OS watch and phone using WearableListenerService, DataClient, and MessageClient—covering paths, data sync, and pitfalls.</p>
+    <a href="../articles/wear-os-seamless-handover.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/two-sides-of-200-android-interviews.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*aoJAwMebD6MC_hCTeuy5WA.png" alt="Two Sides of 200+ Android Interviews hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2025-06-25">Jun 25, 2025</time>
+      <span>•</span>
+      <span>13 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/two-sides-of-200-android-interviews.html">Two Sides of 200+ Android Interviews</a>
+    </h2>
+    <p class="article-card-description">Interviews Suck, But Here We Are</p>
+    <a href="../articles/two-sides-of-200-android-interviews.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/fast-feedback-winning-back-60-of-our-ci-time.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*e6MCHibpW3bKuEjFttx_Og.jpeg" alt="Fast Feedback: Winning Back 60% of Our CI Time hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2025-05-09">May 9, 2025</time>
+      <span>•</span>
+      <span>4 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/fast-feedback-winning-back-60-of-our-ci-time.html">Fast Feedback: Winning Back 60% of Our CI Time</a>
+    </h2>
+    <p class="article-card-description">Speeding up your build pipeline isn’t just about faster Gradle builds, though that’s a great place to start. I covered that part in a…</p>
+    <a href="../articles/fast-feedback-winning-back-60-of-our-ci-time.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/how-i-tackled-parsing-xml-on-android-when-jaxb-just-wouldnt-play-nice.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*mziQNQoSKqidensELjUk8g.png" alt="How I Tackled Parsing XML on Android When JAXB Just Wouldn’t Play Nice hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2025-04-14">Apr 14, 2025</time>
+      <span>•</span>
+      <span>9 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/how-i-tackled-parsing-xml-on-android-when-jaxb-just-wouldnt-play-nice.html">How I Tackled Parsing XML on Android When JAXB Just Wouldn’t Play Nice</a>
+    </h2>
+    <p class="article-card-description">If you’ve ever tried using JAXB (Java Architecture for XML Binding) on Android, you probably know that it doesn’t exactly play well with…</p>
+    <a href="../articles/how-i-tackled-parsing-xml-on-android-when-jaxb-just-wouldnt-play-nice.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/how-i-cut-my-gradle-build-time-by-50.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*3zi07Bc4-iqKJKg-1iVtHQ.jpeg" alt="How I Cut My Gradle Build Time by 50% hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2025-04-07">Apr 7, 2025</time>
+      <span>•</span>
+      <span>7 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/how-i-cut-my-gradle-build-time-by-50.html">How I Cut My Gradle Build Time by 50%</a>
+    </h2>
+    <p class="article-card-description">Android developers are no strangers to the occasional long build time. As projects grow in complexity, waiting on Gradle to finish its work...</p>
+    <a href="../articles/how-i-cut-my-gradle-build-time-by-50.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/editable-config-files-a-ui-less-way-to-configure-android-apps-and-services.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*L43s57I1ZUXgGH8XCyfLwQ.png" alt="Editable Config Files: A UI-less Way to Configure Android Apps and Services hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2025-02-04">Feb 4, 2025</time>
+      <span>•</span>
+      <span>10 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/editable-config-files-a-ui-less-way-to-configure-android-apps-and-services.html">Editable Config Files: A UI-less Way to Configure Android Apps and Services</a>
+    </h2>
+    <p class="article-card-description">Configuration files can play a crucial role in many Android applications, allowing users to customize settings without modifying the app’s…</p>
+    <a href="../articles/editable-config-files-a-ui-less-way-to-configure-android-apps-and-services.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/git-it-together.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*MyxHv6p2ovDJ8l_RVEiPWw.jpeg" alt="Git It Together! hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-12-15">Dec 15, 2024</time>
+      <span>•</span>
+      <span>16 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/git-it-together.html">Git It Together!</a>
+    </h2>
+    <p class="article-card-description">Hello, fellow developers and version control fans! If you’re reading this, you’ve probably had your fair share of “hair-raising” Git…</p>
+    <a href="../articles/git-it-together.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*UvGYhV0gNPoBKBLm_FV28A.jpeg" alt="One Piece of Code: Picking and Reading Files like a True Pirate King hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-11-16">Nov 16, 2024</time>
+      <span>•</span>
+      <span>4 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html">One Piece of Code: Picking and Reading Files like a True Pirate King</a>
+    </h2>
+    <p class="article-card-description">Ahoy, fellow sailors of the digital high seas!</p>
+    <a href="../articles/one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1024/1*nxE_0b5SXkAgcooRvTovCA.jpeg" alt="Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-04-24">Apr 24, 2024</time>
+      <span>•</span>
+      <span>5 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html">Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android</a>
+    </h2>
+    <p class="article-card-description">Ah, another themed article. This one’s about Maestro, an effective mobile UI testing framework, but with a twist — a Fallout twist! Like…</p>
+    <a href="../articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/one-punch-one-scan-effortless-barcode-scanning-on-android-with-googles-ml-kit-jetpack-compose.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1176/1*z6D9gYMNzEFx9KIPDkHEfw.png" alt="One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit & Jetpack Compose hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-04-16">Apr 16, 2024</time>
+      <span>•</span>
+      <span>5 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/one-punch-one-scan-effortless-barcode-scanning-on-android-with-googles-ml-kit-jetpack-compose.html">One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit & Jetpack Compose</a>
+    </h2>
+    <p class="article-card-description">With so many smart gadgets and QR codes in the world today, it might feel like we’re caught in a complicated maze of connectivity issues…</p>
+    <a href="../articles/one-punch-one-scan-effortless-barcode-scanning-on-android-with-googles-ml-kit-jetpack-compose.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/artifactory-secrets-unveiled-maximizing-android-projects-with-private-module-publishing.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*SZHT45mXSCiPg7LFHOZp-A.jpeg" alt="Artifactory Secrets Unveiled: Maximizing Android Projects with Private Module Publishing hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-04-10">Apr 10, 2024</time>
+      <span>•</span>
+      <span>5 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/artifactory-secrets-unveiled-maximizing-android-projects-with-private-module-publishing.html">Artifactory Secrets Unveiled: Maximizing Android Projects with Private Module Publishing</a>
+    </h2>
+    <p class="article-card-description">Android developers often find themselves in scenarios where sharing code across projects or teams becomes essential for maintaining…</p>
+    <a href="../articles/artifactory-secrets-unveiled-maximizing-android-projects-with-private-module-publishing.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/diving-into-the-developers-dive-crafting-android-development-articles-for-android-developers.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*6dQBVbY9hnz7OMrggFmtkg.jpeg" alt="Diving into the Developer’s Dive: Crafting Android Development Articles for Android Developers hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-04-03">Apr 3, 2024</time>
+      <span>•</span>
+      <span>9 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/diving-into-the-developers-dive-crafting-android-development-articles-for-android-developers.html">Diving into the Developer’s Dive: Crafting Android Development Articles for Android Developers</a>
+    </h2>
+    <p class="article-card-description">The journey from a novice coder to a seasoned expert is one marked by continuous learning, exploration, and sharing of knowledge. Writing…</p>
+    <a href="../articles/diving-into-the-developers-dive-crafting-android-development-articles-for-android-developers.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/say-goodbye-to-dependency-hell-simplify-your-android-development-with-version-catalogs.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*ZULpjuiHNX8twt6_S43I0A.jpeg" alt="Say Goodbye to Dependency Hell: Simplify Your Android Development with Version Catalogs hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-03-27">Mar 27, 2024</time>
+      <span>•</span>
+      <span>6 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/say-goodbye-to-dependency-hell-simplify-your-android-development-with-version-catalogs.html">Say Goodbye to Dependency Hell: Simplify Your Android Development with Version Catalogs</a>
+    </h2>
+    <p class="article-card-description">For Android developers, managing dependencies and versions has long been a crucial aspect of the development process. However, with the…</p>
+    <a href="../articles/say-goodbye-to-dependency-hell-simplify-your-android-development-with-version-catalogs.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/leveling-up-the-dev-dungeon-with-ml-kits-text-recognition.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1024/1*16s0bmqbHZYRiFhLBpGG7A.png" alt="Leveling Up the Dev Dungeon with ML Kit’s Text Recognition hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-03-13">Mar 13, 2024</time>
+      <span>•</span>
+      <span>5 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/leveling-up-the-dev-dungeon-with-ml-kits-text-recognition.html">Leveling Up the Dev Dungeon with ML Kit’s Text Recognition</a>
+    </h2>
+    <p class="article-card-description">Unlocking the Arcane with ML Kit & Text Recognition</p>
+    <a href="../articles/leveling-up-the-dev-dungeon-with-ml-kits-text-recognition.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/pixels-to-profits-monetizing-jetpack-compose-apps-with-admob.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*6RlPtPt8T3XTER7BZk-bng.jpeg" alt="Pixels to Profits: Monetizing Jetpack Compose Apps with AdMob hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-02-26">Feb 26, 2024</time>
+      <span>•</span>
+      <span>8 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/pixels-to-profits-monetizing-jetpack-compose-apps-with-admob.html">Pixels to Profits: Monetizing Jetpack Compose Apps with AdMob</a>
+    </h2>
+    <p class="article-card-description">Staying ahead of the curve in the ever-changing environment of mobile app development is critical for developers wanting to produce not…</p>
+    <a href="../articles/pixels-to-profits-monetizing-jetpack-compose-apps-with-admob.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/monetizing-marvels-a-developers-guide-to-in-app-purchases-on-android.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*GlJydEBBej20d8ctVuYPPQ.jpeg" alt="Monetizing Marvels: A Developer’s Guide to In-App Purchases on Android hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-02-21">Feb 21, 2024</time>
+      <span>•</span>
+      <span>5 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/monetizing-marvels-a-developers-guide-to-in-app-purchases-on-android.html">Monetizing Marvels: A Developer’s Guide to In-App Purchases on Android</a>
+    </h2>
+    <p class="article-card-description">Picture this scenario. As we sit in the warm corner of this crowded coffee shop, let me to tell you about the Android ecosystem, a digital…</p>
+    <a href="../articles/monetizing-marvels-a-developers-guide-to-in-app-purchases-on-android.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/permission-slips-and-flag-waving-navigating-the-android-development-skyline.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*aVNVmjdGr68MI3msRUTK9A.jpeg" alt="Permission Slips and Flag Waving: Navigating the Android Development Skyline hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-02-14">Feb 14, 2024</time>
+      <span>•</span>
+      <span>6 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/permission-slips-and-flag-waving-navigating-the-android-development-skyline.html">Permission Slips and Flag Waving: Navigating the Android Development Skyline</a>
+    </h2>
+    <p class="article-card-description">As we navigate the bustling streets of the Android development ecosystem, we pass through the dynamic metropolis of permissions and window…</p>
+    <a href="../articles/permission-slips-and-flag-waving-navigating-the-android-development-skyline.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/room-to-grow-walking-through-the-gardens-of-android-databases.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*WDh6Os5LnxhjPyfDfIhDDw.jpeg" alt="Room to Grow: Walking Through the Gardens of Android Databases hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-02-07">Feb 7, 2024</time>
+      <span>•</span>
+      <span>9 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/room-to-grow-walking-through-the-gardens-of-android-databases.html">Room to Grow: Walking Through the Gardens of Android Databases</a>
+    </h2>
+    <p class="article-card-description">Have you ever felt as if you were navigating a maze when handling the database for your Android app? So have a seat on this virtual park…</p>
+    <a href="../articles/room-to-grow-walking-through-the-gardens-of-android-databases.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/pixel-perfect-designing-for-every-screen-every-fold.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*k1A_hLHTpvc_j5P-msJMfg.jpeg" alt="Pixel Perfect: Designing for Every Screen, Every Fold hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-02-06">Feb 6, 2024</time>
+      <span>•</span>
+      <span>9 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/pixel-perfect-designing-for-every-screen-every-fold.html">Pixel Perfect: Designing for Every Screen, Every Fold</a>
+    </h2>
+    <p class="article-card-description">Mobile device diversity has increased to previously unheard-of levels. App developers have many challenges because different devices have…</p>
+    <a href="../articles/pixel-perfect-designing-for-every-screen-every-fold.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/accessibility-amplified-a-journey-to-inclusive-android-apps.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*_CiG1iSCBKZ25DpwON5Ysw.jpeg" alt="Accessibility Amplified: A Journey to Inclusive Android Apps hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-02-01">Feb 1, 2024</time>
+      <span>•</span>
+      <span>13 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/accessibility-amplified-a-journey-to-inclusive-android-apps.html">Accessibility Amplified: A Journey to Inclusive Android Apps</a>
+    </h2>
+    <p class="article-card-description">The pursuit of innovation frequently overshadows the requirement of inclusion. As our lives grow more entwined with digital interfaces, it…</p>
+    <a href="../articles/accessibility-amplified-a-journey-to-inclusive-android-apps.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/android-symphony-a-ux-melody-with-tooltips-popups-and-dialogs.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*t1-bBfv2L0PuZ6J3fhefCA.jpeg" alt="Android Symphony: A UX Melody with Tooltips, Popups, and Dialogs hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-02-01">Feb 1, 2024</time>
+      <span>•</span>
+      <span>6 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/android-symphony-a-ux-melody-with-tooltips-popups-and-dialogs.html">Android Symphony: A UX Melody with Tooltips, Popups, and Dialogs</a>
+    </h2>
+    <p class="article-card-description">Grab a cup of coffee and let’s embark on a journey into the captivating world of user interface elements that add finesse to your Android…</p>
+    <a href="../articles/android-symphony-a-ux-melody-with-tooltips-popups-and-dialogs.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/defending-the-android-realm-proguards-role-in-app-security-and-efficiency.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*z2SY7TR5bubT9Gwg-25rdw.jpeg" alt="Defending the Android Realm: ProGuard’s Role in App Security and Efficiency hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2024-01-11">Jan 11, 2024</time>
+      <span>•</span>
+      <span>9 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/defending-the-android-realm-proguards-role-in-app-security-and-efficiency.html">Defending the Android Realm: ProGuard’s Role in App Security and Efficiency</a>
+    </h2>
+    <p class="article-card-description">Maintaining the security, effectiveness, and performance of your codebase becomes critical on Android. Enter ProGuard, a flexible tool with…</p>
+    <a href="../articles/defending-the-android-realm-proguards-role-in-app-security-and-efficiency.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/yo-ho-ho-and-a-heap-of-memory-leak-woes-leakcanary-to-the-rescue.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*ePVvDe6bFxV9-5FJ5BjX2g.jpeg" alt="Yo Ho Ho and a Heap of Memory Leak Woes: LeakCanary to the Rescue! hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-12-24">Dec 24, 2023</time>
+      <span>•</span>
+      <span>8 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/yo-ho-ho-and-a-heap-of-memory-leak-woes-leakcanary-to-the-rescue.html">Yo Ho Ho and a Heap of Memory Leak Woes: LeakCanary to the Rescue!</a>
+    </h2>
+    <p class="article-card-description">Have you ever asked, “But why is all the memory gone?” Fear not, for memory leaks may be like nefarious gremlins, devouring your resources…</p>
+    <a href="../articles/yo-ho-ho-and-a-heap-of-memory-leak-woes-leakcanary-to-the-rescue.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/locking-in-data-confidence-decoding-androids-encrypted-preferences-arsenal.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*fptv4zq95XLXVHRSQIOQMg.jpeg" alt="Locking In Data Confidence: Decoding Android’s Encrypted Preferences Arsenal hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-12-23">Dec 23, 2023</time>
+      <span>•</span>
+      <span>8 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/locking-in-data-confidence-decoding-androids-encrypted-preferences-arsenal.html">Locking In Data Confidence: Decoding Android’s Encrypted Preferences Arsenal</a>
+    </h2>
+    <p class="article-card-description">Safeguarding sensitive user data has become an essential undertaking for both developers and consumers in an era characterized by the…</p>
+    <a href="../articles/locking-in-data-confidence-decoding-androids-encrypted-preferences-arsenal.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/compose-and-conquer-a-tale-of-effortless-android-navigation.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*uV01rjRhsd0kUxxOWbJzzw.jpeg" alt="Compose and Conquer: A Tale of Effortless Android Navigation hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-12-15">Dec 15, 2023</time>
+      <span>•</span>
+      <span>7 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/compose-and-conquer-a-tale-of-effortless-android-navigation.html">Compose and Conquer: A Tale of Effortless Android Navigation</a>
+    </h2>
+    <p class="article-card-description">In Android app development, efficient navigation is critical to offering a seamless user experience. Prior to the introduction of Jetpack…</p>
+    <a href="../articles/compose-and-conquer-a-tale-of-effortless-android-navigation.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/reshaping-the-network-layer-transitioning-from-retrofit-to-ktor.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*kaFrtzJJGEg9Wd1GXZIGug.jpeg" alt="Reshaping the Network Layer: Transitioning from Retrofit to Ktor hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-12-07">Dec 7, 2023</time>
+      <span>•</span>
+      <span>8 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/reshaping-the-network-layer-transitioning-from-retrofit-to-ktor.html">Reshaping the Network Layer: Transitioning from Retrofit to Ktor</a>
+    </h2>
+    <p class="article-card-description">Choosing the correct networking library is critical for creating strong and efficient apps in the ever-changing world of Android…</p>
+    <a href="../articles/reshaping-the-network-layer-transitioning-from-retrofit-to-ktor.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/stepping-into-the-alternative-universe-of-automated-testing-for-android-mobile-espresso.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*GpaKQAu2CtPeA68HqNzS2Q.jpeg" alt="Stepping into the Alternative Universe of Automated Testing for Android & Mobile: Espresso… hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-12-04">Dec 4, 2023</time>
+      <span>•</span>
+      <span>14 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/stepping-into-the-alternative-universe-of-automated-testing-for-android-mobile-espresso.html">Stepping into the Alternative Universe of Automated Testing for Android & Mobile: Espresso…</a>
+    </h2>
+    <p class="article-card-description">As a developer, I vividly remember my early encounters with Test-Driven Development (TDD). The frustration, the seemingly endless…</p>
+    <a href="../articles/stepping-into-the-alternative-universe-of-automated-testing-for-android-mobile-espresso.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/spring-loaded-perfection-coil-and-jetpack-compose-for-effortless-image-loading.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*SzxzvHDyrFs_GZfBLfvdFg.jpeg" alt="Spring-loaded Perfection: Coil and Jetpack Compose for Effortless Image Loading hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-12-01">Dec 1, 2023</time>
+      <span>•</span>
+      <span>5 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/spring-loaded-perfection-coil-and-jetpack-compose-for-effortless-image-loading.html">Spring-loaded Perfection: Coil and Jetpack Compose for Effortless Image Loading</a>
+    </h2>
+    <p class="article-card-description">The necessity for quick image loading libraries has never been more vital in the dynamic field of Android development, where the visual…</p>
+    <a href="../articles/spring-loaded-perfection-coil-and-jetpack-compose-for-effortless-image-loading.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/challenge-accepted-hacks-for-effortless-oauth2-login-testing-on-android.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*Fpz64sC4foobChwvDnU2rQ.jpeg" alt="Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-10-19">Oct 19, 2023</time>
+      <span>•</span>
+      <span>10 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/challenge-accepted-hacks-for-effortless-oauth2-login-testing-on-android.html">Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android</a>
+    </h2>
+    <p class="article-card-description">Automated UI testing is a must-have tool for assuring the dependability and performance of your Android apps. When it comes to features…</p>
+    <a href="../articles/challenge-accepted-hacks-for-effortless-oauth2-login-testing-on-android.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/wifi-wizardry-a-developers-guide-to-android-network-magic.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*CHmmhQ8vTET--2bSGiEg3Q.jpeg" alt="WiFi Wizardry: A Developer’s Guide to Android Network Magic hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-09-30">Sep 30, 2023</time>
+      <span>•</span>
+      <span>18 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/wifi-wizardry-a-developers-guide-to-android-network-magic.html">WiFi Wizardry: A Developer’s Guide to Android Network Magic</a>
+    </h2>
+    <p class="article-card-description">One constant in the ever-changing environment of Android app development is the significance of connection. As our world gets more linked…</p>
+    <a href="../articles/wifi-wizardry-a-developers-guide-to-android-network-magic.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/defending-against-mitm-attacks-the-android-certificate-pinning-approach.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*-jSBQeqUVa1FrI4-JG9xzw.jpeg" alt="Defending Against MITM Attacks: The Android Certificate Pinning Approach hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-09-22">Sep 22, 2023</time>
+      <span>•</span>
+      <span>7 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/defending-against-mitm-attacks-the-android-certificate-pinning-approach.html">Defending Against MITM Attacks: The Android Certificate Pinning Approach</a>
+    </h2>
+    <p class="article-card-description">Security is a top priority in the ever-changing environment of mobile app development. Because Android is the most popular mobile operating…</p>
+    <a href="../articles/defending-against-mitm-attacks-the-android-certificate-pinning-approach.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/tailoring-apps-with-finesse-using-build-variants.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*pBIF1ZUM1DvvsXnjw9C5RA.jpeg" alt="Tailoring Apps with Finesse using Build Variants hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-08-16">Aug 16, 2023</time>
+      <span>•</span>
+      <span>6 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/tailoring-apps-with-finesse-using-build-variants.html">Tailoring Apps with Finesse using Build Variants</a>
+    </h2>
+    <p class="article-card-description">The path from coding to a fully working application in the rapidly growing world of Android app development entails countless twists and…</p>
+    <a href="../articles/tailoring-apps-with-finesse-using-build-variants.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+<article class="article-card">
+  <a href="../articles/diving-into-the-license-abyss-an-android-odyssey-through-font-image-and-library-licenses.html" class="article-card-media">
+    <img src="https://miro.medium.com/v2/resize:fit:1200/1*wiZVwFI8__OUrcTJMfwpLg.jpeg" alt="Diving into the License Abyss: An Android Odyssey through Font, Image, and Library Licenses hero image"/>
+  </a>
+  <div class="article-card-body">
+    <div class="article-card-meta">
+      <time datetime="2023-08-11">Aug 11, 2023</time>
+      <span>•</span>
+      <span>11 min read</span>
+    </div>
+    <h2 class="article-card-title">
+      <a href="../articles/diving-into-the-license-abyss-an-android-odyssey-through-font-image-and-library-licenses.html">Diving into the License Abyss: An Android Odyssey through Font, Image, and Library Licenses</a>
+    </h2>
+    <p class="article-card-description">A plethora of variables merge to construct seamless user experiences in the dynamic arena of Android development, where creativity meets…</p>
+    <a href="../articles/diving-into-the-license-abyss-an-android-odyssey-through-font-image-and-library-licenses.html" class="article-card-link">Read article</a>
+  </div>
+</article>
+    </div>
+  </section>
 </main>
-
-
 <footer>
   <div class="footer-inner">
     <div>© 2026 James Cullimore. All rights reserved.</div>
     <ul class="footer-links">
-      <li><a href="blog.html">Blog</a></li>
-      <li><a href="impressum.html">Impressum</a></li>
-      <li><a href="datenschutz.html">Datenschutz</a></li>
+      <li><a href="../articles.html">Blog</a></li>
+      <li><a href="../pages/impressum.html">Impressum</a></li>
+      <li><a href="../pages/datenschutz.html">Datenschutz</a></li>
     </ul>
   </div>
 </footer>

@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Modular Architecture at Scale – James Cullimore</title>
+  <title>Modular Architecture at Scale â€“ James Cullimore</title>
   <link rel="stylesheet" href="../../styles.css">
   <style>
     .article-container { max-width: 700px; margin: 0 auto; }
@@ -31,12 +31,21 @@ body::after {
 
 <header>
   <nav class="nav">
-    <a href="../../index.html" class="brand">
+    <div class="brand">
       <div class="brand-mark">JC</div>
-    </a>
+      <div class="brand-text">
+        <div class="brand-name">James Cullimore</div>
+        <div class="brand-role">Software Engineering</div>
+      </div>
+    </div>
     <ul class="nav-links">
-      <li><a href="../../index.html">Home</a></li>
-      <li><a href="../blog.html">← Back to Blog</a></li>
+      <li><a href="../../index.html#overview">Overview</a></li>
+      <li><a href="../../index.html#services">Services</a></li>
+      <li><a href="../../index.html#how-we-work">How we work</a></li>
+      <li><a href="../../index.html#projects">Projects</a></li>
+      <li><a href="../../index.html#insights">Insights</a></li>
+      <li><a href="../../index.html#contact">Contact</a></li>
+      <li><a href="../../articles.html" class="nav-cta">Blog</a></li>
     </ul>
   </nav>
 </header>
@@ -45,7 +54,7 @@ body::after {
   <article class="article-container">
     <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Modular Architecture at Scale</h1>
     <div class="article-meta">
-      January 15, 2026 • 8 min read
+      January 15, 2026 â€¢ 8 min read
       <div style="margin-top: 0.5rem;">
         <span style="display: inline-block; background: var(--navy-lighter); color: var(--navy); padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.8rem; margin-right: 0.4rem;">Architecture</span>
         <span style="display: inline-block; background: var(--navy-lighter); color: var(--navy); padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.8rem; margin-right: 0.4rem;">Kotlin</span>
@@ -56,25 +65,25 @@ body::after {
       <h2>Intro</h2>
       <p>
         Wir hatten ein Problem: 200K+ Zeilen Java-Code in einer riesigen Monolith-App. 
-        Build-Zeit: 8 Minuten. Test-Coverage: 12%. Team-Produktivität: im Keller.
+        Build-Zeit: 8 Minuten. Test-Coverage: 12%. Team-ProduktivitÃ¤t: im Keller.
       </p>
 
-      <h2>Die Lösung: Modular Architecture</h2>
+      <h2>Die LÃ¶sung: Modular Architecture</h2>
       <p>
-        Wir haben die App in unabhängige Feature-Module aufgeteilt:
+        Wir haben die App in unabhÃ¤ngige Feature-Module aufgeteilt:
       </p>
       <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
-        <li><code>:feature-auth</code> – Authentifizierung</li>
-        <li><code>:feature-dashboard</code> – Dashboard</li>
-        <li><code>:feature-payments</code> – Payment-Integration</li>
-        <li><code>:core-network</code> – API-Client</li>
-        <li><code>:core-database</code> – Room DB</li>
+        <li><code>:feature-auth</code> â€“ Authentifizierung</li>
+        <li><code>:feature-dashboard</code> â€“ Dashboard</li>
+        <li><code>:feature-payments</code> â€“ Payment-Integration</li>
+        <li><code>:core-network</code> â€“ API-Client</li>
+        <li><code>:core-database</code> â€“ Room DB</li>
       </ul>
 
       <h2>Ergebnisse</h2>
       <ul style="margin-left: 1.5rem;">
-        <li>Build-Zeit: 8 Min → 2 Min (75% Reduktion)</li>
-        <li>Test-Coverage: 12% → 78%</li>
+        <li>Build-Zeit: 8 Min â†’ 2 Min (75% Reduktion)</li>
+        <li>Test-Coverage: 12% â†’ 78%</li>
         <li>Neue Features: 3x schneller</li>
       </ul>
     </div>
@@ -83,7 +92,7 @@ body::after {
 
 <footer>
   <div class="footer-inner">
-    <div>© 2026 James Cullimore. All rights reserved.</div>
+    <div>Â© 2026 James Cullimore. All rights reserved.</div>
   </div>
 </footer>
 

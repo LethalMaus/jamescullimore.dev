@@ -20,7 +20,6 @@
     <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
     <link rel="stylesheet" href="/articles/assets/style.css">
 
-    <script src="https://cdn.jsdelivr.net/npm/@mariusbongarts/previewbox/dist/link/index.min.js"></script>
 </head>
 <body>
 
@@ -46,113 +45,85 @@
         </figure>
 
         <section class="article-content">
-
-            <h2>1. Introduction</h2>
-            <p>
+      <h2>1. Introduction</h2>
+      <p>
                 This is your introduction paragraph. Explain the problem, who this article is for,
                 and what readers will get out of it.
             </p>
-
-            <p>
-                You can include <a href="https://medium.com" target="_blank" rel="noopener">external links</a>
+      <p>
+                You can include <a href="https://medium.com" rel="noopener" target="_blank">external links</a>
                 to references, documentation, or related posts.
             </p>
-
-            <h2>2. Link preview (Medium-style)</h2>
-            <p>
+      <h2>2. Link preview (Medium-style)</h2>
+      <p>
                 This card is a manual link preview that works without JavaScript.
             </p>
-
-            <div>
-                <previewbox-link href="https://developer.android.com/training/wearables/data/data-items"> </previewbox-link>
-                <noscript>
-                    <p>
-                        <a href="https://developer.android.com/training/wearables/data/data-items" target="_blank" rel="noopener">
+      <p>
+<a href="https://developer.android.com/training/wearables/data/data-items" rel="noopener" target="_blank">
                             Sync Data Items with the Data Layer API (developer.android.com)
                         </a>
-                    </p>
-                </noscript>
-            </div>
-
-            <h2>3. Code examples</h2>
-            <p>
+</p>
+      <h2>3. Code examples</h2>
+      <p>
                 Use inline <code>&lt;code&gt;</code> for small pieces and blocks for full listings.
             </p>
-
-            <pre><code class="language-kotlin">
-data class Movie(
-    val id: Int,
-    val title: String,
-    val overview: String
-)
-
-interface MovieApi {
-    @GET("movies/popular")
-    suspend fun getPopularMovies(): List&lt;Movie&gt;
-}
-      </code></pre>
-
-            <p class="code-caption">
+      <pre><code class="language-kotlin">
+                  data class Movie(
+                      val id: Int,
+                      val title: String,
+                      val overview: String
+                  )
+                  
+                  interface MovieApi {
+                      @GET("movies/popular")
+                      suspend fun getPopularMovies(): List&lt;Movie&gt;
+                  }
+                        </code></pre>
+      <p class="code-caption">
                 Listing 1: Simple Retrofit API interface in Kotlin.
             </p>
-
-            <pre><code class="language-kotlin">
-@Composable
-fun MovieListScreen(
-    viewModel: MovieListViewModel = hiltViewModel()
-) {
-    val state by viewModel.state.collectAsState()
-
-    LazyColumn {
-        items(state.movies) { movie ->
-            Text(text = movie.title)
-        }
-    }
-}
-      </code></pre>
-
-            <h2>4. Embeds</h2>
-
-            <h3>4.1. YouTube video (no custom JS needed)</h3>
-            <p>
+      <pre><code class="language-kotlin">
+                  @Composable
+                  fun MovieListScreen(
+                      viewModel: MovieListViewModel = hiltViewModel()
+                  ) {
+                      val state by viewModel.state.collectAsState()
+                  
+                      LazyColumn {
+                          items(state.movies) { movie -&gt;
+                              Text(text = movie.title)
+                          }
+                      }
+                  }
+                        </code></pre>
+      <h2>4. Embeds</h2>
+      <h3>4.1. YouTube video (no custom JS needed)</h3>
+      <p>
                 Replace <code>VIDEO_ID</code> with your own video.
             </p>
-
-            <div class="embed embed-video">
-                <iframe
-                        src="https://www.youtube.com/embed/gaW31lMdf9I"
-                        title="YouTube video player"
-                        frameborder="0"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        referrerpolicy="strict-origin-when-cross-origin"
-                        allowfullscreen>
-                </iframe>
-            </div>
-
-            <h3>4.2. GitHub Gist with <code>&lt;noscript&gt;</code> fallback</h3>
-            <p>
+      <div class="embed embed-video">
+<iframe allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen="" frameborder="0" referrerpolicy="strict-origin-when-cross-origin" src="https://www.youtube.com/embed/gaW31lMdf9I" title="YouTube video player">
+</iframe>
+</div>
+      <h3>4.2. GitHub Gist with <code>&lt;noscript&gt;</code> fallback</h3>
+      <p>
                 JS users get the official Gist embed. No-JS users get code + a link.
             </p>
+      <figure class="embed embed-gist"><pre><code class="language-kotlin">
+val result = runCatching { riskyOperation() }
+    .recoverCatching { exception -&gt;
+        println("Attempting fallback due to: ${exception.message}")
+        fallbackOperation()  // This may also throw
+    }
 
-            <figure class="embed embed-gist">
-                <div class="embed-gist-js">
-                    <script src="https://gist.github.com/LethalMaus/33ed7dc21ed1c3db77a4fe2ec0a540e9.js"></script>
-                </div>
-                <noscript>
-                    <p>
-                        View the full code here:
-                        <a href="https://gist.github.com/LethalMaus/33ed7dc21ed1c3db77a4fe2ec0a540e9" target="_blank" rel="noopener">
-                            https://gist.github.com/LethalMaus/33ed7dc21ed1c3db77a4fe2ec0a540e9
-                        </a>
-                    </p>
-                </noscript>
-            </figure>
-
-            <h2>5. Conclusion</h2>
-            <p>
+result
+    .onSuccess { println("Final success: $it") }
+    .onFailure { println("Both primary and fallback failed: ${it.message}") }
+</code></pre><figcaption><a href="https://gist.github.com/LethalMaus/33ed7dc21ed1c3db77a4fe2ec0a540e9" rel="noopener" target="_blank">https://gist.github.com/LethalMaus/33ed7dc21ed1c3db77a4fe2ec0a540e9</a></figcaption></figure>
+      <h2>5. Conclusion</h2>
+      <p>
                 Summarize the main takeaways and link to related resources or your newsletter.
             </p>
-
         </section>
 
         <footer class="article-footer">
@@ -167,14 +138,6 @@ fun MovieListScreen(
 
     </article>
 </main>
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-TYPWQYLWYH"></script>
-<script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-TYPWQYLWYH');
-</script>
 
 </body>
 </html>

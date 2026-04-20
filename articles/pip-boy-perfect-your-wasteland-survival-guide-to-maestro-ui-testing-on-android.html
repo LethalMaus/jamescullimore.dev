@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android</title>
+<meta content="Ah, another themed article. This one’s about Maestro, an effective mobile UI testing framework, but with a twist — a Fallout twist! Like…" name="description"/>
+<meta content="James Cullimore" name="author"/>
+<link href="https://jamescullimore.dev/articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html" rel="canonical"/>
+<meta content="article" property="og:type"/>
+<meta content="Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android" property="og:title"/>
+<meta content="Ah, another themed article. This one’s about Maestro, an effective mobile UI testing framework, but with a twist — a Fallout twist! Like…" property="og:description"/>
+<meta content="https://jamescullimore.dev/articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html" property="og:url"/>
+<meta content="https://miro.medium.com/v2/resize:fit:1024/1*nxE_0b5SXkAgcooRvTovCA.jpeg" property="og:image"/>
+<meta content="James Cullimore - Software Engineering" property="og:site_name"/>
+<link href="../img/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="assets/style.css" rel="stylesheet"/>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android",
+  "author": {
+    "@type": "Person",
+    "name": "James Cullimore"
+  },
+  "mainEntityOfPage": "https://jamescullimore.dev/articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html",
+  "description": "Ah, another themed article. This one’s about Maestro, an effective mobile UI testing framework, but with a twist — a Fallout twist! Like…",
+  "publisher": {
+    "@type": "Organization",
+    "name": "James Cullimore - Software Engineering"
+  },
+  "datePublished": "2024-04-24",
+  "dateModified": "2024-04-24",
+  "image": "https://miro.medium.com/v2/resize:fit:1024/1*nxE_0b5SXkAgcooRvTovCA.jpeg"
+}</script></head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="../index.html">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="../index.html#overview">Overview</a></li>
+<li><a href="../index.html#services">Services</a></li>
+<li><a href="../index.html#how-we-work">How we work</a></li>
+<li><a href="../index.html#projects">Projects</a></li>
+<li><a href="../index.html#insights">Insights</a></li>
+<li><a href="../index.html#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+<article class="container">
+<header class="article-header">
+<h1 class="article-title">Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android</h1>
+<div class="article-meta">
+<span>By <span class="article-author">James Cullimore</span></span>
+<span>•</span>
+<time datetime="2024-04-24">Apr 24, 2024</time>
+<span>•</span>
+<span>5 min read</span>
+</div>
+</header>
+<figure class="article-hero">
+<img alt="Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android" src="https://miro.medium.com/v2/resize:fit:1024/1*nxE_0b5SXkAgcooRvTovCA.jpeg"/>
+</figure>
+<section class="article-content">
+<p>Ah, another themed article. This one’s about Maestro, an effective mobile UI testing framework, but with a twist — a Fallout twist! Like many a wastelander scouring the irradiated ruins for hidden treasures, I recently unearthed a gem (pun intended) in the form of the new live-action Fallout series. It reignited my love for the franchise, a love story that began in 2008 as I ventured out of Vault 101 and into the harsh beauty of the wasteland. Now, while navigating the complexities of UI testing might seem a far cry from battling super mutants and scavenging for Nuka-Cola, fear not! This article will bridge the gap, using the spirit of Fallout to illuminate the power of Maestro for Android. So, grab your Pip-Boy (or at least your favorite mobile device), and prepare to explore the robust features of this innovative testing framework.</p>
+<h2>Setting Up Your Test Lab</h2>
+<p>Before venturing out into the mobile UI testing wasteland with Maestro, we need to establish a secure base of operations. Here’s a breakdown of setting up Maestro to run tests locally, much like how you’d set up a cozy outpost in Fallout.</p>
+<h2>Package Retrieval: Calling Down the Delivery Drone</h2>
+<p>First things first, we need to grab Maestro itself. You can think of this like calling in a supply drop from a friendly trader. Use the following command in your terminal:</p>
+<pre><code>
+                  curl -Ls "https://get.maestro.mobile.dev" | bash
+                  </code></pre>
+<p>This nifty piece of code retrieves and installs Maestro using a handy script. Easy enough, right? Now you have Maestro at your disposal, ready to be unleashed on your mobile UI testing challenges.</p>
+<h2>Dependencies: Gearing Up for the Wasteland</h2>
+<p>Just like any good vault dweller needs the right gear to survive the harsh environment, Maestro has some dependencies for your chosen platform. Here, we’ll focus on setting things up for Android, the vast wasteland of mobile devices.</p>
+<h2>Sample Time: Exploring the Vaults of Knowledge</h2>
+<p>Maestro comes with pre-built samples to help you get started, just like those handy training terminals scattered around Vaults in Fallout. To access these samples, navigate to the <code>samples</code> directory using the <code>cd</code> command:</p>
+<pre><code>
+                  cd ./samples
+                  </code></pre>
+<h2>Installing the Test Subject: Like Booting Up a Protectron</h2>
+<p>Within the <code>samples</code> directory, you'll find an APK file for a sample application. This serves as your test subject, similar to how you might activate a Protectron robot for training purposes. Use the <code>adb install</code> command followed by the filename of the APK to install the sample app:</p>
+<pre><code class="language-bash">
+                  adb install sample.apk
+                  </code></pre>
+<h2>Running the Gauntlet: Putting Maestro Through its paces</h2>
+<p>Now comes the moment of truth: running a Maestro test! Navigate back to the main directory (likely where you downloaded Maestro) and use the <code>maestro test</code> command followed by the name of the test file (usually <code>android-flow.yaml</code> in the samples directory).</p>
+<pre><code class="language-yaml">
+                  maestro test android-flow.yaml
+                  </code></pre>
+<p>This fires up Maestro and executes the test defined in the YAML file. Think of it like running an obstacle course to assess your Protectron’s capabilities.</p>
+<h2>Bonus Round: Building for Different Scenarios</h2>
+<p>Maestro allows you to build your test app in different configurations, just like customizing your Pip-Boy for various situations:</p>
+<ul>
+<li>Release Build: To simulate a production-ready app, use the following Gradle command:</li>
+</ul>
+<pre><code>
+                  ./gradlew assembleRelease
+                  </code></pre>
+<ul>
+<li>Debug Build: For easier debugging during the development process, use this Gradle command:</li>
+</ul>
+<pre><code>
+                  ./gradlew assembleDebug
+                  </code></pre>
+<h2>Scripting Your Success</h2>
+<p>Now that you’ve established your testing outpost, it’s time to craft the tests that will ensure the smooth operation of your mobile app. Think of these tests as the detailed instructions a wasteland scribe would leave behind to guide future vault dwellers. Here, we’ll explore the basic structure of Maestro tests using YAML files, along with some helpful code examples.</p>
+<h2>The Test Blueprint: run-test.yml</h2>
+<p>Our first example, <code>run-test.yml</code>, demonstrates the overall structure of a Maestro test file. It's like the blueprint for your testing expedition:</p>
+<p>Breakdown:</p>
+<p><code>appId</code>: This line specifies the application under test using its package identifier.<code>launchApp</code>: This command instructs Maestro to launch the specified app.<code>---</code>: This line separates different test sections within the same file, allowing you to organize complex tests logically.<code>runFlow</code>: This powerful command allows you to call other YAML files containing specific test flows. This promotes code reusability and keeps your main test file organized. Imagine it as delegating tasks to specialists within your vault!</p>
+<h2>A Login Odyssey: Step-by-Step Testing</h2>
+<p>The next section dives deeper into a specific test flow, focusing on a login scenario. Imagine it as a detailed log from a wasteland explorer navigating the login process:</p>
+<p>Breakdown:</p>
+<p><code>appId</code>: Similar to the previous example, this line specifies the app under test.<code>tapOn</code>: This command simulates tapping on an element on the screen. You can target elements by their text content (with wildcards for variations) or ID. Think of it as carefully navigating the app's interface.<code>runScript</code>: This powerful feature allows you to execute external JavaScript code, potentially fetching test data or performing complex actions. For instance, you could use a script to generate random usernames and passwords for more robust testing.<code>inputText</code>: This command enters text into an editable field on the screen. You can leverage dynamic values fetched from JavaScript scripts using<code>${ }</code> notation.<code>back</code>: This command simulates pressing the back button on the device.</p>
+<h2>Exploring the Unknown: Dynamic Test Data</h2>
+<p>The final example showcases another valuable technique — using JavaScript to generate dynamic test data:</p>
+<h2>Conclusion</h2>
+<p>There you have it, vault dweller! With these basic steps, you’re well on your way to crafting effective Maestro tests and ensuring the smooth operation of your mobile app. Remember, these are just the building blocks — Maestro offers a vast arsenal of commands and features for more complex testing scenarios.</p>
+<p>But enough theory, it’s time to put your newfound knowledge to the test! When are you going to get started and adding more to this guide? As the ghoul played by Walton Goggins in the Fallout series might say, “Well, one good question deserves another: why the fuck am I doing all the work? Now come on, Vaultie. Ass jerky don’t make itself.”</p>
+<p>Head over to the official Maestro documentation <a href="https://www.mobile.dev/">https://www.mobile.dev/</a> to delve deeper into its functionalities and unleash your inner mobile UI testing champion. Remember, with Maestro by your side, even the most treacherous mobile wastelands can be navigated with confidence.</p>
+</section>
+<section class="related-articles"><h2>More articles</h2><ul><li><a href="challenge-accepted-hacks-for-effortless-oauth2-login-testing-on-android.html">Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android</a></li><li><a href="stepping-into-the-alternative-universe-of-automated-testing-for-android-mobile-espresso.html">Stepping into the Alternative Universe of Automated Testing for Android &amp; Mobile: Espresso…</a></li><li><a href="monetizing-marvels-a-developers-guide-to-in-app-purchases-on-android.html">Monetizing Marvels: A Developer’s Guide to In-App Purchases on Android</a></li></ul></section><footer class="article-footer">
+<p>Last updated: <time datetime="2024-04-24">Apr 24, 2024</time></p>
+<p>
+        Tags: Android, Gradle, Kotlin
+      </p>
+<p class="article-footer-copy">
+        © 2026 James Cullimore
+      </p>
+</footer>
+</article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

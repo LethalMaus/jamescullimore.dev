@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Stop Using PlayerView in Compose: Media3 PlayerSurface Done Right</title>
+<meta content="Modern Android development moves fast, especially around media playback. Libraries evolve, APIs shift, and examples that worked a year ago…" name="description"/>
+<meta content="James Cullimore" name="author"/>
+<link href="https://jamescullimore.dev/articles/stop-using-playerview-in-compose-media3-playersurface-done-right.html" rel="canonical"/>
+<meta content="article" property="og:type"/>
+<meta content="Stop Using PlayerView in Compose: Media3 PlayerSurface Done Right" property="og:title"/>
+<meta content="Modern Android development moves fast, especially around media playback. Libraries evolve, APIs shift, and examples that worked a year ago…" property="og:description"/>
+<meta content="https://jamescullimore.dev/articles/stop-using-playerview-in-compose-media3-playersurface-done-right.html" property="og:url"/>
+<meta content="https://miro.medium.com/v2/resize:fit:1200/1*i8xPzBIBaZwNKIVP1gyM8Q.png" property="og:image"/>
+<meta content="James Cullimore - Software Engineering" property="og:site_name"/>
+<link href="../img/favicon-32x32.png" rel="icon" sizes="32x32" type="image/png"/>
+<link href="../styles.css" rel="stylesheet"/>
+<link href="assets/style.css" rel="stylesheet"/>
+<script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "Stop Using PlayerView in Compose: Media3 PlayerSurface Done Right",
+  "author": {
+    "@type": "Person",
+    "name": "James Cullimore"
+  },
+  "mainEntityOfPage": "https://jamescullimore.dev/articles/stop-using-playerview-in-compose-media3-playersurface-done-right.html",
+  "description": "Modern Android development moves fast, especially around media playback. Libraries evolve, APIs shift, and examples that worked a year ago…",
+  "publisher": {
+    "@type": "Organization",
+    "name": "James Cullimore - Software Engineering"
+  },
+  "datePublished": "2026-01-19",
+  "dateModified": "2026-01-19",
+  "image": "https://miro.medium.com/v2/resize:fit:1200/1*i8xPzBIBaZwNKIVP1gyM8Q.png"
+}</script></head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="../index.html">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="../index.html#overview">Overview</a></li>
+<li><a href="../index.html#services">Services</a></li>
+<li><a href="../index.html#how-we-work">How we work</a></li>
+<li><a href="../index.html#projects">Projects</a></li>
+<li><a href="../index.html#insights">Insights</a></li>
+<li><a href="../index.html#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+<article class="container">
+<header class="article-header">
+<h1 class="article-title">Stop Using PlayerView in Compose: Media3 PlayerSurface Done Right</h1>
+<div class="article-meta">
+<span>By <span class="article-author">James Cullimore</span></span>
+<span>•</span>
+<time datetime="2026-01-19">Jan 19, 2026</time>
+<span>•</span>
+<span>7 min read</span>
+</div>
+</header>
+<figure class="article-hero">
+<img alt="Stop Using PlayerView in Compose: Media3 PlayerSurface Done Right" src="https://miro.medium.com/v2/resize:fit:1200/1*i8xPzBIBaZwNKIVP1gyM8Q.png"/>
+</figure>
+<section class="article-content">
+<p>Modern Android development moves fast, especially around media playback. Libraries evolve, APIs shift, and examples that worked a year ago can already feel dated. I ran into this exact problem recently while working on a Jetpack Compose project that needed to play videos inside a card based layout.</p>
+<p>Most tutorials and snippets I found online still relied on older patterns. Even the official Android documentation often demonstrates video playback using <code>PlayerView</code>, which is fundamentally a View based approach. For example, both the playback app guide and the Media3 ExoPlayer hello world sample showcase <code>PlayerView</code> rather than Compose first APIs.</p>
+<p>These examples are still valid, but when you are building a UI that is entirely Compose driven, falling back to <code>PlayerView</code> or <code>AndroidView</code> interop feels like a step backwards. It works, but it does not reflect the direction Compose and Media3 are moving toward.</p>
+<p>So I took some time to dig into the newer Media3 APIs and, more importantly, their Compose specific UI integrations. The result is a clean, modern way to play videos directly in Compose using <code>PlayerSurface</code>, proper lifecycle handling, and without relying on outdated or mixed UI approaches.</p>
+<p>In this article, I will walk through how I implemented video playback inside a composable card, explain the key pieces involved, and show how this approach aligns with the current Media3 and Jetpack Compose ecosystem.</p>
+<h2>Defining the Goal — A Composable, Self-Contained Video Card</h2>
+<p>Before diving into Media3 or ExoPlayer details, it helps to clearly define what we are trying to build.</p>
+<p>The goal here is not just to play a video. It is to create a <strong>self contained composable</strong> that fits naturally into a Compose UI. In this case, that composable is a card that:</p>
+<ul>
+<li>Plays a video automatically</li>
+<li>Crops and scales the video correctly</li>
+<li>Handles its own lifecycle</li>
+<li>Does not rely on
+        <code>PlayerView</code> or<code>AndroidView</code></li>
+<li>Works cleanly with Material 3 theming</li>
+</ul>
+<p>This is important because video playback is often embedded inside scrolling lists, dashboards, or feature cards. Treating it as a reusable composable makes it easier to reason about, test, and reuse across the app.</p>
+<p>At a high level, the <code>MediaCard</code> composable is responsible for three things:</p>
+<p><strong>Layout and styling</strong>The card shape, elevation, size, and clipping behavior are handled entirely by Compose and Material 3 components.<strong>Player creation and lifecycle</strong>ExoPlayer is created inside the composable, remembered across recompositions, and released when the composable leaves the composition.<strong>Video rendering in Compose</strong>The video itself is rendered using<code>PlayerSurface</code>, which is part of Media3’s Compose UI module and designed specifically for Compose based apps.</p>
+<p>By keeping these responsibilities inside a single composable, the implementation stays focused and avoids leaking player or lifecycle logic into higher levels of the UI.</p>
+<p>In the next section, we will start breaking down the code itself, beginning with the <code>MediaCard</code> composable and its Material 3 card setup.</p>
+<h2>Building the Card Layout with Material 3</h2>
+<p>The foundation of this implementation is a Material 3 <code>Card</code>. This might seem straightforward, but it plays an important role in how the video is presented and clipped within the UI.</p>
+<p>Here is the composable definition and card setup as used in the project:</p>
+<h3>Why a Card Works Well for Video</h3>
+<p>Using a <code>Card</code> here is not just a visual choice. It gives us a few practical benefits:</p>
+<p><strong>Clipping and shape control</strong>The rounded corners define a clear visual boundary for the video content.<strong>Elevation and layering</strong>Subtle elevation helps the video stand out when placed inside lists or stacked layouts.<strong>Material theming</strong>By using<code>MaterialTheme.colorScheme.surface</code>, the card automatically adapts to light and dark themes without extra work.</p>
+<p>The <code>cardHeight</code> parameter is also intentional. Video content often needs a predictable height to avoid layout jumps, especially when used in lazy lists. Making this configurable keeps the composable flexible without complicating its usage.</p>
+<p>At this stage, the card is purely structural. It does not know anything about video playback yet. That separation is useful, because it allows us to reason about layout and styling independently from media concerns.</p>
+<p>In the next section, we will introduce ExoPlayer and look at how the player is created and remembered inside a composable without breaking Compose’s lifecycle rules.</p>
+<h2>Creating and Managing ExoPlayer in Compose</h2>
+<p>This is the part where a lot of older examples start to drift into View based territory. If you follow many tutorials, you will often see a <code>PlayerView</code> created and then hosted inside Compose via <code>AndroidView</code>. That works, but it puts you back into the world of View lifecycles inside a Compose screen.</p>
+<p>Instead, this approach keeps the player creation and cleanup fully inside the composable, using <code>remember</code> to keep it stable across recompositions and <code>DisposableEffect</code> to release it at the right time.</p>
+<p>Here is the exact player setup from the implementation:</p>
+<h3>Why <code>remember</code></h3>
+<p>Matters Here</p>
+<p>Compose will re-run composable functions frequently, sometimes for reasons that have nothing to do with your player. Without <code>remember</code>, you would risk rebuilding the player during recomposition, which is expensive and can cause playback glitches.</p>
+<p>Using:</p>
+<p><code>remember(media.assetPath)</code> ensures the player is kept as long as the asset path stays the same- and recreated only when that input changes (for example, the card is reused for a different video)</p>
+<h3>Why <code>LocalInspectionMode</code></h3>
+<p>Is Included</p>
+<p>A small but useful detail is guarding player creation when running in preview/inspection mode:</p>
+<ul>
+<li>Compose previews do not have a full Android runtime environment</li>
+<li>creating an ExoPlayer instance in preview can crash the preview renderer</li>
+</ul>
+<p>So this pattern keeps the preview stable while still working normally on device.</p>
+<h3>Why <code>DisposableEffect</code></h3>
+<p>Is Non-Negotiable</p>
+<p>ExoPlayer holds onto resources that must be released:</p>
+<ul>
+<li>decoders</li>
+<li>buffers</li>
+<li>surfaces</li>
+<li>audio focus</li>
+</ul>
+<p><code>DisposableEffect(Unit)</code> ties cleanup to the composable lifecycle. When the <code>MediaCard</code> leaves composition, the <code>onDispose</code> block runs and releases the player.</p>
+<p>This is the piece that keeps the implementation safe when the composable is used inside navigation, lists, or conditional UI. Without it, you can leak resources quickly.</p>
+<p>In the next section we will move from “player exists” to “player is rendered”, using Media3’s Compose UI integration via <code>PlayerSurface</code>, and we will also introduce the presentation state that makes sizing and cover behavior easier to manage.</p>
+<h2>Rendering Video with PlayerSurface</h2>
+<p>At this point we have a correctly managed <code>ExoPlayer</code> instance, but nothing is visible yet. This is where Media3’s Compose UI integration becomes the key difference compared to older approaches.</p>
+<h2>Putting It All Together and Practical Notes</h2>
+<p>At this point, all the pieces are in place:</p>
+<ul>
+<li>A Material 3 card that defines the visual container</li>
+<li>An ExoPlayer instance that is stable across recompositions</li>
+<li>Correct cleanup with
+        <code>DisposableEffect</code></li>
+<li>Media3 Compose UI rendering via
+        <code>PlayerSurface</code></li>
+<li>Presentation state to handle sizing and surface cover behavior</li>
+</ul>
+<p>Here is the full composable exactly as you provided it, with everything in one place:</p>
+<h2>Practical Notes from Real Usage</h2>
+<p>A few things are worth calling out once you move beyond a single demo screen and start using this pattern in production UI.</p>
+<h3>This Works Best When the Card Owns the Player</h3>
+<p>This component is intentionally self-contained. That is great for screens where each card is responsible for its own playback and lifecycle.</p>
+<p>If you later need more advanced behavior (for example, shared playback across multiple screens, handoff between list items, or a single player instance reused across the app), you might lift the player out of the card and inject it instead. But as a default pattern, keeping ownership local is simple and safe.</p>
+<h3>Be Careful with Many Players in a Lazy List</h3>
+<p>If you render lots of these cards in a scrolling list, you can quickly end up with multiple active players. Even if only one is visible, the resource cost adds up.</p>
+<p>This composable is still a solid base, but in list scenarios you usually also add constraints like:</p>
+<ul>
+<li>only play the currently visible item</li>
+<li>pause when the item leaves the viewport</li>
+<li>reuse a shared player</li>
+</ul>
+<p>The important part is that the lifecycle hooks you already have (<code>remember</code> and <code>DisposableEffect</code>) are the building blocks for those improvements.</p>
+<h3>The Compose UI Module Is the Key Difference</h3>
+<p>If someone is coming from older examples, the big upgrade is that <code>PlayerSurface</code> and related helpers are in Media3’s Compose UI integration. That is the direction the ecosystem is moving toward, and it is why this pattern stays Compose-first without interop.</p>
+<h2>Compose-First Playback That Matches Where Media3 Is Going</h2>
+<p>What I like about this approach is that it does not feel like a workaround. You are not embedding a View inside Compose just to get video on screen. You are using Media3’s Compose UI integration the way it was intended: the player is managed inside the composable, the surface is rendered with <code>PlayerSurface</code>, and the UI behavior (cropping, clipping, overlays) stays in Compose where it belongs.</p>
+<p>Yes, the official docs still demonstrate <code>PlayerView</code> in a couple of the more common entry points, and that can easily send you down a slightly outdated path when you are building a Compose-only screen. But once you lean into the Media3 Compose module, the setup becomes straightforward: remember the player, release it reliably, and render it with a surface that understands Compose sizing.</p>
+<p>The end result is a <code>MediaCard</code> that feels reusable and production-friendly. It fits naturally into Material 3 layouts, it behaves predictably through recompositions, and it avoids the hidden complexity that comes with mixing UI systems. If you are already writing Compose, this is the kind of media playback code that will age well as the ecosystem continues to move forward.</p>
+</section>
+<section class="related-articles"><h2>More articles</h2><ul><li><a href="compose-and-conquer-a-tale-of-effortless-android-navigation.html">Compose and Conquer: A Tale of Effortless Android Navigation</a></li><li><a href="goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html">Goodbye AndroidView: A Real CameraX QR Scanner in Compose</a></li><li><a href="one-punch-one-scan-effortless-barcode-scanning-on-android-with-googles-ml-kit-jetpack-compose.html">One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit &amp; Jetpack Compose</a></li></ul></section><footer class="article-footer">
+<p>Last updated: <time datetime="2026-01-19">Jan 19, 2026</time></p>
+<p>
+        Tags: Android, Gradle, Kotlin
+      </p>
+<p class="article-footer-copy">
+        © 2026 James Cullimore
+      </p>
+</footer>
+</article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>
