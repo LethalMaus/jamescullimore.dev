@@ -2,17 +2,18 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import datetime
+from html import unescape
 import json
 from pathlib import Path
 import re
 from typing import Iterable
 
-from bs4 import BeautifulSoup
-
 
 ROOT = Path(__file__).resolve().parent.parent
 ARTICLES_DIR = ROOT / "articles"
 ARTICLE_TEMPLATE = "article-template.html"
+# Slug kept as a redirect to wear-os-seamless-handover.html; not a full article for sync.
+ARTICLE_REDIRECT_SLUGS = frozenset({"how-i-built-seamless-watch-phone-handover-in-wear-os.html"})
 SITE_NAME = "James Cullimore"
 SITE_ROLE = "Software Engineering"
 SITE_TITLE = f"{SITE_NAME} {SITE_ROLE}"
@@ -35,7 +36,6 @@ VERIFIED_MEDIUM_DATES = {
     "fast-feedback-winning-back-60-of-our-ci-time.html": "2025-05-09",
     "git-it-together.html": "2024-12-15",
     "goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html": "2026-01-14",
-    "how-i-built-seamless-watch-phone-handover-in-wear-os.html": "2025-07-02",
     "how-i-cut-my-gradle-build-time-by-50.html": "2025-04-07",
     "how-i-tackled-parsing-xml-on-android-when-jaxb-just-wouldnt-play-nice.html": "2025-04-14",
     "leveling-up-the-dev-dungeon-with-ml-kits-text-recognition.html": "2024-03-13",
@@ -92,37 +92,30 @@ class ArticleMeta:
 
 
 def read_article_meta(path: Path) -> ArticleMeta:
-    soup = BeautifulSoup(path.read_text(encoding="utf-8"), "html.parser")
+    text = path.read_text(encoding="utf-8")
 
-    title = soup.title.get_text(strip=True)
-    description_tag = soup.find("meta", attrs={"name": "description"})
-    image_tag = soup.find("meta", attrs={"property": "og:image"})
-    canonical_tag = soup.find("link", attrs={"rel": "canonical"})
-    author_tag = soup.find("meta", attrs={"name": "author"})
-    time_tag = soup.find("time", attrs={"datetime": True})
-    meta_candidates = soup.select(".article-meta span, .article-meta time")
-    read_time = next(
-        (
-            candidate.get_text(" ", strip=True)
-            for candidate in meta_candidates
-            if re.search(r"\b\d+\s+min read\b", candidate.get_text(" ", strip=True))
-        ),
-        "",
-    )
+    title = extract_title(text)
+    description = extract_meta_content(text, "name", "description")
+    image = extract_meta_content(text, "property", "og:image")
+    canonical = extract_link_href(text, "canonical")
+    author = extract_meta_content(text, "name", "author")
+    published_iso, published_display = extract_first_time(text)
+    read_time_match = re.search(r"\b\d+\s+min read\b", text)
+    read_time = read_time_match.group(0) if read_time_match else ""
 
-    if not all([description_tag, image_tag, canonical_tag, author_tag, time_tag, read_time]):
+    if not all([title, description, image, canonical, author, published_iso, published_display, read_time]):
         raise ValueError(f"Missing article metadata in {path.name}")
 
     return ArticleMeta(
         filename=path.name,
         title=title,
-        description=description_tag["content"].strip(),
-        image=image_tag["content"].strip(),
-        canonical=canonical_tag["href"].strip(),
-        published_iso=time_tag["datetime"].strip(),
-        published_display=time_tag.get_text(" ", strip=True),
+        description=description,
+        image=image,
+        canonical=canonical,
+        published_iso=published_iso,
+        published_display=published_display,
         read_time=read_time,
-        author=author_tag["content"].strip(),
+        author=author,
     )
 
 
@@ -134,7 +127,7 @@ def article_files() -> list[Path]:
     return sorted(
         path
         for path in ARTICLES_DIR.glob("*.html")
-        if path.name not in {ARTICLE_TEMPLATE}
+        if path.name not in {ARTICLE_TEMPLATE, *ARTICLE_REDIRECT_SLUGS}
     )
 
 
@@ -193,10 +186,50 @@ def ensure_brand_link_styles(text: str) -> str:
     return text
 
 
+def strip_tags(text: str) -> str:
+    return unescape(re.sub(r"\s+", " ", re.sub(r"<[^>]+>", "", text)).strip())
+
+
+def extract_title(text: str) -> str:
+    match = re.search(r"<title>(.*?)</title>", text, re.S)
+    return strip_tags(match.group(1)) if match else ""
+
+
+def extract_meta_content(text: str, attr_name: str, attr_value: str) -> str:
+    patterns = (
+        rf'<meta[^>]*{attr_name}="{re.escape(attr_value)}"[^>]*content="([^"]*)"',
+        rf'<meta[^>]*content="([^"]*)"[^>]*{attr_name}="{re.escape(attr_value)}"',
+    )
+    for pattern in patterns:
+        match = re.search(pattern, text, re.I | re.S)
+        if match:
+            return unescape(match.group(1).strip())
+    return ""
+
+
+def extract_link_href(text: str, rel_value: str) -> str:
+    patterns = (
+        rf'<link[^>]*rel="{re.escape(rel_value)}"[^>]*href="([^"]*)"',
+        rf'<link[^>]*href="([^"]*)"[^>]*rel="{re.escape(rel_value)}"',
+    )
+    for pattern in patterns:
+        match = re.search(pattern, text, re.I | re.S)
+        if match:
+            return unescape(match.group(1).strip())
+    return ""
+
+
+def extract_first_time(text: str) -> tuple[str, str]:
+    match = re.search(r'<time[^>]*datetime="([^"]+)"[^>]*>(.*?)</time>', text, re.I | re.S)
+    if not match:
+        return ("", "")
+    return (match.group(1).strip(), strip_tags(match.group(2)))
+
+
 def article_header(prefix: str) -> str:
     return f"""<header>
   <nav class="nav">
-    <a href="{prefix}/index.html" class="article-brand-link" aria-label="{SITE_NAME} home">
+    <a href="/" class="article-brand-link" aria-label="{SITE_NAME} home">
       <div class="brand">
         <div class="brand-mark">JC</div>
         <div class="brand-text">
@@ -206,13 +239,13 @@ def article_header(prefix: str) -> str:
       </div>
     </a>
     <ul class="nav-links">
-      <li><a href="{prefix}/index.html#overview">Overview</a></li>
-      <li><a href="{prefix}/index.html#services">Services</a></li>
-      <li><a href="{prefix}/index.html#how-we-work">How we work</a></li>
-      <li><a href="{prefix}/index.html#projects">Projects</a></li>
-      <li><a href="{prefix}/index.html#insights">Insights</a></li>
-      <li><a href="{prefix}/index.html#contact">Contact</a></li>
-      <li><a href="{prefix}/articles.html" class="nav-cta active">Blog</a></li>
+      <li><a href="/#overview">Overview</a></li>
+      <li><a href="/#services">Services</a></li>
+      <li><a href="/#how-we-work">How we work</a></li>
+      <li><a href="/#projects">Projects</a></li>
+      <li><a href="/#insights">Insights</a></li>
+      <li><a href="/#contact">Contact</a></li>
+      <li><a href="/articles.html" class="nav-cta active">Blog</a></li>
     </ul>
   </nav>
 </header>
@@ -224,9 +257,10 @@ def site_footer(prefix: str) -> str:
   <div class="footer-inner">
     <div>© {COPYRIGHT_YEAR} {SITE_NAME}. All rights reserved.</div>
     <ul class="footer-links">
-      <li><a href="{prefix}/articles.html">Blog</a></li>
-      <li><a href="{prefix}/pages/impressum.html">Impressum</a></li>
-      <li><a href="{prefix}/pages/datenschutz.html">Datenschutz</a></li>
+      <li><a href="/articles.html">Blog</a></li>
+      <li><a href="/starjar.html">StarJar</a></li>
+      <li><a href="/pages/impressum.html">Impressum</a></li>
+      <li><a href="/pages/datenschutz.html">Datenschutz</a></li>
     </ul>
   </div>
 </footer>
@@ -249,7 +283,7 @@ def build_article_footer(text: str) -> str:
     return (
         '<footer class="article-footer">'
         f"{last_updated}"
-        '<p><a href="../articles.html">Browse all articles</a></p>'
+        '<p><a href="/articles.html">Browse all articles</a></p>'
         f'<p class="article-footer-copy">© {COPYRIGHT_YEAR} {SITE_NAME}</p>'
         "</footer>"
     )
@@ -260,28 +294,56 @@ def apply_verified_date(path: Path, text: str) -> str:
     if not verified_date:
         return text
 
-    soup = BeautifulSoup(text, "html.parser")
     display = display_date(verified_date)
+    return re.sub(
+        r'<time([^>]*?)datetime="[^"]+"([^>]*)>.*?</time>',
+        lambda match: f'<time{match.group(1)}datetime="{verified_date}"{match.group(2)}>{display}</time>',
+        text,
+        flags=re.I | re.S,
+    )
 
-    for time_tag in soup.find_all("time"):
-        if time_tag.get("datetime"):
-            time_tag["datetime"] = verified_date
-            time_tag.string = display
 
-    for script_tag in soup.find_all("script", attrs={"type": "application/ld+json"}):
-        script_text = script_tag.string or script_tag.get_text()
-        if not script_text.strip():
-            continue
-        try:
-            payload = json.loads(script_text)
-        except json.JSONDecodeError:
-            continue
-        if isinstance(payload, dict) and payload.get("@type") == "Article":
-            payload["datePublished"] = verified_date
-            payload["dateModified"] = verified_date
-            script_tag.string = json.dumps(payload, indent=2, ensure_ascii=False)
+def build_article_schema(meta: ArticleMeta) -> str:
+    data = {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": meta.title,
+        "description": meta.description,
+        "image": [meta.image],
+        "datePublished": meta.published_iso,
+        "author": {
+            "@type": "Person",
+            "name": meta.author,
+        },
+        "publisher": {
+            "@type": "Organization",
+            "name": SITE_TITLE,
+            "url": f"{SITE_URL}/",
+        },
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": meta.canonical,
+        },
+        "url": meta.canonical,
+        "inLanguage": "en",
+    }
+    return json.dumps(data, ensure_ascii=False, separators=(",", ":"))
 
-    return str(soup)
+
+def ensure_article_schema(path: Path, text: str) -> str:
+    meta = read_article_meta(path)
+    script = (
+        f'<script type="application/ld+json" data-seo-schema="article">{build_article_schema(meta)}</script>'
+    )
+    if "</head>" not in text:
+        return text
+    text = re.sub(
+        r'\s*<script[^>]*data-seo-schema="article"[^>]*>.*?</script>',
+        "",
+        text,
+        flags=re.I | re.S,
+    )
+    return text.replace("</head>", f"  {script}\n</head>", 1)
 
 
 def normalize_article_markup(path: Path, text: str) -> str:
@@ -294,6 +356,13 @@ def normalize_article_markup(path: Path, text: str) -> str:
         '<article class="article-layout">': '<article class="container">',
         '<figure class="hero">': '<figure class="article-hero">',
         '<h1 id="article-title">': '<h1 class="article-title" id="article-title">',
+        'href="../index.html"': 'href="/"',
+        'href="../index.html#overview"': 'href="/#overview"',
+        'href="../index.html#services"': 'href="/#services"',
+        'href="../index.html#how-we-work"': 'href="/#how-we-work"',
+        'href="../index.html#projects"': 'href="/#projects"',
+        'href="../index.html#insights"': 'href="/#insights"',
+        'href="../index.html#contact"': 'href="/#contact"',
     }
     for source, target in replacements.items():
         text = text.replace(source, target)
@@ -335,7 +404,8 @@ def normalize_article_markup(path: Path, text: str) -> str:
     if '<div class="footer-inner">' not in text:
         text = text.replace("</body>", site_footer("..") + "\n</body>", 1)
 
-    return apply_verified_date(path, text)
+    text = apply_verified_date(path, text)
+    return ensure_article_schema(path, text)
 
 
 def format_count(count: int) -> str:
@@ -367,9 +437,7 @@ def article_card(article: ArticleMeta, href: str, featured: bool = False) -> str
 
 
 def render_article_index(articles: list[ArticleMeta], *, depth: int, canonical: str) -> str:
-    prefix = ".." if depth == 1 else "."
     css_prefix = "../articles" if depth == 1 else "articles"
-    home_prefix = ".." if depth == 1 else "."
     favicon_href = "../img/favicon-32x32.png" if depth == 1 else "img/favicon-32x32.png"
     styles_href = "../styles.css" if depth == 1 else "styles.css"
     article_css_href = f"{css_prefix}/assets/style.css"
@@ -379,6 +447,31 @@ def render_article_index(articles: list[ArticleMeta], *, depth: int, canonical: 
     featured_markup = article_card(featured, href_for(featured), featured=True)
     cards_markup = "\n".join(article_card(article, href_for(article)) for article in rest)
     pages_url = canonical
+    item_list_schema = json.dumps(
+        {
+            "@context": "https://schema.org",
+            "@type": "CollectionPage",
+            "name": f"Articles | {SITE_NAME}",
+            "url": pages_url,
+            "description": "Technical articles on Android, architecture, performance, testing, security, and product engineering.",
+            "mainEntity": {
+                "@type": "ItemList",
+                "itemListOrder": "https://schema.org/ItemListOrderDescending",
+                "numberOfItems": len(articles),
+                "itemListElement": [
+                    {
+                        "@type": "ListItem",
+                        "position": index,
+                        "url": article.canonical,
+                        "name": article.title,
+                    }
+                    for index, article in enumerate(articles, start=1)
+                ],
+            },
+        },
+        ensure_ascii=False,
+        separators=(",", ":"),
+    )
 
     return f"""<!DOCTYPE html>
 <html lang="en">
@@ -398,9 +491,10 @@ def render_article_index(articles: list[ArticleMeta], *, depth: int, canonical: 
   <link rel="icon" type="image/png" sizes="32x32" href="{favicon_href}"/>
   <link rel="stylesheet" href="{styles_href}"/>
   <link rel="stylesheet" href="{article_css_href}"/>
+  <script type="application/ld+json">{item_list_schema}</script>
 </head>
 <body class="article-hub">
-{article_header(home_prefix)}
+{article_header(".")}
 <main class="article-index-main">
   <section class="article-index-hero">
     <div class="article-index-shell">
@@ -429,7 +523,25 @@ def render_article_index(articles: list[ArticleMeta], *, depth: int, canonical: 
     </div>
   </section>
 </main>
-{site_footer(home_prefix)}
+{site_footer(".")}
+</body>
+</html>
+"""
+
+
+def render_blog_redirect() -> str:
+    return f"""<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="robots" content="noindex, follow"/>
+  <title>Articles | {SITE_NAME}</title>
+  <link rel="canonical" href="{SITE_URL}/articles.html"/>
+  <meta http-equiv="refresh" content="0; url={SITE_URL}/articles.html"/>
+</head>
+<body>
+  <p><a href="{SITE_URL}/articles.html">Continue to the articles index</a>.</p>
 </body>
 </html>
 """
@@ -450,7 +562,7 @@ def sync_articles() -> dict[str, int]:
     articles_html = render_article_index(metas, depth=0, canonical=f"{SITE_URL}/articles.html")
     (ROOT / "articles.html").write_text(articles_html, encoding="utf-8")
 
-    blog_html = render_article_index(metas, depth=1, canonical=f"{SITE_URL}/articles.html")
+    blog_html = render_blog_redirect()
     (ROOT / "pages" / "blog.html").write_text(blog_html, encoding="utf-8")
 
     return {

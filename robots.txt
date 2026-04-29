@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Helper / demo / source files (pages also use noindex where applicable)
+Disallow: /articles/article-template.html
+Disallow: /pages/articles/
+Disallow: /articles/how-i-cut-my-gradle-build-time-by-50.md
+
+Sitemap: https://jamescullimore.dev/sitemap.xml
