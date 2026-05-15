@@ -4,10 +4,54 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Datenschutz – James Cullimore</title>
-  <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
-  <link rel="stylesheet" href="../styles.css">
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied'
+    });
+
+    function loadAnalytics() {
+      if (window.__gaLoaded) return;
+      window.__gaLoaded = true;
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-TYPWQYLWYH';
+      document.head.appendChild(script);
+
+      gtag('js', new Date());
+      gtag('config', 'G-TYPWQYLWYH');
+    }
+
+    window.setAnalyticsConsent = function setAnalyticsConsent(granted) {
+      const consentValue = granted ? 'granted' : 'denied';
+
+      gtag('consent', 'update', {
+        analytics_storage: consentValue
+      });
+
+      if (granted) {
+        localStorage.setItem('analytics_consent', 'granted');
+        loadAnalytics();
+        return;
+      }
+
+      localStorage.setItem('analytics_consent', 'denied');
+    };
+
+    if (localStorage.getItem('analytics_consent') === 'granted') {
+      window.setAnalyticsConsent(true);
+    }
+  </script>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
   <style>
     .legal-content {
       max-width: 800px;
@@ -48,17 +92,19 @@
 
 <header>
   <nav class="nav">
-    <div class="brand">
-      <div class="brand-mark">
-        <img src="../assets/branding/logo-black.png" alt="">
+    <a href="/" class="brand-link" aria-label="James Cullimore Software Engineering home">
+      <div class="brand">
+        <div class="brand-mark">
+          <img src="assets/branding/logo-black.png" alt="">
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">James Cullimore</div>
+          <div class="brand-role">Developer</div>
+        </div>
       </div>
-      <div class="brand-text">
-        <div class="brand-name">James Cullimore</div>
-        <div class="brand-role">Developer</div>
-      </div>
-    </div>
+    </a>
     <ul class="nav-links">
-      <li><a href="../index.html">Home</a></li>
+      <li><a href="/">Home</a></li>
       <li><a href="blog.html">Blog</a></li>
       <li><a href="impressum.html">Impressum</a></li>
     </ul>
@@ -93,10 +139,11 @@
       </p>
       <p>
         <strong>James Cullimore</strong><br>
-        [Your Address]<br>
-        [Postal Code] [City]<br>
+        Auf der Nuß 9<br>
+        78078 Niedereschach<br>
         Germany<br>
-        E-Mail: hello@jamescullimore.dev
+        E-Mail: info@jamescullimore.dev<br>
+        Telefon: +49 1590 1727704
       </p>
 
       <h3>Widerruf Ihrer Einwilligung zur Datenverarbeitung</h3>
@@ -128,12 +175,12 @@
         Eine Zusammenführung dieser Daten mit anderen Datenquellen wird nicht vorgenommen. Die Erfassung dieser Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an der technisch fehlerfreien Darstellung und der Optimierung seiner Website – hierzu müssen die Server-Log-Dateien erfasst werden.
       </p>
 
-      <h3>Kontaktformular</h3>
+      <h3>Kontaktaufnahme per E-Mail</h3>
       <p>
-        Sollten Sie uns per Kontaktformular Anfragen zukommen lassen, werden Ihre Angaben aus dem Anfrageformular inklusive der von Ihnen dort angegebenen Kontaktdaten zwecks Bearbeitung der Anfrage und für den Fall von Anschlussfragen bei uns gespeichert. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter.
+        Wenn Sie uns per E-Mail kontaktieren, werden Ihre Nachricht sowie die daraus hervorgehenden Kontaktdaten zur Bearbeitung Ihrer Anfrage und für eventuelle Anschlussfragen verarbeitet. Diese Daten geben wir nicht ohne Ihre Einwilligung weiter, sofern keine gesetzliche Verpflichtung dazu besteht.
       </p>
       <p>
-        Die Verarbeitung der in das Kontaktformular eingegebenen Daten erfolgt auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO (Verarbeitung mit Einwilligung). Sie können diese Einwilligung jederzeit widerrufen.
+        Die Verarbeitung dieser Daten erfolgt je nach Anlass auf Grundlage von Art. 6 Abs. 1 lit. b DSGVO, sofern Ihre Anfrage mit der Anbahnung oder Durchführung eines Vertrags zusammenhängt, oder auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO aufgrund unseres berechtigten Interesses an der effizienten Bearbeitung eingehender Anfragen.
       </p>
     </div>
 
@@ -141,32 +188,15 @@
       <h2>4. Analyse-Tools und Werbung</h2>
       <h3>Google Analytics</h3>
       <p>
-        Diese Website nutzt ggf. Google Analytics, einen Webanalysedienst der Google Inc. („Google"). Google Analytics verwendet sog. „Cookies", Textdateien, die auf Ihrem Computer gespeichert werden und die eine Analyse der Benutzung der Website durch Sie ermöglichen. Die durch den Cookie erzeugten Informationen über Ihre Benutzung dieser Website werden in der Regel an einen Server von Google in den USA übertragen und dort gespeichert.
+        Diese Website kann Google Analytics, einen Webanalysedienst von Google, nutzen. Google Analytics wird auf dieser Website erst nach Ihrer ausdrücklichen Einwilligung aktiviert. Google Analytics verwendet Cookies und vergleichbare Technologien, um die Nutzung der Website auszuwerten. Die dadurch erzeugten Informationen über Ihre Benutzung dieser Website können an Server von Google übertragen und dort verarbeitet werden.
       </p>
       <p>
-        Die Speicherung von Google-Analytics-Cookies erfolgt auf Grundlage von Art. 6 Abs. 1 lit. f DSGVO. Der Websitebetreiber hat ein berechtigtes Interesse an der Analyse des Nutzerverhaltens, um sein Webangebot zu optimieren.
+        Rechtsgrundlage für den Einsatz von Google Analytics ist Ihre Einwilligung gemäß Art. 6 Abs. 1 lit. a DSGVO sowie, soweit einschlägig, § 25 TTDSG. Sie können eine erteilte Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen.
       </p>
     </div>
 
     <div class="legal-section">
-      <h2>5. Plugins und Tools</h2>
-      <h3>YouTube</h3>
-      <p>
-        Unsere Website nutzt Plugins der von Google betriebenen Seite YouTube. Der Betreiber der Seiten ist die YouTube, LLC, 901 Cherry Ave., San Bruno, CA 94066, USA.
-      </p>
-      <p>
-        Wenn Sie eine unserer Webseiten besuchen, auf der YouTube integriert ist, wird eine Verbindung zu den Servern von YouTube hergestellt. Dabei wird dem YouTube-Server mitgeteilt, welche unserer Seiten Sie besucht haben.
-      </p>
-      <p>
-        Wenn Sie in Ihrem YouTube-Account eingeloggt sind, ermöglichen Sie YouTube, Ihr Surfverhalten direkt Ihrem persönlichen Profil zuzuordnen. Dies können Sie verhindern, indem Sie sich aus Ihrem YouTube-Account ausloggen.
-      </p>
-      <p>
-        Die Nutzung von YouTube erfolgt im Interesse einer ansprechenden Darstellung unserer Online-Angebote. Dies stellt ein berechtigtes Interesse im Sinne von Art. 6 Abs. 1 lit. f DSGVO dar. Soweit eine entsprechende Einwilligung abgefragt wurde (z. B. eine Einwilligung zur Speicherung von Cookies), erfolgt die Verarbeitung ausschließlich auf Grundlage von Art. 6 Abs. 1 lit. a DSGVO.
-      </p>
-    </div>
-
-    <div class="legal-section">
-      <h2>6. Ihre Rechte</h2>
+      <h2>5. Ihre Rechte</h2>
       <p>
         Sie haben das Recht:
       </p>
@@ -178,12 +208,12 @@
         <li>der Datenportabilität (Art. 20 DSGVO) und gegen automatisierte Entscheidungen Einspruch zu erheben (Art. 22 DSGVO)</li>
       </ul>
       <p>
-        Möchten Sie von diesen Rechten Gebrauch machen, kontaktieren Sie uns bitte unter: hello@jamescullimore.dev
+        Möchten Sie von diesen Rechten Gebrauch machen, kontaktieren Sie uns bitte unter: info@jamescullimore.dev
       </p>
     </div>
 
     <div class="legal-section">
-      <h2>7. Änderung dieser Datenschutzerklärung</h2>
+      <h2>6. Änderung dieser Datenschutzerklärung</h2>
       <p>
         Wir behalten uns das Recht vor, diese Datenschutzerklärung anzupassen, damit sie immer den aktuellen rechtlichen Anforderungen entspricht. Dies gilt insbesondere im Falle von Änderungen der Gesetzgebung. In diesem Fall informieren wir Sie zeitnah über die Änderung per E-Mail oder auf dieser Website.
       </p>

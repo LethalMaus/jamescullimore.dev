@@ -249,6 +249,23 @@ pre code {
   outline-offset: 2px;
 }
 
+.skip-link {
+  position: absolute;
+  left: var(--space-16);
+  top: -48px;
+  z-index: 1000;
+  padding: var(--space-10) var(--space-12);
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  color: var(--color-slate-900);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: var(--shadow-md);
+}
+
+.skip-link:focus {
+  top: var(--space-16);
+}
+
 /* ========== SCROLL FADE UTILITY ========== */
 @media (prefers-reduced-motion: reduce) {
   .fade-section {
@@ -1662,9 +1679,11 @@ main {
   gap: 10px;
   margin-top: 8px;
   margin-bottom: 20px;
+  padding: 0;
+  list-style: none;
 }
 
-.clients-list span {
+.clients-list li {
   display: inline-flex;
   align-items: center;
   padding: 7px 12px;

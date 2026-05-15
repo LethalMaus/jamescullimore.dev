@@ -4,10 +4,54 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Impressum – James Cullimore</title>
-  <link rel="icon" type="image/x-icon" href="../img/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png">
-  <link rel="apple-touch-icon" sizes="180x180" href="../img/apple-touch-icon.png">
-  <link rel="stylesheet" href="../styles.css">
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+
+    gtag('consent', 'default', {
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      ad_user_data: 'denied',
+      ad_personalization: 'denied'
+    });
+
+    function loadAnalytics() {
+      if (window.__gaLoaded) return;
+      window.__gaLoaded = true;
+
+      const script = document.createElement('script');
+      script.async = true;
+      script.src = 'https://www.googletagmanager.com/gtag/js?id=G-TYPWQYLWYH';
+      document.head.appendChild(script);
+
+      gtag('js', new Date());
+      gtag('config', 'G-TYPWQYLWYH');
+    }
+
+    window.setAnalyticsConsent = function setAnalyticsConsent(granted) {
+      const consentValue = granted ? 'granted' : 'denied';
+
+      gtag('consent', 'update', {
+        analytics_storage: consentValue
+      });
+
+      if (granted) {
+        localStorage.setItem('analytics_consent', 'granted');
+        loadAnalytics();
+        return;
+      }
+
+      localStorage.setItem('analytics_consent', 'denied');
+    };
+
+    if (localStorage.getItem('analytics_consent') === 'granted') {
+      window.setAnalyticsConsent(true);
+    }
+  </script>
+  <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
+  <link rel="stylesheet" href="styles.css">
   <style>
     .legal-content {
       max-width: 800px;
@@ -35,19 +79,21 @@
 
 <header>
   <nav class="nav">
-    <div class="brand">
-      <div class="brand-mark">
-        <img src="../assets/branding/logo-black.png" alt="">
+    <a href="/" class="brand-link" aria-label="James Cullimore Software Engineering home">
+      <div class="brand">
+        <div class="brand-mark">
+          <img src="assets/branding/logo-black.png" alt="">
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">James Cullimore</div>
+          <div class="brand-role">Developer</div>
+        </div>
       </div>
-      <div class="brand-text">
-        <div class="brand-name">James Cullimore</div>
-        <div class="brand-role">Developer</div>
-      </div>
-    </div>
+    </a>
     <ul class="nav-links">
-      <li><a href="../index.html">Home</a></li>
+      <li><a href="/">Home</a></li>
       <li><a href="blog.html">Blog</a></li>
-      <li><a href="../index.html#contact">Contact</a></li>
+      <li><a href="/#contact">Contact</a></li>
     </ul>
   </nav>
 </header>
@@ -57,29 +103,35 @@
     <h1 class="section-heading" style="margin-bottom: 2rem;">Impressum</h1>
 
     <div class="legal-section">
-      <h2>Angaben gemäß § 5 TMG</h2>
+      <h2>Angaben gemäß § 5 DDG</h2>
       <p>
         <strong>James Cullimore</strong><br>
-        [Your Address]<br>
-        [Postal Code] [City]<br>
+        Auf der Nuß 9<br>
+        78078 Niedereschach<br>
         Germany
+      </p>
+    </div>
+
+    <div class="legal-section">
+      <h2>Umsatzsteuer-ID</h2>
+      <p>
+        Umsatzsteuer-Identifikationsnummer gemäß § 27a Umsatzsteuergesetz:<br>
+        DE357615818
       </p>
     </div>
 
     <div class="legal-section">
       <h2>Kontakt</h2>
       <p>
-        <strong>E-Mail:</strong> hello@jamescullimore.dev<br>
-        <strong>Telefon:</strong> [Your Phone Number]
+        <strong>E-Mail:</strong> info@jamescullimore.dev<br>
+        <strong>Telefon:</strong> +49 1590 1727704
       </p>
     </div>
 
     <div class="legal-section">
-      <h2>Berufliche Qualifikation</h2>
+      <h2>Tätigkeit</h2>
       <p>
-        <strong>Berufsbezeichnung:</strong> Android Developer & Software Consultant<br>
-        <strong>Zuständige Kammer:</strong> [Chamber of Commerce/Professional Organization]<br>
-        <strong>Berufsrechtliche Regelungen:</strong> [Relevant regulations for your jurisdiction]
+        Freiberufliche Softwareentwicklung und IT-Beratung mit Schwerpunkt auf Android, IoT, Kotlin Multiplatform, Webentwicklung und technischen Schulungen.
       </p>
     </div>
 
@@ -93,7 +145,7 @@
     <div class="legal-section">
       <h2>Haftung für Inhalte</h2>
       <p>
-        Die Inhalte unserer Seiten wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 des TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen.
+        Die Inhalte dieser Website wurden mit größter Sorgfalt erstellt. Für die Richtigkeit, Vollständigkeit und Aktualität der Inhalte können wir jedoch keine Gewähr übernehmen. Als Diensteanbieter sind wir nach den allgemeinen Gesetzen für eigene Inhalte auf diesen Seiten verantwortlich. Eine Verpflichtung zur Überwachung übermittelter oder gespeicherter fremder Informationen besteht erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung.
       </p>
     </div>
 
