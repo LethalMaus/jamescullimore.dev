@@ -873,7 +873,9 @@
 
       let lastScrollY = window.scrollY;
       let ticking = false;
-      const hideThreshold = header.offsetHeight * 2;
+      const hideThreshold = window.matchMedia("(max-width: 640px)").matches
+        ? window.innerHeight * 0.25
+        : header.offsetHeight * 2;
       const deltaThreshold = 8;
 
       const updateHeaderState = () => {
