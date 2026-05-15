@@ -368,7 +368,7 @@ body.header-hidden header {
   object-fit: contain;
   max-width: none;
   max-height: none;
-  transform: translateX(-20px);
+  transform: translateX(0);
 }
 
 .brand-text {
@@ -2172,6 +2172,10 @@ footer {
     text-align: center;
   }
 
+  .brand-text {
+    transform: translateX(20px);
+  }
+
   .hero-title {
     font-size: var(--font-size-2xl);
   }
@@ -2220,6 +2224,7 @@ footer {
 @media (max-width: 480px) {
   .brand-text {
     display: none;
+    transform: none;
   }
 
   .nav {
