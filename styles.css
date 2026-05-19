@@ -1632,8 +1632,67 @@ main {
   align-items: start;
 }
 
+.community-media {
+  display: grid;
+  gap: 18px;
+}
+
 .community-media .video-frame {
   margin-top: 12px;
+}
+
+.community-book-title {
+  margin-bottom: 10px;
+}
+
+.community-book-card {
+  color: inherit;
+  text-decoration: none;
+}
+
+.community-book-row {
+  display: block;
+}
+
+.community-book-content {
+  min-width: 0;
+}
+
+.community-book-cover {
+  float: right;
+  display: block;
+  width: 100px;
+  min-width: 100px;
+  max-width: 100px;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 8px 18px rgba(8, 17, 31, 0.14);
+  margin: 2px 0 10px 14px;
+}
+
+.community-book-link {
+  clear: both;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+  color: var(--color-teal-600);
+  font-size: 14px;
+  font-weight: 500;
+  border-bottom: 1px solid rgba(var(--color-teal-500-rgb), 0.22);
+  padding-bottom: 2px;
+  width: fit-content;
+  transition: color 160ms ease, border-color 160ms ease, transform 120ms ease;
+}
+
+.community-book-link::after {
+  content: "→";
+  transition: transform 120ms ease;
+}
+
+.community-book-link:hover::after,
+.community-book-link:focus-visible::after {
+  transform: translateX(2px);
 }
 
 /* Responsive */
@@ -1655,6 +1714,17 @@ main {
 
   .community-content {
     padding: 18px 16px 20px;
+  }
+
+  .community-book-card {
+    padding: 16px 16px 18px;
+  }
+
+  .community-book-cover {
+    width: 84px;
+    min-width: 84px;
+    max-width: 84px;
+    margin-left: 12px;
   }
 }
 
