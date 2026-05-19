@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Modular Architecture at Scale – James Cullimore</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script defer src="../assets/analytics-consent.js"></script>
+  <style>
+    .article-container { max-width: 700px; margin: 0 auto; }
+    .article-meta { font-size: 0.9rem; color: var(--muted); margin-bottom: 2rem; }
+    .article-content h2 { font-size: 1.3rem; margin: 2rem 0 1rem; color: var(--navy); }
+    .article-content p { margin-bottom: 1rem; line-height: 1.7; }
+    .article-content code { background: var(--navy-lighter); padding: 0.2rem 0.5rem; border-radius: 4px; }
+    .article-content a {
+  color: var(--navy);
+  font-weight: 500;
+  border-bottom: 1px solid transparent;
+  transition: border-bottom 0.15s ease;
+}
+.article-content a:hover {
+  border-bottom-color: var(--navy);
+}
+  /* Disable global fade overlay on blog pages */
+body::before,
+body::after {
+  content: none !important;
+  display: none !important;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="/" class="brand" aria-label="James Cullimore home">
+      <div class="brand-mark">
+        <img src="../assets/branding/logo-black.png" alt="">
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="../blog.html">← Back to Blog</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main style="padding: 3.5rem 1.25rem;">
+  <article class="article-container">
+    <h1 style="font-size: 2rem; margin-bottom: 0.5rem;">Modular Architecture at Scale</h1>
+    <div class="article-meta">
+      January 15, 2026 • 8 min read
+      <div style="margin-top: 0.5rem;">
+        <span style="display: inline-block; background: var(--navy-lighter); color: var(--navy); padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.8rem; margin-right: 0.4rem;">Architecture</span>
+        <span style="display: inline-block; background: var(--navy-lighter); color: var(--navy); padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.8rem; margin-right: 0.4rem;">Kotlin</span>
+      </div>
+    </div>
+
+    <div class="article-content" style="color: var(--muted); line-height: 1.7;">
+      <h2>Intro</h2>
+      <p>
+        Wir hatten ein Problem: 200K+ Zeilen Java-Code in einer riesigen Monolith-App. 
+        Build-Zeit: 8 Minuten. Test-Coverage: 12%. Team-Produktivität: im Keller.
+      </p>
+
+      <h2>Die Lösung: Modular Architecture</h2>
+      <p>
+        Wir haben die App in unabhängige Feature-Module aufgeteilt:
+      </p>
+      <ul style="margin-left: 1.5rem; margin-bottom: 1rem;">
+        <li><code>:feature-auth</code> – Authentifizierung</li>
+        <li><code>:feature-dashboard</code> – Dashboard</li>
+        <li><code>:feature-payments</code> – Payment-Integration</li>
+        <li><code>:core-network</code> – API-Client</li>
+        <li><code>:core-database</code> – Room DB</li>
+      </ul>
+
+      <h2>Ergebnisse</h2>
+      <ul style="margin-left: 1.5rem;">
+        <li>Build-Zeit: 8 Min → 2 Min (75% Reduktion)</li>
+        <li>Test-Coverage: 12% → 78%</li>
+        <li>Neue Features: 3x schneller</li>
+      </ul>
+    </div>
+  </article>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>© 2026 James Cullimore. All rights reserved.</div>
+  </div>
+</footer>
+
+</body>
+</html>

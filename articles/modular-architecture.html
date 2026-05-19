@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modular Architecture at Scale – James Cullimore</title>
+  <link rel="stylesheet" href="../styles.css">
+  <script defer src="../assets/analytics-consent.js"></script>
+  <style>
+    .article-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    .article-meta {
+      font-size: 0.9rem;
+      color: var(--muted);
+      margin-bottom: 2rem;
+    }
+    .article-meta-tags {
+      margin-top: 0.5rem;
+      display: flex;
+      gap: 0.4rem;
+      flex-wrap: wrap;
+    }
+    .article-tag {
+      display: inline-block;
+      background: var(--navy-lighter);
+      color: var(--navy);
+      padding: 0.2rem 0.6rem;
+      border-radius: 999px;
+      font-size: 0.8rem;
+    }
+    .article-content {
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .article-content h2 {
+      font-size: 1.4rem;
+      margin: 2.5rem 0 1rem;
+      color: var(--navy);
+      font-weight: 600;
+    }
+    .article-content h3 {
+      font-size: 1.1rem;
+      margin: 1.5rem 0 0.8rem;
+      color: var(--ink);
+      font-weight: 600;
+    }
+    .article-content p {
+      margin-bottom: 1rem;
+      line-height: 1.8;
+    }
+    .article-content ul,
+    .article-content ol {
+      margin-left: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .article-content li {
+      margin-bottom: 0.6rem;
+      line-height: 1.7;
+    }
+    .article-content code {
+      background: var(--navy-lighter);
+      color: var(--navy);
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+    }
+    .article-content pre {
+      background: var(--navy-lighter);
+      border-left: 3px solid var(--navy);
+      padding: 1rem;
+      border-radius: 4px;
+      overflow-x: auto;
+      margin: 1.5rem 0;
+    }
+    .article-content pre code {
+      background: none;
+      color: var(--navy);
+      padding: 0;
+      font-size: 0.85rem;
+    }
+    .stat-highlight {
+      background: var(--navy-lighter);
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1.5rem 0;
+      border-left: 3px solid var(--navy);
+    }
+    .stat-highlight strong {
+      color: var(--navy);
+      font-size: 1.1rem;
+    }
+  /* Disable global fade overlay on blog pages */
+body::before,
+body::after {
+  content: none !important;
+  display: none !important;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="nav">
+    <a href="/" style="text-decoration: none; color: inherit;">
+      <div class="brand">
+        <div class="brand-mark">
+          <img src="../assets/branding/logo-black.png" alt="">
+        </div>
+        <div class="brand-text">
+          <div class="brand-name">James Cullimore</div>
+          <div class="brand-role">Developer</div>
+        </div>
+      </div>
+    </a>
+    <ul class="nav-links">
+      <li><a href="/">Home</a></li>
+      <li><a href="../blog.html">← Back to Blog</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main style="padding: 3.5rem 1.25rem;">
+  <article class="article-container">
+    <h1 style="font-size: 2rem; margin-bottom: 0.5rem; color: var(--navy);">Modular Architecture at Scale</h1>
+    <div class="article-meta">
+      January 15, 2026 • 8 min read
+      <div class="article-meta-tags">
+        <span class="article-tag">Architecture</span>
+        <span class="article-tag">Kotlin</span>
+        <span class="article-tag">Performance</span>
+      </div>
+    </div>
+
+    <div class="article-content">
+
+      <h2>The Problem: Monolith Paralysis</h2>
+      <p>
+        Last year, we inherited a 200K+ line Android codebase. Single monolithic module. 8-minute builds. Tests that were more aspirational than actual (coverage: 12%). Teams couldn't work independently – changes to one screen had a way of breaking another. Deploy frequency? Weeks. Feature velocity? Crawling.
+      </p>
+      <p>
+        The team knew something had to change. We couldn't scale feature delivery with this structure.
+      </p>
+
+      <h2>Why Modularization?</h2>
+      <p>
+        The goals were concrete:
+      </p>
+      <ul>
+        <li><strong>Reduce build times by 50%+</strong> – Parallel module builds, incremental compilation.</li>
+        <li><strong>Enable independent feature development</strong> – Teams own their modules, deploy without coordination.</li>
+        <li><strong>Improve testability</strong> – Smaller modules, faster unit tests, higher coverage.</li>
+        <li><strong>Make the codebase navigable</strong> – Clear boundaries, explicit dependencies, easier onboarding.</li>
+      </ul>
+
+      <h2>The Target Architecture</h2>
+      <p>
+        We designed a three-layer modular structure:
+      </p>
+
+      <h3>1. Core Layer</h3>
+      <p>
+        Shared infrastructure – no business logic, no UI:
+      </p>
+      <ul>
+        <li><code>core-network</code> – Retrofit, OkHttp, API clients, DTOs.</li>
+        <li><code>core-database</code> – Room setup, DAOs, database schema.</li>
+        <li><code>core-ui</code> – Design system, reusable UI components, themes.</li>
+        <li><code>core-analytics</code> – Event tracking, crash reporting.</li>
+      </ul>
+
+      <h3>2. Feature Layer</h3>
+      <p>
+        Independent, self-contained features:
+      </p>
+      <ul>
+        <li><code>feature-auth</code> – Login, signup, password reset.</li>
+        <li><code>feature-dashboard</code> – Home screen, analytics widgets.</li>
+        <li><code>feature-payments</code> – Payment flows, transaction history.</li>
+        <li><code>feature-settings</code> – User preferences, account management.</li>
+      </ul>
+
+      <h3>3. App Layer</h3>
+      <p>
+        Brings it all together:
+      </p>
+      <ul>
+        <li><code>app</code> – Main app module, navigation graph, dependency injection setup.</li>
+      </ul>
+
+      <p>
+        Simple structure. Each feature owns its UI, domain logic, and data access. Minimal coupling through interfaces.
+      </p>
+
+      <h2>The Migration Strategy</h2>
+      <p>
+        We didn't do a "big bang" refactor. Instead:
+      </p>
+
+      <h3>Phase 1: Extract Core</h3>
+      <p>
+        First, we pulled out all infrastructure into core modules. No business logic – just APIs, database setup, UI components. This took 2 weeks and was low-risk.
+      </p>
+
+      <h3>Phase 2: One Feature at a Time</h3>
+      <p>
+        Then we started extracting features from the monolith. Started with the simplest: <code>feature-auth</code>. Took 3 days. Once it worked, the pattern was clear.
+      </p>
+
+      <h3>Phase 3: Connect the Dots</h3>
+      <p>
+        Finally, we set up the app module with a proper navigation graph and dependency injection (we used Hilt). Features expose interfaces; the app module wires them together.
+      </p>
+
+      <h2>Key Technical Decisions</h2>
+
+      <h3>Use <code>implementation</code> not <code>api</code></h3>
+      <p>
+        Each feature uses <code>implementation</code> for its dependencies. This hides transitive dependencies and keeps the API surface small.
+      </p>
+
+      <pre><code>// feature-payments build.gradle.kts
+dependencies {
+    implementation(project(":core:core-network"))
+    implementation(project(":core:core-ui"))
+    implementation(libs.retrofit)
+    implementation(libs.hilt)
+}</code></pre>
+
+      <h3>Domain Models Over DTOs</h3>
+      <p>
+        Each feature has its own domain model. The API layer (core-network) returns DTOs. The feature translates them. This keeps features independent.
+      </p>
+
+      <h3>Navigation via Interfaces</h3>
+      <p>
+        Features don't know about each other. Instead, the app module defines navigation interfaces:
+      </p>
+
+      <pre><code>// In app module
+interface PaymentNavigation {
+    fun navigateToPaymentFlow()
+}
+
+// Feature provides implementation
+class PaymentNavigationImpl : PaymentNavigation { ... }</code></pre>
+
+      <h2>The Bumps Along the Way</h2>
+
+      <h3>Circular Dependencies</h3>
+      <p>
+        Early on, <code>feature-dashboard</code> wanted to reference <code>feature-payments</code>. That created a circle. We fixed it by introducing a <code>payment-api</code> module that both could reference.
+      </p>
+
+      <h3>Shared Models</h3>
+      <p>
+        Both payments and dashboard needed a <code>Transaction</code> model. We put shared domain models in <code>core-models</code>. Solves the problem cleanly.
+      </p>
+
+      <h3>Gradle Build Cache</h3>
+      <p>
+        First attempt: each module built independently, but we didn't set up Gradle's build cache. Discovered this when local builds were fast but CI was slow. Fixed it – CI now leverages the cache.
+      </p>
+
+      <h2>The Results</h2>
+
+      <div class="stat-highlight">
+        <p>
+          <strong>Build time: 8 minutes → 3 minutes</strong> (62% reduction)<br>
+          Clean builds went from 8 to 10 minutes (parallel module builds FTW).
+        </p>
+      </div>
+
+      <div class="stat-highlight">
+        <p>
+          <strong>Test coverage: 12% → 75%</strong> (in refactored modules)<br>
+          Smaller modules meant faster tests, so developers ran them locally.
+        </p>
+      </div>
+
+      <div class="stat-highlight">
+        <p>
+          <strong>Feature velocity: +40% in first quarter</strong><br>
+          Teams could work in parallel; new payment feature shipped in 2 weeks (used to take 4).
+        </p>
+      </div>
+
+      <h2>Lessons Learned</h2>
+
+      <h3>1. Don't Over-Modularize Too Early</h3>
+      <p>
+        We created core-analytics early because we thought we'd need it. Turned out most features didn't use it. Start with problems, not predictions.
+      </p>
+
+      <h3>2. Ownership Matters</h3>
+      <p>
+        Once each team owned their feature module, quality improved. They cared about keeping the API clean, the tests passing, the code maintainable.
+      </p>
+
+      <h3>3. Invest in DI Setup</h3>
+      <p>
+        Hilt made this possible. Without dependency injection, wiring modules together would've been a nightmare. Worth the upfront time.
+      </p>
+
+      <h2>What's Next</h2>
+
+      <p>
+        We're monitoring build times – targeting 90 seconds for incremental builds. We're also exploring dynamic feature modules for rarely-used features. And we're documenting the module structure so new engineers understand the mental model quickly.
+      </p>
+
+      <p>
+        The bigger win? Teams ship faster. The architecture supports 3x the feature delivery. And the codebase is actually fun to work with.
+      </p>
+
+      <p style="margin-top: 2.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border); font-size: 0.9rem; color: var(--muted);">
+        <strong>Have thoughts on modularization?</strong> Reach out on <a href="https://linkedin.com/in/jamescullimore" target="_blank" rel="noopener noreferrer" style="color: var(--navy); text-decoration: underline;">LinkedIn</a>.
+      </p>
+
+    </div>
+
+  </article>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div>© 2026 James Cullimore. All rights reserved.</div>
+    <ul class="footer-links">
+      <li><a href="../blog.html">Blog</a></li>
+      <li><a href="../impressum.html">Impressum</a></li>
+      <li><a href="../datenschutz.html">Datenschutz</a></li>
+    </ul>
+  </div>
+</footer>
+
+</body>
+</html>
