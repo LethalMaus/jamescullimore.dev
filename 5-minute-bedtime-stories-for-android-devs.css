@@ -359,6 +359,15 @@ a {
   box-shadow: 0 0 0 4px rgba(152, 225, 107, 0.14);
 }
 
+.authors-list li.sheep-bullet::before {
+  background: center / contain no-repeat url("assets/regularSheep.png");
+  border-radius: 0;
+  box-shadow: none;
+  left: -0.05625rem;
+  width: 0.5625rem;
+  height: 0.5625rem;
+}
+
 .inline-actions {
   margin-top: 1.3rem;
   color: var(--warm);
