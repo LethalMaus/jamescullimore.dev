@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Why HTTPS Alone Is Not Enough for Sensitive Android Payloads</title>
+  <meta name="description" content="Why HTTPS Alone Is Not Enough for Sensitive Android Payloads When most Android teams talk about securing data in transit, the conversation usually stops at HTTPS. That is a good baseline, but it is …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/why-https-alone-is-not-enough-for-sensitive-android-payloads.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Why HTTPS Alone Is Not Enough for Sensitive Android Payloads"/>
+  <meta property="og:description" content="Why HTTPS Alone Is Not Enough for Sensitive Android Payloads When most Android teams talk about securing data in transit, the conversation usually stops at HTTPS. That is a good baseline, but it is …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/why-https-alone-is-not-enough-for-sensitive-android-payloads.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*EHyyNUobQyRp5RMa_7Wnqw.png"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Why HTTPS Alone Is Not Enough for Sensitive Android Payloads"/>
+  <meta name="twitter:description" content="Why HTTPS Alone Is Not Enough for Sensitive Android Payloads When most Android teams talk about securing data in transit, the conversation usually stops at HTTPS. That is a good baseline, but it is …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*EHyyNUobQyRp5RMa_7Wnqw.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Why HTTPS Alone Is Not Enough for Sensitive Android Payloads","description":"Why HTTPS Alone Is Not Enough for Sensitive Android Payloads When most Android teams talk about securing data in transit, the conversation usually stops at HTTPS. That is a good baseline, but it is …","image":["https://miro.medium.com/v2/resize:fit:1200/1*EHyyNUobQyRp5RMa_7Wnqw.png"],"datePublished":"2026-03-23","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/why-https-alone-is-not-enough-for-sensitive-android-payloads.html"},"url":"https://jamescullimore.dev/articles/why-https-alone-is-not-enough-for-sensitive-android-payloads.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android Development • Android App Development</p>
+      <h1 class="article-title">Why HTTPS Alone Is Not Enough for Sensitive Android Payloads</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-03-23">Mar 23, 2026</time>
+        <span>&bull;</span>
+        <span>6 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*EHyyNUobQyRp5RMa_7Wnqw.png" alt="Why HTTPS Alone Is Not Enough for Sensitive Android Payloads"/>
+    </figure>
+    <section class="article-content">
+<p>When most Android teams talk about securing data in transit, the conversation usually stops at HTTPS. That is a good baseline, but it is not the whole story.</p>
+<p>If you care about what happens to a payload before it leaves the device, or what an attacker can learn when crypto is implemented badly, you need to look one layer deeper. That is exactly why I added an end-to-end encryption lab to the Android Security Training project. Each topic in the project ships with a secure implementation and a deliberately vulnerable one, so you can compare the two side by side instead of discussing security as an abstraction.</p>
+<p>In the E2E lab, the secure flavor uses modern AEAD with AES-GCM, fresh IVs, AAD, HMAC, and an optional ECDH flow for session key establishment. The vulnerable flavor does the kinds of things you still find in real apps: ECB mode, hardcoded keys, weak MAC choices, and even treating Base64 as if it were encryption. The contrast is useful because you can see the failure modes immediately.</p>
+<p>HTTPS still matters, and you can observe transport behaviour with the project’s proxy labs, but the focus here is payload-layer confidentiality and integrity. That is the part people often hand-wave. It is also the part that tends to break in subtle ways.</p>
+<h2>The Secure AES-GCM Path Is Doing More Than “Encrypting”</h2>
+<p>The secure implementation uses AES-GCM with a random 12-byte IV and optional AAD. That combination gives you confidentiality and integrity together, which is the real reason AEAD modes are worth using.</p>
+<p>The implementation used in the secure flavor is here:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/b95b9c9a2fb1f1f9a25a24397434b565.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/b95b9c9a2fb1f1f9a25a24397434b565" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/b95b9c9a2fb1f1f9a25a24397434b565" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>There are a few details here that are easy to miss if you only look at the happy path:</p>
+<ul><li>The IV is generated fresh for every encryption call.</li><li>AAD is included when present, which means metadata can be authenticated without becoming part of the ciphertext.</li><li>The authentication tag is separated from the ciphertext in the return model so learners can see the moving pieces clearly.</li></ul>
+<p>That last point is mostly pedagogical, but it helps. A lot of crypto bugs come from developers not really having a mental model of what the IV, ciphertext, and tag are doing.</p>
+<p>In the training app, this flow also round-trips cleanly when you decrypt with the same key and AAD. If you tamper with the ciphertext or tag, decryption fails. That is the property you want students and developers to see early: encryption without integrity is not enough.</p>
+<p>There is one important caveat in the demo: the symmetric key is kept in memory for simplicity. That is fine for a teaching lab, but it is not where you should stop in production. Long-term keys should live in the Android Keystore, and key lifecycle needs to be treated as part of the design rather than an afterthought.</p>
+<h2>The Vulnerable Path Shows the Mistakes More Honestly Than a Slide Deck Ever Could</h2>
+<p>The vulnerable implementation is intentionally bad, but not unrealistic. It mirrors the kinds of shortcuts that show up when teams want something that “looks encrypted” without really understanding the security properties.</p>
+<p>The first example is the most obvious one: an API that claims to be AES-GCM but is actually using ECB.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/c143fcf8eb6c1cf5c198eec867f265de.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/c143fcf8eb6c1cf5c198eec867f265de" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/c143fcf8eb6c1cf5c198eec867f265de" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This is useful because it demonstrates a failure mode that is both technical and organisational. The method name says one thing, the implementation does another, and the UI still labels the button as “Encrypt Locally (AES-GCM)”. If a team only checks whether some ciphertext appears on screen, this kind of mistake can survive much longer than it should.</p>
+<p>The same vulnerable helper also uses a predictable hardcoded key and a weaker MAC construction:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/cda8a8196a9b706f20eb6d8212dd217b.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/cda8a8196a9b706f20eb6d8212dd217b" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/cda8a8196a9b706f20eb6d8212dd217b" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Hardcoded keys are a recurring theme in mobile assessments because they solve the immediate engineering problem while creating a much larger security problem. Once the key is embedded in the app, it becomes recoverable. At that point, the crypto is mostly ceremony.</p>
+<p>The other useful anti-pattern in this lab is the Base64 example:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/2486c8fb2b78b207a9de546d1282b409.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/2486c8fb2b78b207a9de546d1282b409" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/2486c8fb2b78b207a9de546d1282b409" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>I like keeping this example in the lab because it forces an uncomfortable but necessary point: if your transformation is reversible by anyone who sees the data, it is not encryption. It does not become encryption because it is wrapped in JSON or posted over HTTPS.</p>
+<h2>The ECB Mini-Lab Makes Pattern Leakage Obvious</h2>
+<p>One of the more effective parts of this lab is also one of the simplest. In the vulnerable E2E build, the button labelled “Encrypt Locally (AES-GCM)” deliberately routes to ECB so you can demonstrate block pattern leakage without any extra setup.</p>
+<p>Set the app variant to `vulnE2eDebug`, open the E2E screen, and paste this exact JSON payload:</p>
+<pre><code class="language-text">{"type":"demo","pad":"x","msg":"ABCDEFGHIJKLMNOPABCDEFGHIJKLMNOPABCDEFGHIJKLMNOPABCDEFGHIJKLMNOPABCDEFGHIJKLMNOPABCDEFGHIJKLMNOP"}</code></pre>
+<p>The `pad` field is there for a reason. It aligns the repeated `msg` data on a 16-byte boundary so ECB’s weakness becomes easier to see. After tapping the button, the app shows a `CT=` line containing Base64 ciphertext. In the vulnerable build, you will notice repeating chunks at regular intervals because identical plaintext blocks produce identical ciphertext blocks under the same key.</p>
+<p>That is the kind of thing people can read about ten times and still not internalise until they see it happen with their own input.</p>
+<p>Then switch to `secureE2eDebug` and repeat the exact same steps. The plaintext is unchanged, but the output no longer shows repeating patterns because the secure implementation uses real AES-GCM with a fresh IV. That side-by-side comparison usually lands the lesson much faster than explaining ECB in abstract terms.</p>
+<p>It is also a good reminder that confidentiality is not just about whether the original text is readable. Leaking structure can still tell an attacker a lot.</p>
+<h2>ECDH Is Where the Conversation Starts Getting More Real</h2>
+<p>Once you move beyond a single local symmetric key, you need a way to establish shared secrets. The secure flavor includes a minimal ECDH example using P-256 and then derives an AES key from the shared secret.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/80e7745011748f291e517333deeeb8a4.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/80e7745011748f291e517333deeeb8a4" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/80e7745011748f291e517333deeeb8a4" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>I would not present this as a production-ready key agreement design, and the code does not pretend otherwise. It is intentionally minimal so learners can follow the flow:</p>
+<ol><li>Parse the server public key.</li><li>Generate an ephemeral EC key pair.</li><li>Perform ECDH.</li><li>Derive a symmetric key from the shared secret.</li></ol>
+<p>That alone is already more useful than many high-level explanations because it connects the abstract idea of “session key agreement” to the actual Android and Java crypto primitives involved.</p>
+<p>The implementation uses PBKDF2 to avoid adding extra dependencies, but HKDF would be the better fit here. That tradeoff is called out directly in the code because I would rather students see a clear, honest compromise than mistake a teaching shortcut for a best practice.</p>
+<p>The broader lesson is that key exchange should be ephemeral where possible, key rotation should be planned from the start, and long-lived symmetric keys should not quietly accumulate across sessions just because it is convenient.</p>
+<h2>Transport Security Still Matters, But It Solves a Different Problem</h2>
+<p>One reason I wanted this lab in the project is that mobile security discussions often collapse transport security and payload security into one blurry concept.</p>
+<p>They are related, but they are not the same.</p>
+<p>HTTPS protects the channel. You still want that, and the project’s HTTPS and pinning labs are useful for showing what can be observed with tools like `mitmproxy`, especially when you are testing how apps behave with trusted interception on an emulator. That is worth doing because it grounds the transport story in something concrete.</p>
+<p>But payload encryption is about what happens to the message itself. If a payload is encrypted and authenticated before it is handed to the networking layer, then the security properties travel with the message. If it is not, or if the crypto is weak, then TLS may protect the hop while the app still leaks structure, accepts tampering, or relies on keys that should never have shipped.</p>
+<p>That separation is the thing I want readers to leave with. TLS is necessary. It is just not sufficient for every problem.</p>
+<h2>Closing Thoughts</h2>
+<p>The secure side of this lab is not trying to be magical. It just sticks to the boring rules that usually hold up: use AEAD, generate fresh IVs, authenticate associated data, derive keys properly, and be explicit about integrity.</p>
+<p>The vulnerable side is useful for the same reason. It shows how quickly security falls apart when you use ECB, hardcode keys, weaken authenticity guarantees, or confuse encoding with encryption.</p>
+<p>If you teach this material, review mobile implementations, or just want a better mental model for Android crypto, the side-by-side approach helps. It moves the conversation away from “did we encrypt it?” and toward the more useful questions: what properties does this design actually provide, and what breaks when the implementation cuts corners?</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-03-23">Mar 23, 2026</time></p>
+      <p>Tags: Android, Android Development, Android App Development, Security, Kotlin</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Building a Reliable Control Handoff with the Wear OS Data Layer</title>
+  <meta name="description" content="Building a Reliable Control Handoff with the Wear OS Data Layer When One Feature Has Two Masters Modern Android experiences rarely live on a single screen anymore. A phone app might offer deep …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/building-a-reliable-control-handoff-with-the-wear-os-data-layer.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Building a Reliable Control Handoff with the Wear OS Data Layer"/>
+  <meta property="og:description" content="Building a Reliable Control Handoff with the Wear OS Data Layer When One Feature Has Two Masters Modern Android experiences rarely live on a single screen anymore. A phone app might offer deep …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/building-a-reliable-control-handoff-with-the-wear-os-data-layer.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*2ghgteXhywgmvdAeyb8N4Q.png"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Building a Reliable Control Handoff with the Wear OS Data Layer"/>
+  <meta name="twitter:description" content="Building a Reliable Control Handoff with the Wear OS Data Layer When One Feature Has Two Masters Modern Android experiences rarely live on a single screen anymore. A phone app might offer deep …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*2ghgteXhywgmvdAeyb8N4Q.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Building a Reliable Control Handoff with the Wear OS Data Layer","description":"Building a Reliable Control Handoff with the Wear OS Data Layer When One Feature Has Two Masters Modern Android experiences rarely live on a single screen anymore. A phone app might offer deep …","image":["https://miro.medium.com/v2/resize:fit:1200/1*2ghgteXhywgmvdAeyb8N4Q.png"],"datePublished":"2026-02-11","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/building-a-reliable-control-handoff-with-the-wear-os-data-layer.html"},"url":"https://jamescullimore.dev/articles/building-a-reliable-control-handoff-with-the-wear-os-data-layer.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android Development • Wearables</p>
+      <h1 class="article-title">Building a Reliable Control Handoff with the Wear OS Data Layer</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-02-11">Feb 11, 2026</time>
+        <span>&bull;</span>
+        <span>10 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*2ghgteXhywgmvdAeyb8N4Q.png" alt="Building a Reliable Control Handoff with the Wear OS Data Layer"/>
+    </figure>
+    <section class="article-content">
+<h2>When One Feature Has Two Masters</h2>
+<p>Modern Android experiences rarely live on a single screen anymore. A phone app might offer deep configuration and context, while a Wear OS app provides immediacy, glanceability, and physical convenience. The challenge begins when both surfaces are capable of controlling the same feature.</p>
+<p>If a workout can be paused from the watch and the phone, which device is in charge? If playback is started on the phone, should the watch immediately reflect that authority? And what happens when connectivity drops, messages are delayed, or the user needs control right now?</p>
+<p>This article explores a practical control sharing pattern between a phone app and a Wear OS app where only one device is the active controller at any given time. Either side can request control. The other side can grant it. And when communication fails, the user is never blocked thanks to an explicit emergency takeover path.</p>
+<p>Under the hood, this is powered by the Wear OS data layer, combining messages for intent driven requests and data items for authoritative shared state. On top of that sits a small but strict contract that defines who owns control, when it changed, whether it was an emergency action, and which user is currently active.</p>
+<p>The result is a system that feels responsive, resilient, and predictable across devices. One that makes failures visible instead of silent, and prioritizes user intent over perfect connectivity.</p>
+<p>In the sections that follow, we will break this down piece by piece. We will start with the shared contract and data layer manager that both apps rely on, then walk through the phone and watch UIs, and finally look at the listener services that keep everything flowing even when the UI is not in the foreground.</p>
+<h2>A Shared Contract and a Single Source of Truth</h2>
+<p>When two apps on two different devices need to cooperate, the most important decision is not UI, timing, or even connectivity. It is the contract.</p>
+<p>Before a phone and a watch can safely negotiate control, they need a shared understanding of:</p>
+<ul><li>where data lives</li><li>how requests are made</li><li>how authority is published</li><li>how identity is represented</li><li>how connection health is observed</li></ul>
+<p>This example starts by defining that contract explicitly and keeping it platform agnostic. Both apps import the same shared module, and neither side invents its own rules.</p>
+<h3>Paths, keys, and models</h3>
+<p>All communication is anchored to a small set of well known paths and keys. These paths intentionally separate intent from state.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/e08080b074b654ea8b4013c12fda270f.js?file=WearPaths.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/e08080b074b654ea8b4013c12fda270f#file-wearpaths-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/e08080b074b654ea8b4013c12fda270f#file-wearpaths-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Messages use <code>/request-control</code> to express intent. Data items under <code>/device-control</code> and <code>/user-profile</code> represent durable, authoritative state. This separation is deliberate. Messages may be lost. Data eventually converges.</p>
+<p>The domain models mirror this thinking.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/2b3a4acb0883dbb66ca6bcec73611288.js?file=ControlStatus.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/2b3a4acb0883dbb66ca6bcec73611288#file-controlstatus-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/2b3a4acb0883dbb66ca6bcec73611288#file-controlstatus-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p><code>ControlStatus</code> is the heart of the system. It answers three questions unambiguously:</p>
+<ul><li>who currently holds control</li><li>whether that control was taken via an emergency path</li><li>when the decision was made</li></ul>
+<p>Nothing else needs to be inferred.</p>
+<h3>One manager on both devices</h3>
+<p>Both the phone app and the watch app use the same data layer manager. The only difference is which <code>DeviceType</code> they identify as.</p>
+<pre><code class="language-sh">class WearDataLayerManager(
+    context: Context,
+    private val localDevice: DeviceType,
+    private val scope: CoroutineScope = CoroutineScope(SupervisorJob() + Dispatchers.IO),
+) : DataClient.OnDataChangedListener, MessageClient.OnMessageReceivedListener {</code></pre>
+<p>This class deliberately owns all Wear OS APIs:</p>
+<ul><li><code>DataClient</code> for shared state</li><li><code>MessageClient</code> for point to point requests</li><li><code>NodeClient</code> for connectivity awareness</li></ul>
+<p>It exposes everything else as state flows that the UI can safely observe.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/a10033f581a1d02c5ca084a895e9711e.js?file=WearViewModel.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/a10033f581a1d02c5ca084a895e9711e#file-wearviewmodel-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/a10033f581a1d02c5ca084a895e9711e#file-wearviewmodel-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This means the UI never talks to the data layer directly. It reacts to state.</p>
+<h3>Connection tracking as a first class concern</h3>
+<p>Rather than assuming connectivity, the manager checks and publishes it.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/3fab7b88b78631a29a33167c37181da4.js?file=refreshNodes.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/3fab7b88b78631a29a33167c37181da4#file-refreshnodes-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/3fab7b88b78631a29a33167c37181da4#file-refreshnodes-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This information is later used to decide whether an emergency takeover should be shown. Connectivity is not hidden. It is surfaced.</p>
+<h3>Requesting control versus publishing control</h3>
+<p>A critical design choice here is that requesting control and taking control are two separate actions.</p>
+<p>Requesting control sends a message.</p>
+<pre><code class="language-sh">suspend fun requestControl(): Boolean {
+        val payload = localDevice.name.toByteArray()
+        return sendMessageToNodes(WearPaths.REQUEST_CONTROL, payload)
+    }</code></pre>
+<p>Taking control publishes data.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/b13357e047ecad5e377b754f0d291c46.js?file=takeControl.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/b13357e047ecad5e377b754f0d291c46#file-takecontrol-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/b13357e047ecad5e377b754f0d291c46#file-takecontrol-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Publishing updates local state immediately, then syncs it to the data layer.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/be82b343eec2288e7d1c1dc063dd269a.js?file=publishControl.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/be82b343eec2288e7d1c1dc063dd269a#file-publishcontrol-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/be82b343eec2288e7d1c1dc063dd269a#file-publishcontrol-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This is the emergency guarantee. Even if nothing else works, the local device becomes the source of truth immediately.</p>
+<h3>Profile sync as simple shared state</h3>
+<p>User identity is intentionally lightweight.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/bed6b48c9826191428a6bcca42c7800c.js?file=syncUserProfile.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/bed6b48c9826191428a6bcca42c7800c#file-syncuserprofile-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/bed6b48c9826191428a6bcca42c7800c#file-syncuserprofile-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The watch does not log in. It reflects. This keeps responsibilities clean.</p>
+<h3>Messages drive intent, data drives reality</h3>
+<p>Incoming messages are handled immediately and converted into published state.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/117234f03249ba4b0ab22c2ad5f15dfc.js?file=onMessageReceived.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/117234f03249ba4b0ab22c2ad5f15dfc#file-onmessagereceived-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/117234f03249ba4b0ab22c2ad5f15dfc#file-onmessagereceived-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Incoming data updates simply refresh local flows.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/84ece189f7b6dce99c6548b7f50d9dd6.js?file=onDataChanged.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/84ece189f7b6dce99c6548b7f50d9dd6#file-ondatachanged-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/84ece189f7b6dce99c6548b7f50d9dd6#file-ondatachanged-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>At no point does the UI need to know whether something arrived via message or data. It just observes state.</p>
+<h2>Phone UI Flow: Requesting Control, Handling Failure, and Syncing Identity</h2>
+<p>On the phone, the UI acts as the most expressive control surface. It can afford richer feedback, longer explanations, and explicit fallback actions. The goal here is not just to request control, but to make success and failure equally visible to the user.</p>
+<p>The phone screen is driven entirely by state coming from the shared <code>WearDataLayerManager</code>.</p>
+<pre><code class="language-sh">@Composable
+fun PhoneControlScreen(manager: WearDataLayerManager, modifier: Modifier = Modifier) {
+    val connection by manager.connectionStatus.collectAsState()
+    val control by manager.controlStatus.collectAsState()
+    val profile by manager.userProfile.collectAsState()</code></pre>
+<p>Nothing is queried imperatively. Connectivity, control ownership, and profile data all flow in reactively.</p>
+<h3>Local UI state and intent tracking</h3>
+<p>The screen maintains only UI specific state: whether a request is in progress, whether the emergency option should be revealed, and the editable username field.</p>
+<pre><code class="language-sh">val coroutineScope = rememberCoroutineScope()
+    var username by rememberSaveable { mutableStateOf(profile?.username.orEmpty()) }
+    var isRequesting by rememberSaveable { mutableStateOf(false) }
+    var showEmergency by rememberSaveable { mutableStateOf(false) }
+    val localDevice = DeviceType.PHONE</code></pre>
+<p>The <code>DeviceType</code> is explicit. This matters later when verifying whether control was actually granted.</p>
+<h3>Reflecting synced profile data</h3>
+<p>If the watch or another phone syncs profile data first, the UI reacts automatically.</p>
+<pre><code class="language-sh">LaunchedEffect(profile?.username) {
+        profile?.username?.let { username = it }
+    }</code></pre>
+<p>This ensures the phone remains the source of editing, but not necessarily the source of truth.</p>
+<h3>Requesting control with a bounded wait</h3>
+<p>The core interaction is the request control button.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/b561cbd2a666f830927a7d2d3755ecfe.js?file=RequestControlButton.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/b561cbd2a666f830927a7d2d3755ecfe#file-requestcontrolbutton-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/b561cbd2a666f830927a7d2d3755ecfe#file-requestcontrolbutton-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This sequence is important:</p>
+<ol><li>A message is sent to the watch. This expresses intent, not authority.</li><li>The UI waits up to five seconds for the shared <code>ControlStatus</code> to reflect that the phone is now the holder.</li><li>Success is defined by observed state, not by message delivery alone.</li></ol>
+<p>If the message is delivered but the data never changes, the request is treated as a failure.</p>
+<h3>Making failure explicit</h3>
+<p>If connectivity is down, or the request times out, the emergency takeover is revealed.</p>
+<pre><code class="language-sh">if (!connection.connected || showEmergency) {
+    Button(onClick = { manager.takeControl(emergency = true) }) {
+        Text("Emergency take over")
+    }
+}</code></pre>
+<p>This is a conscious UX choice. The user is not left guessing. The system admits that coordination failed and offers a clear override.</p>
+<p>Triggering an emergency takeover immediately publishes control locally and marks it as such. When connectivity returns, the data layer syncs and the watch will converge on the same truth.</p>
+<h3>Syncing profile data to the watch</h3>
+<p>Profile sync is treated as a separate concern and an explicit action.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/0dc05d57763537e1e32eee9ecb12f8fe.js?file=SyncProfileButton.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/0dc05d57763537e1e32eee9ecb12f8fe#file-syncprofilebutton-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/0dc05d57763537e1e32eee9ecb12f8fe#file-syncprofilebutton-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>There is no background guessing. The user decides when the watch should update.</p>
+<h3>Why this flow works well on phones</h3>
+<p>This approach embraces the phone’s strengths:</p>
+<ul><li>clear progress indication</li><li>explicit timeout handling</li><li>visible connectivity status</li><li>deliberate emergency actions</li></ul>
+<p>Most importantly, the phone UI never assumes success. Control is not considered granted until the shared state confirms it.</p>
+<h2>Watch UI Flow: Mirrored Requests, Timeout Driven Emergency Reveal, and Profile Display</h2>
+<p>On the watch, the UI has the same responsibilities as the phone, but with different constraints. Space is limited, attention is brief, and the user may be in motion. That changes how we present state and how aggressively we surface recovery options.</p>
+<p>The watch screen still follows the same rule as the phone: observe shared state, send intent messages, and only treat control as granted once the data layer confirms it.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/89beac470e6232bf2af8b8431179a859.js?file=WatchControlScreen.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/89beac470e6232bf2af8b8431179a859#file-watchcontrolscreen-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/89beac470e6232bf2af8b8431179a859#file-watchcontrolscreen-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Just like the phone:</p>
+<ul><li><code>connectionStatus</code> is used to shape the UI</li><li><code>controlStatus</code> shows who is holding control</li><li><code>userProfile</code> is displayed if present</li><li><code>isRequesting</code> and <code>showEmergency</code> are purely UI concerns</li></ul>
+<h3>Showing the synced profile</h3>
+<p>The watch does not edit the profile. It reflects what the phone shared.</p>
+<pre><code class="language-sh">Text(
+    text = profile?.let { "User: ${it.username}" } ?: "Waiting for profile sync",
+    style = MaterialTheme.typography.body2,
+    textAlign = TextAlign.Center
+)</code></pre>
+<p>This is a small touch that improves the feeling of continuity between devices. If the phone is signed in as “James”, the watch can acknowledge that immediately without needing its own login flow.</p>
+<h3>Control summary and status visibility</h3>
+<p>The watch uses a compact summary component to show current ownership.</p>
+<pre><code class="language-sh">ControlSummary(control)</code></pre>
+<p>Even without seeing the implementation, the intent is clear: the watch needs a quick “who is in charge right now” signal, because that informs whether the user should request control or expect actions to be mirrored from the phone.</p>
+<h3>Emergency takeover is conditional and earned</h3>
+<p>The emergency action is shown in two cases:</p>
+<ul><li>the watch is offline (<code>!connection.connected</code>)</li><li>a request attempt failed (<code>showEmergency</code>)</li></ul>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/1fabf17d5c5ff98f8dc3910a353cc9df.js?file=EmergencyTakeoverButton.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/1fabf17d5c5ff98f8dc3910a353cc9df#file-emergencytakeoverbutton-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/1fabf17d5c5ff98f8dc3910a353cc9df#file-emergencytakeoverbutton-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This design matters. On a small screen, too many always visible actions create confusion. Here, “Emergency takeover” is a recovery path, not a primary path, and the UI treats it that way.</p>
+<p>When tapped, it calls:</p>
+<pre><code class="language-sh">manager.takeControl(emergency = true)</code></pre>
+<p>Which means the watch publishes local authority immediately and lets the data layer reconcile when possible.</p>
+<h3>Requesting control with the same success criteria</h3>
+<p>The watch request flow mirrors the phone, including the same five second timeout and the same definition of success.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/4e677e5753b7dabe561ce9af1508eb68.js?file=ControlStatusChip.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/4e677e5753b7dabe561ce9af1508eb68#file-controlstatuschip-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/4e677e5753b7dabe561ce9af1508eb68#file-controlstatuschip-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Again, message delivery is not enough. The watch waits for <code>controlStatus.holder == DeviceType.WATCH</code>. If it never arrives, the UI pivots into recovery mode by revealing the emergency option.</p>
+<p>The watch also uses the request in progress state to replace the label with a progress indicator:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/d8e75abe2b0181786b90040887db385c.js?file=RequestControlIndicator.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/d8e75abe2b0181786b90040887db385c#file-requestcontrolindicator-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/d8e75abe2b0181786b90040887db385c#file-requestcontrolindicator-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This is a small but important usability improvement. On a watch, you want immediate feedback that the tap did something.</p>
+<h2>Listener Services: Keeping Messages and Data Flowing in the Background</h2>
+<p>So far, the pattern looks very UI driven: the user taps a button, a request is sent, and state updates flow back into Compose. But real device to device coordination cannot depend on screens being open.</p>
+<p>That is where listener services come in.</p>
+<p>A <code>WearableListenerService</code> gives your app a background entry point for:</p>
+<ul><li>incoming messages (<code>MessageClient</code>)</li><li>data layer updates (<code>DataClient</code>)</li></ul>
+<p>This is what allows control handoffs, profile sync, and connectivity signals to continue working when the app is in the background or not running in the foreground UI process.</p>
+<h3>A bridge service that forwards events into the same manager</h3>
+<p>The service is intentionally thin. It does not reimplement logic. It just forwards events into the same <code>WearDataLayerManager</code> used by the UI.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/d33f87b032546549be152f21de3e36c1.js?file=WearBridgeListenerService.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/d33f87b032546549be152f21de3e36c1#file-wearbridgelistenerservice-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/d33f87b032546549be152f21de3e36c1#file-wearbridgelistenerservice-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>A few details are doing a lot of work here:</p>
+<ul><li>The manager is constructed with <code>applicationContext</code>, which matches the fact that this service can outlive any Activity.</li><li><code>manager.refreshNodes()</code> is called in <code>onCreate()</code> to populate connection state early. That way the UI can show “No watch connected” or a device count without waiting for the next interaction.</li><li>Both <code>onMessageReceived</code> and <code>onDataChanged</code> simply forward the payload. This is key to avoiding split brain behavior where the UI and the background service disagree on business rules.</li></ul>
+<p>This also reinforces the design choice from earlier sections: messages represent intent, but published state comes from data items. The service can receive a request message while the UI is closed, publish a new <code>ControlStatus</code>, and when the UI opens it will immediately render the latest state from the data layer.</p>
+<h3>Manifest wiring: only wake up for what you care about</h3>
+<p>The service does not automatically receive everything. You explicitly declare which message paths and data paths should wake it up.</p>
+<p>This is the watch side example:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/17baf06ae4455905aa76941a400684aa.js?file=WearManifest.xml"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/17baf06ae4455905aa76941a400684aa#file-wearmanifest-xml" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/17baf06ae4455905aa76941a400684aa#file-wearmanifest-xml" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The intent filters mirror the shared contract:</p>
+<ul><li>Messages:- <code>/request-control</code> is the control request intent- <code>/ping</code> and <code>/pong</code> support lightweight connectivity checks</li><li>Data:- <code>/device-control</code> is the authoritative <code>ControlStatus</code> - <code>/user-profile</code> is the synced profile</li></ul>
+<p>This filter based approach keeps the service focused and reduces unnecessary wakeups. It also makes it obvious, at a glance, which parts of your contract are “background critical”.</p>
+<h2>Why this matters for the overall pattern</h2>
+<p>The listener service is what makes the whole setup feel reliable:</p>
+<ul><li>If the phone requests control while the watch UI is not open, the watch can still publish control.</li><li>If the phone syncs a profile, the watch can store it and show it later without requiring a fresh request.</li><li>If control changes, both sides converge on the same data layer truth as soon as they can observe it.</li></ul>
+<p>You are effectively treating the data layer as a shared state bus, and the listener service as the always on bridge into that bus.</p>
+<h2>Designing Control That Survives Real World Conditions</h2>
+<p>Sharing control between a phone and a watch is not just a technical problem. It is a trust problem. The user needs to trust that the device in their hand or on their wrist will respond, reflect reality, and recover gracefully when things go wrong.</p>
+<p>This pattern works because it is explicit at every layer.</p>
+<p>Control requests are expressed as intent via messages, but authority is always published as shared state. The UI never assumes success. It waits for confirmation from the data layer. When confirmation does not arrive, failure is acknowledged and a clear emergency path is offered instead of silent retry loops.</p>
+<p>Connectivity is treated as first class state, not an implementation detail. Both the phone and the watch can surface when they are disconnected and adjust their UI accordingly. This makes degraded behavior understandable rather than mysterious.</p>
+<p>Emergency takeovers are not hacks. They are designed into the flow. By publishing local control immediately and syncing later, the system prioritizes user intent over perfect coordination. The <code>emergency</code> flag ensures that this context is preserved and visible across devices.</p>
+<p>Profile sync demonstrates the same philosophy at a smaller scale. The phone owns identity, the watch reflects it, and both sides converge through the same data layer mechanism used for control.</p>
+<h2>Key takeaways</h2>
+<ul><li>Separate intent from authority. Use messages to ask and data to decide.</li><li>Treat shared state as the source of truth, not delivery success.</li><li>Make connectivity visible and actionable in the UI.</li><li>Design emergency paths as first class UX, not hidden fallbacks.</li><li>Keep business rules in one shared manager and reuse it everywhere, including background services.</li></ul>
+<h2>Possible future extensions</h2>
+<p>This foundation leaves plenty of room to grow without changing the core contract:</p>
+<ul><li>Add acknowledgements or decline flows when a device wants to refuse a control request.</li><li>Persist control history using the timestamp to show who last held control and when.</li><li>Introduce a soft lock duration where control cannot immediately flip back and forth.</li><li>Expand <code>UserProfile</code> to include avatar colors or roles that affect UI presentation.</li><li>Add analytics around emergency takeovers to identify connectivity pain points in the wild.</li></ul>
+<p>By designing for failure as deliberately as success, you end up with a control sharing system that feels calm, predictable, and human, even when the radio is not.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-02-11">Feb 11, 2026</time></p>
+      <p>Tags: Android, Android Development, Wearables, Kotlin, Jetpack Compose</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

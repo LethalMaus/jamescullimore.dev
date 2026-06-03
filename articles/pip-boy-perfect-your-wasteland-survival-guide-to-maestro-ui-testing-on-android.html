@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android</title>
+  <meta name="description" content="Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android Ah, another themed article. This one’s about Maestro, an effective mobile UI testing framework, but with a twist — …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android"/>
+  <meta property="og:description" content="Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android Ah, another themed article. This one’s about Maestro, an effective mobile UI testing framework, but with a twist — …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1024/1*nxE_0b5SXkAgcooRvTovCA.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android"/>
+  <meta name="twitter:description" content="Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android Ah, another themed article. This one’s about Maestro, an effective mobile UI testing framework, but with a twist — …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1024/1*nxE_0b5SXkAgcooRvTovCA.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android","description":"Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android Ah, another themed article. This one’s about Maestro, an effective mobile UI testing framework, but with a twist — …","image":["https://miro.medium.com/v2/resize:fit:1024/1*nxE_0b5SXkAgcooRvTovCA.jpeg"],"datePublished":"2024-04-24","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html"},"url":"https://jamescullimore.dev/articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • Automation Testing</p>
+      <h1 class="article-title">Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2024-04-24">Apr 24, 2024</time>
+        <span>&bull;</span>
+        <span>5 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1024/1*nxE_0b5SXkAgcooRvTovCA.jpeg" alt="Pip-Boy Perfect: Your Wasteland Survival Guide to Maestro UI Testing on Android"/>
+    </figure>
+    <section class="article-content">
+<p>Ah, another themed article. This one’s about Maestro, an effective mobile UI testing framework, but with a twist — a Fallout twist! Like many a wastelander scouring the irradiated ruins for hidden treasures, I recently unearthed a gem (pun intended) in the form of the new live-action Fallout series. It reignited my love for the franchise, a love story that began in 2008 as I ventured out of Vault 101 and into the harsh beauty of the wasteland. Now, while navigating the complexities of UI testing might seem a far cry from battling super mutants and scavenging for Nuka-Cola, fear not! This article will bridge the gap, using the spirit of Fallout to illuminate the power of Maestro for Android. So, grab your Pip-Boy (or at least your favorite mobile device), and prepare to explore the robust features of this innovative testing framework.</p>
+<h2>Setting Up Your Test Lab</h2>
+<p>Before venturing out into the mobile UI testing wasteland with Maestro, we need to establish a secure base of operations. Here’s a breakdown of setting up Maestro to run tests locally, much like how you’d set up a cozy outpost in Fallout.</p>
+<h2>Package Retrieval: Calling Down the Delivery Drone</h2>
+<p>First things first, we need to grab Maestro itself. You can think of this like calling in a supply drop from a friendly trader. Use the following command in your terminal:</p>
+<pre><code class="language-text">curl -Ls "https://get.maestro.mobile.dev" | bash</code></pre>
+<p>This nifty piece of code retrieves and installs Maestro using a handy script. Easy enough, right? Now you have Maestro at your disposal, ready to be unleashed on your mobile UI testing challenges.</p>
+<h2>Dependencies: Gearing Up for the Wasteland</h2>
+<p>Just like any good vault dweller needs the right gear to survive the harsh environment, Maestro has some dependencies for your chosen platform. Here, we’ll focus on setting things up for Android, the vast wasteland of mobile devices.</p>
+<p>For Android specifically, Maestro recommends having Xcode installed, ideally version 14 or higher. Think of Xcode as your crafting station, allowing you to build the tools you’ll need for testing.</p>
+<h2>Sample Time: Exploring the Vaults of Knowledge</h2>
+<p>Maestro comes with pre-built samples to help you get started, just like those handy training terminals scattered around Vaults in Fallout. To access these samples, navigate to the <code>samples</code> directory using the <code>cd</code> command:</p>
+<pre><code class="language-text">cd ./samples</code></pre>
+<h2>Installing the Test Subject: Like Booting Up a Protectron</h2>
+<p>Within the <code>samples</code> directory, you'll find an APK file for a sample application. This serves as your test subject, similar to how you might activate a Protectron robot for training purposes. Use the <code>adb install</code> command followed by the filename of the APK to install the sample app:</p>
+<pre><code class="language-text">adb install sample.apk</code></pre>
+<h2>Running the Gauntlet: Putting Maestro Through its paces</h2>
+<p>Now comes the moment of truth: running a Maestro test! Navigate back to the main directory (likely where you downloaded Maestro) and use the <code>maestro test</code> command followed by the name of the test file (usually <code>android-flow.yaml</code> in the samples directory).</p>
+<pre><code class="language-text">maestro test android-flow.yaml</code></pre>
+<p>This fires up Maestro and executes the test defined in the YAML file. Think of it like running an obstacle course to assess your Protectron’s capabilities.</p>
+<h2>Bonus Round: Building for Different Scenarios</h2>
+<p>Maestro allows you to build your test app in different configurations, just like customizing your Pip-Boy for various situations:</p>
+<ul><li>Release Build: To simulate a production-ready app, use the following Gradle command:</li></ul>
+<pre><code class="language-text">./gradlew assembleRelease</code></pre>
+<ul><li>Debug Build: For easier debugging during the development process, use this Gradle command:</li></ul>
+<pre><code class="language-text">./gradlew assembleDebug</code></pre>
+<h2>Scripting Your Success</h2>
+<p>Now that you’ve established your testing outpost, it’s time to craft the tests that will ensure the smooth operation of your mobile app. Think of these tests as the detailed instructions a wasteland scribe would leave behind to guide future vault dwellers. Here, we’ll explore the basic structure of Maestro tests using YAML files, along with some helpful code examples.</p>
+<h2>The Test Blueprint: run-test.yml</h2>
+<p>Our first example, <code>run-test.yml</code>, demonstrates the overall structure of a Maestro test file. It's like the blueprint for your testing expedition:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/35d59f2711b5724888a5f461aec60595.js?file=run-test.yml"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/35d59f2711b5724888a5f461aec60595#file-run-test-yml" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/35d59f2711b5724888a5f461aec60595#file-run-test-yml" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Breakdown:</p>
+<ul><li><code>appId</code>: This line specifies the application under test using its package identifier.</li><li><code>launchApp</code>: This command instructs Maestro to launch the specified app.</li><li><code>---</code>: This line separates different test sections within the same file, allowing you to organize complex tests logically.</li><li><code>runFlow</code>: This powerful command allows you to call other YAML files containing specific test flows. This promotes code reusability and keeps your main test file organized. Imagine it as delegating tasks to specialists within your vault!</li></ul>
+<h2>A Login Odyssey: Step-by-Step Testing</h2>
+<p>The next section dives deeper into a specific test flow, focusing on a login scenario. Imagine it as a detailed log from a wasteland explorer navigating the login process:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/0b79afcc36f404fd40833252c2836fe7.js?file=login.yml"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/0b79afcc36f404fd40833252c2836fe7#file-login-yml" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/0b79afcc36f404fd40833252c2836fe7#file-login-yml" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/70fdcaa213fded33f44d5a88840f0e60.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/70fdcaa213fded33f44d5a88840f0e60" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/70fdcaa213fded33f44d5a88840f0e60" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Breakdown:</p>
+<ul><li><code>appId</code>: Similar to the previous example, this line specifies the app under test.</li><li><code>tapOn</code>: This command simulates tapping on an element on the screen. You can target elements by their text content (with wildcards for variations) or ID. Think of it as carefully navigating the app's interface.</li><li><code>runScript</code>: This powerful feature allows you to execute external JavaScript code, potentially fetching test data or performing complex actions. For instance, you could use a script to generate random usernames and passwords for more robust testing.</li><li><code>inputText</code>: This command enters text into an editable field on the screen. You can leverage dynamic values fetched from JavaScript scripts using <code>${ }</code> notation.</li><li><code>back</code>: This command simulates pressing the back button on the device.</li></ul>
+<h2>Exploring the Unknown: Dynamic Test Data</h2>
+<p>The final example showcases another valuable technique — using JavaScript to generate dynamic test data:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/23872f11fd94c67398bd2fdac0baae72.js?file=signup.yml"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/23872f11fd94c67398bd2fdac0baae72#file-signup-yml" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/23872f11fd94c67398bd2fdac0baae72#file-signup-yml" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/17f3d7be74c03f951b84c93d5965af2e.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/17f3d7be74c03f951b84c93d5965af2e" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/17f3d7be74c03f951b84c93d5965af2e" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h2>Conclusion</h2>
+<p>There you have it, vault dweller! With these basic steps, you’re well on your way to crafting effective Maestro tests and ensuring the smooth operation of your mobile app. Remember, these are just the building blocks — Maestro offers a vast arsenal of commands and features for more complex testing scenarios.</p>
+<p>But enough theory, it’s time to put your newfound knowledge to the test! When are you going to get started and adding more to this guide? As the ghoul played by Walton Goggins in the Fallout series might say, “Well, one good question deserves another: why the fuck am I doing all the work? Now come on, Vaultie. Ass jerky don’t make itself.”</p>
+<p>Head over to the official Maestro documentation <a href="https://www.mobile.dev/">https://www.mobile.dev/</a> to delve deeper into its functionalities and unleash your inner mobile UI testing champion. Remember, with Maestro by your side, even the most treacherous mobile wastelands can be navigated with confidence.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2024-04-24">Apr 24, 2024</time></p>
+      <p>Tags: Android, Android App Development, Automation Testing, UI</p>
+      <p class="article-footer-copy">&copy; 2024 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

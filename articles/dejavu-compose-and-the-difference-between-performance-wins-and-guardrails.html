@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Dejavu, Compose, And The Difference Between Performance Wins And Guardrails</title>
+  <meta name="description" content="Dejavu, Compose, And The Difference Between Performance Wins And Guardrails When I first decided to try Dejavu, I was hoping for a slightly dramatic story. I wanted it to point at a few screens and …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/dejavu-compose-and-the-difference-between-performance-wins-and-guardrails.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Dejavu, Compose, And The Difference Between Performance Wins And Guardrails"/>
+  <meta property="og:description" content="Dejavu, Compose, And The Difference Between Performance Wins And Guardrails When I first decided to try Dejavu, I was hoping for a slightly dramatic story. I wanted it to point at a few screens and …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/dejavu-compose-and-the-difference-between-performance-wins-and-guardrails.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*eqjNab5c1qMyWKS7ZIWmKw.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Dejavu, Compose, And The Difference Between Performance Wins And Guardrails"/>
+  <meta name="twitter:description" content="Dejavu, Compose, And The Difference Between Performance Wins And Guardrails When I first decided to try Dejavu, I was hoping for a slightly dramatic story. I wanted it to point at a few screens and …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*eqjNab5c1qMyWKS7ZIWmKw.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Dejavu, Compose, And The Difference Between Performance Wins And Guardrails","description":"Dejavu, Compose, And The Difference Between Performance Wins And Guardrails When I first decided to try Dejavu, I was hoping for a slightly dramatic story. I wanted it to point at a few screens and …","image":["https://miro.medium.com/v2/resize:fit:1200/1*eqjNab5c1qMyWKS7ZIWmKw.jpeg"],"datePublished":"2026-05-18","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/dejavu-compose-and-the-difference-between-performance-wins-and-guardrails.html"},"url":"https://jamescullimore.dev/articles/dejavu-compose-and-the-difference-between-performance-wins-and-guardrails.html","inLanguage":"en"}</script>
+  <script src="assets/link-preview.js" defer></script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • AndroidDev</p>
+      <h1 class="article-title">Dejavu, Compose, And The Difference Between Performance Wins And Guardrails</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-05-18">May 18, 2026</time>
+        <span>&bull;</span>
+        <span>7 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*eqjNab5c1qMyWKS7ZIWmKw.jpeg" alt="Dejavu, Compose, And The Difference Between Performance Wins And Guardrails"/>
+    </figure>
+    <section class="article-content">
+<p>When I first decided to try Dejavu, I was hoping for a slightly dramatic story. I wanted it to point at a few screens and tell me, with evidence, that I had been too relaxed about recomposition. I wanted at least one moment where the tool exposed a bad assumption I had missed.</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://github.com/himattm/dejavu" target="_blank" rel="noopener noreferrer" data-preview-url="https://github.com/himattm/dejavu" data-preview-title="GitHub - himattm/dejavu: A lightweight framework for tracking and asserting against Jetpack Compose…" data-preview-description="A lightweight framework for tracking and asserting against Jetpack Compose recompositions. - himattm/dejavu" data-preview-site="github.com">GitHub - himattm/dejavu: A lightweight framework for tracking and asserting against Jetpack Compose…</a></div>
+<p>That did not really happen.</p>
+<p>Instead, the experience turned into something a little less flashy and a lot more useful: a mix of Compose guardrails, a real Android tooling bug, a standalone repro, and a clearer picture of what recomposition tooling is actually good at in an existing codebase.</p>
+<p>So this is not an article about a massive performance win.</p>
+<p>It is an article about what happened when I tried to add recomposition assertions to a real app, what broke first, what I learned from fixing it, and why I would still absolutely use Dejavu again.</p>
+<h2>Why I Wanted To Try Dejavu</h2>
+<p>I like tools that make invisible UI behavior visible.</p>
+<p>That is especially true in Compose, because a lot of bugs do not look like bugs at first. The screen renders. The interaction works. The tests pass. And yet a refactor quietly broadens recomposition, or a state boundary gets fuzzy, or a screen starts doing more work than it used to.</p>
+<p>That kind of regression is easy to introduce and easy to miss.</p>
+<p>Dejavu appealed to me because it gives you a way to turn those concerns into explicit test contracts. Instead of only asking whether a screen still works, you can also ask whether the right parts of the screen are the ones recomposing.</p>
+<p>That difference matters.</p>
+<p>If you are doing a Compose upgrade, refactoring a state-heavy screen, or letting AI help with UI code, “it still renders” is not a high enough bar.</p>
+<h2>The Outcome Was Not What I Expected</h2>
+<p>I expected one of two outcomes.</p>
+<p>Either:</p>
+<ul><li>Dejavu would quickly reveal some embarrassing recomposition patterns</li></ul>
+<p>or:</p>
+<ul><li>the app would be too awkward for the tool to be worth keeping</li></ul>
+<p>What I actually got was somewhere in the middle.</p>
+<p>On the screens where Dejavu worked cleanly, the contracts passed. That told me something useful, but not dramatic: the covered screens were already behaving reasonably well. I was not sitting on some hidden recomposition disaster.</p>
+<p>So no, this did not produce a big “I found the problem” moment.</p>
+<p>But it did produce something I value almost as much:</p>
+<ul><li>proof that several important screens already behave sanely</li><li>protection against future regressions</li><li>a better understanding of where the tool fits and where it does not</li></ul>
+<p>That is why I now think of this rollout as guardrail work more than performance work.</p>
+<h2>The First Problem Was Not My App</h2>
+<p>The first serious problem was Dejavu itself on Android.</p>
+<p>Some screens worked immediately. Others failed with:</p>
+<pre><code class="language-text">Warning: testTag '…' could not be mapped to a composable function</code></pre>
+<p>At first, that looked like an app-side issue. Maybe the tagged composables were too large. Maybe the boundaries were wrong. Maybe I needed to split more UI into smaller wrappers.</p>
+<p>That was a reasonable theory, so I tried it.</p>
+<p>I added tags to cleaner boundaries. I extracted smaller named composables. I kept reducing the size of the tracked regions. Some screens benefited from that, but one important screen still refused to map.</p>
+<p>That is usually the point where a tool rollout quietly dies. You tell yourself the screen is “too complex,” accept partial coverage, and move on.</p>
+<p>I did not want to stop there because the failure pattern was too consistent.</p>
+<p>So I inspected Dejavu itself.</p>
+<h2>The Android Failure Was More Specific Than It Looked</h2>
+<p>What I found was subtle.</p>
+<p>The activity already had Compose inspection slot tables on the view tree. In other words, some of the raw Compose inspection data Dejavu needed was already present.</p>
+<p>But Dejavu was still returning no composition snapshots.</p>
+<p>That meant the tag-mapping failure was not really “this screen is impossible to inspect.” It was closer to “Dejavu is looking for the active activity in a way that misses this test setup.”</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/0e2603e8b548704186de1228833e5dad.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/0e2603e8b548704186de1228833e5dad" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/0e2603e8b548704186de1228833e5dad" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/3d1f8206803078c7e2d36d17fbcb264c.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/3d1f8206803078c7e2d36d17fbcb264c" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/3d1f8206803078c7e2d36d17fbcb264c" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That distinction changed the whole story.</p>
+<p>It meant I was no longer asking, “How do I force Dejavu onto this one awkward screen?”</p>
+<p>I was asking, “Why does Dejavu lose the active activity if it attaches after the activity is already resumed?”</p>
+<p>That is a much better question.</p>
+<h2>I Built A Tiny Repro Instead Of Arguing Abstractly</h2>
+<p>Whenever I hit something like this, I prefer moving toward a minimal reproduction instead of staying inside the full app.</p>
+<p>Full apps are noisy. There are too many moving pieces, too many excuses, and too many ways for a real problem to get dismissed as app-specific.</p>
+<p>So I built a tiny standalone Android repro:</p>
+<ul><li>one screen</li><li>two tagged user composables</li><li>one boolean state change</li><li>one expectation that the changed card recomposes</li><li>one expectation that the unrelated top bar stays stable</li></ul>
+<p>That repro failed against the published Dejavu artifact with the same mapping warning.</p>
+<p>That was the moment the issue became much easier to reason about.</p>
+<p>Now the problem was not “my app is weird.”</p>
+<p>Now the problem was:</p>
+<ul><li>here is a tiny Android Compose case</li><li>here is the exact failure</li><li>here is the point where Dejavu loses the activity/root context it needs</li></ul>
+<p>That kind of repro is much more useful than a long explanation in a bug report.</p>
+<h2>There Were Really Two Fix Paths</h2>
+<p>Once I understood the failure mode, two possible fixes emerged.</p>
+<p>The first was the blunt one.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/9396753e4fe7846c7e8cf3553c3984ee.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/9396753e4fe7846c7e8cf3553c3984ee" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/9396753e4fe7846c7e8cf3553c3984ee" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>In that version, the Android test rule explicitly seeds the active activity into Dejavu after `enable()`.</p>
+<p>It is small. It works. It is easy to explain.</p>
+<p>It also feels a little too aware of an internal runtime problem.</p>
+<p>The second option was cleaner.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/550c64dd343000be40c3f7fbc59262e9.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/550c64dd343000be40c3f7fbc59262e9" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/550c64dd343000be40c3f7fbc59262e9" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Instead of teaching the test rule about the problem, Dejavu recovers the already-active activity internally at enable time and backfills its runtime state from there.</p>
+<p>That version keeps the fix inside the library instead of pushing special handling into the rule path.</p>
+<p>That is the version I prefer as a contribution.</p>
+<p>It is still pragmatic, but it respects the library boundary better.</p>
+<p>I ended up reducing that failure into issue #51</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://github.com/himattm/dejavu/issues/51" target="_blank" rel="noopener noreferrer" data-preview-url="https://github.com/himattm/dejavu/issues/51" data-preview-title="Android tag mapping can fail when Dejavu enables after the activity is already resumed · Issue #51…" data-preview-description="Description On Android, Dejavu can fail to map a testTag back to a composable function even when the activity already…" data-preview-site="github.com">Android tag mapping can fail when Dejavu enables after the activity is already resumed · Issue #51…</a></div>
+<p>And the runtime-side fix was accepted in PR #52</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://github.com/himattm/dejavu/pull/52" target="_blank" rel="noopener noreferrer" data-preview-url="https://github.com/himattm/dejavu/pull/52" data-preview-title="Seed active activity from Android test rule by LethalMaus · Pull Request #52 · himattm/dejavu" data-preview-description="Description This is the smaller Android fix for the tag-mapping failure reported in #51. On Android, Dejavu can be…" data-preview-site="github.com">Seed active activity from Android test rule by LethalMaus · Pull Request #52 · himattm/dejavu</a></div>
+<p>That is worth mentioning here because part of what made Dejavu useful in this app was not just adopting the tool, but helping close an Android edge case that made its tag mapping unreliable in this exact setup.</p>
+<h2>What Dejavu Actually Brought To This App</h2>
+<p>After the Android runtime issue was understood and patched locally, Dejavu became genuinely usable.</p>
+<p>I ended up with recomposition coverage on several screens that mattered, especially around setup, connection, activation, and settings flows.</p>
+<p>What that gave me was not a measurable startup win.</p>
+<p>It gave me:</p>
+<ul><li>recomposition contracts I can run on a real device</li><li>confidence that future refactors do not quietly broaden recomposition</li><li>a sharper understanding of the screens where state boundaries are already decent</li></ul>
+<p>That last point is worth saying clearly because it is easy to undersell.</p>
+<p>If a tool does not expose a disaster, that does not mean the work was wasted.</p>
+<p>Sometimes the result is that the current implementation is acceptable, and now you have tests proving it.</p>
+<p>That is still engineering value.</p>
+<h2>So Did It Improve Performance?</h2>
+<p>Not directly.</p>
+<p>This kind of rollout is not like fixing a hot startup path or moving blocking work off the main thread. Adding Dejavu does not make the app faster on its own.</p>
+<p>What it does is create pressure against regressions.</p>
+<p>It turns “I think this screen is still fine” into “I can prove this screen still recomposes within the boundary I intended.”</p>
+<p>That is a different kind of improvement.</p>
+<p>It is operational improvement. Maintenance improvement. Refactor safety.</p>
+<p>And honestly, that is the more realistic value in a mature codebase.</p>
+<p>If I had found terrible recomposition patterns, great. I would have fixed them.</p>
+<p>But when I did not, the result was still useful. I learned that the covered screens were not hiding an obvious problem, and now I have guardrails to keep them that way.</p>
+<h2>I Would Still Use Dejavu Again</h2>
+<p>Absolutely.</p>
+<p>In fact, I would like to try it next on a project where I already know some composables are not in great shape.</p>
+<p>That would be a better environment for the other side of the story: not “Dejavu gave me guardrails,” but “Dejavu helped me find the actual recomposition mess faster.”</p>
+<p>This app just was not that story.</p>
+<p>Here, the more interesting result was:</p>
+<ul><li>the tool was worth integrating</li><li>the main friction was an Android runtime edge case</li><li>the screens I covered mostly confirmed decent behavior</li><li>the long-term value is guarding that behavior, not claiming a flashy performance win</li></ul>
+<p>I am completely fine with that outcome.</p>
+<p>Not every worthwhile tool adoption needs to end with a huge metric improvement. Sometimes the honest result is that you added a good tool, fixed a real integration issue, and ended up with a safer codebase.</p>
+<p>That is still a win.</p>
+<h2>Closing Thoughts</h2>
+<p>I started this work expecting Dejavu to either expose a few ugly Compose patterns or prove too awkward to keep.</p>
+<p>Instead, it did something more grounded.</p>
+<p>It showed me that recomposition tooling can be valuable even when it does not reveal a dramatic flaw. It gave me guardrails on important screens. It helped me isolate and reproduce an Android runtime issue in the library itself. And it clarified the difference between “performance optimization” and “performance confidence.”</p>
+<p>If you are considering adding Dejavu to a real Compose app, my advice is simple:</p>
+<ol><li>Start with stateful screens where you care about boundaries.</li><li>Expect some app-side cleanup around tags and composable structure.</li><li>If mapping fails repeatedly, do not assume your screen is the problem.</li><li>Build a small repro early.</li><li>Treat the first rollout as guardrail work unless it actually proves a performance issue.</li></ol>
+<p>That framing makes the tool much easier to evaluate honestly.</p>
+<p>And if the first outcome is “my screens are mostly okay,” that is still a result worth keeping.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-05-18">May 18, 2026</time></p>
+      <p>Tags: Android, Android App Development, AndroidDev, Jetpack Compose, Kotlin</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Goodbye AndroidView: A Real CameraX QR Scanner in Compose</title>
+  <meta name="description" content="Goodbye AndroidView: A Real CameraX QR Scanner in Compose In a recent project, we needed to add a QR scanner that allows users to quickly connect to a Wi-Fi network. This is not a new problem. I have …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Goodbye AndroidView: A Real CameraX QR Scanner in Compose"/>
+  <meta property="og:description" content="Goodbye AndroidView: A Real CameraX QR Scanner in Compose In a recent project, we needed to add a QR scanner that allows users to quickly connect to a Wi-Fi network. This is not a new problem. I have …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*dQ0hL8953SnmuvLeQOZb1A.png"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Goodbye AndroidView: A Real CameraX QR Scanner in Compose"/>
+  <meta name="twitter:description" content="Goodbye AndroidView: A Real CameraX QR Scanner in Compose In a recent project, we needed to add a QR scanner that allows users to quickly connect to a Wi-Fi network. This is not a new problem. I have …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*dQ0hL8953SnmuvLeQOZb1A.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Goodbye AndroidView: A Real CameraX QR Scanner in Compose","description":"Goodbye AndroidView: A Real CameraX QR Scanner in Compose In a recent project, we needed to add a QR scanner that allows users to quickly connect to a Wi-Fi network. This is not a new problem. I have …","image":["https://miro.medium.com/v2/resize:fit:1200/1*dQ0hL8953SnmuvLeQOZb1A.png"],"datePublished":"2026-01-14","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html"},"url":"https://jamescullimore.dev/articles/goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html","inLanguage":"en"}</script>
+  <script src="assets/link-preview.js" defer></script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android Development • Jetpack Compose</p>
+      <h1 class="article-title">Goodbye AndroidView: A Real CameraX QR Scanner in Compose</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-01-14">Jan 14, 2026</time>
+        <span>&bull;</span>
+        <span>16 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*dQ0hL8953SnmuvLeQOZb1A.png" alt="Goodbye AndroidView: A Real CameraX QR Scanner in Compose"/>
+    </figure>
+    <section class="article-content">
+<p>In a recent project, we needed to add a QR scanner that allows users to quickly connect to a Wi-Fi network. This is not a new problem. I have implemented Wi-Fi QR scanning multiple times over the years, and on paper, it should be straightforward. Scan a code, extract the SSID and password, and initiate a connection.</p>
+<p>In practice, it was always slightly frustrating. Even with Jetpack Compose, camera based features almost inevitably pulled me back into <code>AndroidView</code>. That felt like a step backwards, especially in an otherwise fully Compose driven screen. Every time I revisited this problem, I found myself asking the same question. Is this really still the best we can do.</p>
+<p>Recently, that answer finally changed.</p>
+<p>With the introduction of CameraX Compose artifacts and <code>CameraXViewfinder</code>, it is now possible to build a fully Compose native camera experience without falling back to view interop. The problem was not capability, but documentation. While the APIs exist, finding a clear, real world example that goes beyond a demo proved difficult.</p>
+<p>After coming across a small but extremely helpful <a href="https://gist.github.com/JolandaVerhoef/74d4696b804736c698450bd34b5c9ff8" target="_blank" rel="noopener noreferrer">gist by Jolanda Verhoef</a>, I was able to piece together the missing parts and adapt them into a production ready QR scanner. I later extracted and refined this work into one of my open source projects so the implementation can evolve over time.</p>
+<p>This article walks through that journey. We will build a QR scanner screen using modern CameraX Compose APIs, analyze Wi-Fi QR codes using ML Kit, and connect to a network without touching <code>AndroidView</code> at all. If you have avoided camera features in Compose because they felt awkward or incomplete, this is the missing piece.</p>
+<h2>Why QR scanning for Wi-Fi used to be annoying in Compose</h2>
+<p>For a long time, building camera based features in Jetpack Compose came with an implicit compromise. Even if the rest of your UI was fully declarative, the camera preview itself almost always lived inside an <code>AndroidView</code>. CameraX was mature and reliable, but its integration story with Compose lagged behind.</p>
+<p>That created a few recurring problems.</p>
+<p>First, the mental model broke down. Compose encourages state driven UI and lifecycle awareness at the composable level, but <code>AndroidView</code> brings imperative setup, callbacks, and view lifecycle concerns back into the picture. You could make it work, but the code often felt stitched together rather than designed as a whole.</p>
+<p>Second, gesture handling became awkward. Things like tap to focus, overlays, or animations layered on top of the preview required careful coordination between Compose and the underlying <code>PreviewView</code>. Debugging touch offsets and coordinate conversions was common and rarely enjoyable.</p>
+<p>Finally, these implementations aged poorly. Each time CameraX or Compose evolved, the glue code had to be revisited. What started as a small interop block often turned into one of the most fragile parts of the screen.</p>
+<p>For QR scanning specifically, this friction felt unnecessary. The use case is simple. Show a camera preview, analyze frames, react to a result. Yet the implementation complexity was disproportionate to the problem being solved.</p>
+<p>This is why the introduction of CameraX Compose support is such a big deal. It removes the need for view interop entirely and allows camera previews to behave like any other composable. Layout, gestures, lifecycle, and state all live in the same mental model again.</p>
+<p>In the next section, we will look at what changed, and which CameraX Compose APIs finally made this possible.</p>
+<h2>The shift away from AndroidView with CameraX Compose</h2>
+<p>The real turning point for camera based features in Compose came with the introduction of CameraX Compose artifacts and, more importantly, <code>CameraXViewfinder</code>. Instead of embedding a <code>PreviewView</code> inside <code>AndroidView</code>, we can now work directly with a <code>SurfaceRequest</code> and render it as a composable.</p>
+<p>This is a subtle but important shift.</p>
+<p>Rather than treating the camera preview as an opaque view, the preview becomes just another piece of UI. It participates naturally in Compose layout, can be clipped, layered, animated, and responds to pointer input without special handling. There is no view hierarchy boundary to work around.</p>
+<p>At a high level, the flow now looks like this:</p>
+<ul><li>CameraX produces a <code>SurfaceRequest</code></li><li>The composable collects and renders that request using <code>CameraXViewfinder</code></li><li>Camera use cases are bound and unbound using normal lifecycle awareness</li><li>Gesture input and overlays live entirely in Compose</li></ul>
+<p>This approach also encourages better separation of concerns. Camera setup and binding can live in a <code>ViewModel</code>, while the composable remains focused on rendering state and handling user interaction. That split is especially valuable for QR scanning, where frame analysis and UI feedback evolve independently.</p>
+<p>In the implementation we are about to walk through, the camera preview is driven by a small, focused <code>CameraPreviewViewModel</code>. It exposes a <code>StateFlow, which the UI simply collects and displays. No view interop, no imperative wiring in the composable itself.</p>
+<p>With that foundation in place, we can start looking at the actual screen. Next, we will break down the overall architecture of the QR scanner screen and how responsibilities are divided across composables and view models.</p>
+<h2>High level architecture of the QR scanner screen</h2>
+<p>Before diving into camera setup or QR analysis, it is worth stepping back and looking at how the screen is structured. This is not just a camera demo. It is a production screen that deals with permissions, lifecycle changes, UI state, error handling, and navigation.</p>
+<p>At the top level, the screen is split into three main responsibilities:</p>
+<ol><li>Navigation and screen entry points</li><li>Wi-Fi related state and business logic</li><li>Camera preview and QR analysis</li></ol>
+<p>This separation is reflected directly in the composables.</p>
+<p>The first entry point is a thin wrapper that integrates with navigation:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/d7206a4c58069bf19b1720cf3ee58f36.js?file=QrScannerScreen.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/d7206a4c58069bf19b1720cf3ee58f36#file-qrscannerscreen-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/d7206a4c58069bf19b1720cf3ee58f36#file-qrscannerscreen-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This function does exactly one thing. It adapts navigation concerns into simple callbacks. By doing this, the rest of the screen remains unaware of <code>NavHostController</code>, which keeps the UI easier to preview, test, and reuse.</p>
+<p>The second layer of the screen handles permissions, lifecycle awareness, and Wi-Fi connection state. This is where the <code>WiFiViewModel</code> is used, camera permissions are requested, and QR scan results are translated into connection attempts. This composable owns the logic, but not the camera rendering itself.</p>
+<p>Finally, the lowest layer focuses purely on UI. It renders the scaffold, camera card, loading state, and delegates scanning results upward via a simple callback. This layer has no knowledge of Wi-Fi, permissions, or navigation.</p>
+<p>That split is intentional.</p>
+<p>By keeping camera rendering isolated from business logic, it becomes much easier to reason about each piece independently. Camera code tends to be sensitive to lifecycle changes and threading, while Wi-Fi logic evolves with platform APIs and user flows. Mixing them together would make both harder to maintain.</p>
+<p>In the next section, we will take a closer look at how permissions and lifecycle events are handled, and why they matter so much for a camera driven screen.</p>
+<h2>Permissions, lifecycle, and UI state handling</h2>
+<p>Camera screens live and die by lifecycle timing. If permissions are missing, you cannot even start. If the app goes to the background and comes back, you need to re-check state. And if your QR scan triggers a Wi-Fi connection attempt, the UI has to react immediately.</p>
+<p>In your implementation, this responsibility sits in the middle layer composable. It is where you combine:</p>
+<ul><li>Camera permission handling (via Accompanist permissions)</li><li>Lifecycle observation (<code>ON_RESUME</code>)</li><li>Wi-Fi connection state driven by <code>WiFiViewModel</code></li><li>UI reactions (navigate back on success, show a dialog on failure)</li><li>Passing a clean <code>onAnalyze</code> callback down into the camera layer</li></ul>
+<p>Here is that layer, unchanged:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/205be72fa241ac93bb23ef6f3fde3a86.js?file=QrScannerScreen.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/205be72fa241ac93bb23ef6f3fde3a86#file-qrscannerscreen-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/205be72fa241ac93bb23ef6f3fde3a86#file-qrscannerscreen-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Why this works well</h3>
+<p><strong>Permission checks happen at the right time.</strong>You request <code>Manifest.permission.CAMERA</code>, but you do it in response to <code>ON_RESUME</code>. That matters because the user might bounce to Settings and back, or deny once and later accept. Checking only once at first composition often misses those flows.</p>
+<p><strong>Lifecycle observation is explicit and scoped.</strong>Using <code>DisposableEffect(lifecycleOwner)</code> keeps the observer tied to the current lifecycle owner, and guarantees cleanup in <code>onDispose</code>. That prevents the classic “observer keeps firing after navigation” bug.</p>
+<p><strong>The UI reacts to connection state rather than guessing.</strong>Instead of assuming a scan means success, you let <code>uiState.connectionState</code> drive outcomes:</p>
+<ul><li><code>CONNECTED</code> navigates back</li><li><code>FAILED</code> opens a dialog once</li><li><code>CONNECTING</code> becomes a UI loading state in the next composable</li></ul>
+<p><strong>The QR result is translated into app language immediately.</strong><code>Barcode.WiFi</code> gives you raw fields. You normalize them:</p>
+<ul><li><code>ssid</code> and <code>password</code> are stored locally</li><li><code>encryptionType</code> is mapped into your own <code>SecurityType</code></li><li>the connection attempt is triggered with <code>suggestWiFi(...)</code></li></ul>
+<p>That keeps the camera layer clean. The camera does not need to know what “connect to Wi-Fi” means. It only reports what it saw.</p>
+<h2>Camera preview with CameraXViewfinder</h2>
+<p>Now we get to the part that used to force <code>AndroidView</code>.</p>
+<p>This layer is intentionally dumb. It does not know what Wi-Fi is. It does not manage permissions. It does not decide what to do with a scan result. It is just UI that shows a camera preview, handles taps, and reports <code>Barcode.WiFi</code> results upward.</p>
+<p>You start by rendering a scaffold with a simple top bar back button, some instruction text, and a card that contains either a progress indicator or the actual camera content:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/ee257736973e0a3502be2814b859fe71.js?file=QrScannerScreen.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/ee257736973e0a3502be2814b859fe71#file-qrscannerscreen-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/ee257736973e0a3502be2814b859fe71#file-qrscannerscreen-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>What this layer gets right</h3>
+<p><strong>The camera preview lives inside normal Compose layout.</strong> It is just content inside an <code>ElevatedCard</code>. That means it behaves like any other composable. Rounded corners, padding, overlays, loading states, it all stays in one UI system.</p>
+<p><strong>Connection state is visual, not implicit.</strong>The <code>connecting</code> flag is driven by your <code>WiFiUiState</code>, and the UI is honest about what is happening. When a scan triggers a connection attempt, you show a progress indicator instead of continuing to scan.</p>
+<p><strong>The camera logic is deferred to a dedicated component.</strong>The preview itself is delegated to <code>CameraPreviewContent(...)</code>, which is where <code>CameraXViewfinder</code> comes in. This keeps the screen structure readable and makes it easier to swap out preview behavior without touching the rest of the screen.</p>
+<p>One important detail here is that you are using a <code>CameraPreviewViewModel</code>, but it is not the usual <code>viewModel()</code> call. You are creating it via:</p>
+<pre><code class="language-sh">val viewModel = remember { CameraPreviewViewModel() }</code></pre>
+<p>That works, and it is consistent with your intent: this is a tiny, screen-scoped holder for camera resources and state, not an app-wide model. It is created once per composition and retained as long as this part of the UI stays alive.</p>
+<p>Next, we will look inside <code>CameraPreviewContent</code> and see how the <code>SurfaceRequest</code> is collected and rendered with <code>CameraXViewfinder</code>.</p>
+<h2>Rendering the SurfaceRequest with CameraPreviewContent</h2>
+<p>This is where the modern Compose-first camera flow becomes real.</p>
+<p>Instead of embedding a <code>PreviewView</code>, your UI collects a <code>SurfaceRequest</code> from a <code>StateFlow</code> and hands it to <code>CameraXViewfinder</code>. CameraX provides the surface, Compose renders it, and everything stays in the same input and layout system.</p>
+<p>Here is the composable that does that work:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/60412449c033acd9e0f425c64c1f6a3d.js?file=CameraPreviewContent.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/60412449c033acd9e0f425c64c1f6a3d#file-camerapreviewcontent-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/60412449c033acd9e0f425c64c1f6a3d#file-camerapreviewcontent-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>What is happening here</h3>
+<p><strong>The preview is driven by state</strong>This line is the whole trick:</p>
+<pre><code class="language-sh">val surfaceRequest by viewModel.surfaceRequest.collectAsStateWithLifecycle()</code></pre>
+<p>The <code>CameraPreviewViewModel</code> publishes a <code>SurfaceRequest</code> when CameraX is ready to stream frames. The UI does not pull it. It just reacts when it appears.</p>
+<p><strong>Camera binding is lifecycle-aware, but still Compose-native</strong>You bind in a <code>LaunchedEffect</code>:</p>
+<pre><code class="language-sh">LaunchedEffect(lifecycleOwner, onAnalyze) {
+    viewModel.bindToCamera(context.applicationContext, lifecycleOwner, onAnalyze)
+}</code></pre>
+<p>That means:</p>
+<ul><li>binding runs when this composable becomes active</li><li>if the lifecycle owner changes (for example, navigation or configuration), the effect restarts cleanly</li><li>the binding call is a suspend function, which fits naturally here</li></ul>
+<p><code><strong>CameraXViewfinder</strong></code><strong> renders the camera feed without view interop</strong> Once a request exists:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/0401af85e916b6e6d5c92a4d7d33845b.js?file=SurfaceRequest.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/0401af85e916b6e6d5c92a4d7d33845b#file-surfacerequest-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/0401af85e916b6e6d5c92a4d7d33845b#file-surfacerequest-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This is the replacement for <code>AndroidView(PreviewView)</code>.</p>
+<p><strong>Tap to focus stays fully in Compose input</strong>You attach <code>pointerInput</code> directly to the viewfinder and handle taps with <code>detectTapGestures</code>. The key is the coordinate conversion:</p>
+<pre><code class="language-sh">with(coordinateTransformer) {
+    currentOnTapToFocus(tapCoords.transform())
+}</code></pre>
+<p>This is one of those details that used to be painful with interop. Here it is explicit, controlled, and local to the UI that needs it.</p>
+<p><strong>Autofocus indicator plumbing is already in place</strong>You track tap coordinates via:</p>
+<pre><code class="language-sh">var autofocusRequest by remember { mutableStateOf(UUID.randomUUID() to Offset.Unspecified) }</code></pre>
+<p>and clear them after a delay. Even though this snippet does not yet draw an indicator, the state is there to support one. That is a nice pattern: keep the interaction state close to the input handling, even if the visuals come later.</p>
+<p>Next, we will jump into the <code>CameraPreviewViewModel</code> and see how it creates the preview use case, publishes <code>SurfaceRequest</code>, binds to lifecycle, and wires up image analysis for QR detection.</p>
+<h2>Binding CameraX use cases and publishing SurfaceRequest</h2>
+<p>The <code>CameraPreviewViewModel</code> is the engine room. It does two key jobs:</p>
+<ul><li>It creates a CameraX preview use case and exposes its <code>SurfaceRequest</code> as state for Compose.</li><li>It binds the camera to a lifecycle and sets up an <code>ImageAnalysis</code> pipeline that feeds QR scan results back to the UI.</li></ul>
+<p>Here is your implementation, unchanged:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/98d2deab589c10fa934858053f25de51.js?file=CameraPreviewViewModel.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/98d2deab589c10fa934858053f25de51#file-camerapreviewviewmodel-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/98d2deab589c10fa934858053f25de51#file-camerapreviewviewmodel-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Publishing a SurfaceRequest to Compose</h3>
+<pre><code class="language-text">SurfaceRequest</code></pre>
+<p>This is the heart of the Compose integration:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/90d98e2148e6ca0ecc33e900200027e1.js?file=SetSurfaceProvider.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/90d98e2148e6ca0ecc33e900200027e1#file-setsurfaceprovider-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/90d98e2148e6ca0ecc33e900200027e1#file-setsurfaceprovider-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Instead of giving CameraX a view to draw into, you expose the <code>SurfaceRequest</code> via a <code>StateFlow</code>. The UI collects it and passes it to <code>CameraXViewfinder</code>. That is the entire replacement for view interop.</p>
+<p>At the same time, you capture the preview resolution and build a <code>SurfaceOrientedMeteringPointFactory</code>. This becomes important later for tap to focus, because metering points must be created in the coordinate space CameraX expects.</p>
+<h3>Binding preview + analysis together</h3>
+<p>Inside <code>bindToCamera(...)</code>, you assemble two use cases:</p>
+<ul><li><code>cameraPreviewUseCase</code> for the live preview</li><li><code>imageAnalysis</code> for QR decoding</li></ul>
+<p>The analysis use case is configured to keep only the latest frame:</p>
+<pre><code class="language-sh">.setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)</code></pre>
+<p>That is exactly what you want for QR scanning. There is no benefit in decoding stale frames, and you do not want analysis lag to build up while the user moves the phone.</p>
+<p>Then you attach an analyzer that hands results back through <code>onAnalyze</code>:</p>
+<pre><code class="language-sh">setAnalyzer(cameraExecutor, QrCodeAnalyzer { qrCode -&gt;
+    qrCode.wifi?.let { wifi -&gt; onAnalyze(wifi) }
+})</code></pre>
+<p>Notice the boundary here: the analyzer emits a QR code model, and you only forward the Wi-Fi payload if it exists. That keeps the UI contract clean: <code>onAnalyze</code> only receives <code>Barcode.WiFi</code>.</p>
+<h3>awaitCancellation() and guaranteed cleanup</h3>
+<pre><code class="language-text">awaitCancellation()</code></pre>
+<p>This pattern is doing a lot of work for you:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/3a975dec9471273d2112ebcc2529167c.js?file=AwaitCancellation.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/3a975dec9471273d2112ebcc2529167c#file-awaitcancellation-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/3a975dec9471273d2112ebcc2529167c#file-awaitcancellation-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Because <code>bindToCamera</code> is called from a <code>LaunchedEffect</code>, it will be cancelled when the composable leaves composition. <code>awaitCancellation()</code> suspends forever until that cancellation happens. When it does, you immediately unbind the camera and shut down the executor in <code>finally</code>.</p>
+<p>That means you get predictable cleanup without needing a second callback or explicit “stop camera” API.</p>
+<h3>Tap to focus</h3>
+<p>The focus code is intentionally minimal:</p>
+<pre><code class="language-sh">val point = surfaceMeteringPointFactory?.createPoint(tapCoords.x, tapCoords.y)
+if (point != null) {
+    val meteringAction = FocusMeteringAction.Builder(point).build()
+    cameraControl?.startFocusAndMetering(meteringAction)
+}</code></pre>
+<p>You only need two ingredients:</p>
+<ul><li>a metering point factory created from the preview surface resolution</li><li>a <code>CameraControl</code> reference from the bound camera</li></ul>
+<p>Everything else stays in Compose input handling, which is exactly where it belongs.</p>
+<p>Next, we will zoom in on the QR decoding itself: what <code>QrCodeAnalyzer</code> is expected to do, how ML Kit fits in, and what to watch out for when you translate raw barcodes into a Wi-Fi connection flow.</p>
+<h2>QR analysis with ML Kit and QrCodeAnalyzer</h2>
+<pre><code class="language-text">QrCodeAnalyzer</code></pre>
+<p>Up to this point, everything has been about getting a Compose-native preview on screen and binding the right CameraX use cases. The QR scanning part happens in one very small seam in your <code>ImageAnalysis</code> setup:</p>
+<pre><code class="language-sh">setAnalyzer(cameraExecutor, QrCodeAnalyzer { qrCode -&gt;
+    qrCode.wifi?.let { wifi -&gt; onAnalyze(wifi) }
+})</code></pre>
+<p>That line tells us a lot about the design, even without looking at the <code>QrCodeAnalyzer</code> implementation.</p>
+<h3>The contract you built is clean</h3>
+<p>Your UI does not care about raw QR payloads, QR formats, or general barcode content. It only cares about one thing: does the scanned code contain a Wi-Fi payload?</p>
+<p>ML Kit’s barcode API can return many barcode types and data shapes, but Wi-Fi QR codes are a first-class supported type via <code>Barcode.WiFi</code>. The analyzer is expected to do the heavy lifting, then surface a result where <code>wifi</code> is either present or absent.</p>
+<p>That gives you a very tight interface:</p>
+<ul><li>camera frames go in</li><li>a QR model comes out</li><li>you forward only <code>Barcode.WiFi</code> into <code>onAnalyze</code></li></ul>
+<h3>Why STRATEGY_KEEP_ONLY_LATEST is the right choice</h3>
+<pre><code class="language-text">STRATEGY_KEEP_ONLY_LATEST</code></pre>
+<p>You configured image analysis like this:</p>
+<pre><code class="language-sh">.setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)</code></pre>
+<p>For QR scanning, this is exactly what you want. If decoding takes a little longer on some devices, you do not want a queue of old frames. You want the newest frame available when the analyzer is ready again. Android’s CameraX docs explicitly call out <code>STRATEGY_KEEP_ONLY_LATEST</code> as the non-blocking approach for analysis.</p>
+<h3>What QrCodeAnalyzer typically does</h3>
+<pre><code class="language-text">QrCodeAnalyzer</code></pre>
+<p>Your analyzer is expected to bridge CameraX <code>ImageProxy</code> frames into ML Kit’s <code>BarcodeScanner</code> pipeline:</p>
+<ul><li>Convert the <code>ImageProxy</code> to an ML Kit <code>InputImage</code></li><li>Call <code>barcodeScanner.process(image)</code></li><li>Filter results for Wi-Fi payloads</li><li>Close the <code>ImageProxy</code> reliably to avoid stalling analysis</li></ul>
+<p>ML Kit’s barcode scanning docs describe creating a scanner via <code>BarcodeScanning.getClient(...)</code>, creating an <code>InputImage</code>, and processing it through the scanner.</p>
+<h3>Optional official snippet (ML Kit setup)</h3>
+<p>You did not include <code>QrCodeAnalyzer</code> in the provided code, so I will not invent one. But to ground what it likely contains, this is the core ML Kit setup pattern from the official documentation, shown here only as a reference point:</p>
+<pre><code class="language-sh">val scanner = BarcodeScanning.getClient()</code></pre>
+<p>ML Kit also recommends using <code>getClient(BarcodeScannerOptions)</code> when you can restrict formats for better performance.</p>
+<h3>A practical note for Wi-Fi QR codes</h3>
+<p>Your mapping logic earlier depends on ML Kit’s Wi-Fi encryption type constants:</p>
+<ul><li><code>Barcode.WiFi.TYPE_OPEN</code></li><li><code>Barcode.WiFi.TYPE_WEP</code></li><li><code>Barcode.WiFi.TYPE_WPA</code></li></ul>
+<p>That is exactly the right place for this logic: in the screen layer that translates scan results into app behavior, not inside the camera layer.</p>
+<h2>Tap to focus and coordinate transforming</h2>
+<p>Tap to focus is one of those features that sounds simple until you ship it. You are dealing with at least three coordinate spaces at once:</p>
+<ul><li>the tap location in Compose</li><li>the preview surface coordinates</li><li>the camera’s metering coordinate system</li></ul>
+<p>When <code>AndroidView</code> was involved, a lot of this turned into guesswork. Your implementation is clean because it makes the conversion explicit and keeps each step close to the code that owns it.</p>
+<h3>Capture taps on the viewfinder</h3>
+<p>You attach pointer input directly to <code>CameraXViewfinder</code> and listen for taps:</p>
+<p>— -</p>
+<p>The key detail here is that you do not pass raw <code>tapCoords</code> to the camera. You transform them first, using <code>MutableCoordinateTransformer</code>, which exists specifically to convert between Compose coordinates and the underlying surface coordinates used by the viewfinder.</p>
+<h3>Build a metering point factory from the surface resolution</h3>
+<p>In your <code>CameraPreviewViewModel</code>, you create the <code>SurfaceOrientedMeteringPointFactory</code> as soon as CameraX gives you a <code>SurfaceRequest</code>:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/94b28a64e3c54a3469c8775829022cca.js?file=CameraXViewfinder.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/94b28a64e3c54a3469c8775829022cca#file-cameraxviewfinder-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/94b28a64e3c54a3469c8775829022cca#file-cameraxviewfinder-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This factory is how you translate a tap location into a <code>MeteringPoint</code> the camera can use. Building it from the surface resolution is a common pattern for tap to focus with CameraX.</p>
+<h3>Trigger focus and metering using CameraControl</h3>
+<p>Once you have a metering point, you build a <code>FocusMeteringAction</code> and hand it to <code>cameraControl.startFocusAndMetering(...)</code>:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/5d3ff516d3a1931cb8110991ef2d2dac.js?file=TapToFocus.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/5d3ff516d3a1931cb8110991ef2d2dac#file-taptofocus-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/5d3ff516d3a1931cb8110991ef2d2dac#file-taptofocus-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>CameraX documentation explicitly calls out <code>startFocusAndMetering()</code> with a <code>FocusMeteringAction</code> as the foundation for implementing tap to focus.</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/media/camera/camerax/configuration" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/media/camera/camerax/configuration" data-preview-title="https://developer.android.com/media/camera/camerax/configuration" data-preview-site="developer.android.com">https://developer.android.com/media/camera/camerax/configuration</a></div>
+<h3>Why this is a solid Compose-first approach</h3>
+<ul><li>Compose owns the gesture and the UI state for it.</li><li>The viewfinder owns coordinate transformation.</li><li>The view model owns camera control and metering logic.</li></ul>
+<p>Nothing is doing “a bit of everything”, which is usually where camera code starts to rot.</p>
+<p>One small caveat worth mentioning in the article: focus accuracy depends heavily on correct coordinate conversion and preview scaling. The Compose viewfinder plus transformer is designed to handle that conversion, and it is a big part of why this approach feels better than wiring it up manually.</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://medium.com/androiddevelopers/tap-to-focus-mastering-camerax-transformations-in-jetpack-compose-440853280a6e" target="_blank" rel="noopener noreferrer" data-preview-url="https://medium.com/androiddevelopers/tap-to-focus-mastering-camerax-transformations-in-jetpack-compose-440853280a6e" data-preview-title="Tap to focus: Mastering CameraX Transformations in Jetpack Compose" data-preview-description="Part 2 — Using the Compose gesture system , graphics, and coroutines to implement a visual tap-to-focus." data-preview-site="medium.com">Tap to focus: Mastering CameraX Transformations in Jetpack Compose</a></div>
+<h2>Connecting state, UX, and production considerations</h2>
+<p>Once the camera preview and analysis pipeline are working, the next problems are not camera problems anymore. They are product problems.</p>
+<p>QR scanning is fast, noisy, and repetitive. A camera feed will happily detect the same QR code frame after frame, and if you respond to every detection, you can easily spam your own connection flow.</p>
+<p>Your code already hints at the right approach: treat scanning as a trigger, then move the UI into a controlled “connection attempt” state.</p>
+<h3>Stop scanning when you are connecting</h3>
+<p>In your UI layer you have a clean gate:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/c947c726c7a03b6dddc8b4b400ca636c.js?file=CameraPreviewContent.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/c947c726c7a03b6dddc8b4b400ca636c#file-camerapreviewcontent-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/c947c726c7a03b6dddc8b4b400ca636c#file-camerapreviewcontent-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>When <code>uiState.connectionState == ConnectionState.CONNECTING</code>, the camera preview is not even composed. That means the <code>LaunchedEffect</code> that binds the camera gets cancelled, and <code>awaitCancellation()</code> ensures the camera is unbound and the executor is shut down. This is exactly what you want in a production flow: once you have a valid Wi-Fi payload, the scanner becomes irrelevant until the connection succeeds or fails.</p>
+<p>This is one of the biggest differences between a demo scanner and a real one. A demo keeps scanning forever. A real one transitions to the next user intent.</p>
+<h3>Handle the “Settings detour” correctly</h3>
+<p>Your lifecycle observer checks permission state and connection status on <code>ON_RESUME</code>:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/ba64f8b97e7ce31ea45d50ac3f0ec794.js?file=PermissionState.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/ba64f8b97e7ce31ea45d50ac3f0ec794#file-permissionstate-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/ba64f8b97e7ce31ea45d50ac3f0ec794#file-permissionstate-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This matters because users often take a detour:</p>
+<ul><li>they deny camera permission</li><li>you send them to Settings</li><li>they come back</li><li>the screen needs to immediately re-check and continue the flow</li></ul>
+<p>Doing this work on resume is the right timing for those real-world loops.</p>
+<h3>Avoid repeated connection attempts from repeated scans</h3>
+<p>Right now, your analyzer forwards every Wi-Fi payload it sees:</p>
+<pre><code class="language-sh">qrCode.wifi?.let { wifi -&gt; onAnalyze(wifi) }</code></pre>
+<p>That is fine because your UI layer effectively disables scanning once you transition to <code>CONNECTING</code>. But there is still a small edge case window: you can get multiple callbacks before the UI state flips.</p>
+<p>A common production pattern is to add a simple throttle or “first valid scan wins” guard in the layer that handles <code>onAnalyze</code>. You do not have to change your camera pipeline to do this. The clean boundary you already have makes it easy to add later.</p>
+<p>If you decide to mention this in the article, frame it as:</p>
+<ul><li>keep the analyzer simple and fast</li><li>control scan frequency where business logic lives</li></ul>
+<h3>Keep analysis non-blocking and responsive</h3>
+<p>Your use of:</p>
+<pre><code class="language-sh">.setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)</code></pre>
+<p>is a production-friendly default. CameraX describes this as the non-blocking approach where the analyzer receives the most recent frame available, rather than building up a backlog.</p>
+<p>For QR scanning, that is exactly the behavior users expect. If they move the camera, the scanner should react to what is currently in view, not what was in view half a second ago.</p>
+<h3>Make cleanup predictable</h3>
+<p>This is easy to overlook until you hit device-specific camera issues. Your cleanup is explicit and tied to cancellation:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/3a975dec9471273d2112ebcc2529167c.js?file=AwaitCancellation.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/3a975dec9471273d2112ebcc2529167c#file-awaitcancellation-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/3a975dec9471273d2112ebcc2529167c#file-awaitcancellation-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This is a solid pattern for Compose-driven camera code. You do not leak executors, and you do not keep the camera bound after navigation.</p>
+<h3>Expect imperfect QR codes</h3>
+<p>Wi-Fi QR codes are generally well supported, and ML Kit’s <code>Barcode.WiFi</code> exposes <code>ssid</code>, <code>password</code>, and <code>encryptionType</code> directly.</p>
+<p>In practice though, you will still see:</p>
+<ul><li>blank passwords for open networks</li><li>missing or unusual values from third-party QR generators</li><li>encryption types that do not map cleanly</li></ul>
+<p>Your logic already accounts for that:</p>
+<pre><code class="language-sh">password.ifBlank { null }</code></pre>
+<p>and</p>
+<pre><code class="language-sh">else -&gt; SecurityType.UNKNOWN</code></pre>
+<p>Those are the kinds of small defensive moves that keep a scanner from becoming brittle.</p>
+<h2>Conclusion</h2>
+<p>What I wanted from this feature was simple: scan a Wi-Fi QR code, extract the credentials, and help the user connect. The frustrating part was never ML Kit or even CameraX itself. It was the feeling that a modern Compose screen still had to fall back to <code>AndroidView</code> for something as common as a camera preview.</p>
+<p>That has finally shifted.</p>
+<p>By building the preview around <code>SurfaceRequest</code> and rendering it with <code>CameraXViewfinder</code>, the camera stops being a special case. It becomes composable UI. Gestures stay in Compose, state stays in Compose, and lifecycle cleanup becomes predictable because it is driven by cancellation instead of ad-hoc teardown code.</p>
+<p>The result is a screen that is easier to maintain and easier to reason about. Your top-level composables handle navigation, permissions, and connection state. The camera layer does one job: show a preview and emit scan results. And the view model holds the plumbing needed to bind use cases, publish the surface request, and support tap to focus.</p>
+<p>If you want to see this wired together in a real project, including how it evolves over time, the full implementation lives in an open source project of mine. The QR scanner screen shown throughout this article is taken directly from that codebase, and you can follow along or adapt it for your own use:</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://github.com/LethalMaus/WiFiWizard/blob/main/app/src/main/java/dev/jamescullimore/wifiwizard/ui/QrScannerScreen.kt" target="_blank" rel="noopener noreferrer" data-preview-url="https://github.com/LethalMaus/WiFiWizard/blob/main/app/src/main/java/dev/jamescullimore/wifiwizard/ui/QrScannerScreen.kt" data-preview-title="WiFiWizard/app/src/main/java/dev/jamescullimore/wifiwizard/ui/QrScannerScreen.kt at main ·…" data-preview-description="An example Android project using Jetpack Compose showing how to a WiFi programmatically. …" data-preview-site="github.com">WiFiWizard/app/src/main/java/dev/jamescullimore/wifiwizard/ui/QrScannerScreen.kt at main ·…</a></div>
+<p>If you have been avoiding camera features in Compose because they felt messy or incomplete, this is the first approach that feels like it belongs. No interop scaffolding, no mismatched lifecycles, no view hierarchy compromises. Just a camera preview that behaves like the rest of your UI.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-01-14">Jan 14, 2026</time></p>
+      <p>Tags: Android, Android Development, Jetpack Compose, Kotlin</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

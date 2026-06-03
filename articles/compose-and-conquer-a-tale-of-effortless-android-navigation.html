@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Compose and Conquer: A Tale of Effortless Android Navigation</title>
+  <meta name="description" content="Compose and Conquer: A Tale of Effortless Android Navigation In Android app development, efficient navigation is critical to offering a seamless user experience. Prior to the introduction of Jetpack …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/compose-and-conquer-a-tale-of-effortless-android-navigation.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Compose and Conquer: A Tale of Effortless Android Navigation"/>
+  <meta property="og:description" content="Compose and Conquer: A Tale of Effortless Android Navigation In Android app development, efficient navigation is critical to offering a seamless user experience. Prior to the introduction of Jetpack …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/compose-and-conquer-a-tale-of-effortless-android-navigation.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*uV01rjRhsd0kUxxOWbJzzw.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Compose and Conquer: A Tale of Effortless Android Navigation"/>
+  <meta name="twitter:description" content="Compose and Conquer: A Tale of Effortless Android Navigation In Android app development, efficient navigation is critical to offering a seamless user experience. Prior to the introduction of Jetpack …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*uV01rjRhsd0kUxxOWbJzzw.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Compose and Conquer: A Tale of Effortless Android Navigation","description":"Compose and Conquer: A Tale of Effortless Android Navigation In Android app development, efficient navigation is critical to offering a seamless user experience. Prior to the introduction of Jetpack …","image":["https://miro.medium.com/v2/resize:fit:1200/1*uV01rjRhsd0kUxxOWbJzzw.jpeg"],"datePublished":"2023-12-15","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/compose-and-conquer-a-tale-of-effortless-android-navigation.html"},"url":"https://jamescullimore.dev/articles/compose-and-conquer-a-tale-of-effortless-android-navigation.html","inLanguage":"en"}</script>
+  <script src="assets/link-preview.js" defer></script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • Kotlin</p>
+      <h1 class="article-title">Compose and Conquer: A Tale of Effortless Android Navigation</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2023-12-15">Dec 15, 2023</time>
+        <span>&bull;</span>
+        <span>8 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*uV01rjRhsd0kUxxOWbJzzw.jpeg" alt="Compose and Conquer: A Tale of Effortless Android Navigation"/>
+    </figure>
+    <section class="article-content">
+<p>In Android app development, efficient navigation is critical to offering a seamless user experience. Prior to the introduction of Jetpack Navigation, developers frequently struggled with the complexities of navigating between activities and fragments, relying on complex frameworks and boilerplate code. The time-consuming nature of this method frequently resulted in tangled navigation graphs, which hampered the general maintainability of Android applications.</p>
+<p>In the pre-Jetpack Navigation era, navigating between activities demanded intricate handling of Intent objects, resulting in verbose and error-prone code. Similarly, navigating within fragments required developers to manage FragmentTransactions, adding complexity to the navigation flow. These challenges prompted the need for a more streamlined solution, paving the way for the introduction of Jetpack Navigation.</p>
+<p>Jetpack Navigation simplifies the navigation paradigm by providing a comprehensive framework for navigating between destinations in an Android app. It abstracts away the complexities of fragment transactions and activity intents, offering a declarative approach to navigation. With Jetpack Navigation, developers can construct a clear navigation graph, defining the flow of their application in a visually intuitive manner. This not only enhances code readability but also promotes modularization and maintainability.</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/guide/navigation" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/guide/navigation" data-preview-title="Navigation | Android Developers" data-preview-description="Use the Navigation component in Android Jetpack to implement navigation in your app." data-preview-site="developer.android.com">Navigation | Android Developers</a></div>
+<p>As the Android ecosystem evolves, so does Jetpack Navigation. The library seamlessly integrates with Jetpack Compose, the modern UI toolkit for building native Android UIs. This integration opens up new possibilities for navigation within Jetpack Compose applications, offering a cohesive experience for developers working on the latest Android projects. Furthermore, Jetpack Navigation provides robust support for passing data between destinations, allowing developers to effortlessly handle arguments during navigation. This article delves into the multifaceted world of Jetpack Navigation, exploring its evolution and demonstrating how it addresses the challenges associated with navigating activities, fragments, and Jetpack Compose applications while emphasizing the significance of passing data in a seamless and maintainable manner.</p>
+<figure class="article-embed article-video-embed"><div class="video-embed-shell"><iframe src="https://www.youtube.com/embed/Y0Cs2MQxyIs?feature=oembed" title="Android Jetpack: Introducing Navigation component" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen referrerpolicy="strict-origin-when-cross-origin"></iframe></div><noscript><p class="video-embed-fallback"><a href="https://www.youtube.com/watch?v=Y0Cs2MQxyIs" target="_blank" rel="noopener noreferrer">Android Jetpack: Introducing Navigation component</a></p></noscript><p class="video-embed-fallback"><a href="https://www.youtube.com/watch?v=Y0Cs2MQxyIs" target="_blank" rel="noopener noreferrer">Android Jetpack: Introducing Navigation component</a></p></figure>
+<h2>Activities &amp; Intents</h2>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/guide/components/intents-filters" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/guide/components/intents-filters" data-preview-title="Intents and intent filters | Android Developers" data-preview-description="An is a messaging object you can use to request an action from another app component. Although intents facilitate…" data-preview-site="developer.android.com">Intents and intent filters | Android Developers</a></div>
+<p>Navigating between activities in Android traditionally involves the use of Intents, a mechanism for expressing an intention to perform an action. While this approach served its purpose, it often led to a proliferation of activities, resulting in a less modular and maintainable codebase. Each activity, being a heavyweight component, encapsulates its own lifecycle, UI, and logic, contributing to an application’s bloat. As a remedy, developers have increasingly turned to more efficient alternatives, such as fragments and Jetpack Compose, to achieve a more streamlined and modular architecture.</p>
+<p>In the snippet below, we showcase the classic method of navigating from one activity to another using an Intent and passing data between them:</p>
+<pre><code class="language-sh">// Navigating from one activity to another
+val intent = Intent(this@YourCurrentActivity, UserActivity::class.java)
+intent.putExtra("USER_ID", userId)
+startActivity(intent)</code></pre>
+<p>Here, we’re navigating to the UserActivity and passing a user ID as an extra parameter. While this approach is straightforward, it contributes to the proliferation of activities, each handling a specific aspect of the application flow. This can lead to a monolithic structure, making it challenging to maintain and extend the codebase over time.</p>
+<p>To retrieve the passed data in the destination activity, the following code snippet demonstrates how to extract the user ID:</p>
+<pre><code class="language-sh">// Retrieving USER_ID in the destination activity
+val userId = intent.getStringExtra("USER_ID")</code></pre>
+<p>While activities can serve certain use cases well, it’s generally recommended to minimize their usage, especially for tasks that can be efficiently handled by fragments or Jetpack Compose. These alternatives offer a more modular and flexible approach to UI development in Android, enabling developers to create richer, more maintainable applications. By embracing these alternatives, developers can navigate through their application with greater ease, avoiding the pitfalls associated with the heavyweight nature of activities.</p>
+<h2>Fragment Transactions</h2>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/guide/fragments/transactions" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/guide/fragments/transactions" data-preview-title="Fragment transactions | Android Developers" data-preview-description="At runtime, a FragmentManager can add, remove, replace, and perform other actions with fragments in response to user…" data-preview-site="developer.android.com">Fragment transactions | Android Developers</a></div>
+<p>Navigating between fragments in Android without utilizing Jetpack Navigation often involves directly manipulating the FragmentManager and FragmentTransactions. While this approach grants developers granular control over the backstack and fragment transactions, it comes with its own set of complexities and potential pitfalls. The code snippet below illustrates how to replace a fragment and add it to the backstack:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/4f9d3eae8c33e33bbd39860ca3ba3a16.js?file=android-navigation.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/4f9d3eae8c33e33bbd39860ca3ba3a16#file-android-navigation-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/4f9d3eae8c33e33bbd39860ca3ba3a16#file-android-navigation-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>In this example, we replace the existing fragment with an instance of ExampleFragment and add it to the backstack with a specified name. This technique allows developers to manage the backstack manually, providing fine-grained control over the navigation history.</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/guide/fragments/communicate" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/guide/fragments/communicate" data-preview-title="Communicate with fragments | Android Developers" data-preview-description="To reuse fragments, build them as completely self-contained components that define their own layout and behavior. Once…" data-preview-site="developer.android.com">Communicate with fragments | Android Developers</a></div>
+<p>To pass data between fragments, developers can use the setFragmentResult method, as demonstrated in the code snippet below:</p>
+<pre><code class="language-sh">button.setOnClickListener {
+    val result = "result"
+    // Use the Kotlin extension in the fragment-ktx artifact.
+    setFragmentResult("requestKey", bundleOf("bundleKey" to result))
+}</code></pre>
+<p>This snippet shows how to set a fragment result, attaching a bundle containing relevant data. To receive the result, the destination fragment can register a result listener in its onCreate method:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/2d8fea8cf942cc3a4374d6743881a29a.js?file=android-navigation2.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/2d8fea8cf942cc3a4374d6743881a29a#file-android-navigation2-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/2d8fea8cf942cc3a4374d6743881a29a#file-android-navigation2-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>While this manual approach to fragment navigation allows for greater control over the backstack and transactions, it introduces complexities such as potential memory leaks, increased boilerplate code, and the need for careful management of the fragment lifecycle. Additionally, the absence of a declarative navigation graph makes it challenging to visualize and maintain the navigation flow, especially in larger applications. As such, while this method may be suitable for specific scenarios requiring fine-tuned control, developers should carefully weigh the trade-offs and consider adopting Jetpack Navigation for a more streamlined and maintainable navigation solution.</p>
+<h2>Jetpack Navigation</h2>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/guide/navigation/get-started" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/guide/navigation/get-started" data-preview-title="Navigation | Android Developers" data-preview-description="Use the Navigation component in Android Jetpack to implement navigation in your app." data-preview-site="developer.android.com">Navigation | Android Developers</a></div>
+<p>Navigating between fragments with Jetpack Navigation introduces a declarative and visually intuitive approach to managing the navigation flow in Android applications. One of the key advantages is the use of a navigation graph (nav_graph.xml), which acts as a centralized representation of the app’s navigation structure. This graph allows developers to define fragment destinations and the associated actions between them. Additionally, it provides a clear overview of the entire navigation flow, enhancing code readability and maintainability.</p>
+<p>In the snippet below, an excerpt from a nav_graph.xml file demonstrates how to declare a fragment with an associated argument:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/40d22d6b3b9af6701a9ba9a1c3f361f0.js?file=android-navigation.xml"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/40d22d6b3b9af6701a9ba9a1c3f361f0#file-android-navigation-xml" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/40d22d6b3b9af6701a9ba9a1c3f361f0#file-android-navigation-xml" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Here, we define a fragment called myFragment with an argument named myArg of type integer and a default value of 0.</p>
+<p>To facilitate navigation to myFragment with a specific argument, the following action is declared in the navigation graph:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/ac270e37e0b6fad5ece66a2e55158944.js?file=android-navigation2.xml"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/ac270e37e0b6fad5ece66a2e55158944#file-android-navigation2-xml" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/ac270e37e0b6fad5ece66a2e55158944#file-android-navigation2-xml" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This action, named startMyFragment, is associated with the destination myFragment and specifies an argument myArg with a default value of 1.</p>
+<p>In the code snippet below, we demonstrate how to navigate to myFragment and pass data using safe args in a fragment:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/19b257ce925795838eae07139ae5ae4c.js?file=android-navigation3.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/19b257ce925795838eae07139ae5ae4c#file-android-navigation3-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/19b257ce925795838eae07139ae5ae4c#file-android-navigation3-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Here, SpecifyAmountFragmentDirections.confirmationAction is an automatically generated class by the Safe Args plugin, providing a type-safe way to pass data between fragments. The amount argument is set, and the navigation is triggered.</p>
+<p>To receive the data in the destination fragment, the args property is used:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/9c80ae95b00fb760dd410087f90f4420.js?file=android-navigation4.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/9c80ae95b00fb760dd410087f90f4420#file-android-navigation4-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/9c80ae95b00fb760dd410087f90f4420#file-android-navigation4-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The navArgs() delegate simplifies the retrieval of arguments, ensuring type safety and reducing boilerplate code.</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/guide/navigation/use-graph/pass-data" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/guide/navigation/use-graph/pass-data" data-preview-title="Pass data between destinations | Android Developers" data-preview-description="Navigation lets you attach data to a navigation operation by defining arguments for a destination. For example, a user…" data-preview-site="developer.android.com">Pass data between destinations | Android Developers</a></div>
+<p>In summary, Jetpack Navigation streamlines fragment navigation through a visual representation in the navigation graph and leverages safe args for a type-safe and concise way to pass and receive data between fragments. This approach enhances code quality, reduces errors, and promotes a more maintainable and scalable architecture for Android applications.</p>
+<h2>Navigating with Compose</h2>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/jetpack/compose/navigation" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/jetpack/compose/navigation" data-preview-title="Navigation with Compose | Jetpack Compose | Android Developers" data-preview-description="The Navigation component provides support for Jetpack Compose applications. You can navigate between composables while…" data-preview-site="developer.android.com">Navigation with Compose | Jetpack Compose | Android Developers</a></div>
+<p>Jetpack Compose Navigation brings a breath of fresh air to the navigation landscape in Android development, offering a remarkably simple and intuitive way to handle navigation within Compose-based applications. A key advantage lies in the integration of the Jetpack Compose Navigation library, which aligns seamlessly with the principles of Compose, promoting a more declarative and concise approach to building UIs.</p>
+<p>To begin, developers can include the necessary dependency in their project, as demonstrated in the code snippet below:</p>
+<pre><code class="language-sh">dependencies {
+    def nav_version = "2.7.6"
+    implementation "androidx.navigation:navigation-compose:$nav_version"
+}</code></pre>
+<p>With the library integrated, developers can initialize a NavController using the rememberNavController() function. The NavHost then serves as the container for defining the application’s navigation graph, specifying the start destination and composing various destinations:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/4c802c194f2750ffb63ebb1d5443d4e8.js?file=android-navigation5.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/4c802c194f2750ffb63ebb1d5443d4e8#file-android-navigation5-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/4c802c194f2750ffb63ebb1d5443d4e8#file-android-navigation5-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>In this example, the NavHost is configured with a start destination of “profile/{userId}” and additional composable destinations, including one that takes a dynamic argument, userId. The use of a navigation graph, reminiscent of the Jetpack Navigation for XML-based navigation, contributes to a clear and visually intuitive representation of the app’s navigation flow.</p>
+<p>Navigating to a destination is as simple as invoking the navigate function on the NavController, as illustrated in the following code snippet:</p>
+<pre><code class="language-sh">navController.navigate("profile/user1234")</code></pre>
+<p>One of the strengths of Jetpack Compose Navigation is its integration with ViewModels and the ability to seamlessly pass and retrieve data. In the ViewModel example below, a UserViewModel takes advantage of the SavedStateHandle to retrieve the userId argument:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/7f920501101f76a80f674b8eb2ae6454.js?file=android-navigation6.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/7f920501101f76a80f674b8eb2ae6454#file-android-navigation6-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/7f920501101f76a80f674b8eb2ae6454#file-android-navigation6-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This approach ensures that the ViewModel has access to the necessary data, promoting a separation of concerns and adhering to best practices in Android architecture.</p>
+<p>In conclusion, Jetpack Compose Navigation simplifies the navigation paradigm in Android, embracing the principles of Jetpack Compose and providing a powerful yet elegant solution for building modern UIs. The seamless integration with ViewModels and the familiar navigation graph structure make it a preferred choice for developers seeking a straightforward and maintainable approach to navigation in Compose-based applications.</p>
+<h2>Conclusion</h2>
+<p>The journey into Jetpack Compose Navigation has been a compelling exploration of Android’s evolving navigation landscape. Admittedly, the initial adjustment posed its challenges, as any paradigm shift would. However, as I delved deeper into the intricacies of Compose Navigation, it became evident that the paradigm offers a refreshingly slim and intuitive approach to crafting navigation flows in modern Android applications.</p>
+<p>The simplicity of Jetpack Compose Navigation shines through its seamless integration with Jetpack Compose, aligning perfectly with the declarative nature of Compose UI development. The ability to effortlessly navigate through various screens and pass data with concise code has streamlined the navigation process significantly. This newfound simplicity not only enhances the development experience but also contributes to the creation of more maintainable and scalable applications.</p>
+<p>Despite the merits of Jetpack Compose Navigation, there remains a personal preference for the familiar comfort of the navigation graph, a stalwart companion in Android development for years. The comprehensive separation of concerns afforded by the navigation graph, combined with its visual representation of the entire app’s navigation flow, continues to be a compelling choice. Perhaps it’s the years of familiarity or the comfort derived from its widespread adoption, but for now, the navigation graph stands as a preferred tool in the arsenal.</p>
+<p>As the Android ecosystem continues to evolve, so too will the developer’s toolkit. The choice between Jetpack Compose Navigation and the trusted navigation graph may ultimately come down to personal workflow preferences. Nevertheless, the journey into the world of Compose Navigation has been an enlightening one, showcasing the adaptability and resilience of the Android development community in embracing innovative solutions for crafting the next generation of user interfaces.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2023-12-15">Dec 15, 2023</time></p>
+      <p>Tags: Android, Android App Development, Kotlin, Jetpack Compose, Navigation</p>
+      <p class="article-footer-copy">&copy; 2023 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

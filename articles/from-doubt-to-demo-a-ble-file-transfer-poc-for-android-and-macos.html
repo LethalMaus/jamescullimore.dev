@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>From Doubt to Demo: A BLE File Transfer PoC for Android and macOS</title>
+  <meta name="description" content="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS GitHub - LethalMaus/BluetoothFileTransfer Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS"/>
+  <meta property="og:description" content="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS GitHub - LethalMaus/BluetoothFileTransfer Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS"/>
+  <meta name="twitter:description" content="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS GitHub - LethalMaus/BluetoothFileTransfer Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"From Doubt to Demo: A BLE File Transfer PoC for Android and macOS","description":"From Doubt to Demo: A BLE File Transfer PoC for Android and macOS GitHub - LethalMaus/BluetoothFileTransfer Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on …","image":["https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg"],"datePublished":"2026-04-10","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html"},"url":"https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • Android Development</p>
+      <h1 class="article-title">From Doubt to Demo: A BLE File Transfer PoC for Android and macOS</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-04-10">Apr 10, 2026</time>
+        <span>&bull;</span>
+        <span>7 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg" alt="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS"/>
+    </figure>
+    <section class="article-content">
+<h2>GitHub - LethalMaus/BluetoothFileTransfer</h2>
+<h3>Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on GitHub.</h3>
+<p>github.com</p>
+<p>This repo exists because I needed a proof of concept for work.</p>
+<p>I cannot go into the wider product context, but the technical question was clear enough: can we transfer files to and from an Android app over Bluetooth with another machine acting as the peer?</p>
+<p>I did not need a perfect product answer first. I needed a hands-on answer.</p>
+<p>More specifically, I needed something concrete enough to say: here is a working example of an Android app and a laptop moving files back and forth over Bluetooth. It is not the finished solution, but it proves the concept and gives us something real to tune from.</p>
+<p>That is what this repo became.</p>
+<p>The Android side acts as a BLE peripheral. The laptop side runs a Python client as the BLE central. The two can connect, exchange status, browse one shared folder on Android, push files into an incoming folder, and pull files back out.</p>
+<p>This article is really about why I built the PoC this way, what it proved, and what I had to change before it became a convincing enough demonstration.</p>
+<h2>The Point Was to Prove Feasibility, Not to Find the Perfect Architecture Up Front</h2>
+<p>I think this matters, because it is easy to write about proof of concepts as if they begin after a full survey of every possible option.</p>
+<p>That is not how I tend to work.</p>
+<p>I usually do enough research to avoid walking in blind, then I build something quickly enough to answer the core technical question. Once there is a real result on the table, I can evaluate whether the direction is good enough, whether a different transport would be better, or whether existing software already solves the problem more cleanly.</p>
+<p>So I do not want to overstate the claim here.</p>
+<p>I am not saying this repo proves BLE is the best way to do file transfer between Android and another machine. I am not saying there is not better ready-made software. There may well be.</p>
+<p>What I am saying is narrower and more useful for the problem I had:</p>
+<ul><li>yes, it can be done</li><li>yes, it can be done in both directions</li><li>yes, you can show it working between an Android app and a laptop with code you control</li></ul>
+<p>For a PoC, that is already a meaningful result.</p>
+<h2>The First Important Result Was a Real BLE Link Between the Phone and the Laptop</h2>
+<p>Before file transfer matters, the BLE model has to make sense.</p>
+<p>In this repo:</p>
+<ul><li>Android exposes a custom GATT service</li><li>one characteristic carries control messages as JSON</li><li>one characteristic carries raw file data</li><li>the laptop discovers the Android device and connects as the central</li></ul>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/d0d285b2924e8a2b93c79937834b6fec.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/d0d285b2924e8a2b93c79937834b6fec" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/d0d285b2924e8a2b93c79937834b6fec" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That was enough to get to the first real checkpoint: the Mac could connect and ask the Android app for status, and the app would answer with its current configuration.</p>
+<p>That may sound small, but it was the first moment where the concept stopped being theoretical.</p>
+<p>At that point, I knew the Android app and the laptop could speak to each other over BLE in a way that was structured enough to build on.</p>
+<h2>The First Failure Was Useful Because It Was Real</h2>
+<p>One thing I like about building a PoC quickly is that the failures become specific very fast.</p>
+<p>The Android app originally looked like it was starting correctly, but it shut down almost immediately after registering the GATT server. The logs showed the service being added successfully and then the server closing.</p>
+<p>That turned out to be an advertising payload problem, not a GATT service problem.</p>
+<p>I was trying to advertise:</p>
+<ul><li>the full device name</li><li>and a 128-bit service UUID</li></ul>
+<p>in the main advertising packet.</p>
+<p>That is the sort of mistake that is easy to make if you are still thinking in abstractions instead of platform limits. Once I moved the device name into the scan response and kept the service UUID in the primary advertising payload, the behavior became much more reliable.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/735113cc81c66351496dbbe6a29d22ec.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/735113cc81c66351496dbbe6a29d22ec" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/735113cc81c66351496dbbe6a29d22ec" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This was exactly the kind of result I wanted from the PoC. Not just “it failed,” but “it failed for a concrete, understandable reason, and now we know what shape a working solution needs to take.”</p>
+<h2>A Single Shared File Proved Downloads. It Did Not Prove a Useful Workflow</h2>
+<p>The first Android version let the user pick one file for the laptop to download.</p>
+<p>That was enough to prove the basic download path, but it was too narrow to serve as a convincing demonstration of the concept. If the point is to show that Bluetooth can support this kind of interaction between the app and another machine, then the workflow has to feel at least somewhat real.</p>
+<p>So I changed the model from:</p>
+<ul><li>one selected outgoing file</li></ul>
+<p>to:</p>
+<ul><li>one shared folder for browsing and downloads</li><li>one incoming folder for uploads from the laptop</li></ul>
+<p>That pushed the desktop client forward too. Instead of only `upload` and `download`, it grew into:</p>
+<ul><li>`list`</li><li>`push`</li><li>`pull`</li></ul>
+<p>with path-based behavior and recursive folder handling where it made sense.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/d0d285b2924e8a2b93c79937834b6fec.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/d0d285b2924e8a2b93c79937834b6fec" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/d0d285b2924e8a2b93c79937834b6fec" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This was an important shift in the PoC.</p>
+<p>It meant I was no longer just proving that one byte stream could cross BLE. I was proving that a small but believable file-transfer workflow could exist between Android and a machine over Bluetooth.</p>
+<p>That was much closer to the actual value of the exercise.</p>
+<h2>The PoC Needed to Show More Than a Happy Path With the App Open</h2>
+<p>Another thing that became obvious once the core transfer path worked was that activity-owned BLE state was too fragile.</p>
+<p>If the only thing I wanted was a very controlled demo, keeping all BLE ownership inside the activity would have been enough. But I needed something stronger than that. I needed to be able to point at the repo and say this concept works in a form that looks like the beginning of a real implementation.</p>
+<p>That meant the Android side had to survive normal lifecycle pressure better than a toy demo.</p>
+<p>So the BLE ownership moved into a foreground service.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/0c09954f5576e89eeae990fc4b6e03f7.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/0c09954f5576e89eeae990fc4b6e03f7" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/0c09954f5576e89eeae990fc4b6e03f7" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That made the design much easier to defend:</p>
+<ul><li>the service owns the BLE runtime</li><li>the activity handles permissions, folder selection, and UI</li><li>the foreground notification makes the long-running BLE work explicit</li></ul>
+<p>I do not think that makes the app “finished.” It just makes the PoC more credible, because it is no longer depending on a fragile activity-only lifecycle to keep the Bluetooth session alive.</p>
+<h2>Some of the Most Useful Bugs Were State-Ownership Bugs</h2>
+<p>One of the stranger failures looked like a UI problem at first:</p>
+<ul><li>selecting the shared folder updated the wrong row</li><li>selecting the incoming folder looked like it did nothing</li><li>the Python client still reported that no shared folder was configured</li></ul>
+<p>The fix was not just a UI text update. The underlying issue was state ownership during the folder-picker round-trip. The picker result and the service binding were not synchronized tightly enough, so the visible state and the BLE state could drift apart.</p>
+<p>The eventual fix was straightforward once the problem was clear:</p>
+<ul><li>the activity owns the folder-selection state it shows</li><li>the selected URI and label are persisted immediately</li><li>the service is synchronized from that stored state</li></ul>
+<p>That made the behavior much more predictable.</p>
+<p>I mention this because it is another example of what I wanted from the PoC. The goal was not only to get a green path. The goal was to understand what kinds of engineering problems show up as soon as the feature becomes even slightly real.</p>
+<h2>What the Repo Actually Proves</h2>
+<p>For me, the most important outcome is still the simplest one.</p>
+<p>This repo proves that I can:</p>
+<ul><li>run an Android app as a BLE peripheral</li><li>connect to it from a laptop</li><li>browse files from a shared Android folder</li><li>upload files from the laptop into Android</li><li>download files from Android back to the laptop</li></ul>
+<p>In other words, it proves the exact thing I needed the PoC to prove: transferring files to and from Android via Bluetooth between the app and a machine is possible.</p>
+<p>That does not settle every design question that comes after.</p>
+<p>It does not tell me whether BLE is the final transport choice.It does not tell me whether a different protocol would be better.It does not tell me whether an existing product or library might solve the same problem more efficiently.</p>
+<p>But that is fine. The PoC was not supposed to answer every future question.</p>
+<p>It was supposed to remove doubt around the core concept and replace it with a working example.</p>
+<h2>Closing Thoughts</h2>
+<p>That is probably the main thing I would want another developer to take from this repo.</p>
+<p>Sometimes the right next step is not a perfect design. Sometimes it is a proof that the thing can be done at all, in a way that is concrete enough to discuss seriously.</p>
+<p>That was the role of this project.</p>
+<p>I needed a working answer to a very specific question: can an Android app and another machine transfer files to and from each other over Bluetooth?</p>
+<p>Now I have one.</p>
+<p>It is not claiming to be the final product. It is not claiming to be the best possible implementation. It is a practical, working demonstration that the concept holds up, and that was exactly what I needed.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-04-10">Apr 10, 2026</time></p>
+      <p>Tags: Android, Android App Development, Android Development, Kotlin, Mac</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

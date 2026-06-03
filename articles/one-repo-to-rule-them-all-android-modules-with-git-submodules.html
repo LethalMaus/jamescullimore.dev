@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>One Repo to Rule Them All: Android Modules with Git Submodules</title>
+  <meta name="description" content="One Repo to Rule Them All: Android Modules with Git Submodules I was working on a project recently when I noticed something interesting. Another developer had included a springboot kotlin project …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/one-repo-to-rule-them-all-android-modules-with-git-submodules.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="One Repo to Rule Them All: Android Modules with Git Submodules"/>
+  <meta property="og:description" content="One Repo to Rule Them All: Android Modules with Git Submodules I was working on a project recently when I noticed something interesting. Another developer had included a springboot kotlin project …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/one-repo-to-rule-them-all-android-modules-with-git-submodules.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*Qfl8XebsvdWpQ4X-zi1WcA.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="One Repo to Rule Them All: Android Modules with Git Submodules"/>
+  <meta name="twitter:description" content="One Repo to Rule Them All: Android Modules with Git Submodules I was working on a project recently when I noticed something interesting. Another developer had included a springboot kotlin project …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*Qfl8XebsvdWpQ4X-zi1WcA.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"One Repo to Rule Them All: Android Modules with Git Submodules","description":"One Repo to Rule Them All: Android Modules with Git Submodules I was working on a project recently when I noticed something interesting. Another developer had included a springboot kotlin project …","image":["https://miro.medium.com/v2/resize:fit:1200/1*Qfl8XebsvdWpQ4X-zi1WcA.jpeg"],"datePublished":"2025-07-25","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/one-repo-to-rule-them-all-android-modules-with-git-submodules.html"},"url":"https://jamescullimore.dev/articles/one-repo-to-rule-them-all-android-modules-with-git-submodules.html","inLanguage":"en"}</script>
+  <script src="assets/link-preview.js" defer></script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Kotlin • Git</p>
+      <h1 class="article-title">One Repo to Rule Them All: Android Modules with Git Submodules</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2025-07-25">Jul 25, 2025</time>
+        <span>&bull;</span>
+        <span>8 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*Qfl8XebsvdWpQ4X-zi1WcA.jpeg" alt="One Repo to Rule Them All: Android Modules with Git Submodules"/>
+    </figure>
+    <section class="article-content">
+<p>I was working on a project recently when I noticed something interesting. Another developer had included a springboot kotlin project, built by a different team, into our codebase without copying files, creating a library, or even using Maven or Jitpack. They did it using Git submodules.</p>
+<p>At first, I was skeptical. Git submodules have a bit of a reputation: they’re either misunderstood, misused, or completely avoided. But once I took a closer look, I started to see where they could actually shine, especially when working across internal projects or managing open-sourced modules you still want to pull in as source.</p>
+<p>This article is a breakdown of how submodules work in the context of Android development, when they make sense, and how to wire them up properly using Gradle. I’m not saying you should start converting all your dependencies into submodules, but if you’re working with internal teams or trying to reuse code without building and publishing artifacts, this might be a clean and simple solution.</p>
+<p>Let’s walk through the setup, tradeoffs, and a few things to keep in mind.</p>
+<h2>Why Submodules? (And When You Shouldn’t Use Them)</h2>
+<p>Before we dive into how Git submodules work in Android projects, it’s worth pausing to ask: <strong>should you even be using them?</strong></p>
+<p>Submodules aren’t for every project. If you’re working with public dependencies, fast-moving teams, or anything you can publish to Maven or Jitpack, stick to that. Submodules introduce friction when versioning isn’t tightly controlled, they’re not great for “fire-and-forget” style dependencies.</p>
+<p>That said, there are a few situations where submodules can be the perfect middle ground:</p>
+<ul><li><strong>Internal shared modules</strong>You have another project inside your company that builds, say, <code>core-ui</code>, <code>analytics-sdk</code>, or <code>network-utils</code>, and you want to use it in multiple apps without copying the code or publishing artifacts.</li><li><strong>Single open-source modules you maintain</strong>Let’s say you open-sourced your <code>image-editor</code> module on GitHub. You don’t want to deal with publishing to Maven, but you still want to include it in your main app. With submodules, you can pull in the module as source and keep it versioned properly.</li><li><strong>Collaborating across teams</strong>Maybe another team owns a project you want to consume, but you don’t want to fork or duplicate anything. A submodule lets you reference the exact commit you depend on while still keeping both repos clean and separated.</li></ul>
+<p>In short, submodules are great when:</p>
+<ul><li>You own (or trust) the external project</li><li>You need to <em>modify or inspect</em> the code locally</li><li>You’re okay with some manual syncing effort</li><li>You want everything in a single workspace without copying code</li></ul>
+<p>They’re not great when:</p>
+<ul><li>The code changes often and unpredictably</li><li>You just need binaries</li><li>You don’t control the other repo</li></ul>
+<p>The rest of this guide assumes you’ve decided that submodules make sense for your use case. If you’re here just out of curiosity (like I was), feel free to read along anyway, it’s a useful tool to keep in your toolbox.</p>
+<h2>Adding a Git Submodule: One Command, Real Impact</h2>
+<p>Once you’ve decided that a submodule fits your use case, the actual setup is surprisingly simple. From your project’s root directory, run:</p>
+<pre><code class="language-text">git submodule add https://github.com/your-org/anotherProject.git ../anotherProject</code></pre>
+<p>Let’s break that down:</p>
+<ul><li><code>git submodule add</code> tells Git you’re adding a submodule</li><li>The first argument is the <strong>Git URL</strong> of the project you want to include</li><li>The second argument is the <strong>folder path</strong> where you want it to live, in this case, one level up (<code>..</code>) so it’s not nested inside your current repo’s directory</li></ul>
+<p>After running this, two things will happen:</p>
+<ul><li>Git will <strong>clone</strong> the submodule into the path you specified</li><li>It will create a new file called <code>.gitmodules</code> at the root of your project</li></ul>
+<p>That <code>.gitmodules</code> file will look something like this:</p>
+<pre><code class="language-text">[submodule "../anotherProject"]
+    path = ../anotherProject
+    url = https://github.com/your-org/anotherProject.git</code></pre>
+<p>Behind the scenes, Git tracks only a specific <strong>commit</strong> of the submodule, not the full history like a regular clone. That means:</p>
+<ul><li>If the submodule gets updated upstream, your project won’t automatically pick it up</li><li>You control when (and whether) to update to a newer commit</li></ul>
+<h3>A quick example</h3>
+<p>Let’s say the submodule repo receives a new commit. In your project, you’ll need to run:</p>
+<pre><code class="language-text">cd ../anotherProject
+git pull origin main
+cd -
+git add ../anotherProject
+git commit -m "Update submodule to latest commit"</code></pre>
+<p>That’s part of the tradeoff, submodules give you <strong>source-level control</strong>, but also require <strong>manual updates</strong> when needed.</p>
+<p>Read up more on it here:</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://git-scm.com/book/en/v2/Git-Tools-Submodules" target="_blank" rel="noopener noreferrer" data-preview-url="https://git-scm.com/book/en/v2/Git-Tools-Submodules" data-preview-title="Git - Submodules" data-preview-description="We&#x27;ll walk through developing a simple project that has been split up into a main project and a few sub-projects. Let&#x27;s…" data-preview-site="git-scm.com">Git - Submodules</a></div>
+<h2>Hooking Up Your Submodule in Gradle</h2>
+<p>Cloning the submodule is just the first step, now you need to tell Gradle where to find it. By default, Gradle only knows about modules inside your project directory. Since we placed the submodule <strong>outside</strong> (<code>../anotherProject</code>), we’ll need to explicitly register it.</p>
+<p>Open your <code>settings.gradle.kts</code> (or <code>settings.gradle</code> if you’re using Groovy) and add the following:</p>
+<pre><code class="language-text">include(":anotherProject")
+project(":anotherProject").projectDir = File("../anotherProject")</code></pre>
+<p>Let’s break this down:</p>
+<ul><li><code>include(":anotherProject")</code> tells Gradle you want to include a new module</li><li><code>project(":anotherProject").projectDir = File("../anotherProject")</code> points Gradle to the actual directory of the submodule, relative to the root <code>settings.gradle.kts</code></li></ul>
+<blockquote><p><em>You can choose any relative path here, depending on where the submodule lives. Just make sure it resolves correctly from the root project directory.</em></p></blockquote>
+<p>Once this is in place, you’ll see <code>anotherProject</code> treated like any other module in your IDE. You can browse its code, use its classes, and even run or test it independently.</p>
+<p>Gradle doesn’t care whether this folder is part of your Git repo or not, as long as it exists and has a valid <code>build.gradle.kts</code>, it’ll wire it in.</p>
+<h2>Using the Module in Your App or Feature</h2>
+<p>Once your submodule is included in <code>settings.gradle</code>, using it is pretty much the same as working with any other local module in an Android project.</p>
+<p>Open the <code>build.gradle.kts</code> of your app (or feature module) and add a dependency like this:</p>
+<pre><code class="language-text">implementation(project(":anotherProject"))</code></pre>
+<p>Or if you only want it available in debug builds:</p>
+<pre><code class="language-text">debugImplementation(project(":anotherProject"))</code></pre>
+<p>Or if you’re exposing its API to downstream modules:</p>
+<pre><code class="language-text">api(project(":anotherProject"))</code></pre>
+<h3>When to use what</h3>
+<ul><li><code><strong>implementation</strong></code> most common. You depend on the module, but consumers of your module don't need to see it.</li><li><code><strong>api</strong></code>use this if your module re-exports types or functions from the submodule.</li><li><code><strong>debugImplementation</strong></code> useful for things like logging libraries, dev tools, or mock data generators that you only want during development.</li></ul>
+<h3>Keep in mind</h3>
+<ul><li>The submodule must have a valid <code>build.gradle.kts</code> (or Groovy version) file.</li><li>It should ideally follow your project’s conventions, consistent <code>compileSdk</code>, <code>targetSdk</code>, etc.</li><li>You’ll need to sync Gradle after changes to <code>settings.gradle</code> to make the new module visible.</li></ul>
+<p>At this point, you should be able to build and run your app with the submodule wired in. The code is shared, tracked in Git, and sits right there in your IDE like any other module, no artifact publishing, no version mismatches.</p>
+<h2>Submodule Gotchas &amp; Best Practices</h2>
+<p>Git submodules can be incredibly useful, but they come with quirks. Here are a few things you’ll want to know before relying on them too heavily.</p>
+<h3>Cloning a Repo with Submodules</h3>
+<p>When someone else clones your repo, the submodule’s contents won’t be there automatically. They’ll need to run:</p>
+<pre><code class="language-text">git submodule update --init</code></pre>
+<p>Or, better yet, clone with submodules from the start</p>
+<pre><code class="language-text">git clone --recurse-submodules &lt;repo-url&gt;</code></pre>
+<p>This is easy to forget, so if you’re onboarding teammates, include this in your project’s README.</p>
+<h3>Updating Submodules</h3>
+<p>The main repo tracks a specific <strong>commit</strong> from the submodule, not the latest code. If you want to update it:</p>
+<pre><code class="language-text">cd ../anotherProject
+git pull origin main   # or any branch you want
+cd -
+git add ../anotherProject
+git commit -m "Update submodule"</code></pre>
+<p>You’re not just pulling code, you’re updating the reference in your parent repo. That means two commits: one in the submodule, one in the parent.</p>
+<h3>Removing a Submodule (Cleanly)</h3>
+<p>Submodules don’t go away by just deleting the folder. To remove one properly:</p>
+<ul><li>Delete the entry in <code>.gitmodules</code></li><li>Delete the section from <code>.git/config</code></li><li>Run: <code>git rm --cached ../anotherProject</code></li><li>Commit the change</li><li>Manually delete the submodule directory if needed</li></ul>
+<p>Yes, it’s a bit of a cleanup process, another reason to use them only when they’re really adding value.</p>
+<h3>Best Practices</h3>
+<ul><li><strong>Keep them small and focused, </strong>don’t use submodules for huge, unrelated projects</li><li><strong>Pin to commits intentionally, </strong>treat updates like upgrading dependencies</li><li><strong>Keep </strong><code><strong>README</strong></code><strong>s clear, </strong>especially around setup instructions</li><li><strong>Don’t use for public libs, </strong>if it’s not internal or owned by you, use Maven/Jitpack</li></ul>
+<p>Git submodules are more fragile than Gradle dependencies in some ways, but they also offer more control. If you’re careful, they can make managing internal shared code feel clean and deliberate, without needing to run a Maven repo or deal with versioning headaches.</p>
+<h2>Real-World Use Case: Open-Sourcing a Single Module</h2>
+<p>Let’s say you’ve built a reusable image editor as part of your app, maybe something like <code>image-editor</code>, a self-contained module that handles cropping, filters, and transformations.</p>
+<p>Now your team decides to open-source it on GitHub. Great! But here’s the catch: you still want to use it internally, in your production app, without publishing it to Maven Central or relying on Jitpack.</p>
+<p>This is where submodules really shine.</p>
+<h3>Here’s how it plays out</h3>
+<ul><li>You create a new public GitHub repo and move the <code>image-editor</code> module there.</li><li>In your main app repo, you add it as a submodule:</li></ul>
+<pre><code class="language-text">git submodule add https://github.com/your-org/image-editor.git ../image-editor</code></pre>
+<ul><li>Update your <code>settings.gradle.kts</code>:</li></ul>
+<pre><code class="language-text">include(":image-editor") project(":image-editor").projectDir = File("../image-editor")</code></pre>
+<ul><li>Use it like any local module:</li></ul>
+<pre><code class="language-text">implementation(project(":image-editor"))</code></pre>
+<p>Now you’ve got:</p>
+<ul><li><strong>An open-sourced module</strong> that lives on GitHub</li><li><strong>An internal app</strong> that uses it without copying code or managing a publish pipeline</li><li><strong>Version control</strong> over which commit of <code>image-editor</code> your app depends on</li></ul>
+<p>You can work on both projects in the same IDE session, open PRs against the public repo, and keep your internal project lean.</p>
+<p>This pattern works great for:</p>
+<ul><li>SDKs you maintain for partners or external clients</li><li>Utility modules (<code>core-ui</code>, <code>logging</code>, <code>analytics</code>) that live in their own repo</li><li>Open source experiments you want to consume internally before releasing fully</li></ul>
+<p>Submodules aren’t the only way to do this, you could publish AARs, use Gradle source dependencies, or copy code directly but submodules give you a clean middle ground when you want source-level access with tight Git integration.</p>
+<h2>Submodules Aren’t Magic, But They’re Useful</h2>
+<p>Git submodules have been around forever, but in Android development, they’re often overlooked. Maybe because they feel a bit old-school. Maybe because they’ve burned a few people in the past.</p>
+<p>But when used intentionally, they can be a solid tool for managing shared code across projects, especially when you’re working within a single org, or trying to reuse an open-source module you maintain without jumping through the Maven publishing hoops.</p>
+<p>They’re not a silver bullet. If you’re building something public, fast-moving, or maintained by another team, you’ll probably be better off using Gradle dependencies or setting up an internal artifact repo.</p>
+<p>But if you:</p>
+<ul><li>Own both repos</li><li>Want to work with source code directly</li><li>Need clean version control without extra infrastructure</li></ul>
+<p>Then Git submodules can fit right into your workflow.</p>
+<p>Just remember:</p>
+<ul><li>Submodules don’t automatically sync, you control the version</li><li>Setup requires a little boilerplate in <code>settings.gradle</code></li><li>Cloning and onboarding needs that extra <code>git submodule update --init</code> step</li></ul>
+<p>They’re not for every situation but in the right one, they’re simple, clean, and surprisingly effective.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2025-07-25">Jul 25, 2025</time></p>
+      <p>Tags: Android, Kotlin, Git, Mobile App Development</p>
+      <p class="article-footer-copy">&copy; 2025 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>
