@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Reshaping the Network Layer: Transitioning from Retrofit to Ktor</title>
+  <meta name="description" content="Reshaping the Network Layer: Transitioning from Retrofit to Ktor Choosing the correct networking library is critical for creating strong and efficient apps in the ever-changing world of Android …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/reshaping-the-network-layer-transitioning-from-retrofit-to-ktor.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Reshaping the Network Layer: Transitioning from Retrofit to Ktor"/>
+  <meta property="og:description" content="Reshaping the Network Layer: Transitioning from Retrofit to Ktor Choosing the correct networking library is critical for creating strong and efficient apps in the ever-changing world of Android …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/reshaping-the-network-layer-transitioning-from-retrofit-to-ktor.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*kaFrtzJJGEg9Wd1GXZIGug.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Reshaping the Network Layer: Transitioning from Retrofit to Ktor"/>
+  <meta name="twitter:description" content="Reshaping the Network Layer: Transitioning from Retrofit to Ktor Choosing the correct networking library is critical for creating strong and efficient apps in the ever-changing world of Android …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*kaFrtzJJGEg9Wd1GXZIGug.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Reshaping the Network Layer: Transitioning from Retrofit to Ktor","description":"Reshaping the Network Layer: Transitioning from Retrofit to Ktor Choosing the correct networking library is critical for creating strong and efficient apps in the ever-changing world of Android …","image":["https://miro.medium.com/v2/resize:fit:1200/1*kaFrtzJJGEg9Wd1GXZIGug.jpeg"],"datePublished":"2023-12-07","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/reshaping-the-network-layer-transitioning-from-retrofit-to-ktor.html"},"url":"https://jamescullimore.dev/articles/reshaping-the-network-layer-transitioning-from-retrofit-to-ktor.html","inLanguage":"en"}</script>
+  <script src="assets/link-preview.js" defer></script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • Kotlin</p>
+      <h1 class="article-title">Reshaping the Network Layer: Transitioning from Retrofit to Ktor</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2023-12-07">Dec 7, 2023</time>
+        <span>&bull;</span>
+        <span>7 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*kaFrtzJJGEg9Wd1GXZIGug.jpeg" alt="Reshaping the Network Layer: Transitioning from Retrofit to Ktor"/>
+    </figure>
+    <section class="article-content">
+<p>Choosing the correct networking library is critical for creating strong and efficient apps in the ever-changing world of Android development. Retrofit and Ktor are two notable players in this space, each with its own strategy to processing network requests. In this post, we’ll look at the migration route from Retrofit to Ktor, going into the features of both libraries and comparing the benefits they provide.</p>
+<h2>Retrofit and Its Benefits</h2>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://square.github.io/retrofit/" target="_blank" rel="noopener noreferrer" data-preview-url="https://square.github.io/retrofit/" data-preview-title="Retrofit" data-preview-description="A type-safe HTTP client for Android and Java" data-preview-site="square.github.io">Retrofit</a></div>
+<p>Retrofit has long been a stalwart in Android development, renowned for its simplicity and ease of use. With its declarative API and seamless integration with popular serialization libraries like Gson, Retrofit simplified the process of communicating with RESTful APIs. Developers appreciated its annotation-based approach, allowing them to define API endpoints in a clean and concise manner. As we delve into the benefits Retrofit provided, we’ll also uncover the challenges that might prompt developers to seek alternatives.</p>
+<h2>Unveiling the Merits of Ktor</h2>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://ktor.io/" target="_blank" rel="noopener noreferrer" data-preview-url="https://ktor.io/" data-preview-title="Ktor: Build Asynchronous Servers and Clients in Kotlin" data-preview-description="Kotlin Server and Client Framework for microservices, HTTP APIs, and RESTful services" data-preview-site="ktor.io">Ktor: Build Asynchronous Servers and Clients in Kotlin</a></div>
+<p>Enter Ktor, a modern and lightweight asynchronous framework developed by JetBrains. While Retrofit excelled in its own right, Ktor brings a fresh perspective to Android networking, especially in the context of asynchronous and non-blocking operations. In this section, we’ll explore why developers are increasingly turning to Ktor, examining its seamless integration with Kotlin Coroutines, its extensible architecture, and how it addresses the evolving needs of modern Android applications.</p>
+<h2>Harnessing the Power of Kotlin Multiplatform in Networking Evolution</h2>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://kotlinlang.org/docs/multiplatform.html" target="_blank" rel="noopener noreferrer" data-preview-url="https://kotlinlang.org/docs/multiplatform.html" data-preview-title="Kotlin Multiplatform | Kotlin" data-preview-description="The Kotlin Multiplatform technology is designed to simplify the development of cross-platform projects. It reduces time…" data-preview-site="kotlinlang.org">Kotlin Multiplatform | Kotlin</a></div>
+<p>As the Android ecosystem evolves, developers are faced with the difficulty of designing apps that cross platform borders. Enter Kotlin Multiplatform, a game changer that has a substantial impact on the choice to switch from Retrofit to Ktor. The distinctions between Android and other platforms blur with Kotlin Multiplatform, enabling for code interchange across varied contexts such as iOS, web, and backend services.</p>
+<h2>Seamless Code Sharing</h2>
+<p>One of the primary attractions of Kotlin Multiplatform is its ability to facilitate seamless code sharing. By leveraging shared Kotlin code, developers can maintain a single codebase for networking logic, reducing redundancy and ensuring consistency across platforms. This translates to not only a more maintainable codebase but also accelerated development cycles as changes can be applied uniformly.</p>
+<h2>Synchronized Coroutines for Asynchronous Operations</h2>
+<p>Kotlin Multiplatform’s integration with Kotlin Coroutines becomes particularly significant when transitioning from Retrofit to Ktor. Coroutines enable asynchronous and non-blocking operations, aligning seamlessly with Ktor’s architecture. This synergy empowers developers to write concurrent, efficient code that is easily portable across platforms, fostering a unified and streamlined development experience.</p>
+<h2>True Platform Independence</h2>
+<p>In the Retrofit to Ktor migration, Kotlin Multiplatform serves as the linchpin for achieving true platform independence. As organizations aim to expand their applications beyond the Android ecosystem, the ability to reuse networking code on iOS and other platforms becomes a strategic advantage. Ktor, with its Kotlin Multiplatform compatibility, aligns with this vision, enabling developers to build resilient, cross-platform applications without sacrificing performance or code clarity.</p>
+<p>In essence, Kotlin Multiplatform not only facilitates the smooth transition from Retrofit to Ktor but also positions developers to embrace a future where applications seamlessly traverse the boundaries of various platforms, unlocking new possibilities and efficiencies in the ever-evolving world of Android development.</p>
+<h2>Migration Blueprint: Retrofit to Ktor Code Transition</h2>
+<h2>Gradle Setup: From Retrofit to Ktor</h2>
+<p>Retrofit Gradle Setup:</p>
+<pre><code class="language-sh">implementation 'com.squareup.retrofit2:retrofit:$retrofit_version'
+implementation 'com.squareup.retrofit2:converter-gson:$retrofit_version'</code></pre>
+<p>Ktor Gradle Setup:</p>
+<pre><code class="language-sh">implementation "io.ktor:ktor-client-core:$ktor_version"
+implementation "io.ktor:ktor-client-json:$ktor_version"
+implementation "io.ktor:ktor-client-serialization:$ktor_version"</code></pre>
+<p>The transition begins with updating dependencies. While Retrofit relied on its specific artifacts, Ktor introduces a modular approach with various components for flexible configuration.</p>
+<h2>Configuring Networking in Kotlin</h2>
+<p>Retrofit Configuration:</p>
+<pre><code class="language-sh">val retrofit = Retrofit.Builder()
+    .baseUrl(BASE_URL)
+    .addConverterFactory(GsonConverterFactory.create())
+    .build()
+val apiService = retrofit.create(ApiService::class.java)</code></pre>
+<p>Ktor Configuration:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/c03494d6ee16cdd627e8df08eccee0cc.js?file=ktor.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/c03494d6ee16cdd627e8df08eccee0cc#file-ktor-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/c03494d6ee16cdd627e8df08eccee0cc#file-ktor-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>In this phase, the configuration transitions from Retrofit’s Builder pattern to Ktor’s HttpClient configuration. Note the use of Ktor’s JsonFeature and KotlinxSerializer for JSON serialization.</p>
+<h2>Making Endpoint Requests</h2>
+<p>Retrofit Endpoint Request:</p>
+<pre><code class="language-sh">interface ApiService {
+    @GET("user/{userId}")
+    suspend fun getUser(@Path("userId") userId: String): User
+}</code></pre>
+<p>Ktor Endpoint Request:</p>
+<pre><code class="language-sh">class KtorApiService(private val client: HttpClient) {
+    suspend fun getUser(userId: String): User {
+        return client.get("${BASE_URL}user/$userId")
+    }
+}</code></pre>
+<p>Here, the transition involves defining endpoint requests. While Retrofit used annotated interfaces, Ktor employs a more direct approach within a class that encapsulates the HTTP client.</p>
+<h2>Integrating Flows in ViewModel</h2>
+<p>Retrofit ViewModel with Coroutines:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/f6b7761456e89fbb4a8ddec8ccc369f5.js?file=ktor2.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/f6b7761456e89fbb4a8ddec8ccc369f5#file-ktor2-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/f6b7761456e89fbb4a8ddec8ccc369f5#file-ktor2-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Ktor ViewModel with Flows:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/8958094f56718bda2062c77c12fadde1.js?file=ktor3.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/8958094f56718bda2062c77c12fadde1#file-ktor3-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/8958094f56718bda2062c77c12fadde1#file-ktor3-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The transition to Ktor involves adapting ViewModel logic to work with Kotlin Flows. The use of MutableStateFlow in Ktor aligns with its asynchronous and non-blocking nature, offering a more idiomatic approach for reactive programming.</p>
+<p>This migration blueprint provides a glimpse into the transformation journey from Retrofit to Ktor, showcasing the adjustments needed at various stages of the application, from Gradle configurations to endpoint requests and the adoption of Kotlin Flows in the ViewModel.</p>
+<h2>Navigating Error Handling</h2>
+<h2>Retrofit’s Exception Handling</h2>
+<p>In Retrofit, error handling is primarily managed through exceptions. When a request encounters an issue, Retrofit throws an exception that developers must catch and process. For example:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/c1317a75a8b1eaa43cd6fd56f8d84638.js?file=ktor4.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/c1317a75a8b1eaa43cd6fd56f8d84638#file-ktor4-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/c1317a75a8b1eaa43cd6fd56f8d84638#file-ktor4-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Here, exceptions like IOException cater to network problems, while HttpException helps capture HTTP-specific errors, providing access to response codes and messages.</p>
+<h2>Ktor’s Result-Based Approach</h2>
+<p>Ktor takes a more result-centric approach, utilizing Kotlin’s Result class to encapsulate both success and failure scenarios. The usage might look like this:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/725503b7dd6835caa9eb3968c310ac2a.js?file=ktor5.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/725503b7dd6835caa9eb3968c310ac2a#file-ktor5-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/725503b7dd6835caa9eb3968c310ac2a#file-ktor5-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Ktor’s approach with Result allows developers to distinguish between different failure scenarios in a more structured manner, enhancing code readability and maintainability.</p>
+<h2>Asynchronous Error Handling with Kotlin Flows</h2>
+<p>When dealing with asynchronous operations and Kotlin Flows, both Retrofit and Ktor necessitate adopting reactive error handling patterns. In Ktor, this often involves leveraging the catch operator on a Flow:</p>
+<pre><code class="language-sh">val userFlow: Flow&lt;Result&lt;User&gt;&gt; = flow {
+    emit(runCatching { ktorApiService.getUser(userId) })
+}.catch { exception -&gt;
+    // Handle errors specific to the Flow
+}</code></pre>
+<p>In conclusion, while Retrofit leans on exceptions for error handling, Ktor embraces the Kotlin Result class for a more expressive and cohesive approach. Each method has its strengths, and the choice between them often boils down to developer preference and the desired level of granularity when dealing with errors in the networking layer.</p>
+<h2>Safeguarding Connections: Certificate Pinning</h2>
+<h2>Retrofit’s Certificate Pinning</h2>
+<p>Retrofit relies on the underlying OkHttpClient for network operations, including certificate pinning. Here’s an example of how certificate pinning can be implemented in Retrofit:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/061223d4d02c4a68cf385314fd6ff565.js?file=ktor6.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/061223d4d02c4a68cf385314fd6ff565#file-ktor6-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/061223d4d02c4a68cf385314fd6ff565#file-ktor6-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>In this setup, the CertificatePinner is configured with the expected public key hashes for the specified domain. If the server’s certificate does not match the expected hash, an exception is thrown.</p>
+<h2>Ktor’s Certificate Pinning</h2>
+<p>Ktor, being a versatile and extensible framework, delegates certificate pinning to the underlying HttpClient. The implementation involves customizing the engine with a CertificatePinner:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/99c91d03a717f4f4daf00458f98b03b3.js?file=ktor7.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/99c91d03a717f4f4daf00458f98b03b3#file-ktor7-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/99c91d03a717f4f4daf00458f98b03b3#file-ktor7-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Similar to Retrofit, Ktor’s HttpClient allows developers to set up a CertificatePinner to enforce a secure connection. The provided hash acts as a fingerprint for the server’s certificate.</p>
+<h2>Considerations and Best Practices</h2>
+<ul><li>Key Hash GenerationIn both cases, the key hashes should be generated securely and should match the fingerprints of the server’s certificates.</li><li>Dynamic PinningRetrofit and Ktor allow for dynamic updating of key hashes during runtime, ensuring flexibility in managing certificate changes.</li><li>Periodic ReviewRegularly review and update pinned keys to align with any changes in the server’s certificate, maintaining the security of the connection.</li></ul>
+<p>In essence, whether using Retrofit or Ktor, certificate pinning remains a critical aspect of securing network connections. The key differences lie in the configuration nuances specific to each library, showcasing how developers can tailor their approach based on the chosen networking solution.</p>
+<h2>Mocking Requests for Testing</h2>
+<h2>Retrofit’s MockWebServer</h2>
+<p>Retrofit simplifies the process of mocking network requests for testing purposes with its built-in MockWebServer. Here’s an example of how to set up and use MockWebServer in a unit test:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/90dca75d40eecebe3e90dad145df24a9.js?file=ktor8.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/90dca75d40eecebe3e90dad145df24a9#file-ktor8-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/90dca75d40eecebe3e90dad145df24a9#file-ktor8-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h2>Ktor’s MockEngine</h2>
+<p>Ktor provides a dedicated MockEngine for testing scenarios. Setting up and using MockEngine involves customizing the HttpClient:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/c5ada12fb1f6ee8cf83cecda139eb9d9.js?file=ktor9.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/c5ada12fb1f6ee8cf83cecda139eb9d9#file-ktor9-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/c5ada12fb1f6ee8cf83cecda139eb9d9#file-ktor9-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h2>Considerations</h2>
+<p>In conclusion, whether using Retrofit’s MockWebServer or Ktor’s MockEngine, developers can effectively mock network requests, ensuring robust and predictable testing environments. The choice between the two often depends on the existing networking library in use and the specific testing requirements of the project.</p>
+<h2>Conclusion</h2>
+<p>The networking libraries we choose have a significant impact on the efficiency, scalability, and maintainability of our apps. The path from Retrofit to Ktor highlights the essence of adjusting to shifting paradigms and meeting the changing demands of modern app development.</p>
+<p>Retrofit, with its established presence and simplicity, served as a stalwart for Android developers. Its annotation-based approach and seamless integration with Gson facilitated the implementation of network operations with ease. However, as the demands of cross-platform development and asynchronous programming evolved, Ktor emerged as a compelling alternative, offering a more modern and flexible solution.</p>
+<p>The incorporation of Kotlin Multiplatform not only facilitates code sharing across platforms but also exemplifies the maturation of Kotlin as a language capable of unifying diverse ecosystems. The transition to Ktor, coupled with Kotlin’s inherent features, empowers developers to build applications that transcend traditional boundaries.</p>
+<p>Furthermore, the comparison of error handling strategies and the exploration of certificate pinning illustrate how Ktor aligns with modern coding practices, providing developers with enhanced tools for secure and resilient networking.</p>
+<p>In the realm of testing, the ability to mock requests is paramount. Retrofit’s MockWebServer and Ktor’s MockEngine showcase the adaptability of both libraries in facilitating controlled testing environments, ensuring the reliability of applications under various scenarios.</p>
+<p>As we conclude this exploration, it’s evident that the decision between Retrofit and Ktor is nuanced and depends on the specific needs and goals of a project. Retrofit continues to shine for its simplicity and ease of integration, while Ktor emerges as a versatile choice, particularly in the context of Kotlin Multiplatform and modern Android development practices.</p>
+<p>Experience Retrofit in action <a href="https://github.com/LethalMaus/ExampleAndroidProject" target="_blank" rel="noopener noreferrer">here</a> and delve into the world of Ktor with an example <a href="https://github.com/LethalMaus/HopHub" target="_blank" rel="noopener noreferrer">here</a>. The choice between the two libraries becomes an exciting opportunity for developers to align their projects with the latest advancements in technology and deliver exceptional user experiences.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2023-12-07">Dec 7, 2023</time></p>
+      <p>Tags: Android, Android App Development, Kotlin, Kotlin Multiplatform, Open Source</p>
+      <p class="article-footer-copy">&copy; 2023 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

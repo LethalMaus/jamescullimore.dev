@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>The importance of UI Tests on Android and when not to write them.</title>
+  <meta name="description" content="The importance of UI Tests on Android and when not to write them. In my opinion, this is why UI Tests are important and what advantages they bring in Android development: Accurate representation: UI …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/the-importance-of-ui-tests-on-android-and-when-not-to-write-them.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="The importance of UI Tests on Android and when not to write them."/>
+  <meta property="og:description" content="The importance of UI Tests on Android and when not to write them. In my opinion, this is why UI Tests are important and what advantages they bring in Android development: Accurate representation: UI …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/the-importance-of-ui-tests-on-android-and-when-not-to-write-them.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:752/1*s4X2AKjmBJ1zwy6wI5iGCg.png"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="The importance of UI Tests on Android and when not to write them."/>
+  <meta name="twitter:description" content="The importance of UI Tests on Android and when not to write them. In my opinion, this is why UI Tests are important and what advantages they bring in Android development: Accurate representation: UI …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:752/1*s4X2AKjmBJ1zwy6wI5iGCg.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"The importance of UI Tests on Android and when not to write them.","description":"The importance of UI Tests on Android and when not to write them. In my opinion, this is why UI Tests are important and what advantages they bring in Android development: Accurate representation: UI …","image":["https://miro.medium.com/v2/resize:fit:752/1*s4X2AKjmBJ1zwy6wI5iGCg.png"],"datePublished":"2023-07-28","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/the-importance-of-ui-tests-on-android-and-when-not-to-write-them.html"},"url":"https://jamescullimore.dev/articles/the-importance-of-ui-tests-on-android-and-when-not-to-write-them.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • AndroidDev</p>
+      <h1 class="article-title">The importance of UI Tests on Android and when not to write them.</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2023-07-28">Jul 28, 2023</time>
+        <span>&bull;</span>
+        <span>2 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:752/1*s4X2AKjmBJ1zwy6wI5iGCg.png" alt="The importance of UI Tests on Android and when not to write them."/>
+    </figure>
+    <section class="article-content">
+<p>In my opinion, this is why UI Tests are important and what advantages they bring in Android development:</p>
+<ol><li>Accurate representation: UI tests validate the actual behavior and appearance of the user interface, ensuring it matches the intended design and functionality.</li><li>User-centric focus: UI tests simulate user interactions, helping to ensure a smooth and intuitive user experience on Android devices.</li><li>Regression detection: UI tests can catch unintended regressions caused by code changes, ensuring that previously working features continue to function correctly.</li><li>Platform compatibility: UI tests help identify any inconsistencies or issues that arise on specific Android devices or versions, ensuring app compatibility across a wide range of configurations.</li><li>Automated testing: UI tests can be automated, saving time and effort in the long run by executing repetitive tests and reducing the need for manual testing.</li><li>Continuous integration and delivery: UI tests can be integrated into the development pipeline, facilitating frequent and automated testing as part of the continuous integration and delivery (CI/CD) process.</li><li>Increased confidence: Thorough UI testing increases developers’ and stakeholders’ confidence in the quality of the application, reducing the risk of critical bugs and issues reaching end-users.</li></ol>
+<p>However, I have learned in some rare scenarios with clients, to recommend against writing tests due to the following reasons:</p>
+<ol><li>Unstable or rapidly changing UI: If the user interface undergoes frequent changes, writing and maintaining UI tests can become time-consuming and may not provide significant value.</li><li>Extreme time constraints: In situations where time is limited, investing excessive effort in UI testing may not be feasible, and a more targeted testing approach might be necessary.</li><li>Non-interactive or backend-focused applications: If an app’s core functionality lies primarily in the backend or involves limited user interactions, the benefits of UI testing may be minimal compared to other testing methods.</li><li>Resource limitations: On low-resource devices or under restricted testing environments, executing UI tests can be slow or result in unstable test runs, making them impractical.</li><li>Cost-effectiveness: If the cost of developing and maintaining UI tests outweighs the potential benefits, it may be more efficient to focus on alternative testing methods.</li></ol>
+<p>UI tests are valuable, it’s essential to consider the specific context, project constraints, and priorities when deciding whether to invest in them for Android development.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2023-07-28">Jul 28, 2023</time></p>
+      <p>Tags: Android, Android App Development, AndroidDev, Testing, Ui Testing</p>
+      <p class="article-footer-copy">&copy; 2023 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

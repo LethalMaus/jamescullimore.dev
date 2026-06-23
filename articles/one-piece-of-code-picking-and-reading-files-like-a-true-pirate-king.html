@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>One Piece of Code: Picking and Reading Files like a True Pirate King</title>
+  <meta name="description" content="One Piece of Code: Picking and Reading Files like a True Pirate King Ahoy, fellow sailors of the digital high seas! We frequently find ourselves on exciting expeditions to empower our users with …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="One Piece of Code: Picking and Reading Files like a True Pirate King"/>
+  <meta property="og:description" content="One Piece of Code: Picking and Reading Files like a True Pirate King Ahoy, fellow sailors of the digital high seas! We frequently find ourselves on exciting expeditions to empower our users with …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*UvGYhV0gNPoBKBLm_FV28A.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="One Piece of Code: Picking and Reading Files like a True Pirate King"/>
+  <meta name="twitter:description" content="One Piece of Code: Picking and Reading Files like a True Pirate King Ahoy, fellow sailors of the digital high seas! We frequently find ourselves on exciting expeditions to empower our users with …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*UvGYhV0gNPoBKBLm_FV28A.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"One Piece of Code: Picking and Reading Files like a True Pirate King","description":"One Piece of Code: Picking and Reading Files like a True Pirate King Ahoy, fellow sailors of the digital high seas! We frequently find ourselves on exciting expeditions to empower our users with …","image":["https://miro.medium.com/v2/resize:fit:1200/1*UvGYhV0gNPoBKBLm_FV28A.jpeg"],"datePublished":"2024-11-16","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html"},"url":"https://jamescullimore.dev/articles/one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • Kotlin</p>
+      <h1 class="article-title">One Piece of Code: Picking and Reading Files like a True Pirate King</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2024-11-16">Nov 16, 2024</time>
+        <span>&bull;</span>
+        <span>4 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*UvGYhV0gNPoBKBLm_FV28A.jpeg" alt="One Piece of Code: Picking and Reading Files like a True Pirate King"/>
+    </figure>
+    <section class="article-content">
+<p>Ahoy, fellow sailors of the digital high seas!</p>
+<p>We frequently find ourselves on exciting expeditions to empower our users with tools and features that make their experience as seamless as sailing on the Grand Line in the broad and ever-changing field of Android app development. Picture this: you’re embarking on a journey within your app, and suddenly, you need to handpick a file for your app’s treasure chest, whether it be a CSV file teeming with data riches or a configuration file to set sail on a gaming adventure akin to the legendary One Piece.</p>
+<p>Fear not, for I bring you tidings of a nifty compass in the form of an “Intent Chooser”! With the cunning of a pirate captain, you can now let your users chart their course through their own files, select the desired treasure, and bring it on board for further adventures.</p>
+<p>In this swashbuckling article, we’ll unfurl the map to this hidden treasure chest of possibilities, showing you how to wield the Intent Chooser to read and manipulate files with the deftness of the Pirate King himself. So, gather ‘round, me hearties, and let’s embark on this epic voyage to make your Android app the envy of the Seven Seas.</p>
+<p>Batten down the hatches and prepare to set sail through the intriguing world of Android development, where file selection is no longer a treasure hunt, but a breeze that even Captain Monkey D. Luffy would envy!</p>
+<h2>Setting Sail with the Intent Chooser</h2>
+<p>In the vast ocean of Android development, the “Intent Chooser” is your trusted compass, helping users select files with ease. Just like Luffy searching for the One Piece, your users will now embark on an adventure to find the perfect file for your app.</p>
+<pre><code class="language-text">val intent = Intent(Intent.ACTION_GET_CONTENT) intent.type = "*/*" intent.addCategory(Intent.CATEGORY_OPENABLE) filePickerLauncher.launch(Intent.createChooser(intent, "Select a file to import"))</code></pre>
+<ol><li>val intent = Intent(Intent.ACTION_GET_CONTENT): This code is like setting your sails to “Get Content” mode, indicating your intent to retrieve something valuable.</li><li>intent.type = “*/*”: This line shows that you’re ready to accept any file type, just like a versatile pirate ready for any kind of treasure.</li><li>intent.addCategory(Intent.CATEGORY_OPENABLE): This ensures that you’re only interested in files that can be opened.</li><li>filePickerLauncher.launch(Intent.createChooser(intent, “Select a file to import”)): Here, you hoist the Jolly Roger high, launching the Intent Chooser, which allows users to handpick their treasure. The message “Select a file to import” serves as your app’s siren call, beckoning users to make their choice.</li></ol>
+<p>For the adventure of handling CSV files, simply use:</p>
+<pre><code class="language-text">intent.type = "text/comma-separated-values"</code></pre>
+<h2>Decoding the Treasure Map: Reading File Content</h2>
+<p>Ahoy, me hearties! With the treasure (file) aboard, it’s time to read its contents with the skill of a pirate deciphering an ancient map.</p>
+<h3>Read File Line by Line</h3>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/17593e086f88da2ed37c8abb8d6025ca.js?file=filereader1.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/17593e086f88da2ed37c8abb8d6025ca#file-filereader1-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/17593e086f88da2ed37c8abb8d6025ca#file-filereader1-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Convert File Content to JSON</h3>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/b1dcdf944015fb65e5171675710448e8.js?file=filereader2.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/b1dcdf944015fb65e5171675710448e8#file-filereader2-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/b1dcdf944015fb65e5171675710448e8#file-filereader2-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<ol><li>if (result.resultCode == Activity.RESULT_OK): As before, we’re ensuring a smooth voyage in selecting a file, avoiding any stormy seas.</li><li>data?.data?.let { fileUri ->: This is where the treasure lies — the selected file.</li><li>Prepare your crew and create a chest (a MutableList) to hold the file’s content.</li><li>With the map (BufferedReader) ready, you read each line of the file, ensuring no treasure is left behind.</li></ol>
+<p>Remember, just like deciphering a treasure map, decoding the content into JSON requires the proper encoding (UTF-8, in this case). Also, be aware of how the user’s choice of file format or incompatible data could lead to errors and chaos.</p>
+<p>With this code in your treasure chest, you’ll be able to transform any selected file into a JSON treasure map with the prowess of a pirate who’s just uncovered hidden riches. Now you’re all set to sail through Android app development waters, converting files into JSON to fuel your app’s adventures!</p>
+<h2>A Pirate’s Conclusion</h2>
+<p>Ahoy, brave navigators of the Android seas, we’ve reached the final island in our quest for file selection wisdom.</p>
+<p>In this adventure, we’ve unraveled the mysteries of selecting files using the Intent Chooser and reading their contents. Much like Monkey D. Luffy in pursuit of the One Piece, we’ve armed ourselves with the tools and techniques to make our Android apps unstoppable on the high tides of development.</p>
+<p>But, me hearties, there’s one crucial lesson that we must heed, straight from the pages of One Piece itself: beware the Grand Line’s unpredictable currents and the allure of forbidden treasure. Just as Straw Hat Pirates avoid dangerous islands and treacherous enemies, we must be wary of the users’ choices.</p>
+<p>For, like a user selecting the wrong file format or incompatible data, it can lead to a shipwreck of errors and chaos. We’ve armed ourselves with knowledge, but with great power comes great responsibility. It’s essential to safeguard our app against the whims of users who may inadvertently send us off course.</p>
+<p>So, as we conclude our journey, let’s not forget the golden rule of the pirate code — “Know your treasure, and guard it well.” In our case, the treasure is the data we handle, and we must treat it with the care and respect of a True Pirate King.</p>
+<p>With our newfound wisdom and a hearty Yo-Ho-Ho, we’re ready to navigate the Android app development seas like the true swashbucklers we are. One Piece, one adventure at a time!</p>
+<p>May your apps sail smoothly, and may your users always choose their files wisely. Until next time, my fellow buccaneers!</p>
+<p>And remember, like the Straw Hat Pirates, we’re setting our course for the grandest of treasures — knowledge and innovation!</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2024-11-16">Nov 16, 2024</time></p>
+      <p>Tags: Android, Android App Development, Kotlin</p>
+      <p class="article-footer-copy">&copy; 2024 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

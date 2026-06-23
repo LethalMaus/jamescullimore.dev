@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Turning a Wear OS Complication Into a Launcher Shortcut</title>
+  <meta name="description" content="Turning a Wear OS Complication Into a Launcher Shortcut Wear OS apps often live in the background. Users install them, open them once or twice, and then forget they exist until they are needed. In …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/turning-a-wear-os-complication-into-a-launcher-shortcut.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Turning a Wear OS Complication Into a Launcher Shortcut"/>
+  <meta property="og:description" content="Turning a Wear OS Complication Into a Launcher Shortcut Wear OS apps often live in the background. Users install them, open them once or twice, and then forget they exist until they are needed. In …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/turning-a-wear-os-complication-into-a-launcher-shortcut.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*xcfpWu2YNgbT_LApf0KAiQ.png"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Turning a Wear OS Complication Into a Launcher Shortcut"/>
+  <meta name="twitter:description" content="Turning a Wear OS Complication Into a Launcher Shortcut Wear OS apps often live in the background. Users install them, open them once or twice, and then forget they exist until they are needed. In …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*xcfpWu2YNgbT_LApf0KAiQ.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Turning a Wear OS Complication Into a Launcher Shortcut","description":"Turning a Wear OS Complication Into a Launcher Shortcut Wear OS apps often live in the background. Users install them, open them once or twice, and then forget they exist until they are needed. In …","image":["https://miro.medium.com/v2/resize:fit:1200/1*xcfpWu2YNgbT_LApf0KAiQ.png"],"datePublished":"2026-03-26","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/turning-a-wear-os-complication-into-a-launcher-shortcut.html"},"url":"https://jamescullimore.dev/articles/turning-a-wear-os-complication-into-a-launcher-shortcut.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android Development • Wearables</p>
+      <h1 class="article-title">Turning a Wear OS Complication Into a Launcher Shortcut</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-03-26">Mar 26, 2026</time>
+        <span>&bull;</span>
+        <span>6 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*xcfpWu2YNgbT_LApf0KAiQ.png" alt="Turning a Wear OS Complication Into a Launcher Shortcut"/>
+    </figure>
+    <section class="article-content">
+<p>Wear OS apps often live in the background. Users install them, open them once or twice, and then forget they exist until they are needed. In one recent project, we wanted to solve that problem in the simplest possible way: by giving users a single, reliable shortcut directly on their watch face.</p>
+<p>Instead of building a full custom experience or relying on tiles, we chose to use a complication. Complications are glanceable, fast, and already integrated into how users interact with their watches throughout the day. Our goal was straightforward: tap the complication and immediately launch the app.</p>
+<p>In this article, I will walk through how we implemented a small image complication that acts as an app launcher. We will look at the service implementation, how the complication data is constructed, and how it is registered with the system. The focus is on clarity and practicality, using a real-world setup that worked well in production.</p>
+<h2>Choosing a Complication as a Shortcut</h2>
+<p>On Wear OS, there are several ways to surface functionality to users. Activities require intent and attention. Tiles are powerful, but they introduce an extra swipe and a more opinionated layout. For our use case, both options felt heavier than necessary.</p>
+<p>A complication fit naturally. It lives directly on the watch face, it is always visible, and users already understand that tapping it should trigger something useful. We were not trying to display live data or dynamic state. We simply wanted a fast entry point into the app.</p>
+<p>Because of that, we chose a <code>SMALL_IMAGE</code> complication. This type works well as an icon-only affordance and blends nicely with most watch faces. It also avoids layout complexity and keeps the implementation focused.</p>
+<p>From a technical perspective, complications are provided by a <code>ComplicationDataSourceService</code>. This service is responsible for supplying both preview data and real data when the system requests it. Even though our complication is static, the same mechanism applies.</p>
+<p>This decision shaped the rest of the implementation. Once the complication type was clear, the service became a simple provider that always returns the same data and launches the app when tapped.</p>
+<h2>Implementing the Complication Data Source Service</h2>
+<p>Every Wear OS complication starts with a data source. This is a service that the system binds to when it needs data for a watch face. In our case, the service is intentionally simple because the data never changes.</p>
+<p>We extend <code>ComplicationDataSourceService</code> and override two key methods. One is used when the system requests real complication data, and the other is used for previews inside the watch face picker.</p>
+<p>Here is the complete service implementation exactly as used in the project:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/9b4e0c88a9c54e1f4fb1b8e47827b3f9.js?file=WearOSComplication.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/9b4e0c88a9c54e1f4fb1b8e47827b3f9#file-wearoscomplication-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/9b4e0c88a9c54e1f4fb1b8e47827b3f9#file-wearoscomplication-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The <code>onComplicationRequest</code> method is the main entry point. When the system asks for data, we immediately respond with a <code>ComplicationData</code> object. There is no background work, caching, or conditional logic here.</p>
+<p>The <code>getPreviewData</code> method serves a different purpose. It supplies data when the user is browsing complications in the watch face editor. Returning the same data ensures that the preview looks exactly like the real complication, which avoids confusion.</p>
+<p>To keep things readable, all construction logic lives in <code>getComplicationData</code>. This makes it obvious that both preview and runtime requests share the same output and behavior.</p>
+<h2>Building the Complication Data</h2>
+<p>The core of this approach is the <code>ComplicationData</code> we return. Even though the user experience is simple, the data object still needs to define three things clearly:</p>
+<ol><li>What the complication should look like on the watch face</li><li>What text is available for accessibility and UI surfaces</li><li>What should happen when the user taps it</li></ol>
+<p>All of that happens inside <code>getComplicationData()</code>.</p>
+<h3>Picking an icon and label</h3>
+<p>We start by preparing the visual identity and a human readable label:</p>
+<pre><code class="language-sh">val icon = Icon.createWithResource(this, R.mipmap.app_icon_round)
+val appName = getString(R.string.app_name)</code></pre>
+<p>The icon is the main thing the user will recognize on the watch face. The app name is not necessarily shown prominently in a <code>SMALL_IMAGE</code> slot, but it still matters because complications can surface text in other contexts, and it helps with accessibility.</p>
+<h3>Creating the tap action</h3>
+<p>The entire point of this complication is that it behaves like a shortcut. So the most important piece is the <code>PendingIntent</code> that launches the app:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/fc8dddc7c6d11f24dada5a2e8ef25519.js?file=WearOSComplication.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/fc8dddc7c6d11f24dada5a2e8ef25519#file-wearoscomplication-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/fc8dddc7c6d11f24dada5a2e8ef25519#file-wearoscomplication-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>We ask the package manager for the launch intent for our own package. That gives us the default entry activity for the app, which is exactly what users expect when they tap an app icon.</p>
+<p>The <code>PendingIntent</code> wraps that launch intent so the watch face can trigger it on our behalf. The flags are important in modern Android:</p>
+<ul><li><code>FLAG_UPDATE_CURRENT</code> ensures that if the pending intent already exists, it is updated with the latest intent details.</li><li><code>FLAG_IMMUTABLE</code> satisfies the security requirement introduced in newer Android versions where the mutability of pending intents must be explicit.</li></ul>
+<h3>Returning SmallImageComplicationData</h3>
+<pre><code class="language-text">SmallImageComplicationData</code></pre>
+<p>Finally we construct the complication data. This is where we combine the icon, the label, and the tap action:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/6da62bfcb4cd3f12a1170d54bfdc12f7.js?file=WearOSComplication.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/6da62bfcb4cd3f12a1170d54bfdc12f7#file-wearoscomplication-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/6da62bfcb4cd3f12a1170d54bfdc12f7#file-wearoscomplication-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This is a <code>SMALL_IMAGE</code> complication, so the primary content is the <code>SmallImage</code>. We use <code>SmallImageType.ICON</code>, which is a good fit for app launcher style complications because it signals the watch face to treat it like an icon rather than a photo-style image.</p>
+<p>The <code>PlainComplicationText</code> gives the system a short label to associate with the complication. Depending on the watch face and UI context, this can be used for accessibility, for configuration screens, or for fallback displays.</p>
+<p>And <code>.setTapAction(pendingIntent)</code> is the key line: it turns the complication from a static icon into a shortcut that launches the app.</p>
+<h2>Registering the Service in the Manifest</h2>
+<p>The Kotlin code is only half of the setup. The system will not discover your complication provider unless the service is registered correctly in the manifest, with the right intent filter, permission, and meta-data.</p>
+<p>Here is the exact manifest entry we used:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/3329122edb8cf4bb6b85e5fd104444d8.js?file=WearOSComplication.xml"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/3329122edb8cf4bb6b85e5fd104444d8#file-wearoscomplication-xml" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/3329122edb8cf4bb6b85e5fd104444d8#file-wearoscomplication-xml" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Why these attributes matter</h3>
+<p><code><strong>android:permission="com.google.android.wearable.permission.BIND_COMPLICATION_PROVIDER"</strong></code>This is what makes the service a complication provider. It ensures only the system can bind to it. Without this permission, the watch face cannot request complication data.</p>
+<p><code><strong>android:exported="true"</strong></code>The service must be accessible to other processes (the watch face and system UI). That is why it is exported. On modern Android, you have to be explicit about this.</p>
+<p><code><strong><intent-filter></strong></code><strong> with </strong><code><strong>ACTION_COMPLICATION_UPDATE_REQUEST</strong></code>This is how Wear OS identifies the service as a complication data source. When the system needs data, it uses this action to route the request.</p>
+<h3>Supported types and update period</h3>
+<p><code><strong>SUPPORTED_TYPES</strong></code> We only support one type:</p>
+<pre><code class="language-sh">android:value="SMALL_IMAGE"</code></pre>
+<p>That keeps the provider focused and prevents watch faces from trying to use it in incompatible slots. If you later want to support more types, they need to be comma-separated, as the comment notes.</p>
+<p><code><strong>UPDATE_PERIOD_SECONDS</strong></code><strong> </strong>set to <code><strong>0</strong></code></p>
+<p>This signals that the complication does not need periodic updates. That fits our shortcut use case perfectly because the data is static. The system can request data when needed, but it will not wake your app on a schedule just to refresh an icon.</p>
+<h2>Conclusion</h2>
+<p>This complication was intentionally boring in the best way. We did not need scheduling, background refresh, or custom rendering. We just needed a watch face slot that behaved like a shortcut and felt native to Wear OS.</p>
+<p>By implementing a <code>ComplicationDataSourceService</code> that always returns the same <code>SmallImageComplicationData</code>, we kept the runtime logic minimal and predictable. The icon and label establish identity, and the <code>PendingIntent</code> turns the complication into a one tap entry point into the app. The manifest entry finishes the job by making the provider discoverable, limiting supported types to <code>SMALL_IMAGE</code>, and disabling periodic updates with <code>UPDATE_PERIOD_SECONDS</code> set to <code>0</code>.</p>
+<p>If you are building a Wear OS app and want a lightweight way to stay present on the watch, a complication like this is one of the simplest wins you can ship.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-03-26">Mar 26, 2026</time></p>
+      <p>Tags: Android, Android Development, Wearables, Kotlin, Android App Development</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

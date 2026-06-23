@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Fast Feedback: Winning Back 60% of Our CI Time</title>
+  <meta name="description" content="Fast Feedback: Winning Back 60% of Our CI Time Speeding up your build pipeline isn’t just about faster Gradle builds, though that’s a great place to start. I covered that part in a previous …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/fast-feedback-winning-back-60-of-our-ci-time.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Fast Feedback: Winning Back 60% of Our CI Time"/>
+  <meta property="og:description" content="Fast Feedback: Winning Back 60% of Our CI Time Speeding up your build pipeline isn’t just about faster Gradle builds, though that’s a great place to start. I covered that part in a previous …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/fast-feedback-winning-back-60-of-our-ci-time.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*e6MCHibpW3bKuEjFttx_Og.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Fast Feedback: Winning Back 60% of Our CI Time"/>
+  <meta name="twitter:description" content="Fast Feedback: Winning Back 60% of Our CI Time Speeding up your build pipeline isn’t just about faster Gradle builds, though that’s a great place to start. I covered that part in a previous …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*e6MCHibpW3bKuEjFttx_Og.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Fast Feedback: Winning Back 60% of Our CI Time","description":"Fast Feedback: Winning Back 60% of Our CI Time Speeding up your build pipeline isn’t just about faster Gradle builds, though that’s a great place to start. I covered that part in a previous …","image":["https://miro.medium.com/v2/resize:fit:1200/1*e6MCHibpW3bKuEjFttx_Og.jpeg"],"datePublished":"2025-05-09","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/fast-feedback-winning-back-60-of-our-ci-time.html"},"url":"https://jamescullimore.dev/articles/fast-feedback-winning-back-60-of-our-ci-time.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Kotlin • Gradle</p>
+      <h1 class="article-title">Fast Feedback: Winning Back 60% of Our CI Time</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2025-05-09">May 9, 2025</time>
+        <span>&bull;</span>
+        <span>5 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*e6MCHibpW3bKuEjFttx_Og.jpeg" alt="Fast Feedback: Winning Back 60% of Our CI Time"/>
+    </figure>
+    <section class="article-content">
+<p><strong>Speeding up your build pipeline isn’t just about faster Gradle builds, </strong>though that’s a great place to start. I covered that part in a <a href="/how-i-cut-my-gradle-build-time-by-50-8f3c57534ce6">previous article</a>, where I focused on cutting down Gradle build times directly. That alone gave us a solid boost.</p>
+<p>But faster builds aren’t only about saving time, they’re about faster feedback. The quicker your CI pipeline runs, the sooner you know if something broke. That’s not just a convenience; it directly affects how you work. When feedback takes too long, devs end up waiting, context-switching, and losing momentum. On the flip side, quicker pipelines mean faster fixes, fewer merge conflicts, and more confident changes. It improves both your speed and your flow.</p>
+<p>So what happens after your Gradle tweaks are done and you’re still waiting around?</p>
+<p>This article is all about that. These tips aren’t just Gradle tricks, they’re changes that often fly under the radar until you start poking at your CI config, cache behaviour, and job timings. If your builds still feel slow even after streamlining Gradle, this one’s for you.</p>
+<h2>One Size Doesn’t Fit All</h2>
+<p>First, a quick heads-up: CI/CD setups aren’t one-size-fits-all. While platforms like GitHub Actions, GitLab, and Bitrise all follow similar patterns, they each have their quirks. The examples in this post are based on GitLab CI, but the logic applies anywhere. You’ll just need to adapt the syntax for your platform.</p>
+<h2>Document the changes</h2>
+<p>Whatever you try, <strong>track your changes</strong>. Don’t just run the pipeline once and call it a win. Build times can vary run to run, so test each change a few times. Keep notes on what you changed, what you expected, and what the actual results were.</p>
+<p>Yeah, it means some waiting around, but you don’t have to babysit the terminal. Try out a few tweaks across the day and let the results roll in. I used a markdown file like the one below to keep track: simple, effective, and easy to share with the team.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/8dded217c411d80fe4484dce4aa8f2ae.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/8dded217c411d80fe4484dce4aa8f2ae" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/8dded217c411d80fe4484dce4aa8f2ae" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h2>Why I’m Skipping Caching (Mostly)</h2>
+<p>Caching is usually the first thing people reach for and rightly so. It can shave serious time off your builds. But in our case, we were working with a self-hosted GitLab instance that made proper caching… tricky. The infrastructure just didn’t play nice with persistent cache storage.</p>
+<p>So I looked for other wins that didn’t depend on platform-level support or stable shared storage. If you <em>can</em> set up caching properly, go for it, just know that everything in this article works even if you can’t.</p>
+<p>(That said, here are the docs if you can: <a href="https://docs.gitlab.com/ci/caching/">GitLab</a>, <a href="https://github.com/actions/setup-java#caching-packages-dependencies">GitHub</a>, <a href="https://devcenter.bitrise.io/en/dependencies-and-caching/managing-dependencies-for-android-apps.html">Bitrise</a>)</p>
+<h2>Simplifying Stages for Real Speed</h2>
+<p>Our original pipeline had six stages: <code>documentation</code>, <code>build</code>, <code>lint</code>, <code>test</code>, <code>report</code>, and <code>deploy</code>. Sounds neat on paper, but in practice, each stage waited for the one before it. That meant if your doc job failed, you'd never even reach the tests. Not ideal.</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*6RR9c04D9R3gjhRCxqvKGA.png" alt=""/></figure>
+<p>We collapsed everything into just <strong>two</strong> stages: <code>validate</code> and <code>deploy</code>. Then we used <code>only:</code> and <code>except:</code> to run jobs conditionally. Reporting only ran on <code>main</code>, and docs were skipped completely in that branch.</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*mA9y_1mlCGmFGBL04juCzg.png" alt=""/></figure>
+<pre><code class="language-text">assemble
+  except:
+    - dev
+    - main</code></pre>
+<pre><code class="language-text">report
+  only:
+    - dev</code></pre>
+<p>That one change took our pipeline from <strong>12 minutes to 6 </strong>with no loss in coverage or visibility.</p>
+<h2>Delaying Jobs to Beat the Cache</h2>
+<p>Here’s some outside-the-box thinking.</p>
+<p>Since we couldn’t use a shared cache across all jobs, <strong>every job was doing a clean Gradle build</strong>. That meant downloading Gradle each time, which slowed us down, especially for the longest job, which ran over 4 minutes on its own.</p>
+<p>Eventually we enabled <strong>local</strong> caching with <code>policy: pull/push</code>, but only after one job fetched Gradle first.</p>
+<pre><code class="language-text">default:
+  image: …
+  before_script: …
+  cache:
+    key: cache123
+    paths: …
+    policy: pull</code></pre>
+<p>The problem? All jobs ran in parallel. So they all started cold, none got the cache in time.</p>
+<p>So I picked the <strong>fastest</strong> job and added a delay to the others using <code>start_in: 10 seconds</code>. That gave the fast job time to download Gradle and cache it for the rest. It’s a hack, but it worked.</p>
+<pre><code class="language-text">assemble:
+  interruptible: true
+  stage: validate
+  except: …
+  script: …
+  when: delayed
+  start_in: 10 seconds # wait to allow the quickest job to download gradle and cache it
+  artifacts: …</code></pre>
+<p>We consistently saved around <strong>1 minute per pipeline</strong>, and the team agreed it was worth the weirdness.</p>
+<h2>Running Tests in Parallel</h2>
+<p>Running tests in parallel is one of the easiest wins if you’re not doing it already.</p>
+<p>For <strong>unit tests</strong>, it’s as simple as:</p>
+<p>Adding this configuration to your <code>gradle.properties</code></p>
+<pre><code class="language-text">org.gradle.parallel=true</code></pre>
+<p>Adding this task to your <code>build.gradle.kts</code> file</p>
+<pre><code class="language-text">tasks.withType&lt;Test&gt; {
+    maxParallelForks = Runtime.getRuntime().availableProcessors()
+}</code></pre>
+<p>For <strong>instrumented tests</strong>, it depends on your setup, but Android Studio supports running them on multiple devices in parallel. Check out <a href="https://developer.android.com/studio/test/test-in-android-studio#run-multiple-devices-parallel">this guide</a> for more on that.</p>
+<h2>Other Quick Wins</h2>
+<ul><li><strong>Commit more frequently.</strong> I know this sounds like the opposite of what we’ve been told. But more commits mean more chances to catch issues early. For fast pipelines, it works well.</li><li><strong>Increase your container resources.</strong> Most platforms let you scale your runners. GitHub has <a href="https://docs.github.com/en/actions/using-github-hosted-runners/using-larger-runners/about-larger-runners">larger runners</a>, GitLab <a href="https://docs.gitlab.com/ci/runners/hosted_runners/linux/">offers upgrades</a>, and Bitrise lets you buy more capacity.</li></ul>
+<p>Sometimes more CPU is the cheapest fix.</p>
+<h2>Conclusion</h2>
+<p>For the project I worked on, the biggest win came from <strong>simplifying our pipeline stages, </strong>cutting build time by roughly <strong>50%</strong>. The strange little delay trick? That saved <strong>another 10%</strong>.</p>
+<p>None of it was rocket science, but it did take testing, tweaking, and some creativity. Try different ideas. Measure your results. And don’t be afraid to do something that looks weird if it shaves minutes off your build.</p>
+<p>Just make sure you document it. A simple form of documentation can be the difference between guesswork and progress.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2025-05-09">May 9, 2025</time></p>
+      <p>Tags: Android, Kotlin, Gradle, Ci Cd Pipeline, Android App Development</p>
+      <p class="article-footer-copy">&copy; 2025 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

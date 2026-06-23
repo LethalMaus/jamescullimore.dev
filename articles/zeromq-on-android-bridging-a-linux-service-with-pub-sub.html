@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ZeroMQ on Android: Bridging a Linux Service with PUB SUB</title>
+  <meta name="description" content="ZeroMQ on Android: Bridging a Linux Service with PUB SUB In a recent project, we had a deceptively simple requirement. We needed reliable, low latency communication between a small Linux based …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/zeromq-on-android-bridging-a-linux-service-with-pub-sub.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="ZeroMQ on Android: Bridging a Linux Service with PUB SUB"/>
+  <meta property="og:description" content="ZeroMQ on Android: Bridging a Linux Service with PUB SUB In a recent project, we had a deceptively simple requirement. We needed reliable, low latency communication between a small Linux based …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/zeromq-on-android-bridging-a-linux-service-with-pub-sub.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*jKF0CYHnFn0_HY4YdXRiuQ.png"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="ZeroMQ on Android: Bridging a Linux Service with PUB SUB"/>
+  <meta name="twitter:description" content="ZeroMQ on Android: Bridging a Linux Service with PUB SUB In a recent project, we had a deceptively simple requirement. We needed reliable, low latency communication between a small Linux based …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*jKF0CYHnFn0_HY4YdXRiuQ.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"ZeroMQ on Android: Bridging a Linux Service with PUB SUB","description":"ZeroMQ on Android: Bridging a Linux Service with PUB SUB In a recent project, we had a deceptively simple requirement. We needed reliable, low latency communication between a small Linux based …","image":["https://miro.medium.com/v2/resize:fit:1200/1*jKF0CYHnFn0_HY4YdXRiuQ.png"],"datePublished":"2026-03-09","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/zeromq-on-android-bridging-a-linux-service-with-pub-sub.html"},"url":"https://jamescullimore.dev/articles/zeromq-on-android-bridging-a-linux-service-with-pub-sub.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • AndroidDev</p>
+      <h1 class="article-title">ZeroMQ on Android: Bridging a Linux Service with PUB SUB</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-03-09">Mar 9, 2026</time>
+        <span>&bull;</span>
+        <span>11 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*jKF0CYHnFn0_HY4YdXRiuQ.png" alt="ZeroMQ on Android: Bridging a Linux Service with PUB SUB"/>
+    </figure>
+    <section class="article-content">
+<p>In a recent project, we had a deceptively simple requirement. We needed reliable, low latency communication between a small Linux based service and an Android application. There was no cloud component, no HTTP API, and no long lived backend infrastructure. Just two processes on the same machine that needed to talk to each other efficiently and continuously.</p>
+<p>Traditional approaches like REST or gRPC felt unnecessarily heavy for the problem we were solving. We did not need request response semantics, and we did not want to pay the overhead of serialization formats, connection management, or retry logic that comes with them. What we really wanted was a lightweight messaging layer that could push data as it became available and allow the Android app to publish messages back when needed.</p>
+<p>This is where ZeroMQ came into the picture.</p>
+<p>ZeroMQ is not a message broker and it is not a framework. It is a low level messaging library that gives you building blocks like PUB SUB, PUSH PULL, and REQ REP, and lets you wire them together in a way that fits your system. It runs entirely in process, speaks over plain TCP, and works well across different platforms, including Linux and Android.</p>
+<p>In this article, I want to walk through how we used ZeroMQ to connect a Linux service to an Android app using a simple PUB SUB setup. We will look at the actual client implementation we shipped, why it is structured the way it is, and what tradeoffs we encountered along the way.</p>
+<h2>Architecture Overview and Messaging Model</h2>
+<p>Before writing any code, we spent time deciding how the Linux service and the Android app should communicate. Both processes would run on the same device and talk over localhost. There was no requirement for encryption, authentication, or message persistence. What mattered most was simplicity, predictability, and low latency.</p>
+<p>ZeroMQ’s messaging patterns made this decision straightforward.</p>
+<p>From the Android app’s point of view, this results in two independent connections:</p>
+<ul><li>A SUB socket connected to the Linux service’s PUB port for incoming messages</li><li>A PUB socket connected to the Linux service’s SUB port for outgoing messages</li></ul>
+<p>Both sockets run over TCP on localhost, each bound to a dedicated port. This separation keeps message flow explicit and avoids coupling unrelated concerns into a single channel.</p>
+<h2>Android Setup and ZeroMQ Considerations</h2>
+<p>Using ZeroMQ on Android comes with a few practical considerations that are worth calling out early. While ZeroMQ itself is platform agnostic, Android’s runtime, threading model, and lifecycle constraints shape how you integrate it into a real application.</p>
+<p>In our case, we relied on the Java ZeroMQ bindings, which expose the familiar ZContext and ZMQ.Socket APIs. These bindings work well on Android, but they are not lifecycle aware. Once a context or socket is created, it is your responsibility to manage its lifetime explicitly. Failing to do so can easily lead to leaked threads or native resources that outlive the component that created them.</p>
+<p>Threading is the second major concern. ZeroMQ sockets are blocking by default. Calling recv or send on the main thread is not an option, and even short lived operations can introduce jank or ANRs if they are not handled correctly. For this reason, all socket creation and message handling is pushed onto background threads.</p>
+<p>Kotlin coroutines are a natural fit here. They allow us to offload work to Dispatchers.IO, keep the code readable, and still coordinate state changes back to the main thread when needed. The client implementation you will see later uses coroutines to manage connection setup, message reception, and cleanup without exposing threading concerns to the rest of the app.</p>
+<p>Another important detail is that ZeroMQ does not automatically reconnect sockets if something goes wrong. If a connection drops or a socket fails, you need to decide how to react. In our setup, we kept things intentionally simple. The client reports connection state changes via a callback and leaves reconnection strategies to the caller. This keeps the ZeroMQ client focused on communication, not policy.</p>
+<p>With these constraints in mind, we wrapped all ZeroMQ related logic in a single class. This class owns the context, sockets, and coroutines, and exposes a small, clear API to the rest of the application.</p>
+<h2>Adding ZeroMQ to an Android Project</h2>
+<p>To use ZeroMQ on Android, we relied on <strong>JeroMQ</strong>, the pure Java implementation of ZeroMQ. This is an important distinction. JeroMQ does not require native binaries or NDK integration, which keeps the setup straightforward and avoids ABI related issues.</p>
+<p>In this project, dependencies are managed using a version catalog. The ZeroMQ dependency is defined once and referenced consistently across modules.</p>
+<p>First, we declare the version:</p>
+<pre><code class="language-text">jeromq = "0.6.0"</code></pre>
+<p>Next, we define the actual library entry:</p>
+<pre><code class="language-text">jeromq = { group = "org.zeromq", name = "jeromq", version.ref = "jeromq" }</code></pre>
+<p>With this in place, the dependency can be added to an Android module like any other library:</p>
+<pre><code class="language-text">implementation(libs.jeromq)</code></pre>
+<p>Using JeroMQ means the ZeroMQ context and sockets live entirely within the JVM. This aligns well with Android’s process model and makes resource management more predictable. The tradeoff is that you are not using the native ZeroMQ implementation, but for local, low latency communication, this approach has proven more than sufficient.</p>
+<p>Once the dependency is added, no additional configuration is required. You can create a <code>ZContext</code>, open sockets, and start sending or receiving messages immediately.</p>
+<h2>The ZeroMqClient Class and Its Responsibilities</h2>
+<p>At the center of the Android side implementation is a single class: <code>ZeroMqClient</code>. Its job is to hide all ZeroMQ specific details behind a small, predictable API that the rest of the app can interact with safely.</p>
+<p>The class is responsible for:</p>
+<ul><li>Creating and owning the ZeroMQ context</li><li>Managing one SUB socket for incoming messages</li><li>Managing one PUB socket for outgoing messages</li><li>Running blocking socket operations off the main thread</li><li>Exposing callbacks for messages and connection state</li><li>Cleaning up all resources deterministically</li></ul>
+<p>Rather than exposing sockets directly, the class takes a configuration driven approach. Ports for subscribing and publishing are optional, which makes it possible to use the client in a receive only, send only, or bidirectional mode depending on the use case.</p>
+<p>Here is the full class definition as it exists in the project:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/1920acde7fe40501054c9d25e73348fe.js?file=ZeroMq.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/1920acde7fe40501054c9d25e73348fe#file-zeromq-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/1920acde7fe40501054c9d25e73348fe#file-zeromq-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The class implements <code>Closeable</code>, which makes its lifecycle explicit. When <code>close</code> is called, the expectation is that all background work stops and all native resources are released. This becomes important later when tying the client to an Android component lifecycle.</p>
+<p>The <code>subPort</code> and <code>pubPort</code> parameters are nullable. This allows the client to conditionally create sockets based on what the caller needs, without introducing multiple implementations or flags.</p>
+<p>Callbacks are also passed in rather than exposed as flows or observables. This was a deliberate choice to keep the client lightweight and free of framework level dependencies. Higher level layers in the app are free to adapt these callbacks into StateFlow, LiveData, or any other abstraction if needed.</p>
+<p>Finally, internal state like the ZeroMQ context, sockets, and coroutine job are all kept private. The rest of the app never needs to know how messages are received or sent, only that they are.</p>
+<h2>Connecting and Initializing the Sockets</h2>
+<p>The <code>connect()</code> function is where the client transitions from a plain object into an active ZeroMQ participant. The goal is simple: create a context, create whichever sockets are needed, connect them to localhost, and start receiving messages if a SUB port is configured.</p>
+<p>A few constraints shape the implementation:</p>
+<ul><li>We never want to block the main thread.</li><li>We want SUB and PUB sockets to be optional.</li><li>We want the rest of the app to know whether we connected successfully.</li></ul>
+<p>Here is the <code>connect()</code> implementation exactly as used:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/21350ef2e4e6cb4039020de49517580d.js?file=ZeroMq.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/21350ef2e4e6cb4039020de49517580d#file-zeromq-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/21350ef2e4e6cb4039020de49517580d#file-zeromq-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The early return <code>if (isRunning) return</code> prevents duplicate connections. Without this guard, it would be easy to create multiple contexts and sockets, which quickly turns into confusing behavior and resource leaks.</p>
+<p>All setup is launched on <code>Dispatchers.IO</code>. Socket creation and <code>connect()</code> calls are not operations you want to risk running on the main thread. This also gives us room to add retries or timeouts later without changing the calling code.</p>
+<p>Both sockets connect to <code>tcp://127.0.0.1:<port></code>. That is a key part of the original requirement: local communication between the Linux service and the Android app.</p>
+<p>Finally, the connection callback is invoked on the main dispatcher. Even if the callback only toggles state, updating UI state from a background thread is a common source of subtle issues, so it is handled explicitly.</p>
+<p>If anything fails during setup, the code logs the error, reports a failed connection state, and calls <code>close()</code> to ensure partially created resources do not stick around.</p>
+<h2>Receiving Messages with Coroutines</h2>
+<p>Once the SUB socket is connected, the next problem is straightforward but important: keep listening without blocking the app, and deliver messages to the rest of the code as they arrive.</p>
+<p>That is what <code>startReceiving()</code> does. It runs a loop on a background dispatcher, blocks on <code>recvStr()</code>, and forwards each received message through the callback.</p>
+<p>Here is the implementation exactly as used:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/f2542662874b39c9d3b6bd75a7ec28aa.js?file=ZeroMq.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/f2542662874b39c9d3b6bd75a7ec28aa#file-zeromq-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/f2542662874b39c9d3b6bd75a7ec28aa#file-zeromq-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p><code>recvStr()</code> is a blocking call. That is fine here because this coroutine runs on <code>Dispatchers.IO</code>. The thread can wait for messages without impacting UI responsiveness.</p>
+<p>The loop condition checks both <code>isRunning</code> and <code>subSocket != null</code>. This gives you a quick, readable way to stop receiving when the client is closed or if the socket is cleaned up unexpectedly. Combined with <code>receiveJob?.cancel()</code> in <code>close()</code>, it provides two layers of stopping behavior: state based exit and coroutine cancellation.</p>
+<p>Messages are passed upward through <code>messageCallback</code>. This keeps the class focused on transport concerns, not on how the message will be interpreted. In practice, the callback is where the app can parse JSON, update a <code>StateFlow</code>, or route events deeper into the application.</p>
+<p>One small logging note: the log tag says “Server received message,” but this code is on the client side receiving messages from the server. If you keep this as is, it still works, but it can be misleading when debugging. Whether you want to adjust that is a style call, but it is worth being aware of.</p>
+<p>Errors are caught and logged, but the coroutine is not restarted automatically. This matches the lightweight design of the client. Connection policy (retry, reconnect, backoff) can be implemented one layer above if needed.</p>
+<h2>Sending Messages Back with sendMessage()</h2>
+<pre><code class="language-text">sendMessage()</code></pre>
+<p>Receiving messages is only half of the story. The Android app also needs a simple way to publish messages back to the Linux service.</p>
+<p>The <code>sendMessage()</code> function is intentionally small. It validates that the client is running and that the PUB socket exists, then sends the message and logs the result.</p>
+<p>Here is the implementation exactly as used:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/f4ccb13e55be0932526e08d4b014a531.js?file=ZeroMq.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/f4ccb13e55be0932526e08d4b014a531#file-zeromq-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/f4ccb13e55be0932526e08d4b014a531#file-zeromq-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>First, the method handles the common misuse case up front. If the client was created without a <code>pubPort</code>, or if <code>connect()</code> has not established the PUB socket yet, we fail fast with a clear log message. This avoids silent drops where the app “thinks” it sent something but nothing actually happened.</p>
+<p>Third, errors are narrowed down to <code>ZMQException</code>. This keeps the catch focused on what you realistically expect from the socket send operation, rather than swallowing everything.</p>
+<p>If you later evolve this into a request response pattern, this is the exact place where the shape of the API would change. You would likely swap PUB for REQ on the Android side, and introduce a blocking receive or a suspend function that returns a value. For the current design, a fire and forget send is the right match.</p>
+<h2>Cleanup, Lifecycle, and Closing the Client Safely</h2>
+<p>On Android, resource management is not optional. A ZeroMQ context and its sockets may hold native resources under the hood, and the receive loop can keep running long after the UI component that created it is gone unless you shut it down deliberately.</p>
+<p>That is why this client implements <code>Closeable</code> and puts all teardown logic in <code>close()</code>.</p>
+<p>Here is the implementation exactly as used:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/4c17d4d672429766839a338f82d1df0b.js?file=ZeroMq.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/4c17d4d672429766839a338f82d1df0b#file-zeromq-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/4c17d4d672429766839a338f82d1df0b#file-zeromq-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Stop the receive loop</h3>
+<p>The first line sets <code>isRunning = false</code>. That is enough to make the <code>while (isRunning && subSocket != null)</code> loop in <code>startReceiving()</code> exit naturally.</p>
+<p>Then <code>receiveJob?.cancel()</code> adds a second shutdown mechanism. Cancellation matters because <code>recvStr()</code> is blocking. In practice, cancellation and closing the socket together are what help the coroutine unwind instead of waiting forever.</p>
+<h3>Release sockets and context</h3>
+<p>Sockets are closed first, then the context:</p>
+<ul><li><code>subSocket?.close()</code></li><li><code>pubSocket?.close()</code></li><li><code>context?.close()</code></li></ul>
+<p>This order keeps the teardown predictable. In a system like this, you want to avoid leaving sockets alive after the context is already gone.</p>
+<h3>Report state changes on the main thread</h3>
+<p>After disconnecting, the client reports the connection state through:</p>
+<pre><code class="language-text">CoroutineScope(Dispatchers.Main).launch { onConnectionChanged?.invoke(false) }</code></pre>
+<p>This matches the approach used in <code>connect()</code>: state updates are routed back through the main dispatcher so callers can safely update UI state.</p>
+<p>Finally, the <code>finally</code> block sets references to null. This is less about correctness and more about making the object clearly “closed” and eligible for garbage collection without lingering references.</p>
+<h2>Conclusion</h2>
+<p>This setup worked because it kept the problem small and treated messaging as infrastructure, not as an architecture statement. We had a Linux service that needed to broadcast updates, and an Android app that needed to react quickly and occasionally publish messages back. ZeroMQ gave us that with minimal overhead and without pulling in a broker, an HTTP layer, or a heavier RPC stack.</p>
+<p>The <code>ZeroMqClient</code> is intentionally narrow. It owns the ZeroMQ context and sockets, it does all blocking work on <code>Dispatchers.IO</code>, and it exposes only what the rest of the app needs: <code>connect()</code>, <code>sendMessage()</code>, a message callback, and a connection state callback. The lifecycle is explicit through <code>Closeable</code>, and cleanup is centralized so sockets do not outlive the component that created them.</p>
+<p>If you are considering something similar, the main tradeoff to keep in mind is that PUB SUB is not request response. You are optimizing for streaming updates and loose coupling, not acknowledgements and guaranteed delivery. That is a great fit for local, low latency communication, but it is still a design choice you should make intentionally.</p>
+<p>In our case, that choice paid off. We got a clean, lightweight channel between the Linux service and the Android app, and we kept the implementation small enough that it remained easy to debug and maintain.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-03-09">Mar 9, 2026</time></p>
+      <p>Tags: Android, Android App Development, AndroidDev, Kotlin, Android Development</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

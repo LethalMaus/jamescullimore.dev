@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>How I Used Perfetto to Separate Real Startup Improvements From Plausible Ones</title>
+  <meta name="description" content="How I Used Perfetto to Separate Real Startup Improvements From Plausible Ones By the time I opened Perfetto, the app was already faster. That was the problem. The easy version of startup work is when …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/how-i-used-perfetto-to-separate-real-startup-improvements-from-plausible-ones.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="How I Used Perfetto to Separate Real Startup Improvements From Plausible Ones"/>
+  <meta property="og:description" content="How I Used Perfetto to Separate Real Startup Improvements From Plausible Ones By the time I opened Perfetto, the app was already faster. That was the problem. The easy version of startup work is when …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/how-i-used-perfetto-to-separate-real-startup-improvements-from-plausible-ones.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*zpbAbI_8a1lwD938CkykEw.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="How I Used Perfetto to Separate Real Startup Improvements From Plausible Ones"/>
+  <meta name="twitter:description" content="How I Used Perfetto to Separate Real Startup Improvements From Plausible Ones By the time I opened Perfetto, the app was already faster. That was the problem. The easy version of startup work is when …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*zpbAbI_8a1lwD938CkykEw.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"How I Used Perfetto to Separate Real Startup Improvements From Plausible Ones","description":"How I Used Perfetto to Separate Real Startup Improvements From Plausible Ones By the time I opened Perfetto, the app was already faster. That was the problem. The easy version of startup work is when …","image":["https://miro.medium.com/v2/resize:fit:1200/1*zpbAbI_8a1lwD938CkykEw.jpeg"],"datePublished":"2026-04-20","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/how-i-used-perfetto-to-separate-real-startup-improvements-from-plausible-ones.html"},"url":"https://jamescullimore.dev/articles/how-i-used-perfetto-to-separate-real-startup-improvements-from-plausible-ones.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • Android Development</p>
+      <h1 class="article-title">How I Used Perfetto to Separate Real Startup Improvements From Plausible Ones</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-04-20">Apr 20, 2026</time>
+        <span>&bull;</span>
+        <span>9 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*zpbAbI_8a1lwD938CkykEw.jpeg" alt="How I Used Perfetto to Separate Real Startup Improvements From Plausible Ones"/>
+    </figure>
+    <section class="article-content">
+<p>By the time I opened Perfetto, the app was already faster.</p>
+<p>That was the problem.</p>
+<p>The easy version of startup work is when the app is obviously doing too much, the benchmark is ugly, and almost any sensible cleanup buys you something. The harder version comes later, when the app is already in decent shape and the next round of changes can be justified a little too easily.</p>
+<p>That is where I was.</p>
+<p>I already had startup benchmarks. I already had a baseline profile. A broader cleanup pass had already taken a meaningful chunk out of launch time. The chart looked good enough that I could have stopped there and told a clean story about a modern Android app getting faster.</p>
+<p>But I did not trust the remaining startup path enough to stop.</p>
+<p>I could measure it, but I could not always explain it. Some work seemed to happen “around startup” without a crisp answer to whether it was actually blocking first draw, safely deferred, duplicated, or just arriving at an awkward time. That kind of uncertainty is where weak performance changes come from. You start editing code not because the evidence is strong, but because the shape of the code makes a theory feel plausible.</p>
+<p>That is where Perfetto entered the story.</p>
+<p>Not as the hero. Not as the biggest win. As the point where I stopped letting plausible explanations count as evidence.</p>
+<p>If you have read the earlier startup piece, this is the follow-up to that story, not a replacement for it. The first article was about finding a meaningful startup win in a modern Compose app and proving it with benchmarks. This one is about the more interesting question that came after that:</p>
+<blockquote><p>which part of the work actually deserved to stay?</p></blockquote>
+<h2>This Was A Follow-Up To Real Startup Work, Not The Start Of It</h2>
+<p>The important context is that Perfetto was not competing against a bad baseline. It arrived after two earlier stages had already done real work:</p>
+<ul><li>baseline profiles had already shown a repeatable win</li><li>a broader cleanup pass had already taken a large chunk out of startup</li></ul>
+<p>That matters because it changes the standard.</p>
+<p>When you are early in startup work, almost any sensible improvement feels exciting. When you are late in startup work, excitement is cheap. You need a way to separate “this looks plausible” from “this survives measurement.”</p>
+<p>That is the real reason I value Perfetto here.</p>
+<p>If you want the longer backstory on how the app got to that point, read the earlier piece first:</p>
+<h2>How I Found a 34% Startup Win in a Modern Compose App</h2>
+<h3>It is easy to assume the big startup wins are already gone once an Android app is modern, uses Compose, has reasonable…</h3>
+<p>levelup.gitconnected.com</p>
+<p>This follow-up is about the narrower question the first article only hinted at: once the app is already faster, what does tracing still buy you?</p>
+<h2>The Benchmark Story Looked Good Before Perfetto Ever Showed Up</h2>
+<p>Before the tracing pass, the startup work already had a credible shape.</p>
+<p>On the original validated tree, the baseline profile alone saved:</p>
+<ul><li>`112 ms` on the main flow</li><li>`126 ms` on the setup flow</li></ul>
+<p>That is `238 ms` combined across the two startup paths.</p>
+<p>Then the broader cleanup pass landed, and that changed the absolute startup numbers much more dramatically. Relative to the earlier validated state, the profiled startup medians dropped by another `248 ms` combined.</p>
+<p>That is a substantial result already. It would have been easy to stop there, package the numbers into a clean chart, and call the story done.</p>
+<p>I still did not trust the remaining startup path enough to stop.</p>
+<p>There were still places where the app felt like it was doing work “somewhere around startup,” without a crisp explanation of whether that work was on the critical path, safely deferred, duplicated, or just showing up at an awkward time.</p>
+<p>That is the kind of uncertainty that creates bad follow-up work.</p>
+<h2>Perfetto Arrived At The Exact Point Where It Could Be Misused</h2>
+<p>This is the part I do not think performance articles say often enough.</p>
+<p>Tracing is easiest to misuse when the app is already in decent shape.</p>
+<p>At that point, you open a trace, see a service start early, or a network check, or a callback sequence, and you can easily talk yourself into a “clever” lifecycle rewrite that looks technical and disciplined. Sometimes it is a good change. Sometimes it is just a fancy way to create new uncertainty.</p>
+<p>That was the risk here.</p>
+<p>I did make some changes during this stage that looked plausible and did not earn the right to stay. That was not a failure of the process. That was the process working.</p>
+<p>The useful outcome was not “Perfetto showed me a giant hidden bottleneck.” The useful outcome was:</p>
+<ul><li>it showed which work was really happening before first draw</li><li>it verified that some checks could move safely after first draw</li><li>it showed when a service-side idea was still too noisy or inconclusive to keep</li></ul>
+<p>That is a much more mature kind of win than a chart alone can show. It is less satisfying on a slide, but much more useful in a real codebase.</p>
+<p>The trace labels themselves were simple:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/ddb25fb37b016fb3d4bc86a1dc21d5dc.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/ddb25fb37b016fb3d4bc86a1dc21d5dc" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/ddb25fb37b016fb3d4bc86a1dc21d5dc" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This was not sophisticated instrumentation. It was just enough structure to stop talking vaguely about “startup work” and start asking which slice was actually landing before first draw.</p>
+<h2>The Best Perfetto-Driven Change Was Small, Specific, And Boring</h2>
+<p>The most defensible tracing-driven optimization was not some grand architectural rewrite.</p>
+<p>It was moving a cluster of home screen startup checks out of the visible launch path:</p>
+<ul><li>the initial file watcher</li><li>the initial network validation</li><li>the first server ping</li></ul>
+<p>Those checks still mattered. They just did not need to compete with first draw.</p>
+<p>Once the traces were in place, the question became much simpler:</p>
+<p>are these checks blocking visible startup for a good reason, or are they just happening early because nobody ever forced the issue?</p>
+<p>The answer was the second one.</p>
+<p>So the change was to let the first frame land, report fully drawn, and then enable that first round of monitoring and connectivity work. Normal traces after that change showed the slices where they should have been: after first draw, not before it.</p>
+<p>The pseudocode version of that change is here:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/a59aaf6f105f93acf73c04514d58c487.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/a59aaf6f105f93acf73c04514d58c487" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/a59aaf6f105f93acf73c04514d58c487" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That is not the sort of optimization that gets people excited on social media. It is exactly the sort of optimization that tends to survive contact with reality.</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*mTyH65mLxUvSDi4Pd7iCxw.png" alt=""/></figure>
+<h2>The Most Valuable Perfetto Contribution Was Rejecting Work</h2>
+<p>This was the real lesson for me.</p>
+<p>The raw savings from the final Perfetto-guided pass were positive, but smaller than the earlier stages:</p>
+<ul><li>`142 ms` combined on the `verify` side</li><li>`44.5 ms` combined on the `speed-profile` side</li></ul>
+<p>If you stare only at those numbers, you can make Perfetto sound optional. I think that misses the point.</p>
+<p>By this stage, the app was already much healthier. The remaining job was not to discover one more giant win. It was to keep the last round of work honest.</p>
+<p>Perfetto helped do that by making it possible to say:</p>
+<ul><li>this change clearly moved work off the critical path, keep it</li><li>this change improved attribution without changing behavior, keep it</li><li>this service-lifecycle tweak is not producing a clean enough result, revert it</li></ul>
+<p>One example of that last category was a deferred runtime startup path that looked reasonable on paper:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/2548569342be9ba71b4f5e62a027001d.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/2548569342be9ba71b4f5e62a027001d" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/2548569342be9ba71b4f5e62a027001d" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That kind of change is exactly where tracing was useful. It was easy to invent a tidy explanation for why moving service and client startup later should help. It was much harder to prove that the resulting trace was cleaner, quieter, and worth the added lifecycle complexity. In this case, that standard mattered more than whether the idea sounded disciplined.</p>
+<p>That is why I would not describe this stage as “Perfetto made startup fast.” Cleanup had already done more of that. Baseline profiles had already done more of that.</p>
+<p>I would describe it like this instead:</p>
+<blockquote><p>Perfetto made the remaining startup work strict enough that only the defensible changes survived.</p></blockquote>
+<p>That is not flashy, but it is exactly what late-stage performance work needs. Late-stage work is rarely about heroics. It is about becoming harder to fool.</p>
+<h2>The Step-By-Step Comparison Is More Interesting Than The Final Number</h2>
+<p>The final startup number is good, but the sequence is better.</p>
+<p>What the sequence shows is that different tools paid off in different ways:</p>
+<ul><li>baseline profiles delivered the first clean, measurable win</li><li>cleanup work delivered the biggest absolute savings</li><li>Perfetto delivered smaller direct gains, but much better decision quality</li></ul>
+<p>That is the part I would want another team to take away.</p>
+<p>There is a tendency to assume the last tool in the story deserves the most credit. That is how people end up talking about tracing as if the trace itself were the optimization.</p>
+<p>It is not.</p>
+<p>The trace is the thing that gives you enough visibility to know whether the optimization deserves to exist.</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*t7cyNzM0b5JMHZIeI4IzEQ.png" alt=""/></figure>
+<h2>What This Follow-Up Changed In My Head</h2>
+<p>The earlier startup article left me with one broad conclusion: a lot of meaningful startup work does not begin as “startup optimization.”</p>
+<p>This follow-up added a second conclusion:</p>
+<blockquote><p>once the big wins are gone, the hardest part is often refusing to keep the changes that only looked smart.</p></blockquote>
+<p>That is why I now think of Perfetto less as a “find the bottleneck” tool and more as a truth serum for late-stage performance work.</p>
+<p>It is still useful earlier than that, of course. But its value here was not that it revealed some shocking secret. Its value was that it tightened the standard.</p>
+<p>It forced the final round of changes to answer harder questions:</p>
+<ul><li>did this actually move work later?</li><li>did it help the critical path or just shuffle code around?</li><li>did the benchmark improve?</li><li>if the trace is still ambiguous, why am I keeping this?</li></ul>
+<p>Those questions saved me from keeping more weak changes than the trace directly saved in milliseconds. That may be the most honest way to describe the value of tracing once the obvious wins are gone.</p>
+<h2>What I Would Repeat Next Time</h2>
+<p>If I were doing this again on another app, the sequence I would trust is:</p>
+<ol><li>Benchmark the real startup paths, not just one launcher case.</li><li>Validate baseline profiles instead of assuming they help.</li><li>Do the cleanup work that makes the startup path healthier.</li><li>Add tracing when the next question is no longer “is startup slow?” but “why is this still happening here?”</li><li>Keep only the changes that improve either startup time or startup clarity enough to justify their complexity.</li></ol>
+<p>That last clause matters.</p>
+<p>I do not think every performance change needs to pay off in raw milliseconds. Some are worth keeping because they make the system easier to reason about and future regressions easier to catch.</p>
+<p>But even then, I still want them to earn their keep.</p>
+<p>Perfetto did.</p>
+<p>Not because it was the biggest startup win, but because it helped make the final startup story believable.</p>
+<h2>Closing Thought</h2>
+<p>I think that is the part performance stories often flatten too aggressively. We like the version where one technique wins, one chart proves it, and the lesson fits neatly into a conclusion.</p>
+<p>That is not what this one felt like.</p>
+<p>This one felt like getting the obvious gains first, then discovering that the last stretch of performance work was less about finding one more miracle and more about refusing to lie to myself. Refusing to keep changes because they sounded advanced. Refusing to give a trace credit for savings it did not create. Refusing to treat “probably better” as the same thing as “measured and explained.”</p>
+<p>That is why I still think Perfetto was worth doing, even though it was not the biggest source of startup savings.</p>
+<p>Baseline profiles got the first clean compilation gain. Cleanup did most of the heavy lifting. Perfetto made the final round of work strict enough that I trusted what was left standing.</p>
+<p>And in the long run, that may be the more valuable result anyway.</p>
+<p>A faster startup is good. A startup path you can actually explain is better. A workflow that teaches you which changes are real is the part you get to keep on the next app.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-04-20">Apr 20, 2026</time></p>
+      <p>Tags: Android, Android App Development, Android Development, Performance, Kotlin</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

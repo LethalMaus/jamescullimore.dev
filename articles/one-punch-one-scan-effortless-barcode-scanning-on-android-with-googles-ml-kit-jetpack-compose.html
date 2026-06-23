@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit &amp; Jetpack Compose</title>
+  <meta name="description" content="One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit &amp; Jetpack Compose With so many smart gadgets and QR codes in the world today, it might feel like we’re caught in a …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/one-punch-one-scan-effortless-barcode-scanning-on-android-with-googles-ml-kit-jetpack-compose.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit &amp; Jetpack Compose"/>
+  <meta property="og:description" content="One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit &amp; Jetpack Compose With so many smart gadgets and QR codes in the world today, it might feel like we’re caught in a …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/one-punch-one-scan-effortless-barcode-scanning-on-android-with-googles-ml-kit-jetpack-compose.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1176/1*z6D9gYMNzEFx9KIPDkHEfw.png"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit &amp; Jetpack Compose"/>
+  <meta name="twitter:description" content="One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit &amp; Jetpack Compose With so many smart gadgets and QR codes in the world today, it might feel like we’re caught in a …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1176/1*z6D9gYMNzEFx9KIPDkHEfw.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit & Jetpack Compose","description":"One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit & Jetpack Compose With so many smart gadgets and QR codes in the world today, it might feel like we’re caught in a …","image":["https://miro.medium.com/v2/resize:fit:1176/1*z6D9gYMNzEFx9KIPDkHEfw.png"],"datePublished":"2024-04-16","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/one-punch-one-scan-effortless-barcode-scanning-on-android-with-googles-ml-kit-jetpack-compose.html"},"url":"https://jamescullimore.dev/articles/one-punch-one-scan-effortless-barcode-scanning-on-android-with-googles-ml-kit-jetpack-compose.html","inLanguage":"en"}</script>
+  <script src="assets/link-preview.js" defer></script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • Kotlin</p>
+      <h1 class="article-title">One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit &amp; Jetpack Compose</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2024-04-16">Apr 16, 2024</time>
+        <span>&bull;</span>
+        <span>5 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1176/1*z6D9gYMNzEFx9KIPDkHEfw.png" alt="One Punch, One Scan: Effortless Barcode Scanning on Android with Google’s ML Kit &amp; Jetpack Compose"/>
+    </figure>
+    <section class="article-content">
+<p>With so many smart gadgets and QR codes in the world today, it might feel like we’re caught in a complicated maze of connectivity issues. Wouldn’t it be fantastic if we could simplify the difficult process of scanning barcodes and connecting to IoT devices on our Android smartphones in the same way that Saitama from “One Punch Man” destroys his adversaries with a single punch? Your wish has just been realised, thanks to Google’s ML Kit and Jetpack Compose, and you won’t need Saitama’s superhuman power to achieve it!</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developers.google.com/ml-kit/vision/barcode-scanning" target="_blank" rel="noopener noreferrer" data-preview-url="https://developers.google.com/ml-kit/vision/barcode-scanning" data-preview-title="Barcode scanning | ML Kit | Google for Developers" data-preview-description="With ML Kit&#x27;s barcode scanning API, you can read data encoded using most standard barcode formats. Barcode scanning…" data-preview-site="developers.google.com">Barcode scanning | ML Kit | Google for Developers</a></div>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/jetpack/compose" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/jetpack/compose" data-preview-title="Jetpack Compose UI App Development Toolkit - Android Developers" data-preview-description="Discover Jetpack Compose, Android&#x27;s UI app development toolkit and resources that can help accelerate the creation of…" data-preview-site="developer.android.com">Jetpack Compose UI App Development Toolkit - Android Developers</a></div>
+<p>We’re going to begin on a fascinating adventure to deconstruct the art of barcode reading on Android, making it as simple as Saitama’s quick knockout techniques. This guide will be your Genos, directing you through the procedure with precision and accuracy, whether you’re at an event, trying to find your way around, or connecting to a new smart gadget. We’ll help you feel like a superhero in the realm of mobile technology by streamlining the procedures to connect with the Internet of Things and instantly scan QR codes for in-app data. So put on your hero gear and let’s get this journey started, because barcode-busting awaits!</p>
+<p>Now, before we leap into action like Saitama chasing a mosquito, let’s take care of some technical details — the dependencies and AndroidManifest.xml configurations. Think of it as the warm-up exercise before our heroics!</p>
+<h2>Dependencies</h2>
+<p>In the Android realm, heroes need their tools, and in our case, we need the right dependencies to wield the power of barcode scanning with Google’s ML Kit. So, let’s gear up with the following dependencies — just like S-Class heroes assemble:</p>
+<pre><code class="language-sh">implementation("androidx.camera:camera-core:1.3.0")
+implementation("androidx.camera:camera-camera2:1.3.0")
+implementation("androidx.camera:camera-lifecycle:1.3.0")
+implementation("androidx.camera:camera-view:1.3.0")
+implementation("com.google.mlkit:barcode-scanning:17.2.0")</code></pre>
+<p>These dependencies are like your trusty sidekicks, each serving a crucial role in our quest to scan barcodes effortlessly. The CameraX library (androidx.camera) ensures we have the necessary camera functionality, while Google’s ML Kit (com.google.mlkit) equips us with the barcode-scanning superpowers.</p>
+<h2>AndroidManifest.xml</h2>
+<p>Every hero needs a permit to carry out their heroic deeds, right? So, we’ve got to add these permissions and features to our AndroidManifest.xml, just like Saitama registering for the Hero Association:</p>
+<pre><code class="language-sh">&lt;uses-feature
+    android:name="android.hardware.camera"
+    android:required="false" /&gt;
+&lt;uses-permission android:name="android.permission.CAMERA" /&gt;</code></pre>
+<p>The  tag states our reliance on the camera hardware, and we’re being modest about it — it’s not absolutely required. Meanwhile, the  tag grants us the permission to access the camera. Think of it as us asking for permission to join the fight against the barcode chaos. With these declarations in place, we’re all set to conquer the realm of barcode scanning, just like Saitama demolishing monsters with his nonchalant punches!</p>
+<h2>Permission to Succeed</h2>
+<p>Ah, the grand act of securing permission to wield the camera — it’s like Saitama asking for permission to go grocery shopping in a supermarket filled with monsters! So, put on your hero suit and get ready to navigate the permissions maze using some nifty code and a dash of humor.</p>
+<h2>Securing the Permission</h2>
+<p>First, we’ll need a way to manage our permission state. It’s a bit like Saitama gauging the threat level of a monster before deciding how seriously he should take it. In our case, we can use the awesome rememberPermissionState from com.google.accompanist:accompanist-permissions to manage the camera permission state. It’s like our hero’s internal alarm system for granting or denying access:</p>
+<pre><code class="language-sh">val permissionState = rememberPermissionState(Manifest.permission.CAMERA)</code></pre>
+<p>Now, let’s ensure that we get the camera permission when the time is right. Just like Saitama’s “OK” punch to finish a foe in one blow, we’ll request permission only when it’s necessary. Here’s how we set this up:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/05502bb707275f54504dc3fe00581c98.js?file=barcodescanner.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/05502bb707275f54504dc3fe00581c98#file-barcodescanner-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/05502bb707275f54504dc3fe00581c98#file-barcodescanner-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Here, we’re keeping an eye on the app’s lifecycle and, just like Saitama springing into action when monsters show up, we’re launching the permission request during the ON_RESUME event. But remember, we do this only if we don’t already have the permission — we’re not overly aggressive like our caped hero.</p>
+<p>With this setup, you’re all set to handle camera permissions gracefully and efficiently, just like Saitama handles monsters in his casual, one-punch style. Time to conquer the barcode world with permission in hand!</p>
+<h2>Lights, Camera, SCAN!</h2>
+<p>The camera preview view, just like Saitama’s casual demeanor, may appear simple, but it’s your gateway to scanning WiFi QR codes with precision and style. So, gear up, and let’s dive into this action-packed code block!</p>
+<h2>Unveiling the Camera PreviewView</h2>
+<p>Imagine the camera preview view as Saitama standing at the ready, waiting for the next big challenge. We create this view with some nifty code, and it’s a real gem:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/b066d6999b17a5f8e26fa020e6b19c66.js?file=barcodescanner2.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/b066d6999b17a5f8e26fa020e6b19c66#file-barcodescanner2-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/b066d6999b17a5f8e26fa020e6b19c66#file-barcodescanner2-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Just like our bald hero’s routine look, this code does some impressive behind-the-scenes work. It creates a preview view that will display what your camera sees, but with the Saitama-level nonchalance.</p>
+<p>The PreviewView is your canvas, and you can specify its scaleType to control how the camera’s view fills the space. It’s like our hero choosing his punch style for the day — simple yet effective.</p>
+<p>So, with your Camera PreviewView in place, you’re ready to tackle WiFi QR codes like a pro. Just remember, even though it may look effortless, Saitama’s power comes from a solid foundation, and your Camera PreviewView is your foundation in the world of barcode scanning! Time to bring out your inner hero and scan those WiFi QR codes with style!</p>
+<h2>Conclusion</h2>
+<p>In the larger scope of Android programming, activities like barcode scanning and device connectivity might feel as epic as Saitama’s bouts, but with the correct tools, they can be just as simple. We’ve set out to perfect the art of scanning WiFi QR codes using Google’s ML Kit, Jetpack Compose, and a splash of levity. It’s like Saitama walking across the park, punching his way past any impediments with a nonchalant “OK.”</p>
+<p>We’re well on our way to being barcode-busting heroes, thanks to our trusty Camera PreviewView. Simplifying these activities may make you feel as powerful as Saitama after his morning exercise, whether you’re at an event trying to figure out whose booth you visited or connecting to a smart gadget in your house.</p>
+<p>But our trip isn’t over yet! If you’re looking for more Jetpack Compose examples and Android sorcery, see WiFiWizard.</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://github.com/LethalMaus/WiFiWizard" target="_blank" rel="noopener noreferrer" data-preview-url="https://github.com/LethalMaus/WiFiWizard" data-preview-title="GitHub - LethalMaus/WiFiWizard: An example Android project using Jetpack Compose showing how to a…" data-preview-description="An example Android project using Jetpack Compose showing how to a WiFi programmatically. - GitHub …" data-preview-site="github.com">GitHub - LethalMaus/WiFiWizard: An example Android project using Jetpack Compose showing how to a…</a></div>
+<p>It’s your road map to more programmable WiFi connections and even AdMob. Your path in Android development is far from complete, just as Saitama continues to test his limits in the realm of heroes. So, arm yourself, remain amazing, and let’s keep smashing through those Android difficulties!</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2024-04-16">Apr 16, 2024</time></p>
+      <p>Tags: Android, Android App Development, Kotlin, Ml Kit, Barcode Scanner</p>
+      <p class="article-footer-copy">&copy; 2024 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

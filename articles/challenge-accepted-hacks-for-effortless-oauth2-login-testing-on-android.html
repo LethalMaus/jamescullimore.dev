@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android</title>
+  <meta name="description" content="Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android Automated UI testing is a must-have tool for assuring the dependability and performance of your Android apps. When it comes to …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/challenge-accepted-hacks-for-effortless-oauth2-login-testing-on-android.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android"/>
+  <meta property="og:description" content="Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android Automated UI testing is a must-have tool for assuring the dependability and performance of your Android apps. When it comes to …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/challenge-accepted-hacks-for-effortless-oauth2-login-testing-on-android.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*Fpz64sC4foobChwvDnU2rQ.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android"/>
+  <meta name="twitter:description" content="Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android Automated UI testing is a must-have tool for assuring the dependability and performance of your Android apps. When it comes to …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*Fpz64sC4foobChwvDnU2rQ.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android","description":"Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android Automated UI testing is a must-have tool for assuring the dependability and performance of your Android apps. When it comes to …","image":["https://miro.medium.com/v2/resize:fit:1200/1*Fpz64sC4foobChwvDnU2rQ.jpeg"],"datePublished":"2023-10-19","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/challenge-accepted-hacks-for-effortless-oauth2-login-testing-on-android.html"},"url":"https://jamescullimore.dev/articles/challenge-accepted-hacks-for-effortless-oauth2-login-testing-on-android.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • Kotlin</p>
+      <h1 class="article-title">Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2023-10-19">Oct 19, 2023</time>
+        <span>&bull;</span>
+        <span>8 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*Fpz64sC4foobChwvDnU2rQ.jpeg" alt="Challenge Accepted: Hacks for Effortless OAuth2 Login Testing on Android"/>
+    </figure>
+    <section class="article-content">
+<p>Automated UI testing is a must-have tool for assuring the dependability and performance of your Android apps. When it comes to features like user authentication, notably OAuth2-based login systems, the testing complexity skyrockets. This procedure can be complicated due to the delicate dance between your Android app, the OAuth2 provider, and multiple third-party services. In this post, we will look at the problems of building automated UI tests for Android apps with OAuth2 login capability, as well as practical tips on how to test it efficiently.</p>
+<p>OAuth2, a commonly used standard for secure authentication, gives token-based access to user data. Numerous components and interactions are involved in testing the complete login process, which includes token creation, refresh, and verification. To solve these issues, we’ll talk about token manipulation and injection, API mocking, and even an alternative to the infamous Custom Tab solution.</p>
+<p>It is critical to navigate the complexity of OAuth2 in Android app testing. Developers must guarantee that user data is kept safe and that only authorized personnel have access to it. As a result, creating rigorous UI testing is critical for protecting your app’s integrity and reputation. So, let’s plunge into the realm of testing Android apps with OAuth2-based login features and learn efficient methods for dealing with these issues front on.</p>
+<h2>The Ideal Scenario</h2>
+<p>In an ideal testing scenario, the OAuth2 login flow is seamlessly integrated within the app itself, ensuring that all interactions happen within the controlled environment of the application. This ideal setup offers a range of advantages, making UI testing considerably more manageable and effective.</p>
+<h3>In-App Context</h3>
+<p>With the OAuth2 login flow embedded entirely within the app, developers have full control over every step of the process. User interactions, authentication, and token management are all encapsulated, eliminating the need to rely on external components or services, such as web browsers or third-party apps. This containment ensures that testing can be performed in a controlled, sandboxed environment.</p>
+<h3>Non-Productive Environment</h3>
+<p>In an ideal scenario, the testing environment is non-productive, which means it’s separate from the production environment. This isolation allows for extensive testing without impacting real user data or risking any accidental interactions with live systems. It provides a safe space for testing all aspects of the OAuth2 login process without fear of unintended consequences.</p>
+<h3>Access Control</h3>
+<p>The testing environment is equipped with the necessary access controls and permissions, ensuring that the OAuth2 authentication and token generation process can be managed and monitored effectively. This controlled environment allows for systematic and comprehensive testing of different authentication scenarios, including successful logins, failed logins, token expiration, and token refresh.</p>
+<h3>Predictable Outcomes</h3>
+<p>With all components contained within the app and a non-productive environment, testing becomes more predictable. Developers can establish precise expectations for how the OAuth2 login flow should behave under various conditions, making it easier to detect and diagnose issues or regressions.</p>
+<h3>Full Automation</h3>
+<p>The ideal scenario lends itself to full test automation. Automation scripts can simulate user interactions, capture and manipulate tokens, and verify the behavior of the app throughout the entire OAuth2 login process. This not only streamlines testing but also enables continuous integration and delivery pipelines to run tests consistently.</p>
+<p>In this optimal setting, the challenges associated with OAuth2 login testing can be significantly mitigated. However, it’s important to acknowledge that not all apps have the luxury of integrating the OAuth2 flow entirely within the app. In the real world, many Android applications still rely on external services and components like Custom Tabs or browser-based OAuth2 flows. For these cases, developers need to employ alternative strategies to ensure effective testing and maintain app security, which we’ll explore in subsequent sections of this article.</p>
+<h2>No Test User</h2>
+<p>When you’re testing an OAuth2 login flow without a dedicated test user account, one approach is to utilize your own credentials for the testing process. However, committing your credentials directly into the repository is a security risk. Instead, you can use Gradle and a local.properties file to securely manage your credentials while keeping them out of the codebase.</p>
+<p>Here’s how you can set up this approach:</p>
+<h3>Create a local.properties File</h3>
+<p>Start by creating a local.properties file in the root directory of your Android project. This file will contain your sensitive credentials, and it should be added to your project’s .gitignore file to prevent accidental commits.</p>
+<h3>Define Properties in local.properties</h3>
+<p>In the local.properties file, define properties for your sensitive information. For example, you can define properties for your OAuth2 client ID and client secret. Here’s how your local.properties file might look:</p>
+<pre><code class="language-text"># local.properties
+oauth2.client.id=your_client_id
+oauth2.client.secret=your_client_secret</code></pre>
+<h3>Access Credentials in build.gradle</h3>
+<p>You can access these properties in your app’s build.gradle files. Here’s an example of how you can retrieve the OAuth2 client ID and client secret in your app’s build.gradle file:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/c86b0ee6f7fd06706591390b903192cd.js?file=loginTesting.gradle"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/c86b0ee6f7fd06706591390b903192cd#file-logintesting-gradle" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/c86b0ee6f7fd06706591390b903192cd#file-logintesting-gradle" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Use in Your Test Cases</h3>
+<p>You can now access these values in your test cases as you would with any other string resource. For instance, in an Espresso UI test:</p>
+<pre><code class="language-text">// Inside your Espresso test
+onView(withId(R.id.username_edit_text)).perform(typeText(BuildConfig.oauth2_user));
+onView(withId(R.id.password_edit_text)).perform(typeText(BuildConfig.oauth2_pass));
+onView(withId(R.id.login_button)).perform(click());
+// Perform your OAuth2 testing actions...</code></pre>
+<p>As mentioned, while this approach works well for local development, it’s not ideal for CI/CD pipelines. In CI/CD environments, you should use more secure methods, such as environment variables or secret management tools like HashiCorp Vault or AWS Secrets Manager, to protect sensitive data. Nevertheless, for local testing and development, the local.properties approach helps you maintain a balance between security and convenience.</p>
+<h2>Challenges for CI/CD Pipelines:</h2>
+<p>Using local.properties to store credentials, while suitable for local testing, poses challenges when implementing CI/CD pipelines. CI/CD systems typically require a more secure way to manage secrets and access credentials. Storing sensitive information in plain text within a local.properties file is not a recommended practice in CI/CD environments.</p>
+<h3>Secure Secrets Handling in CI/CD</h3>
+<p>To address the challenges of CI/CD pipelines, you can use secrets management solutions provided by your CI/CD platform. For instance, GitHub Actions, CircleCI, or Jenkins have features for securely storing and accessing secrets. You can store your OAuth2 client credentials as secrets in your CI/CD platform and then use them in your CI/CD pipeline configuration.</p>
+<p>Here’s an example of how you might use GitHub Actions to set secrets and access them in your workflow:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/e438b76181b3e297ee6d23d033cb9b93.js?file=login_testing.yml"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/e438b76181b3e297ee6d23d033cb9b93#file-login-testing-yml" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/e438b76181b3e297ee6d23d033cb9b93#file-login-testing-yml" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>In this way, you can ensure the security of your OAuth2 client credentials in a CI/CD pipeline, making the process more robust and adhering to best practices for secrets management.</p>
+<p>By combining Gradle and local.properties for local testing with secure secrets management in your CI/CD pipeline, you strike a balance between convenience and security when handling sensitive OAuth2 credentials in your Android app.</p>
+<h3>Setting Up MockWebServer</h3>
+<p>First, include the MockWebServer library in your build.gradle file:</p>
+<pre><code class="language-text">androidTestImplementation 'com.squareup.okhttp3:mockwebserver:4.9.0'</code></pre>
+<h3>Creating a MockWebServer Instance</h3>
+<p>In your test class, create and start a MockWebServer instance:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/74786b88fd0bf21d67877e8066c0408c.js?file=logintesting.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/74786b88fd0bf21d67877e8066c0408c#file-logintesting-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/74786b88fd0bf21d67877e8066c0408c#file-logintesting-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/753453a465ead0e56cb56055d9d8a6bb.js?file=logintesting2.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/753453a465ead0e56cb56055d9d8a6bb#file-logintesting2-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/753453a465ead0e56cb56055d9d8a6bb#file-logintesting2-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Testing Different Scenarios</h3>
+<p>You can create various MockResponse instances to simulate different scenarios, such as expired tokens or server errors:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/1dff2651d73fdde167bea47a0e98aa29.js?file=logintesting3.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/1dff2651d73fdde167bea47a0e98aa29#file-logintesting3-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/1dff2651d73fdde167bea47a0e98aa29#file-logintesting3-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Accessing the Mocked Server’s URL</h3>
+<p>Your app may need to know the server’s URL for making network requests. You can obtain it as follows:</p>
+<pre><code class="language-text">val mockServerUrl = mockWebServer.url("/auth").toString()</code></pre>
+<h2>Login via WebView</h2>
+<h3>Identify the WebView Element</h3>
+<p>Before you can interact with a WebView, you need to identify it within your app’s layout hierarchy. Use the onWebView and withElement methods to access the WebView element.</p>
+<pre><code class="language-text">// Assuming the WebView has a WebView ID of "webview_login"
+onWebView().withElement(findElement(Locator.ID, "webview_login"))</code></pre>
+<h3>Interact with the WebView</h3>
+<p>You can perform actions within the WebView using Espresso’s inWebView method. Here are some examples:</p>
+<h3>Typing Text into an Input Field</h3>
+<p>To type text into an input field within the WebView:</p>
+<pre><code class="language-text">onWebView().withElement(findElement(Locator.ID, "username_input_field"))
+    .perform(webKeys("your_username"))</code></pre>
+<h3>Clicking a Button</h3>
+<p>To click a button element within the WebView:</p>
+<pre><code class="language-text">onWebView().withElement(findElement(Locator.ID, "login_button"))
+    .perform(webClick())</code></pre>
+<h3>Verifying Content</h3>
+<p>To verify content within the WebView:</p>
+<pre><code class="language-text">onWebView().withElement(findElement(Locator.ID, "welcome_message"))
+    .check(webMatches(getText(), containsString("Welcome")))</code></pre>
+<h3>Handling WebView Alerts</h3>
+<p>If your WebView displays an alert, you can interact with it using Espresso:</p>
+<pre><code class="language-text">onWebView().perform(webClick()).inWindowAtIndex(0)
+// Handle the alert as needed</code></pre>
+<h3>Verifying WebView Content</h3>
+<p>You can also assert that specific content is present within the WebView:</p>
+<pre><code class="language-text">onWebView().withElement(findElement(Locator.ID, "error_message"))
+   .check(webMatches(getText(), containsString("Invalid credentials")))</code></pre>
+<h3>Switching Back to App Context</h3>
+<p>After interacting with the WebView, you might need to switch back to the app’s context to continue testing native app features:</p>
+<pre><code class="language-text">onWebView().perform(webClick()).inWindowAtIndex(0)
+// Switch back to app context
+onView(withId(R.id.native_button)).perform(click())</code></pre>
+<p>Using Espresso to interact with WebViews in your Android app allows you to create comprehensive UI tests for scenarios involving web-based OAuth2 login flows or other web content. It provides a unified testing framework for your app, regardless of whether it integrates native or web components.</p>
+<h2>Login via Custom Tab</h2>
+<p>Integrating Custom Tabs for OAuth2 login in your Android app presents unique challenges in UI testing because Custom Tabs operate outside of the app context. To address this challenge, you can set up a WebView available only in your test flavor and use Espresso-Intents to intercept the Custom Tab intent. Subsequently, you can manually call the URL in the WebView, capture the authorization code in the callback URL, and handle it appropriately. Here’s how to tackle this complex testing scenario with Kotlin code examples:</p>
+<h3>Preparing Your App for Testing</h3>
+<p>First, set up a WebView component within your test flavor, where you can manually navigate and intercept OAuth2 authorization.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/6e01919ffa59f436bac6d6c5923b7d06.js?file=testlogin4.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/6e01919ffa59f436bac6d6c5923b7d06#file-testlogin4-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/6e01919ffa59f436bac6d6c5923b7d06#file-testlogin4-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Intercepting Custom Tab Intent with Espresso-Intents</h3>
+<p>In your Espresso test class, intercept the Custom Tab intent using Espresso-Intents:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/2b90f8b2bab73b9e5b0e26d89352f842.js?file=testlogin5.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/2b90f8b2bab73b9e5b0e26d89352f842#file-testlogin5-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/2b90f8b2bab73b9e5b0e26d89352f842#file-testlogin5-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>In this scenario, you have a dedicated activity (TestFlavorWebViewActivity) within your test flavor that includes a WebView for manual OAuth2 authorization. You intercept the Custom Tab intent with Espresso-Intents, interact with the WebView as if it were a Custom Tab, and capture the authorization code. This approach allows you to thoroughly test the OAuth2 login process even when Custom Tabs are employed, albeit with added complexity.</p>
+<h2>Conclusion</h2>
+<p>Testing OAuth2-based login flows in Android apps is a challenging yet essential task, particularly when navigating the complexities of OAuth2, Custom Tabs, and web-based interactions. However, by employing strategies like token manipulation, API mocking with MockWebServer, and WebView integration, you can create robust and reliable UI tests that ensure the security and functionality of your app.</p>
+<p>In an ideal scenario, OAuth2 flows are seamlessly integrated within the app, offering full control and predictability. But in the real world, these flows often extend beyond the app’s context, requiring creative testing solutions.</p>
+<p>With the right testing tools and approaches, such as MockWebServer for API mocking and Espresso for WebView interactions, you can effectively tackle the most intricate OAuth2 testing challenges. These methods allow you to simulate different scenarios, handle callbacks, and validate user authentication with confidence.</p>
+<p>Mastering OAuth2 UI testing is an invaluable skill. By leveraging the techniques discussed in this article, you can ensure your app’s OAuth2 login feature remains secure, functional, and free of unforeseen issues throughout its lifecycle. Remember that comprehensive and effective UI testing is not just about identifying problems but about ensuring your app’s success in delivering a seamless user experience.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2023-10-19">Oct 19, 2023</time></p>
+      <p>Tags: Android, Android App Development, Kotlin, Oauth2, Espresso</p>
+      <p class="article-footer-copy">&copy; 2023 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

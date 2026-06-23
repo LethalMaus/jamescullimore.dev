@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Grit and Guts: Migrating from Groovy to Kotlin in Gradle</title>
+  <meta name="description" content="Grit and Guts: Migrating from Groovy to Kotlin in Gradle The journey of migrating your Gradle build scripts from Groovy to Kotlin in an Android project can feel akin to wielding the monstrous Dragon …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/grit-and-guts-migrating-from-groovy-to-kotlin-in-gradle.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Grit and Guts: Migrating from Groovy to Kotlin in Gradle"/>
+  <meta property="og:description" content="Grit and Guts: Migrating from Groovy to Kotlin in Gradle The journey of migrating your Gradle build scripts from Groovy to Kotlin in an Android project can feel akin to wielding the monstrous Dragon …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/grit-and-guts-migrating-from-groovy-to-kotlin-in-gradle.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*BwAF9r_JEoKXgq5ZRdi99Q.png"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Grit and Guts: Migrating from Groovy to Kotlin in Gradle"/>
+  <meta name="twitter:description" content="Grit and Guts: Migrating from Groovy to Kotlin in Gradle The journey of migrating your Gradle build scripts from Groovy to Kotlin in an Android project can feel akin to wielding the monstrous Dragon …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*BwAF9r_JEoKXgq5ZRdi99Q.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Grit and Guts: Migrating from Groovy to Kotlin in Gradle","description":"Grit and Guts: Migrating from Groovy to Kotlin in Gradle The journey of migrating your Gradle build scripts from Groovy to Kotlin in an Android project can feel akin to wielding the monstrous Dragon …","image":["https://miro.medium.com/v2/resize:fit:1200/1*BwAF9r_JEoKXgq5ZRdi99Q.png"],"datePublished":"2024-03-26","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/grit-and-guts-migrating-from-groovy-to-kotlin-in-gradle.html"},"url":"https://jamescullimore.dev/articles/grit-and-guts-migrating-from-groovy-to-kotlin-in-gradle.html","inLanguage":"en"}</script>
+  <script src="assets/link-preview.js" defer></script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android App Development • Kotlin</p>
+      <h1 class="article-title">Grit and Guts: Migrating from Groovy to Kotlin in Gradle</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2024-03-26">Mar 26, 2024</time>
+        <span>&bull;</span>
+        <span>8 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*BwAF9r_JEoKXgq5ZRdi99Q.png" alt="Grit and Guts: Migrating from Groovy to Kotlin in Gradle"/>
+    </figure>
+    <section class="article-content">
+<p>The journey of migrating your Gradle build scripts from Groovy to Kotlin in an Android project can feel akin to wielding the monstrous Dragon Slayer sword from the anime “Berserk” — daunting yet exhilarating. Much like Guts, the protagonist of “Berserk,” you’re about to face challenges that will test your resolve and skill. However, with careful planning and guidance, you can emerge victorious in this migration endeavor.</p>
+<p>In this article, we’ll delve into the realm of Gradle migration, focusing on crucial aspects to consider throughout the process. From navigating formatting discrepancies and restructuring tasks to addressing deprecated code and optional transitioning from local.properties to gradle.properties, each step presents its own set of challenges. Additionally, we’ll explore adjustments required for Android extension blocks, adapting to Artifactory changes, and ensuring compatibility with CI/CD pipelines.</p>
+<p>Furthermore, we’ll discuss changes to build variants, importing other Gradle scripts, and accommodating modifications in the buildscript extensions. Lastly, we’ll touch upon migrating to the TOML version catalog, providing insights to streamline your migration journey.</p>
+<p>While this migration may invoke feelings akin to Guts’ arduous battles, remember that every step forward is a step closer to a more robust and maintainable Gradle build system. So, let’s sharpen our swords and embark on this migration quest together.</p>
+<h2>The More Known Stuff</h2>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/build/migrate-to-kotlin-dsl" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/build/migrate-to-kotlin-dsl" data-preview-title="Migrate your build configuration from Groovy to Kotlin | Android Studio | Android Developers" data-preview-description="Migrate your Gradle configuration files from Groovy to Kotlin." data-preview-site="developer.android.com">Migrate your build configuration from Groovy to Kotlin | Android Studio | Android Developers</a></div>
+<h3>Convert Strings, Add Parentheses, and Assignments</h3>
+<p>One of the initial hurdles in migrating from Groovy to Kotlin DSL involves converting strings, adding parentheses to method calls, and ensuring proper assignment syntax. As per the Gradle documentation, strings should be enclosed within double quotes in Kotlin DSL. Additionally, method calls must include parentheses, and assignment operations require an equal sign.</p>
+<pre><code class="language-sh">// Groovy
+version = '1.0.0'</code></pre>
+<pre><code class="language-text">// Kotlin DSL
+version = "1.0.0"</code></pre>
+<h3>Rename File Extensions</h3>
+<p>In line with Kotlin conventions, file extensions need to be adjusted from .gradle to .gradle.kts. This simple change signifies the Kotlin DSL format and ensures compatibility with Kotlin-specific syntax highlighting and tooling.</p>
+<h3>Replace def with val or var</h3>
+<p>In Groovy, variables are often declared using the def keyword, whereas Kotlin requires explicit typing with val for immutable variables and var for mutable ones. Thus, during migration, def declarations must be replaced accordingly to adhere to Kotlin’s type safety.</p>
+<pre><code class="language-sh">// Groovy
+def sdkVersion = 30</code></pre>
+<pre><code class="language-text">// Kotlin DSL
+val sdkVersion = 30</code></pre>
+<h3>Prefix Boolean Properties with is (sometimes)</h3>
+<p>While not always necessary, boolean properties in Kotlin conventionally start with is. However, this prefixing is context-dependent and may not apply universally. Carefully assess whether this adjustment is applicable in your specific codebase to maintain consistency and readability.</p>
+<h3>Convert Lists and Maps</h3>
+<p>Lists and maps in Groovy may require conversion to Kotlin’s collection literals. This involves replacing Groovy’s [] for lists and [:] for maps with Kotlin’s listOf() and mapOf() functions, respectively.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/b3b3aaab8cd6d3298053bbeda02d46fa.js?file=build.gradle.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/b3b3aaab8cd6d3298053bbeda02d46fa#file-build-gradle-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/b3b3aaab8cd6d3298053bbeda02d46fa#file-build-gradle-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Configure Build Types</h3>
+<p>During migration, it’s crucial to revisit build type configurations to ensure they align with the Kotlin DSL syntax. Verify that properties and methods related to build types are appropriately translated to Kotlin, maintaining consistency in functionality and behavior across build variants.</p>
+<h3>Migrate from buildscript to plugins Block</h3>
+<p>Gradle 7.x encourages migrating from the buildscript block to the plugins block for declaring plugins. This transition ensures a cleaner and more modular build script structure, enhancing maintainability and readability.</p>
+<h3>Convert the plugins Block</h3>
+<p>Similarly, the plugins block itself requires conversion to Kotlin DSL syntax. This involves updating plugin declarations and configurations to adhere to Kotlin’s idiomatic style, promoting clarity and conciseness in the build script.</p>
+<h3>Importing and Applying Other Gradle Files:</h3>
+<p>In the realm of Gradle migration, one recurring challenge lies in importing and applying external Gradle files, especially in complex project structures. While Groovy allows for straightforward inclusion of external scripts using the apply from: syntax, Kotlin DSL presents some hurdles in this regard.</p>
+<p>To simplify this process, it’s often recommended to centralize external configurations either in the root or app Gradle file. This consolidation not only streamlines the migration process but also enhances maintainability by providing a clear overview of all applied configurations.</p>
+<h3>Migrating from local.properties to gradle.properties</h3>
+<p>Another crucial aspect of Gradle migration involves the optional transitioning from local.properties to gradle.properties. While local.properties traditionally stores sensitive information like API keys and local configuration properties, migrating these to gradle.properties simplifies the reading and management of keys within the Kotlin DSL context.</p>
+<p>This migration not only ensures a consistent approach to property management but also facilitates seamless integration with the Kotlin DSL syntax, enhancing readability and maintainability of the Gradle build scripts.</p>
+<h3>CI/CD Pipeline Considerations</h3>
+<p>In the context of continuous integration and deployment pipelines, it’s essential to consider the implications of Gradle migration on pipeline configurations. Specifically, ensure that CI/CD scripts check the Gradle file name for cache checksum, if applicable.</p>
+<p>This step helps maintain cache consistency across pipeline executions, mitigating potential build inconsistencies arising from Gradle script modifications.</p>
+<h3>Addressing Deprecations and Adjustments</h3>
+<p>During Gradle migration, it’s imperative to address deprecated functionalities and make necessary adjustments to maintain compatibility and functionality. Certain elements, such as versionName, may need to be removed or replaced with alternative approaches to align with Kotlin DSL conventions.</p>
+<p>Additionally, deprecated methods and configurations within the Gradle build scripts must be updated to utilize recommended alternatives, ensuring smooth migration and future-proofing the build system.</p>
+<h3>Utilizing Version Catalog TOML File</h3>
+<p>The migration from Groovy to Kotlin DSL also entails a shift in approach towards managing dependencies and versions. While the buildscript ext block provided a convenient mechanism for declaring and managing dependency versions in Groovy, Kotlin DSL favors a more structured approach utilizing the Version Catalog TOML file.</p>
+<h3>Leveraging Kotlin DSL for Android Build Configuration</h3>
+<p>In the process of migrating Gradle build scripts from Groovy to Kotlin DSL for Android projects, harnessing the power of Kotlin’s language features can significantly enhance the clarity and conciseness of the codebase. One effective technique involves utilizing Kotlin extension functions and type aliases to streamline Android build configurations.</p>
+<p>Consider the following code snippet, which leverages Kotlin extension functions and type aliases to simplify access to the Android build configuration:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/2ac7237398a59b151376bdfb54f7cbe0.js?file=build2.gradle.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/2ac7237398a59b151376bdfb54f7cbe0#file-build2-gradle-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/2ac7237398a59b151376bdfb54f7cbe0#file-build2-gradle-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h3>Understanding the Code</h3>
+<ul><li>Type Alias for Android Extension: The typealias keyword is used to define a typealias AndroidExtension, which simplifies the verbose type declaration of com.android.build.api.dsl.CommonExtension&lt;*, *, *, *, *, *&gt;. This typealias enhances readability and reduces repetition throughout the codebase.</li><li>Extension Property for Android Extension: An extension property androidExtension is defined on the Project class. This property retrieves the Android build extension (CommonExtension) associated with the project’s Gradle configuration. By utilizing Kotlin’s extension properties, access to the Android build configuration is streamlined and intuitive.</li><li>Extension Function for Android Configuration: Another extension function android is defined on the Project class. This function takes a lambda parameter block representing the configuration block for the Android extension. Inside the function, the plugins.withType method is used to identify the presence of the Android Base Plugin, and the provided block is executed within the context of the Android extension.</li></ul>
+<h3>Benefits and Usage:</h3>
+<ul><li>Simplified Access: By encapsulating the logic for accessing and configuring the Android build extension within extension functions, the codebase becomes more expressive and concise.</li><li>Improved Readability: The use of type aliases and extension functions enhances code readability and maintainability, making it easier for developers to understand and modify the Gradle build scripts.</li><li>Consistent Configuration: With a centralized function for Android configuration (android), developers can ensure consistency in the application of Android-specific settings across multiple Gradle modules or projects.</li></ul>
+<p>By adopting such Kotlin-centric approaches, developers can leverage the expressive power of Kotlin DSL to streamline Android build configurations, leading to more robust and maintainable Gradle build scripts.</p>
+<p>Thank you skydoves for the example code on your Pokedex repo.</p>
+<div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://github.com/skydoves/Pokedex" target="_blank" rel="noopener noreferrer" data-preview-url="https://github.com/skydoves/Pokedex" data-preview-title="GitHub - skydoves/Pokedex: 🗡️ Pokedex demonstrates modern Android development with Hilt, Material…" data-preview-description="🗡️ Pokedex demonstrates modern Android development with Hilt, Material Motion, Coroutines, Flow, Jetpack (Room…" data-preview-site="github.com">GitHub - skydoves/Pokedex: 🗡️ Pokedex demonstrates modern Android development with Hilt, Material…</a></div>
+<h2>Navigating Artifactory Migration in Kotlin DSL</h2>
+<p>As part of the Gradle migration journey, adapting Artifactory configurations to Kotlin DSL presents unique challenges and opportunities. Let’s explore the key changes required for Artifactory integration and how Kotlin DSL facilitates this transition.</p>
+<h3>Migration to Artifactory Version 5</h3>
+<p>To ensure compatibility and leverage the latest features, it’s recommended to migrate to Artifactory Version 5. This update introduces enhancements and optimizations, providing a smoother experience for managing dependencies and artifacts within the Kotlin DSL context.</p>
+<h3>Leveraging ArtifactoryPluginConvention and PublishingExtension</h3>
+<p>In Kotlin DSL, configuring Artifactory repositories and publishing artifacts can be streamlined using the ArtifactoryPluginConvention and PublishingExtension. These extensions offer convenient methods and configurations to manage artifact publication, repository authentication, and metadata generation.</p>
+<h3>Dependency Resolution Management with settings.gradle</h3>
+<p>In Kotlin DSL, the traditional resolution block in the build.gradle file is replaced by the dependencyResolutionManagement block within settings.gradle. This block allows for centralized management of dependency resolution settings across multi-module projects.</p>
+<h3>Importance of Repository Order</h3>
+<p>When configuring repositories in the dependencyResolutionManagement block, the order of repositories is crucial. For optimal dependency resolution, ensure that repositories are listed in the desired order, prioritizing local repositories like mavenLocal() before remote repositories like maven().</p>
+<h3>Retrieving Keys from local.properties</h3>
+<p>To securely retrieve sensitive information such as API keys from local.properties, Kotlin DSL offers a convenient mechanism within the dependencyResolutionManagement or pluginManagement block. Utilize the following code snippet to request keys from local.properties:</p>
+<pre><code class="language-sh">val prop = Properties().apply {
+    load(FileInputStream(File(rootProject.rootDir, "local.properties")))
+}
+println("Property:" + prop.getProperty("propertyName"))</code></pre>
+<h3>Benefits of Kotlin DSL for Artifactory Integration</h3>
+<ul><li>Simplified Configuration: Kotlin DSL provides a more intuitive and concise syntax for configuring Artifactory repositories and artifact publishing, enhancing readability and maintainability.</li><li>Centralized Dependency Management: With the dependencyResolutionManagement block, Kotlin DSL enables centralized management of dependency resolution settings, promoting consistency and reliability across projects.</li><li>Enhanced Security: Kotlin DSL facilitates secure retrieval of sensitive information from local.properties, ensuring that API keys and other credentials are handled safely within the build script.</li></ul>
+<p>By embracing Kotlin DSL for Artifactory integration and migration, developers can unlock the full potential of Gradle for managing dependencies and artifacts, fostering a seamless development experience.</p>
+<h2>Conclusion</h2>
+<p>The migration journey from Groovy to Kotlin DSL in Gradle scripts for Android projects demands grit, determination, and a dash of adventurous spirit, much like the legendary warrior Guts from “Berserk.” Throughout this endeavor, we’ve encountered challenges and triumphs, navigating through formatting discrepancies, restructuring tasks, and adapting to new conventions.</p>
+<p>With Kotlin DSL, we’ve unlocked a realm of possibilities, streamlining configurations, simplifying dependencies, and enhancing readability. From leveraging extension functions to managing Artifactory integrations, Kotlin has proven to be a formidable ally in our quest for Gradle migration mastery.</p>
+<p>As we reflect on our journey, let us remember the lessons learned and the victories achieved. While the path may have been arduous at times, the rewards of cleaner, more maintainable build scripts and the empowerment of Kotlin’s expressive syntax make every challenge worthwhile.</p>
+<p>So, as we raise our metaphorical swords to the sky, let us embrace the courage and tenacity that guided us through this migration. With Guts-like determination, we continue forward, forging a brighter future for our Android projects powered by the resilience of Kotlin DSL and the indomitable spirit of innovation.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2024-03-26">Mar 26, 2024</time></p>
+      <p>Tags: Android, Android App Development, Kotlin, Gradle, Migration</p>
+      <p class="article-footer-copy">&copy; 2024 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

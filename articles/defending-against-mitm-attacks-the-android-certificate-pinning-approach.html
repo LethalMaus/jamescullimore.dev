@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Defending Against MITM Attacks: The Android Certificate Pinning Approach</title>
+  <meta name="description" content="Defending Against MITM Attacks: The Android Certificate Pinning Approach Security is a top priority in the ever-changing environment of mobile app development. Because Android is the most popular …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/defending-against-mitm-attacks-the-android-certificate-pinning-approach.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Defending Against MITM Attacks: The Android Certificate Pinning Approach"/>
+  <meta property="og:description" content="Defending Against MITM Attacks: The Android Certificate Pinning Approach Security is a top priority in the ever-changing environment of mobile app development. Because Android is the most popular …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/defending-against-mitm-attacks-the-android-certificate-pinning-approach.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*-jSBQeqUVa1FrI4-JG9xzw.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Defending Against MITM Attacks: The Android Certificate Pinning Approach"/>
+  <meta name="twitter:description" content="Defending Against MITM Attacks: The Android Certificate Pinning Approach Security is a top priority in the ever-changing environment of mobile app development. Because Android is the most popular …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*-jSBQeqUVa1FrI4-JG9xzw.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Defending Against MITM Attacks: The Android Certificate Pinning Approach","description":"Defending Against MITM Attacks: The Android Certificate Pinning Approach Security is a top priority in the ever-changing environment of mobile app development. Because Android is the most popular …","image":["https://miro.medium.com/v2/resize:fit:1200/1*-jSBQeqUVa1FrI4-JG9xzw.jpeg"],"datePublished":"2023-09-22","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/defending-against-mitm-attacks-the-android-certificate-pinning-approach.html"},"url":"https://jamescullimore.dev/articles/defending-against-mitm-attacks-the-android-certificate-pinning-approach.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Kotlin • Android App Development</p>
+      <h1 class="article-title">Defending Against MITM Attacks: The Android Certificate Pinning Approach</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2023-09-22">Sep 22, 2023</time>
+        <span>&bull;</span>
+        <span>7 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*-jSBQeqUVa1FrI4-JG9xzw.jpeg" alt="Defending Against MITM Attacks: The Android Certificate Pinning Approach"/>
+    </figure>
+    <section class="article-content">
+<p>Security is a top priority in the ever-changing environment of mobile app development. Because Android is the most popular mobile operating system, it is a great target for cyber attacks. To strengthen our defense systems, we must investigate sophisticated security methods, and one such technique that merits our attention is “Certificate Pinning.”</p>
+<p>In this tutorial, we’ll take a look at the nuances of certificate pinning on Android. We’ll look at what certificate pinning is and why it’s important for app security. We’ll also look at the frightening prospect of a “Man-in-the-Middle” (MITM) attack and how certificate pinning may help protect against it.</p>
+<p>Certificate pinning, like every security technique, has drawbacks, and we’ll be open about the possible difficulties and issues involved with its implementation. Not to worry, we’ll walk you through the process of getting a certificate and, more importantly, show you how to successfully utilize certificate pinning in your Android applications.</p>
+<p>So buckle up as we begin on this educational adventure, equipping ourselves with the information and abilities required to secure our Android apps from the ever-present threat of cyber attacks. Let’s explore the realm of certificate pinning and reinforce our Android apps for a more secure digital future.</p>
+<h2>What are “Man-in-the-Middle” (MITM) attacks?</h2>
+<p>Man-in-the-Middle (MITM) attacks are a sneaky and dangerous type of cyber threat that may devastate a user’s online security and privacy. An unauthorized third party intercepts and eavesdrops on communication between two parties who believe they are directly linked, often a user and a trusted server or website, in these attacks. The attacker sneaks into the center of the communication flow, hence the term “Man-in-the-Middle.”</p>
+<h3>How does it work?</h3>
+<ol><li>Interception: The attacker positions themselves between you and the destination server. Your data passes through them unbeknownst to you.</li><li>Monitoring: The attacker can monitor the data passing through and even modify it without your knowledge. They can see your login details, financial data, or any other sensitive information in plain text.</li><li>Relaying: Some MITM attackers may also relay the intercepted data to its intended destination, allowing the communication to proceed seemingly normally. You may not even realize you’ve been compromised.</li></ol>
+<h3>What are the dangers?</h3>
+<p>MITM attacks pose significant dangers to users, including:</p>
+<ol><li>Data Theft: Attackers can steal sensitive information, such as usernames, passwords, credit card numbers, or personal messages, leading to identity theft, financial loss, or privacy breaches.</li><li>Identity Spoofing: By impersonating you or the trusted server, attackers can deceive you into divulging even more sensitive information or perform actions on your behalf without your consent.</li><li>Financial Loss: MITM attacks can lead to unauthorized financial transactions, emptying your bank account or maxing out your credit cards.</li><li>Privacy Invasion: Personal messages, photos, and other private data can be exposed, leading to embarrassment, harassment, or extortion.</li><li>Compromised Security: If you’re using apps or websites for secure tasks like online banking, healthcare, or shopping, MITM attacks can compromise your security and trust in these services.</li></ol>
+<p>In conclusion, Man-in-the-Middle attacks are a user’s worst nightmare since they can result in serious repercussions such as money loss, identity theft, and invasion of personal privacy. Recognizing the threats of MITM attacks highlights the significance of strong security measures, such as certificate pinning, to protect user data and online interactions.</p>
+<h2>What is Certificate Pinning?</h2>
+<p>Certificate pinning is a security practice that limits the number of trustworthy digital certificates that an application will accept from a server in order to create a safe connection. Rather of relying exclusively on the public key infrastructure (PKI) paradigm, in which a large number of certificate authorities (CAs) issue certificates, certificate pinning requires the application to trust only certain certificates or public keys linked with a trusted institution.</p>
+<h3>How does it work?</h3>
+<ol><li>Initial Trust Establishment: When you first connect to a server or website, your application checks the server’s digital certificate, which is issued by a trusted CA. If the certificate is valid and signed by a trusted CA, the connection proceeds without any issues. This is the traditional PKI-based trust establishment.</li><li>Pinning Configuration: Certificate pinning takes it a step further. Instead of relying solely on the CA’s certificates, the application also checks a predefined set of certificates or public keys that it expects the server to present during the connection.</li><li>Comparison: During the connection process, the application compares the server’s certificate with its pinned certificates or keys. If they match, the connection proceeds. If there’s a discrepancy, the application raises a red flag and terminates the connection.</li></ol>
+<h2>The Caveats</h2>
+<p>While certificate pinning is an effective security technique, it is important to recognize that, like every security method, it has drawbacks and obstacles. These disadvantages frequently center on the trade-off between increased security and operational complexity:</p>
+<ol><li>Maintenance Overhead: Certificate pinning requires regular maintenance. As certificates expire or need to be updated, developers must modify the pinned certificate/key list within the application. This can be a cumbersome and time-consuming process, especially in large-scale applications.</li><li>Risk of Outages: If not managed correctly, updates to pinned certificates can lead to service disruptions if the new certificates are not propagated in a timely manner. Balancing security updates with service up-time can be a delicate task.</li><li>User Experience: Certificate pinning can be unforgiving. If a server’s certificate changes due to legitimate reasons, such as a certificate renewal or infrastructure upgrade, users may encounter errors and connection issues until the application is updated to recognize the new certificate.</li><li>Debugging Complexity: Troubleshooting and diagnosing issues related to certificate pinning can be challenging. Pinning-related errors may not provide clear error messages, making it difficult to pinpoint the exact issue.</li><li>Limited Security Scope: While certificate pinning provides robust protection against MITM attacks, it is not a panacea for all security threats. It does not address vulnerabilities like server-side attacks, application-level flaws, or other attack vectors that can compromise security.</li><li>Reduced Scalability: Managing a pinned certificate list becomes more challenging as the number of servers or services your application communicates with increases. Scaling the pinning process can be complex and may require additional resources.</li><li>Incompatibility with Some Network Changes: Certain network configurations, such as load balancing, content delivery networks (CDNs), or failover mechanisms, can be disrupted by strict certificate pinning. Ensuring compatibility with these configurations can be tricky.</li><li>Resistance to Updates: Some users may delay or resist updating the application to the latest version, especially if they encounter disruptions due to certificate changes. This can lead to a fragmented user base running older, potentially less secure versions of the app.</li></ol>
+<p>To prevent these risks, developers must carefully design and execute certificate pinning, manage an efficient certificate updating process, and properly explain changes to users. Furthermore, it is critical to find a balance between the security benefits of pinning and the possible negatives in order to retain a great user experience while maintaining a strong security posture.</p>
+<h2>Getting a key from a certificate</h2>
+<p>Step 1: Connect to the Server and Retrieve the Certificate</p>
+<p>Open a terminal and execute the following command to connect to the target server (replace example.com with the actual server hostname or IP address):</p>
+<pre><code class="language-text">openssl s_client -connect example.com:443 -showcerts &lt; /dev/null | openssl x509 -outform der &gt; server_cert.der</code></pre>
+<p>This command establishes an SSL/TLS connection to the server, retrieves its certificate, and saves it in DER format as server_cert.der.</p>
+<p>Step 2: Extract the Public Key</p>
+<p>Next, use the following command to extract the public key from the DER-encoded certificate and save it in PEM format as server_cert_public_key.pem:</p>
+<pre><code class="language-text">openssl x509 -inform der -in server_cert.der -pubkey -noout &gt; server_cert_public_key.pem</code></pre>
+<p>This command converts the DER certificate into a PEM format and extracts the public key.</p>
+<p>Step 3: Calculate the SHA-256 Fingerprint</p>
+<p>Now, calculate the SHA-256 fingerprint of the public key using the following command:</p>
+<pre><code class="language-text">cat server_cert_public_key.pem | openssl rsa -pubin -outform der | openssl dgst -sha256 -binary | openssl enc -base64</code></pre>
+<p>This command performs the following actions:</p>
+<ul><li>Converts the PEM public key into DER format.</li><li>Calculates the SHA-256 hash of the DER-encoded public key.</li><li>Encodes the hash in base64 format, which is the format Android expects for certificate pinning.</li></ul>
+<p>The result is the SHA-256 public key fingerprint that you can use in your Android application for certificate pinning.</p>
+<p>Important Note: Make sure to replace example.com with the actual server you want to establish a secure connection with. Additionally, integrate this SHA-256 fingerprint into your Android application’s code to enable certificate pinning and enhance your app’s security.</p>
+<p>Step 4: Add the key to your your android project</p>
+<p>Once you have the key, simple place it in your `strings.xml` resource file. Ideally as a string array, as you can trust multiple certs at a given time.</p>
+<pre><code class="language-text">&lt;string-array name="cert_pins" translatable="false"&gt;
+    &lt;item&gt;sha256/flkjfg8WrJFSisd87609ifdlkjdf&lt;/item&gt;
+&lt;/string-array&gt;</code></pre>
+<h2>Implementing it on Android</h2>
+<p>Adding a certificate pin on Android is surprisingly easy when using OkHttpClient & Retrofit:</p>
+<pre><code class="language-text">val certificatePinner = CertificatePinner.Builder()
+    .add(serverHostName,  *context.resources.getStringArray(R.array.cert_pins))
+    .build()</code></pre>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/7def26b73e3295efdaa85795e275caca.js?file=certificate_pinning.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/7def26b73e3295efdaa85795e275caca#file-certificate-pinning-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/7def26b73e3295efdaa85795e275caca#file-certificate-pinning-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<h2>Conclusion</h2>
+<p>We’ve learned about certificate pinning and how it works as a strong defense against Man-in-the-Middle (MITM) attacks along the way. We’ve acknowledged its significance in improving Android app security, as well as its potential hazards and complications.</p>
+<p>While certificate pinning necessitates care and maintenance, its importance in protecting sensitive data and sustaining user confidence cannot be overstated. By limiting the scope of trusted certificates to a few, we get an advantage against attackers looking to infiltrate our apps.</p>
+<p>Let us emphasize the need of establishing a balance between security and user experience as we continue our examination of certificate pinning. While strong security measures are essential, they must coexist with user-friendly apps. The keys to establishing this equilibrium are effective communication and smart management of certificate changes.</p>
+<p>Certificate pinning is a beacon of resilience in the ever-changing field of mobile app security, guaranteeing that Android users can engage with confidence, knowing that their data is safe from prying eyes. It demonstrates our dedication to the safety and privacy of individuals who rely on our applications.</p>
+<p>Let us embrace certificate pinning as a strong tool to reinforce our Android applications and contribute to a safer digital ecosystem as developers, security practitioners, and digital custodians. We can strengthen the trust foundations on which the digital world is founded by working together to ensure that users can traverse it securely, confidently, and with peace of mind.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2023-09-22">Sep 22, 2023</time></p>
+      <p>Tags: Android, Kotlin, Android App Development, Cybersecurity</p>
+      <p class="article-footer-copy">&copy; 2023 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>
