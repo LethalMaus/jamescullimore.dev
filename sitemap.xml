@@ -29,6 +29,18 @@
     <lastmod>2026-05-31</lastmod>
   </url>
   <url>
+    <loc>https://jamescullimore.dev/articles/last-year-i-worked-on-a-project-where-we-had-to-build-not-one-but-two-versions-of-the-same-app.html</loc>
+    <lastmod>2026-07-08</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/development-life-and-the-mask-no-one-sees.html</loc>
+    <lastmod>2026-06-17</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/preview-driven-screenshot-testing-for-locales-keys-and-font-scale.html</loc>
+    <lastmod>2026-06-15</lastmod>
+  </url>
+  <url>
     <loc>https://jamescullimore.dev/articles/dejavu-compose-and-the-difference-between-performance-wins-and-guardrails.html</loc>
     <lastmod>2026-05-18</lastmod>
   </url>
@@ -51,6 +63,10 @@
   <url>
     <loc>https://jamescullimore.dev/articles/why-https-alone-is-not-enough-for-sensitive-android-payloads.html</loc>
     <lastmod>2026-03-23</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/how-i-found-a-34-startup-win-in-a-modern-compose-app.html</loc>
+    <lastmod>2026-03-16</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/articles/zeromq-on-android-bridging-a-linux-service-with-pub-sub.html</loc>
@@ -105,20 +121,8 @@
     <lastmod>2025-02-04</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/articles/git-it-together.html</loc>
-    <lastmod>2023-08-19</lastmod>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/articles/one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html</loc>
-    <lastmod>2023-11-02</lastmod>
-  </url>
-  <url>
     <loc>https://jamescullimore.dev/articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html</loc>
     <lastmod>2024-04-24</lastmod>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/articles/one-punch-one-scan-effortless-barcode-scanning-on-android-with-googles-ml-kit-jetpack-compose.html</loc>
-    <lastmod>2023-11-16</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/articles/artifactory-secrets-unveiled-maximizing-android-projects-with-private-module-publishing.html</loc>
@@ -141,10 +145,6 @@
     <lastmod>2024-03-22</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/articles/pixels-to-profits-monetizing-jetpack-compose-apps-with-admob.html</loc>
-    <lastmod>2023-12-07</lastmod>
-  </url>
-  <url>
     <loc>https://jamescullimore.dev/articles/monetizing-marvels-a-developers-guide-to-in-app-purchases-on-android.html</loc>
     <lastmod>2024-03-12</lastmod>
   </url>
@@ -157,12 +157,12 @@
     <lastmod>2024-02-21</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/articles/pixel-perfect-designing-for-every-screen-every-fold.html</loc>
-    <lastmod>2024-02-06</lastmod>
-  </url>
-  <url>
     <loc>https://jamescullimore.dev/articles/android-symphony-a-ux-melody-with-tooltips-popups-and-dialogs.html</loc>
     <lastmod>2024-02-14</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/pixel-perfect-designing-for-every-screen-every-fold.html</loc>
+    <lastmod>2024-02-06</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/articles/accessibility-amplified-a-journey-to-inclusive-android-apps.html</loc>
@@ -177,10 +177,6 @@
     <lastmod>2024-01-17</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/articles/locking-in-data-confidence-decoding-androids-encrypted-preferences-arsenal.html</loc>
-    <lastmod>2023-09-26</lastmod>
-  </url>
-  <url>
     <loc>https://jamescullimore.dev/articles/compose-and-conquer-a-tale-of-effortless-android-navigation.html</loc>
     <lastmod>2024-01-11</lastmod>
   </url>
@@ -189,28 +185,52 @@
     <lastmod>2023-12-20</lastmod>
   </url>
   <url>
+    <loc>https://jamescullimore.dev/articles/spring-loaded-perfection-coil-and-jetpack-compose-for-effortless-image-loading.html</loc>
+    <lastmod>2023-12-17</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/pixels-to-profits-monetizing-jetpack-compose-apps-with-admob.html</loc>
+    <lastmod>2023-12-07</lastmod>
+  </url>
+  <url>
     <loc>https://jamescullimore.dev/articles/stepping-into-the-alternative-universe-of-automated-testing-for-android-mobile-espresso.html</loc>
     <lastmod>2023-12-04</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/articles/spring-loaded-perfection-coil-and-jetpack-compose-for-effortless-image-loading.html</loc>
-    <lastmod>2023-12-17</lastmod>
+    <loc>https://jamescullimore.dev/articles/one-punch-one-scan-effortless-barcode-scanning-on-android-with-googles-ml-kit-jetpack-compose.html</loc>
+    <lastmod>2023-11-16</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/articles/challenge-accepted-hacks-for-effortless-oauth2-login-testing-on-android.html</loc>
     <lastmod>2023-11-10</lastmod>
   </url>
   <url>
+    <loc>https://jamescullimore.dev/articles/one-piece-of-code-picking-and-reading-files-like-a-true-pirate-king.html</loc>
+    <lastmod>2023-11-02</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/defending-against-mitm-attacks-the-android-certificate-pinning-approach.html</loc>
+    <lastmod>2023-10-12</lastmod>
+  </url>
+  <url>
     <loc>https://jamescullimore.dev/articles/wifi-wizardry-a-developers-guide-to-android-network-magic.html</loc>
     <lastmod>2023-09-30</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/locking-in-data-confidence-decoding-androids-encrypted-preferences-arsenal.html</loc>
+    <lastmod>2023-09-26</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/articles/beyond-tight-coupling-crafting-agile-apps-with-interface-driven-decoupling.html</loc>
     <lastmod>2023-09-26</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/articles/defending-against-mitm-attacks-the-android-certificate-pinning-approach.html</loc>
-    <lastmod>2023-10-12</lastmod>
+    <loc>https://jamescullimore.dev/articles/diving-into-the-license-abyss-an-android-odyssey-through-font-image-and-library-licenses.html</loc>
+    <lastmod>2023-09-07</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/tailoring-apps-with-finesse-using-build-variants.html</loc>
+    <lastmod>2023-09-05</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/articles/simplify-recyclerview-development-on-android-with-binding-collection-adapter.html</loc>
@@ -221,8 +241,8 @@
     <lastmod>2023-08-22</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/articles/tailoring-apps-with-finesse-using-build-variants.html</loc>
-    <lastmod>2023-09-05</lastmod>
+    <loc>https://jamescullimore.dev/articles/git-it-together.html</loc>
+    <lastmod>2023-08-19</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/articles/we-need-more-animations.html</loc>
@@ -231,10 +251,6 @@
   <url>
     <loc>https://jamescullimore.dev/articles/embracing-open-source-projects-fueling-growth-for-android-developers.html</loc>
     <lastmod>2023-08-15</lastmod>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/articles/diving-into-the-license-abyss-an-android-odyssey-through-font-image-and-library-licenses.html</loc>
-    <lastmod>2023-09-07</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/articles/leveraging-firebase-for-internal-app-deployment-with-auto-generated-release-notes.html</loc>

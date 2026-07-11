@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Preview-Driven Screenshot Testing For Locales, Keys, And Font Scale</title>
+  <meta name="description" content="Preview-Driven Screenshot Testing For Locales, Keys, And Font Scale Some testing work starts with a bug. This one started with a client requirement. They already had an internal translation process …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/preview-driven-screenshot-testing-for-locales-keys-and-font-scale.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Preview-Driven Screenshot Testing For Locales, Keys, And Font Scale"/>
+  <meta property="og:description" content="Preview-Driven Screenshot Testing For Locales, Keys, And Font Scale Some testing work starts with a bug. This one started with a client requirement. They already had an internal translation process …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/preview-driven-screenshot-testing-for-locales-keys-and-font-scale.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*3_1k9yLMaTfyVyMYttEk-A.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Preview-Driven Screenshot Testing For Locales, Keys, And Font Scale"/>
+  <meta name="twitter:description" content="Preview-Driven Screenshot Testing For Locales, Keys, And Font Scale Some testing work starts with a bug. This one started with a client requirement. They already had an internal translation process …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*3_1k9yLMaTfyVyMYttEk-A.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Preview-Driven Screenshot Testing For Locales, Keys, And Font Scale","description":"Preview-Driven Screenshot Testing For Locales, Keys, And Font Scale Some testing work starts with a bug. This one started with a client requirement. They already had an internal translation process …","image":["https://miro.medium.com/v2/resize:fit:1200/1*3_1k9yLMaTfyVyMYttEk-A.jpeg"],"datePublished":"2026-06-15","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/preview-driven-screenshot-testing-for-locales-keys-and-font-scale.html"},"url":"https://jamescullimore.dev/articles/preview-driven-screenshot-testing-for-locales-keys-and-font-scale.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android &bull; Jetpack Compose &bull; Screenshot Testing</p>
+      <h1 class="article-title">Preview-Driven Screenshot Testing For Locales, Keys, And Font Scale</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-06-15">Jun 15, 2026</time>
+        <span>&bull;</span>
+        <span>8 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*3_1k9yLMaTfyVyMYttEk-A.jpeg" alt="Preview-Driven Screenshot Testing For Locales, Keys, And Font Scale"/>
+    </figure>
+    <section class="article-content">
+<p>Some testing work starts with a bug.</p>
+<p>This one started with a client requirement.</p>
+<p>They already had an internal translation process, and part of that process on the web side was being able to see not just the rendered text, but the key behind it. That way, when a translator changes one string, they have a much clearer idea of where it appears and whether that same key is reused somewhere else.</p>
+<p>They wanted the same kind of visibility on Android.</p>
+<p>At first glance, that sounds like a narrow requirement. In practice, it turned into one of the more useful bits of UI infrastructure I have added in a while, because it stopped being just about translation and quickly became useful for designers too.</p>
+<p>Once you can snapshot the same screen across multiple locales, multiple font scales, and a “show me the key instead of the final text” mode, you stop treating localisation and accessibility as abstract concerns. You can just look at the output and see what survives contact with reality.</p>
+<p>That was the real value.</p>
+<p>Not a dramatic testing story. Not a heroic “we found dozens of catastrophic bugs” story. Honestly, the surprising part is that it all went pretty smoothly, which is rare enough that it is worth writing down.</p>
+<p>I almost distrusted it at first for exactly that reason.</p>
+<p>Most testing infrastructure work has at least one stretch where you start wondering whether the whole thing is about to turn into an awkward maintenance burden. This did have a couple of rough edges, but it never really tipped over into that territory. It mostly just kept proving useful.</p>
+<h2>The Requirement Was Not Really “Take Screenshots”</h2>
+<p>The request was straightforward on paper:</p>
+<ul><li>show translators where strings appear</li><li>show which key is being used</li><li>make it easier to review changes across languages</li><li>help catch problems with font scaling before they turn into last-minute cleanup</li></ul>
+<p>If you reduce that to “screenshot testing,” it sounds more ordinary than it really was.</p>
+<p>The more interesting requirement was this:</p>
+<p>how do you make translation review less dependent on imagination?</p>
+<p>A spreadsheet of keys is useful up to a point. A preview in isolation is useful up to a point. But once translators and designers can look at a real screen variant and see both the layout and the string identity, the conversation gets much better.</p>
+<p>Instead of asking:</p>
+<blockquote><p>“what does this key map to again?”</p></blockquote>
+<p>you can ask:</p>
+<blockquote><p>“if we change this key here, what else are we implicitly changing?”</p></blockquote>
+<p>That is a much better kind of review.</p>
+<h2>I Used Compose Previews As The Source Of Truth</h2>
+<p>The approach I liked most was using Compose previews as the source of truth.</p>
+<p>That meant I did not need to hand-maintain a giant screenshot test list somewhere else. If a screen already had a useful preview, I could snapshot it. If it needed better coverage, the right fix was usually to improve the preview rather than bolt more configuration onto the test harness.</p>
+<p>I liked that constraint because it kept the work honest. If a preview was too weak to be useful for screenshots, it was probably too weak to be that useful in the IDE either.</p>
+<p>The matrix itself was simple:</p>
+<ul><li>English</li><li>Arabic</li><li>multiple font scales</li><li>a key-display mode for translation review</li></ul>
+<p>The preview annotation looked roughly like this:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/6f0d2468581c3b57c39485dfa76d0b39.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/6f0d2468581c3b57c39485dfa76d0b39" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/6f0d2468581c3b57c39485dfa76d0b39" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>There was one small trick in there.</p>
+<p>The “Keys” preview used an unsupported locale on purpose so the UI would fall back to showing key values instead of translated text. That gave translators a screen-level view of which string was being used where, without needing a separate mode built purely for manual inspection.</p>
+<p>That part ended up being especially useful because it mirrors how they already work on the web side. It did not force them into an Android-specific review model.</p>
+<p>That mattered more than I expected. A lot of internal tooling friction comes from making one team adapt to another team’s conventions. This felt better because it met an existing review habit halfway instead of asking translators to learn a new mental model just because the platform had changed.</p>
+<h2>The Key View Was More Useful Than It Sounds</h2>
+<p>Showing raw keys in a UI sounds a bit odd until you have to maintain a translation set at scale.</p>
+<p>If two places in the app happen to use the same key, that can be perfectly reasonable. It can also be a quiet source of accidental coupling. A translator updates one value, assuming it only affects one screen, and later discovers it also changed a dialog somewhere else that happened to share the same string resource.</p>
+<p>The key preview does not solve that by itself, but it makes the coupling visible.</p>
+<p>That is the part I liked.</p>
+<p>It did not just answer “is this translated?” It helped answer:</p>
+<ul><li>which exact string is this?</li><li>where is it being used?</li><li>is this usage more shared than we thought?</li><li>if we change it, who else do we need to warn?</li></ul>
+<p>That turns a screenshot review from passive confirmation into something much closer to real collaboration.</p>
+<h2>Font Scale Was The Other Dimension That Made This Worth Doing</h2>
+<p>If you already use `<a href="http://twitter.com/PreviewFontScale" target="_blank" rel="noopener noreferrer">@PreviewFontScale</a>`, this probably sounds obvious.</p>
+<p>I still think it is worth stating plainly: font scale coverage buys you more than people expect.</p>
+<p>A layout can look completely fine at default scale and become much less convincing once the text grows. That does not always mean it is broken, but it often reveals where the UI was only “working” because the content happened to be compact enough in the happy path.</p>
+<p>The useful part here was not accessibility compliance in the abstract. It was being able to show translators and designers the practical consequences of longer content and larger text at the same time.</p>
+<p>That is where the screenshots earned their keep.</p>
+<p>A short label in English at `1.0x` is not a serious test. A longer phrase in another language at `1.5x` or `2.0x` is much closer to reality.</p>
+<p>At the very least, if you are already using `<a href="http://twitter.com/PreviewFontScale" target="_blank" rel="noopener noreferrer">@PreviewFontScale</a>`, I think this is one of the better arguments for taking it seriously.</p>
+<p>It also made review conversations much less theoretical. Nobody had to imagine what “this might get tight at larger sizes” meant. They could just look at the screen and decide whether it still held up.</p>
+<h2>The Output Needed To Be Useful To People, Not Just Diffs</h2>
+<p>One thing I wanted to avoid was generating a pile of screenshots that only engineers could tolerate.</p>
+<p>The raw snapshot output is fine for verification, but it is not always the nicest thing to hand to non-engineers. So alongside the snapshot report, I generated a small HTML gallery that grouped previews in a way translators and designers could review comfortably.</p>
+<p>The workflow was roughly: record the Paparazzi previews, then generate the review gallery from the report output.</p>
+<p>The gallery generation script is here:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/e11f340d9ba6ad87ed9e1c57a55c2a96.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/e11f340d9ba6ad87ed9e1c57a55c2a96" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/e11f340d9ba6ad87ed9e1c57a55c2a96" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>And the test side looked like this:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/a4e8330ba3f07419faefe922eb0640f7.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/a4e8330ba3f07419faefe922eb0640f7" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/a4e8330ba3f07419faefe922eb0640f7" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That is not an especially glamorous setup, but it did the job.</p>
+<p>The engineering side kept proper snapshot coverage.</p>
+<p>The human-review side got a gallery that was much easier to skim.</p>
+<p>That split mattered because the main audience here was translators and designers, not just me.</p>
+<p>That is an easy thing to say and a harder thing to design for. Engineering output often becomes “technically available” to other people without actually being pleasant for them to use. I wanted to avoid that trap.</p>
+<h2>The Story Was Happily Short On Drama</h2>
+<p>I almost feel guilty saying that, because technical write-ups often read better when something catches fire.</p>
+<p>But the honest version is that this rollout was smoother than most test infrastructure work I have done.</p>
+<p>There were two practical wrinkles.</p>
+<p>The first was around the preview tooling itself. Early on, there was some confusion around preview configuration, and the fix we ended up contributing was not some deep runtime change. It was much simpler: the documentation needed to be clearer, especially around including `fontScale` in the `deviceConfig` example and showing a sensible file naming convention example in the README.</p>
+<p>That may sound minor. It was still useful.</p>
+<p>A lot of tooling friction is not “the library is broken.” Sometimes it is just that the path to using it correctly is less obvious than it should be. In this case, cleaning that up made the setup much more legible, especially if you are using `<a href="http://twitter.com/PreviewFontScale" target="_blank" rel="noopener noreferrer">@PreviewFontScale</a>` and expect the output naming and device configuration to reflect that properly.</p>
+<p>The second wrinkle was scrollable content.</p>
+<p>That is one of those things you notice quickly once you start relying on previews for more than just compact components. Some screens do not fit neatly into a single static capture, and previews do not magically solve that for you.</p>
+<p>So I needed a small workaround there.</p>
+<p>Nothing especially exotic, just enough structure so scrollable content could be captured in a way that was still useful for review. Once that was in place, it worked fine. But it was a good reminder that preview-driven testing is only as honest as the preview itself. If the preview hides the part of the screen people actually need to inspect, your coverage is technically present and practically weak.</p>
+<p>The small workaround for scrollable preview content is here:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/80e57fb40c1956d558d0731deb862f37.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/80e57fb40c1956d558d0731deb862f37" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/80e57fb40c1956d558d0731deb862f37" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That is a pattern I would watch carefully on any future project.</p>
+<h2>The Real Maintenance Cost Is Preview Quality</h2>
+<p>This is the part I would emphasise most if you want to do something similar.</p>
+<p>The real maintenance burden is not the screenshot harness.</p>
+<p>It is the quality of the previews.</p>
+<p>If previews are treated as decorative IDE extras, a setup like this becomes fragile very quickly. If previews are treated as first-class review surfaces, the whole thing becomes much more valuable.</p>
+<p>That was probably the biggest mindset shift in the whole thing. Once I stopped thinking of previews as just an IDE convenience and started treating them as review assets, a lot of the surrounding decisions got easier.</p>
+<p>That means the preview has to be intentional:</p>
+<ul><li>realistic content</li><li>sensible state coverage</li><li>representative long text</li><li>meaningful locale choices</li><li>a clear reason to exist</li></ul>
+<p>That last part matters.</p>
+<p>A weak preview creates weak screenshots. A strong preview becomes reusable documentation, reusable test coverage, and reusable review material all at once.</p>
+<p>That is what made this approach feel worth keeping.</p>
+<h2>Why I Would Do It Again</h2>
+<p>I would absolutely do this again, mainly because it made a specific client requirement turn into something broader and more durable.</p>
+<p>Yes, it helped translation review.</p>
+<p>But it also improved design review, made font-scale issues easier to surface early, and created a better shared artifact than a list of string resources ever could.</p>
+<p>The key-mode preview was a particularly good fit because it respected an existing workflow instead of inventing a new one just because this was Android.</p>
+<p>And the whole thing stayed grounded. It did not need a dramatic failure story to justify itself. It just needed to make a recurring piece of review work easier and more reliable.</p>
+<p>That is enough.</p>
+<h2>What I Would Recommend If You Try This Yourself</h2>
+<p>If you want to build a similar setup, the sequence I would trust is:</p>
+<ol><li>Start by deciding who the screenshots are actually for.</li><li>Use previews as the source of truth instead of creating a separate manual matrix.</li><li>Include font-scale coverage early, not as an afterthought.</li><li>Add a key-display mode if translation review needs string identity, not just final text.</li><li>Be honest about scrollable screens and make sure the preview still shows what reviewers need to see.</li><li>Treat documentation as part of the tooling, especially if preview configuration is easy to misread.</li></ol>
+<p>That is probably the most boring-sounding lesson here, but also one of the most useful.</p>
+<p>A lot of testing infrastructure succeeds or fails on whether the surrounding workflow is clear enough for people to trust it.</p>
+<p>This one ended up being trustworthy.</p>
+<p>And because of that, it ended up being more useful than the original requirement even asked for.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-06-15">Jun 15, 2026</time></p>
+      <p>Tags: Android, Jetpack Compose, Screenshot Testing, Localization, Accessibility</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

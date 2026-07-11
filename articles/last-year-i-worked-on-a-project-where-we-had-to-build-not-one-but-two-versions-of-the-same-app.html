@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Last year, I worked on a project where we had to build not one, but two versions of the same app.</title>
+  <meta name="description" content="Last year, I worked on a project where we had to build not one, but two versions of the same app. One ran in the personal profile. The other ran in the work profile. They needed to share selected information across Android profile boundaries."/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/last-year-i-worked-on-a-project-where-we-had-to-build-not-one-but-two-versions-of-the-same-app.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="Last year, I worked on a project where we had to build not one, but two versions of the same app."/>
+  <meta property="og:description" content="Last year, I worked on a project where we had to build not one, but two versions of the same app. One ran in the personal profile. The other ran in the work profile. They needed to share selected information across Android profile boundaries."/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/last-year-i-worked-on-a-project-where-we-had-to-build-not-one-but-two-versions-of-the-same-app.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*t4fmIxnKNsaK4DnQw-z3_g.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="Last year, I worked on a project where we had to build not one, but two versions of the same app."/>
+  <meta name="twitter:description" content="Last year, I worked on a project where we had to build not one, but two versions of the same app. One ran in the personal profile. The other ran in the work profile. They needed to share selected information across Android profile boundaries."/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*t4fmIxnKNsaK4DnQw-z3_g.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Last year, I worked on a project where we had to build not one, but two versions of the same app.","description":"Last year, I worked on a project where we had to build not one, but two versions of the same app. One ran in the personal profile. The other ran in the work profile. They needed to share selected information across Android profile boundaries.","image":["https://miro.medium.com/v2/resize:fit:1200/1*t4fmIxnKNsaK4DnQw-z3_g.jpeg"],"datePublished":"2026-07-08","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/last-year-i-worked-on-a-project-where-we-had-to-build-not-one-but-two-versions-of-the-same-app.html"},"url":"https://jamescullimore.dev/articles/last-year-i-worked-on-a-project-where-we-had-to-build-not-one-but-two-versions-of-the-same-app.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android &bull; App Architecture &bull; Product Development</p>
+      <h1 class="article-title">Last year, I worked on a project where we had to build not one, but two versions of the same app.</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-07-08">Jul 8, 2026</time>
+        <span>&bull;</span>
+        <span>6 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*t4fmIxnKNsaK4DnQw-z3_g.jpeg" alt="Last year, I worked on a project where we had to build not one, but two versions of the same app."/>
+    </figure>
+    <section class="article-content">
+<p>Last year, I worked on a project where we had to build not one, but two versions of the same app. One ran in the personal profile. The other ran in the work profile.</p>
+<p>They needed to share selected information between each other, but still respect the strict boundaries enforced by Android.</p>
+<p>On paper, this sounded manageable. In practice, it introduced a completely different layer of complexity that most Android developers never have to think about.</p>
+<p>This article is about what I learned while building and testing apps in a work-profile environment and the practical problems that don’t show up in basic documentation.</p>
+<h2>Why Work Profiles Exist</h2>
+<p>Work profiles were introduced in Android 5.0 (API 21) as a way to solve a very real enterprise problem.</p>
+<p>Employees want to use their personal devices at work.Companies want control over corporate data.</p>
+<p>A work profile creates a managed environment on the same device. The IT admin controls:</p>
+<ul><li>Which apps are available</li><li>Which device features are enabled</li><li>Which data can cross profile boundaries</li></ul>
+<p>To the user, it feels like two separate spaces living on one phone.</p>
+<p>To us as developers, it means we are no longer operating in a single, predictable runtime environment.</p>
+<h2>What This Means for Us as Developers</h2>
+<p>The important thing is this:</p>
+<p>You don’t need special APIs to “support” work profiles.You need to follow Android best practices very strictly.</p>
+<p>Suddenly things that were previously “probably fine” can break:</p>
+<ul><li>Intents may silently fail</li><li>File URIs may become invalid</li><li>Notification listeners may stop working</li><li>System apps may not exist in the work profile</li></ul>
+<p>And here is the tricky part:You don’t control these rules. The IT admin does.</p>
+<p>That unpredictability is what makes work-profile development interesting.</p>
+<h2>What Actually Changes in a Work Profile</h2>
+<p>When I first started working on this project, I assumed this would mostly be a deployment concern.</p>
+<p>It wasn’t.</p>
+<p>A work profile changes runtime behavior in subtle ways. And if your app assumes a “normal” Android environment, you will eventually hit edge cases.</p>
+<p>Let’s break down the ones that matter most.</p>
+<h3>Intents Are No Longer Safe by Default</h3>
+<p>In a normal app, firing an intent feels safe. You assume:</p>
+<ul><li>There is probably a handler.</li><li>If not, the system will show a chooser.</li><li>Worst case, nothing dramatic happens.</li></ul>
+<p>In a work profile, this assumption breaks.</p>
+<p>By default, most intents do <strong>not</strong> cross profile boundaries. If your app fires an intent inside the work profile and there is no handler in that profile, the system will not automatically forward it to the personal profile.</p>
+<p>And here is the important part:If there is no handler available, your app can crash.</p>
+<p>Even if the personal profile <em>does</em> have a valid handler.</p>
+<p>You cannot know in advance which intents are allowed to cross profiles. That is defined by the IT admin and can change at any time.</p>
+<p>So the rule becomes very simple:</p>
+<p>Never fire an intent without checking that it resolves.</p>
+<pre><code class="language-text">val intent = Intent(AlarmClock.ACTION_SET_TIMER).apply {
+    putExtra(AlarmClock.EXTRA_MESSAGE, "Focus session")
+    putExtra(AlarmClock.EXTRA_LENGTH, 25)
+    putExtra(AlarmClock.EXTRA_SKIP_UI, true)
+}</code></pre>
+<pre><code class="language-text">if (intent.resolveActivity(packageManager) != null) {
+    startActivity(intent)
+} else {
+    // Handle gracefully
+}</code></pre>
+<p>This is standard Android practice.</p>
+<p>But in a work-profile environment, it becomes mandatory.</p>
+<h3>File URIs Will Betray You</h3>
+<p>This one is subtle.</p>
+<p>Personal profile storage and work profile storage are completely separate. A <code>file://</code> URI that works perfectly in one profile is invalid in the other.</p>
+<p>If your intent crosses profiles and you attached a file URI, the receiving app simply cannot access the file.</p>
+<p>The fix is what Android has been telling us for years anyway:</p>
+<p>Use <code>content://</code> URIs via <code>FileProvider</code>.</p>
+<pre><code class="language-text">val contentUri = FileProvider.getUriForFile(
+    context,
+    "com.example.myapp.fileprovider",
+    file
+)</code></pre>
+<p>Content URIs are profile-aware.File URIs are not.</p>
+<p>Again, this isn’t new Android knowledge.But work profiles turn bad habits into production failures.</p>
+<h3>NotificationListenerService Does Not Behave the Same</h3>
+<p>If your app runs in the work profile, your <code>NotificationListenerService</code> will be ignored.</p>
+<p>If your app runs in the personal profile, you may not receive notifications from work-profile apps unless the IT admin explicitly allowlists your app.</p>
+<p>That means:</p>
+<ul><li>You cannot assume full visibility of notifications.</li><li>Cross-profile notification listening can be blocked at policy level.</li><li>You may receive partial callbacks without realizing it.</li></ul>
+<p>In enterprise environments, policy always wins.</p>
+<h2>Testing Is Where Reality Hits</h2>
+<p>Reading documentation is one thing.</p>
+<p>Testing on a real device with a work profile is something else.</p>
+<p>Android provides a sample app called TestDPC that lets you create and configure a work profile on a device. It allows you to:</p>
+<ul><li>Enable or disable cross-profile intents</li><li>Restrict default system apps</li><li>Simulate enterprise policy restrictions</li></ul>
+<p>You can suddenly reproduce scenarios like:</p>
+<ul><li>Map intent allowed to cross, handler exists on other profile</li><li>Map intent not allowed to cross, handler exists locally</li><li>Map intent not allowed to cross, no handler anywhere</li></ul>
+<p>These are edge cases most consumer apps never encounter.</p>
+<p>Enterprise apps hit them constantly.</p>
+<h2>The Real Problem: Testing Across Profiles</h2>
+<p>Understanding work profiles is manageable.Testing them properly is where things become painful.</p>
+<p>In our case, the app was not a single APK.</p>
+<p>It was split into three parts:</p>
+<ul><li>The main app</li><li>A companion app</li><li>An androidTest APK for instrumentation</li></ul>
+<p>All three had to exist in the work profile.All three had to exist in the personal profile.</p>
+<p>Every time we wanted to test something inside the work profile, the workflow looked like this:</p>
+<ol><li>Assemble the debug APK</li><li>Assemble the androidTest APK</li><li>Push both to the device</li><li>Install them specifically to the work profile user</li><li>Run instrumentation using the correct <code>--user</code> flag</li></ol>
+<p>Do this a few times manually and you start questioning your life choices.</p>
+<p>The real friction was not writing code.It was the repetition.</p>
+<p>And repetition in development is a signal: automate it.</p>
+<h2>Understanding the --user Flag</h2>
+<pre><code class="language-text">--user</code></pre>
+<p>When a device has a work profile, it behaves like multiple Android users internally.</p>
+<p>If you run:</p>
+<pre><code class="language-text">adb shell pm list users</code></pre>
+<p>You’ll get something like:</p>
+<pre><code class="language-text">UserInfo{0:Primary:13} running
+UserInfo{10:Work profile:30} running</code></pre>
+<p>User 0 is the personal profile.</p>
+<p>User 10 is the work profile.</p>
+<p>If you install an APK normally with:</p>
+<pre><code class="language-text">adb install app.apk</code></pre>
+<p>It installs to the primary user by default.</p>
+<p>To install to the work profile, you must explicitly target it:</p>
+<pre><code class="language-text">adb shell pm install --user 10 /data/local/tmp/app.apk</code></pre>
+<p>Same for instrumentation:</p>
+<pre><code class="language-text">adb shell am instrument --user 10 ...</code></pre>
+<p>Without that flag, you’re not testing what you think you’re testing.</p>
+<h2>Automating the Pain Away</h2>
+<p>Instead of manually pushing and installing APKs every time, I created custom Gradle tasks to automate the process.</p>
+<p>The idea was simple:</p>
+<ul><li>Build</li><li>Push to device</li><li>Install to work profile</li><li>Run instrumentation</li><li>Done</li></ul>
+<p>Here’s a simplified version of what that looked like:</p>
+<pre><code class="language-text">tasks.register&lt;Exec&gt;("pushDevDebugAndroidTestApk") {
+    dependsOn(":app:assembleDevDebugAndroidTest")
+    commandLine(
+        "adb push app/build/outputs/apk/androidTest/dev/debug/app-dev-debug-androidTest.apk /data/local/tmp"
+            .split(" ")
+    )
+}</code></pre>
+<pre><code class="language-text">tasks.register&lt;Exec&gt;("pushDevDebugApk") {
+    dependsOn(":app:assembleDevDebug")
+    commandLine(
+        "adb push app/build/outputs/apk/dev/debug/app-dev-debug.apk /data/local/tmp"
+            .split(" ")
+    )
+}
+tasks.register&lt;Exec&gt;("installDevDebugAndroidTestApkToWorkProfile") {
+    dependsOn("pushDevDebugAndroidTestApk")
+    commandLine(
+        "adb shell pm install --user 10 /data/local/tmp/app-dev-debug-androidTest.apk"
+            .split(" ")
+    )
+}
+tasks.register&lt;Exec&gt;("installDevDebugApkToWorkProfile") {
+    dependsOn("pushDevDebugApk")
+    commandLine(
+        "adb shell pm install --user 10 /data/local/tmp/app-dev-debug.apk"
+            .split(" ")
+    )
+}
+tasks.register&lt;Exec&gt;("connectedDevDebugWorkProfileAndroidTest") {
+    dependsOn(
+        "installDevDebugAndroidTestApkToWorkProfile",
+        "installDevDebugApkToWorkProfile"
+    )
+    commandLine(
+        "adb shell am instrument --user 10 -w dev.jamescullimore.app.test/androidx.test.runner.AndroidJUnitRunner"
+            .split(" ")
+    )
+}</code></pre>
+<p>Now I could run:</p>
+<pre><code class="language-text">./gradlew connectedDevDebugWorkProfileAndroidTest</code></pre>
+<p>And everything was handled in the correct order.</p>
+<p>No manual pushing.No forgetting the <code>--user</code> flag.No installing to the wrong profile by accident.</p>
+<p>It turned a frustrating workflow into a single command.</p>
+<p>And in enterprise development, that kind of automation pays for itself very quickly.</p>
+<h2>Conclusion</h2>
+<p>Work profiles don’t require special APIs.</p>
+<p>They require discipline.</p>
+<p>They force you to:</p>
+<ul><li>Properly resolve intents</li><li>Stop using file URIs</li><li>Expect system apps to be missing</li><li>Accept that IT policy can override assumptions</li><li>Test in environments that behave differently than your local emulator</li></ul>
+<p>Most Android apps never encounter these constraints.</p>
+<p>But when you build for enterprise, you operate in a more controlled and restricted ecosystem.</p>
+<p>And that ecosystem rewards developers who:</p>
+<ul><li>Follow best practices strictly</li><li>Automate repetitive workflows</li><li>Test edge cases intentionally</li></ul>
+<p>For me, the biggest lesson wasn’t about work profiles themselves.</p>
+<p>It was about respecting the environment your app runs in.</p>
+<p>Because once you stop assuming a “normal” Android device, your code becomes significantly more robust.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-07-08">Jul 8, 2026</time></p>
+      <p>Tags: Android, App Architecture, Product Development, Software Development</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>
