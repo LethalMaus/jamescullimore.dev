@@ -366,4 +366,19 @@ body.article-page .link-preview-fallback {
   body.article-page .article-content pre code {
     font-size: 0.89em;
   }
+
+  body.article-page .article-category {
+    display: inline-block;
+    width: fit-content;
+    max-width: 100%;
+    margin-bottom: 0.6rem;
+    padding: 0.28rem 0.55rem;
+    border: 1px solid rgba(94, 82, 64, 0.16);
+    border-radius: 999px;
+    background: rgba(255, 255, 253, 0.9);
+    font-size: 0.68rem;
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+    overflow-wrap: anywhere;
+  }
 }
