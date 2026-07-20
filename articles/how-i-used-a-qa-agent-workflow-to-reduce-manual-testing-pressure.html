@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>How I Used a QA Agent Workflow to Reduce Manual Testing Pressure</title>
+  <meta name="description" content="How I Used a QA Agent Workflow to Reduce Manual Testing Pressure Manual testing has a way of growing quietly. At first, it is manageable. A few regression checks here, a few release checks there, a..."/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/how-i-used-a-qa-agent-workflow-to-reduce-manual-testing-pressure.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="How I Used a QA Agent Workflow to Reduce Manual Testing Pressure"/>
+  <meta property="og:description" content="How I Used a QA Agent Workflow to Reduce Manual Testing Pressure Manual testing has a way of growing quietly. At first, it is manageable. A few regression checks here, a few release checks there, a..."/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/how-i-used-a-qa-agent-workflow-to-reduce-manual-testing-pressure.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*zwNR3gI5w_7T2sV8jKzd4Q.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="How I Used a QA Agent Workflow to Reduce Manual Testing Pressure"/>
+  <meta name="twitter:description" content="How I Used a QA Agent Workflow to Reduce Manual Testing Pressure Manual testing has a way of growing quietly. At first, it is manageable. A few regression checks here, a few release checks there, a..."/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*zwNR3gI5w_7T2sV8jKzd4Q.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"How I Used a QA Agent Workflow to Reduce Manual Testing Pressure","description":"How I Used a QA Agent Workflow to Reduce Manual Testing Pressure Manual testing has a way of growing quietly. At first, it is manageable. A few regression checks here, a few release checks there, a...","image":["https://miro.medium.com/v2/resize:fit:1200/1*zwNR3gI5w_7T2sV8jKzd4Q.jpeg"],"datePublished":"2026-07-15","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/how-i-used-a-qa-agent-workflow-to-reduce-manual-testing-pressure.html"},"url":"https://jamescullimore.dev/articles/how-i-used-a-qa-agent-workflow-to-reduce-manual-testing-pressure.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android | QA Automation | AI Agents</p>
+      <h1 class="article-title">How I Used a QA Agent Workflow to Reduce Manual Testing Pressure</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-07-15">Jul 15, 2026</time>
+        <span>&bull;</span>
+        <span>13 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*zwNR3gI5w_7T2sV8jKzd4Q.jpeg" alt="How I Used a QA Agent Workflow to Reduce Manual Testing Pressure"/>
+    </figure>
+    <section class="article-content">
+<p>Manual testing has a way of growing quietly.</p>
+<p>At first, it is manageable. A few regression checks here, a few release checks there, and enough shared knowledge in the team to know what really needs attention. But as the application grows, the cost starts to show. QA spends more time repeating checks that may already be covered somewhere in automation, developers add tests that are hard to connect back to real test cases, and nobody has a simple answer to the question that actually matters:</p>
+<p>Can this manual test be skipped with confidence?</p>
+<p>That was the problem I wanted to solve.</p>
+<p>We already had automated tests. We also needed more of them. But the missing piece was not only test coverage. It was traceability, confidence, and a workflow that QA could use without needing deep Android testing experience.</p>
+<p>So I started building a QA agent workflow around the testing process.</p>
+<p>Not an agent that magically understands the whole codebase. Not a replacement for QA. More like a structured layer of documentation, mappings, reports, and prompts that helps humans and coding assistants work from the same source of truth.</p>
+<h2>The Problem Was Not Just Missing Tests</h2>
+<p>When people talk about reducing manual testing, the conversation often jumps straight to automation.</p>
+<p>Write more tests. Run more tests in CI. Add more end-to-end coverage. Make the regression suite bigger.</p>
+<p>All of that can help, but it does not solve the whole problem.</p>
+<p>The harder problem is trust.</p>
+<p>QA may have a manual test case that describes a real business scenario. Somewhere else in the codebase, there may be a unit test, a screenshot test, or a heavier UI test that covers part of the same behavior. But if nobody can clearly connect those two things, QA cannot safely skip the manual test.</p>
+<p>From QA’s point of view, an unmapped automated test might as well not exist.</p>
+<p>This is where automated testing can become strangely inefficient. Developers know tests exist, QA knows manual cases exist, but the relationship between them is not obvious enough to change release behavior.</p>
+<p>So the goal became less about simply adding tests and more about answering a better question:</p>
+<p>What evidence do we have for this manual case, and is that evidence strong enough to reduce manual effort?</p>
+<h2>Existing Automation Was Useful, But Not Usable Enough</h2>
+<p>The project already had multiple layers of tests. Some were fast and close to the code. Some checked rendered UI states. Some exercised Android behavior on the JVM. Some were closer to full end-to-end coverage.</p>
+<p>That variety was useful, but it also created ambiguity.</p>
+<p>A passing unit test does not prove the same thing as a passing end-to-end test. A screenshot test may be excellent for visual state, but it does not necessarily prove a backend handoff. A Robolectric-style JVM Android test can exercise screen behavior without launching a real device, but it still may not prove hardware, network, or production environment behavior.</p>
+<p>For developers, this distinction is usually obvious. For QA, it is unfair to expect that level of Android testing context for every feature area.</p>
+<p>The test report might say that everything passed, but QA still needed a more practical answer:</p>
+<ul><li>Which manual cases are covered directly?</li><li>Which ones only have adjacent coverage?</li><li>Which ones are still missing automation?</li><li>Which ones failed?</li><li>Which ones should still be executed manually?</li></ul>
+<p>That is a different kind of report from a normal test result.</p>
+<p>It is not just pass or fail. It is confidence, traceability, and risk.</p>
+<h2>Building a Workflow Layer Around Testing</h2>
+<p>The idea I landed on was to build a workflow layer around the existing test setup.</p>
+<p>This was not a new test framework. It was not a magic AI system. It was mostly documentation, mappings, reports, and prompt structure.</p>
+<p>The workflow had a few responsibilities:</p>
+<ul><li>Describe how tests should be written.</li><li>Map manual cases to internal scenarios.</li><li>Classify the strength of the automation evidence.</li><li>Generate reports for both developers and QA</li><li>Produce prompts that QA could give to a coding assistant or agent.</li><li>Keep the agent focused on the cheapest reliable test first.</li></ul>
+<p>The important part was that all of these pieces worked together.</p>
+<p>Documentation on its own gets ignored. Reports without source mappings become hard to trust. Agent prompts without rules drift over time. Test mappings without confidence notes become another maintenance burden.</p>
+<p>But when they are connected, the workflow starts to become useful.</p>
+<p>QA can start from a manual case, see what automation already exists, understand what is missing, and use a pre-built prompt to ask a coding agent to write the next useful test.</p>
+<p>Developers can start from a code change, see the likely testing impact, run a smaller useful scope, and understand where the regression risk still sits.</p>
+<p>The same system supports both workflows, but it does not give both groups the same report.</p>
+<p>That distinction matters.</p>
+<h2>The Workflow In Practice</h2>
+<p>The workflow became easier to reason about once it had a clear path from manual case to automated evidence.</p>
+<p>In a simplified form, it looked like this:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/382d623ef8dc45aad2c7c70358373387.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/382d623ef8dc45aad2c7c70358373387" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/382d623ef8dc45aad2c7c70358373387" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That sequence is deliberately boring.</p>
+<p>The point was not to make QA learn the structure of the Android project. The point was to let QA start from the thing they already understood, the manual test case, and move toward the next useful automation step without needing to reverse-engineer the codebase.</p>
+<p>It also gave developers a clearer path. If a code change affected a risky area, the workflow could recommend the smallest useful test scope first rather than pushing everyone straight into a full regression run.</p>
+<p>The useful part was the loop:</p>
+<ol><li>Understand the current evidence.</li><li>Add or improve the cheapest useful test.</li><li>Update the mapping.</li><li>Re-run the relevant scope.</li><li>Re-check the confidence.</li></ol>
+<p>That made progress visible in smaller steps.</p>
+<h2>Keeping Source Data Separate From Generated Reports</h2>
+<p>One rule that became important early was separating authored testing knowledge from generated output.</p>
+<p>The stable source of truth was the curated testing configuration: scenario mappings, trust policy, prompt rules, and confidence notes. Reports and imported case records were generated locally from that source data and from manual test case exports.</p>
+<p>That separation prevented generated files from becoming another thing people had to maintain by hand.</p>
+<p>It also made the workflow safer. If a report looked wrong, the fix was not to edit the report. The fix was to update the mapping, refresh the imported case data, adjust the trust rule, or improve the test itself.</p>
+<p>The trade-off is that local generated data can become stale.</p>
+<p>If a QA export has not been refreshed, the missing-tests queue may be working from old case details. If a developer has not generated the local case records on their machine, the prompt may need to fall back to the shared scenario mapping. That is not a reason to commit generated files everywhere. It just means refresh steps need to be explicit.</p>
+<p>This was one of the less exciting parts of the workflow, but it mattered.</p>
+<p>Reports are only useful when people understand what is authored source, what is generated output, and where to fix problems when the two disagree.</p>
+<h2>Confidence Is More Useful Than Existence</h2>
+<p>One of the biggest shifts was moving away from a simple idea of “does a test exist?”.</p>
+<p>That question is too weak.</p>
+<p>A test can exist and still not prove the manual case. It can cover a helper function but not the screen flow. It can check the happy path but not the failure state. It can be mapped to the right feature but not to the specific business scenario QA needs to release.</p>
+<p>So the workflow uses confidence-style buckets instead.</p>
+<p>The exact names are not important, but the concept is:</p>
+<ul><li><strong>trusted:</strong> strong current evidence exists. QA can usually skip the manual check.</li><li><strong>review:</strong> useful automation exists, but the evidence needs inspection before skipping.</li><li><strong>manual:</strong> current evidence is not strong enough. Run the case manually.</li><li><strong>failed:</strong> matching automation ran and failed. Investigate before trusting release confidence.</li><li><strong>not-tested:</strong> the scenario exists, but was not exercised. Run the relevant scope.</li><li><strong>unmapped:</strong> the manual case is not linked to a scenario. Map it first.</li></ul>
+<p>This makes the report more honest.</p>
+<p>It avoids treating every passing test as equal. It also avoids hiding uncertainty. If the automation covers most of the scenario but still misses the real device handoff, the report should say that. If the case is only partially covered by nearby tests, that should not be presented as full confidence.</p>
+<p>One important nuance is that confidence is not code coverage.</p>
+<p>It is not a line percentage. It is a practical judgement about how much release risk the current evidence reduces for a specific scenario. That judgement can be informed by test results, mappings, historical failures, and remaining caveats, but it should not pretend to be more precise than it is.</p>
+<p>That sounds obvious, but it is easy to get wrong when the goal is to show progress.</p>
+<p>The workflow had to be strict about not overstating coverage. A slightly pessimistic report is much more useful than an optimistic one that causes QA to skip something important.</p>
+<h2>Choosing the Cheapest Reliable Test First</h2>
+<p>Another rule was to avoid jumping straight to the heaviest test layer.</p>
+<p>End-to-end tests are valuable, but they are also expensive. They take longer to write, longer to run, and usually require more maintenance. If the risk can be covered by a cheaper test, that should be the first option.</p>
+<p>The rough order looked like this:</p>
+<ol><li>Unit tests for pure logic.</li><li>Screenshot tests for visual states.</li><li>Robolectric-style JVM Android tests for screen or process behavior.</li><li>End-to-end tests when the real risk needs a full system path.</li></ol>
+<p>This is not a universal rule for every project, but the principle is useful.</p>
+<p>Use the lowest-cost layer that gives enough confidence.</p>
+<p>If a manual test is mostly checking validation logic, a unit test may be enough. If it is checking a specific empty state or error dialog, a screenshot test may be better. If it depends on Activity behavior, navigation, or Android framework interaction, a JVM Android test may be more appropriate. If the real risk is a device, backend, scanner, payment terminal, or cross-application flow, then a heavier end-to-end test might be justified.</p>
+<p>Screenshot tests had one extra caveat.</p>
+<p>They are useful, but I did not want the report to treat a screenshot as automatic approval. A screenshot diff can show that the UI changed, and it can be a very good review artifact, but a human may still need to decide whether the new rendering is correct.</p>
+<p>The workflow does not try to make everything cheap. It tries to make the trade-off explicit.</p>
+<p>That is especially helpful when a coding agent is involved. Without guidance, an agent may choose a test layer that looks plausible but is either too shallow to be useful or too heavy for the problem.</p>
+<p>The prompt needs to steer it toward the right level.</p>
+<h2>Mapping Manual Cases to Automated Evidence</h2>
+<p>The next step was traceability.</p>
+<p>Manual cases usually live in an issue tracker or test-management tool. Automated tests live in the codebase. Reports live somewhere else again. If those worlds are not connected, QA has to do the matching manually.</p>
+<p>That matching is exactly the kind of work the system should reduce.</p>
+<p>The workflow imports manual test case data, turns it into local case records, and maps those cases to internal testing scenarios. Those scenarios can then be linked to existing automated tests, adjacent coverage, confidence notes, and recommended next layers.</p>
+<p>The result is a more useful testing queue.</p>
+<p>Instead of a vague statement like “we need more tests”, QA can see something closer to:</p>
+<ul><li>This case has direct coverage and can usually be trusted.</li><li>This case has adjacent coverage but still needs a scenario-level test.</li><li>This case has no meaningful automation yet.</li><li>This case is mapped, but the latest test run did not exercise it.</li><li>This case is not mapped to any scenario, so it needs triage first.</li></ul>
+<p>That distinction changes the conversation.</p>
+<p>It lets QA focus on the cases that still need human attention. It lets developers see which automation would have the highest value. It also gives coding agents a clearer target than “add tests for this feature”.</p>
+<h2>Giving QA Agent-Ready Prompts</h2>
+<p>One of the more useful parts of the workflow was generating prompts that QA could use directly.</p>
+<p>The prompt does not need to be long. In fact, the case-specific part should be short. The stable rules should live in shared documentation, and the prompt should point the agent to those rules.</p>
+<p>A useful prompt contains just enough context:</p>
+<ul><li>The manual case id.</li><li>The mapped internal scenario.</li><li>The local case file or source record.</li><li>The recommended test layer.</li><li>Nearby tests to mirror.</li><li>Any case-specific hints.</li><li>A reminder to update mappings and confidence notes if coverage changes.</li></ul>
+<p>The key is that QA does not have to know how to write the perfect coding-agent prompt. They start from the generated queue, copy the suggested prompt, and give it to whichever coding assistant they are using.</p>
+<p>A version of a generated prompt might look like this:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/aa041af1fa7036568ba1cdeb30fb996d.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/aa041af1fa7036568ba1cdeb30fb996d" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/aa041af1fa7036568ba1cdeb30fb996d" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The agent is then expected to read the testing guidance, inspect nearby tests, follow the existing style, write the cheapest reliable test, and report what confidence changed.</p>
+<p>That last part is important.</p>
+<p>The output should not just be “I added a test”. It should say what layer was added, what is now covered, what remains unproven, and whether the confidence is actually strong enough for QA to rely on.</p>
+<p>For example, a version of the metadata might look something like this:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/f1d02fa46aebe4ce66e33ea0158b7645.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/f1d02fa46aebe4ce66e33ea0158b7645" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/f1d02fa46aebe4ce66e33ea0158b7645" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The exact format is not the point. The point is that the confidence and caveat are captured next to the scenario, instead of being left in a chat message that disappears.</p>
+<h2>The Guardrails Matter More Than the Prompt</h2>
+<p>Coding agents are helpful, but they are not consistent by default.</p>
+<p>They can forget instructions. They can write a test that matches the screen but not the business rule. They can choose a heavier layer than needed. They can overstate confidence. They can miss a mapping update. They can invent new test structure instead of following the local style.</p>
+<p>That does not make them useless. It just means the workflow needs guardrails.</p>
+<p>The stable instructions tell the agent to do a few things before writing tests:</p>
+<ul><li>Read the testing workflow documentation.</li><li>Read the target manual case.</li><li>Check nearby existing tests.</li><li>Match local patterns and helpers.</li><li>Prefer the cheapest reliable test layer.</li><li>Keep traceability to the case or scenario explicit.</li></ul>
+<p>And after writing tests:</p>
+<ul><li>State what was added.</li><li>Give a short confidence estimate.</li><li>Explain the remaining caveat.</li><li>Update the scenario mapping if coverage changed.</li><li>Avoid claiming full confidence unless the evidence supports it.</li><li>Suggest the next best improvement if confidence is still not high enough.</li></ul>
+<p>This is where the workflow becomes less about AI and more about process design.</p>
+<p>The prompt is only the entry point. The repeatable rules, reports, and mappings are what make the result useful.</p>
+<h2>What The Agent Still Got Wrong</h2>
+<p>This workflow helped, but it did not make coding agents perfect.</p>
+<p>The common failure modes were predictable:</p>
+<ul><li>Writing a test around the screen shell instead of the business steps.</li><li>Choosing a broader test layer than the case really needed.</li><li>Forgetting to update the scenario mapping after adding coverage.</li><li>Treating “a test was added” as “confidence is now complete”.</li><li>Missing the remaining caveat when real device, backend, or external-system behavior was still unproven.</li><li>Creating new helper structure instead of following nearby tests.</li></ul>
+<p>Those mistakes are why the workflow kept repeating the same rules in a few places.</p>
+<p>Check nearby tests. Use the cheapest reliable layer. Keep traceability explicit. Do not overstate confidence. Say what still needs manual or broader verification.</p>
+<p>Repetition can feel annoying in documentation, but with coding agents it is often necessary. The model may follow most of the instruction and still miss the one rule that matters for the current case.</p>
+<p>The goal was not to make the agent autonomous. The goal was to make its output easier for QA and developers to review.</p>
+<h2>Developers and QA Need Different Reports</h2>
+<p>Another lesson was that one report cannot serve everyone well.</p>
+<p>Developers and QA ask different questions.</p>
+<p>A developer working on a change usually wants to know:</p>
+<ul><li>What broke?</li><li>What should I run?</li><li>What is the smallest useful test scope?</li><li>What regression risk remains?</li><li>What tests should I write next?</li><li>Is there a production-code change that would make this easier to test?</li></ul>
+<p>QA usually wants to know:</p>
+<ul><li>Which manual cases can be trusted?</li><li>Which cases need review?</li><li>Which cases are still manual?</li><li>Which mapped tests failed?</li><li>Which cases are missing automation?</li><li>Which cases are unmapped?</li><li>What should be automated next?</li></ul>
+<p>Those are related questions, but they are not the same report.</p>
+<p>If the QA report is too developer-focused, it becomes noisy. If the developer report is too QA-focused, it slows down the code-change loop. Splitting them keeps each workflow clearer.</p>
+<p>The developer report can focus on fast feedback and regression risk. The QA report can focus on trust, missing coverage, and manual testing decisions.</p>
+<h2>The Maintenance Loop</h2>
+<p>The mapping was not a one-time task.</p>
+<p>Tests get renamed, deleted, moved, or retargeted. Manual cases change. New scenarios are added. Old assumptions become stale.</p>
+<p>If the system does not make that visible, the reports slowly lose value.</p>
+<p>So maintenance had to be part of the workflow rather than a separate cleanup project. When a test changed coverage, the mapping needed to change with it. When confidence changed, the confidence note needed to be updated. When a report showed unmapped cases, those needed to be triaged instead of ignored.</p>
+<p>This is also where audits helped.</p>
+<p>They gave the team a way to check whether the current test classes still lined up with the scenario inventory. That does not replace human judgement, but it does catch the kind of drift that makes QA stop trusting reports.</p>
+<p>The workflow only works if the map stays close to the territory.</p>
+<h2>What Changed</h2>
+<p>The biggest change was not that manual testing disappeared.</p>
+<p>It did not, and that was never the goal.</p>
+<p>The useful change was that manual testing became more targeted.</p>
+<p>QA could see which cases had strong evidence and which ones still needed attention. Developers could see which tests would reduce the most risk. Coding agents had better prompts and clearer boundaries. The team had a shared language for coverage that went beyond pass or fail.</p>
+<p>The workflow also made missing tests easier to discuss.</p>
+<p>Instead of saying “we need more automation”, the report could point to specific mapped cases, recommended layers, and nearby tests to mirror. That makes the next step smaller and more actionable.</p>
+<p>It also helped with confidence over time.</p>
+<p>When a new test was added, the mapping and confidence note could be updated with it. When a test was renamed or removed, the mapping could be audited. When a case remained manual, the reason could be stated clearly instead of being implied.</p>
+<p>That visibility is valuable.</p>
+<h2>The Caveats</h2>
+<p>This kind of workflow is not free.</p>
+<p>Mappings need maintenance. Trust rules need tuning. Reports are only useful if the source data stays clean. Agents still need review. Some tests will still be too expensive to automate properly. Some scenarios will always need a real device, real backend, or human judgement.</p>
+<p>There is also a risk of making the system sound more certain than it is.</p>
+<p>That is why the confidence model matters. If the current evidence is weak, the report should say so. If the test only covers the local UI state, it should not claim to prove the full end-to-end flow. If a case is unmapped, it should be visible rather than silently ignored.</p>
+<p>The workflow should reduce manual burden, not hide risk.</p>
+<p>That is the balance I kept coming back to.</p>
+<h2>Final Thoughts</h2>
+<p>The most useful part of this work was not the scripts, the reports, or the prompts on their own.</p>
+<p>It was connecting them into a workflow that answered a practical QA question:</p>
+<p>Can this manual test be skipped with confidence?</p>
+<p>Sometimes the answer is yes. Sometimes the answer is no. Often the answer is somewhere in the middle: there is useful automation, but one important caveat remains.</p>
+<p>That honesty is what makes the system useful.</p>
+<p>Coding agents can help write tests, but they need structure. QA can use automation more confidently, but they need traceability. Developers can reduce regression risk faster, but they need clear feedback about what matters.</p>
+<p>The goal was never to remove people from the testing process.</p>
+<p>It was to remove some of the repeated, low-value manual work by making automated evidence easier to find, easier to improve, and easier to trust.</p>
+<p>And for a growing Android project, that can make a real difference.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-07-15">Jul 15, 2026</time></p>
+      <p>Tags: Android, QA Automation, AI Agents, Software Testing, Developer Workflow</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>
