@@ -303,18 +303,34 @@ pre code {
 }
 
 /* Optional: soft fade at bottom of viewport (no blur) */
+body.bottom-fade {
+  background: var(--color-background, #fcfcf9);
+}
+
 .bottom-fade::after {
   content: "";
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 0;
-  height: 12vh;
+  bottom: calc(-1 * env(safe-area-inset-bottom, 0px));
+  height: calc(max(26vh, 156px) + env(safe-area-inset-bottom, 0px));
   pointer-events: none;
-  background: linear-gradient(
+  background: var(--color-background, #fcfcf9);
+  -webkit-mask-image: linear-gradient(
     to top,
-    var(--color-background, #ffffff) 0%,
-    rgba(255, 255, 255, 0) 80%
+    #000 0%,
+    rgba(0, 0, 0, 0.98) 16%,
+    rgba(0, 0, 0, 0.72) 42%,
+    rgba(0, 0, 0, 0.34) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  mask-image: linear-gradient(
+    to top,
+    #000 0%,
+    rgba(0, 0, 0, 0.98) 16%,
+    rgba(0, 0, 0, 0.72) 42%,
+    rgba(0, 0, 0, 0.34) 70%,
+    rgba(0, 0, 0, 0) 100%
   );
   z-index: 60;
 }
@@ -2229,36 +2245,52 @@ footer {
 }
 
 @media (max-width: 640px) {
+  header {
+    background: rgba(255, 255, 253, 0.98);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+  }
+
   .nav {
-    padding: var(--space-12) var(--space-16);
+    padding: calc(var(--space-8) + env(safe-area-inset-top, 0px)) 14px var(--space-10);
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-12);
+    gap: var(--space-8);
   }
 
   .nav-links {
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
-    gap: var(--space-8) var(--space-10);
+    gap: var(--space-4) var(--space-6);
     width: 100%;
     padding: 0;
     margin: 0;
     justify-content: flex-start;
+    align-items: center;
   }
 
   .nav-links li {
     list-style: none;
-    flex: 1 0 22%;
-    min-width: 70px;
+    flex: 0 0 auto;
+    min-width: 0;
+  }
+
+  .nav-links li:last-child {
+    flex-basis: 100%;
   }
 
   .nav-links a,
   .nav-cta {
-    display: block;
-    width: 100%;
-    padding: var(--space-8) var(--space-10);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: auto;
+    min-height: 30px;
+    padding: var(--space-4) var(--space-6);
+    line-height: 1.15;
     text-align: center;
+    white-space: nowrap;
   }
 
   .hero-title {
@@ -2314,7 +2346,7 @@ footer {
 
   .nav {
     justify-content: space-between;
-    padding: var(--space-10) var(--space-12);
+    padding: calc(var(--space-8) + env(safe-area-inset-top, 0px)) var(--space-12) var(--space-8);
   }
 
   .brand-mark {
@@ -2335,13 +2367,22 @@ footer {
   }
 
   .hero-tags {
-    flex-direction: column;
-    gap: var(--space-6);
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: var(--space-4);
   }
 
   .tag {
-    display: block;
-    text-align: center;
+    display: inline-flex;
+    width: auto;
+    max-width: max-content;
+    padding: 4px 9px;
+    font-size: 11px;
+    line-height: 1.15;
+    text-align: left;
+    white-space: nowrap;
   }
 
   .hero-actions {
