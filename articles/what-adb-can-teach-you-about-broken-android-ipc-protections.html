@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>What `adb` Can Teach You About Broken Android IPC Protections</title>
+  <meta name="description" content="What `adb` Can Teach You About Broken Android IPC Protections When Android developers hear “permissions,” they usually think about camera prompts, location access, notifications, or storage."/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/what-adb-can-teach-you-about-broken-android-ipc-protections.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="What `adb` Can Teach You About Broken Android IPC Protections"/>
+  <meta property="og:description" content="What `adb` Can Teach You About Broken Android IPC Protections When Android developers hear “permissions,” they usually think about camera prompts, location access, notifications, or storage."/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/what-adb-can-teach-you-about-broken-android-ipc-protections.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*EHyyNUobQyRp5RMa_7Wnqw.png"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="What `adb` Can Teach You About Broken Android IPC Protections"/>
+  <meta name="twitter:description" content="What `adb` Can Teach You About Broken Android IPC Protections When Android developers hear “permissions,” they usually think about camera prompts, location access, notifications, or storage."/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*EHyyNUobQyRp5RMa_7Wnqw.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"What `adb` Can Teach You About Broken Android IPC Protections","description":"What `adb` Can Teach You About Broken Android IPC Protections When Android developers hear “permissions,” they usually think about camera prompts, location access, notifications, or storage.","image":["https://miro.medium.com/v2/resize:fit:1200/1*EHyyNUobQyRp5RMa_7Wnqw.png"],"datePublished":"2026-07-16","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/what-adb-can-teach-you-about-broken-android-ipc-protections.html"},"url":"https://jamescullimore.dev/articles/what-adb-can-teach-you-about-broken-android-ipc-protections.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android | ADB | IPC Security</p>
+      <h1 class="article-title">What `adb` Can Teach You About Broken Android IPC Protections</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-07-16">Jul 16, 2026</time>
+        <span>&bull;</span>
+        <span>4 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*EHyyNUobQyRp5RMa_7Wnqw.png" alt="What `adb` Can Teach You About Broken Android IPC Protections"/>
+    </figure>
+    <section class="article-content">
+<p>When Android developers hear “permissions,” they usually think about camera prompts, location access, notifications, or storage.</p>
+<p>Those matter, but they are not where some of the more interesting Android security mistakes appear. The more useful test often starts when another process tries to talk to your app.</p>
+<p>Once you expose a `Service`, `ContentProvider`, or `BroadcastReceiver`, the question changes. It is no longer just “did we request the right permission?” It becomes “who is calling us, and what are we willing to trust about that caller?”</p>
+<p>That is why the runtime permissions and IPC lab in the Android Security Training project is useful. The secure and vulnerable variants are close enough to compare directly, but different enough to show how quickly exported components become liabilities when they are left open or protected loosely.</p>
+<h2>Package Names Are Not Identity</h2>
+<p>The secure helper surfaces signer information:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/6e541fcdc0b9844ee3f3ea3d0c3c4e9e.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/6e541fcdc0b9844ee3f3ea3d0c3c4e9e" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/6e541fcdc0b9844ee3f3ea3d0c3c4e9e" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The vulnerable helper is much thinner:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/86adc66716bdb20687f55ae944d2d7c4.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/86adc66716bdb20687f55ae944d2d7c4" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/86adc66716bdb20687f55ae944d2d7c4" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That difference matters because Android trust decisions should not be built on package names alone. A package name is useful for routing and display. It is not proof that the caller is the app you meant to trust.</p>
+<p>For same-signer relationships, the signing certificate is the meaningful identity signal. The secure build computes and displays the signer digest alongside process identity information. The vulnerable build mostly stops at basic PID and UID details.</p>
+<p>That contrast is useful in a teaching app because it pushes the reader toward the right question: not “what did the caller say its name was?” but “what identity did the platform actually assign to this caller?”</p>
+<h2>Exported Services and Providers Should Be Intentional</h2>
+<p>The provider query demo shows the difference clearly:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/0df6da33ad5888294a1a4b7a23774384.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/0df6da33ad5888294a1a4b7a23774384" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/0df6da33ad5888294a1a4b7a23774384" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The service-start path follows the same theme:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/25b1edc3cd9afd017f3445eae2ffcbe4.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/25b1edc3cd9afd017f3445eae2ffcbe4" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/25b1edc3cd9afd017f3445eae2ffcbe4" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The vulnerable build is deliberately permissive. If a component is exported without meaningful protection, another app, or the shell user during testing, can often interact with it.</p>
+<p>The secure build is stricter. Components that do not need external access are kept private. Components that are intentionally shared are guarded by a custom signature permission, so only callers signed with the expected key should be allowed through.</p>
+<p>That may sound like ceremony until you test it:</p>
+<pre><code class="language-bash">adb shell am startservice -n dev.jamescullimore.android_security_training.vuln/dev.jamescullimore.android_security_training.perm.DemoService
+adb shell content query - uri content://dev.jamescullimore.android_security_training.vuln.demo/hello</code></pre>
+<p>On the vulnerable side, those calls are expected to succeed in the lab. On the secure side, the same style of access should be blocked by export settings, permissions, or both.</p>
+<h2>ADB Is a Good Reality Check</h2>
+<p>One reason I like this lab is that you do not need to write a second app to start testing your assumptions. Shell commands are enough to reveal whether the merged manifest matches what you thought you built.</p>
+<p>Start by finding the installed packages:</p>
+<pre><code class="language-bash">adb shell pm list packages | grep android_security_training</code></pre>
+<p>Then inspect the packaged app:</p>
+<pre><code class="language-bash">adb shell dumpsys package dev.jamescullimore.android_security_training.secure | sed -n '1,180p'
+adb shell dumpsys package dev.jamescullimore.android_security_training.vuln | sed -n '1,180p'</code></pre>
+<p>That is where vague confidence gets cleaned up. Source manifests, library manifests, product flavors, and manifest merging can all change the final shape of the app. If you only review the source fragment, you are reviewing an intention. The installed package is the thing users actually run.</p>
+<h2>The Merged Manifest Is the Source of Truth</h2>
+<p>This is where Android reviews can surprise people.</p>
+<p>The manifest you wrote is only one input. Libraries can contribute components. Product flavors can override attributes. Build variants can change package names, permissions, exported flags, authorities, and intent filters. A component that looked private in one source file may not be private in the artifact you installed.</p>
+<p>That is why I like checking the final package from more than one angle. Use Android Studio’s merged manifest view during development, then verify the installed app with `dumpsys package`. If a provider authority, exported receiver, or service permission differs between secure and vulnerable builds, that difference should be visible in the final artifact.</p>
+<p>This also helps catch accidental drift. A signature permission is useful only if the component actually requires it. A non-exported service is useful only if it is still non-exported after merging. A provider authority is useful only if it is not predictable in a way that collides across variants or apps.</p>
+<p>For release reviews, I would also compare secure and vulnerable flavors explicitly. Differences in permissions, authorities, and exported attributes should be deliberate. If a debug-only component appears in the release package, the review should stop until someone can explain why it ships.</p>
+<h2>Caller Checks Should Match the Sensitivity of the Operation</h2>
+<p>Not every IPC path needs the same level of ceremony.</p>
+<p>A harmless diagnostic provider that returns static demo text does not carry the same risk as a service that changes account state, exports files, or starts a privileged workflow. The review should match the operation.</p>
+<p>For low-risk paths, keeping the component private may be enough. For same-suite communication, signature permissions are often a better fit than runtime permissions. For sensitive Binder or provider operations, the callee may need to inspect the caller UID, resolve packages for that UID, and compare signer identity before doing anything irreversible.</p>
+<p>The key is to make the trust decision explicit. If the app is about to reveal data or perform an action on behalf of another process, there should be a clear reason that caller is allowed to ask.</p>
+<h2>Good IPC Hygiene Is Boring for a Reason</h2>
+<p>The secure version is not doing anything exotic. It applies platform rules consistently:</p>
+<ul><li>keep components non-exported unless external access is required</li><li>use signature permissions for same-signer IPC</li><li>inspect the merged manifest and installed package</li><li>check caller identity when the trust boundary matters</li><li>avoid treating package names as proof</li></ul>
+<p>That last point is worth repeating because it is a common shortcut. If a provider, service, or receiver makes a sensitive decision, the caller identity should come from platform-enforced properties, not from a string that merely looks familiar.</p>
+<h2>Closing Thoughts</h2>
+<p>The permissions lab is useful because it moves the conversation away from prompts and into process boundaries.</p>
+<p>The secure build treats IPC as a trust problem. The vulnerable build treats it as plumbing. That is the real contrast.</p>
+<p>If you want tighter Android boundaries, do the boring work carefully: keep components private by default, protect intentional sharing with signature permissions, verify identity when needed, and inspect the final packaged app. Most IPC bugs are not exotic. They come from leaving a component reachable and assuming nobody will try to call it.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-07-16">Jul 16, 2026</time></p>
+      <p>Tags: Android, ADB, IPC Security, Android Security, Debugging</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>How I Found a 34% Startup Win in a Modern Compose App</title>
+  <meta name="description" content="How I Found a 34% Startup Win in a Modern Compose App It is easy to assume the big startup wins are already gone once an Android app is modern, uses Compose, has reasonable structure, and does not …"/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/how-i-found-a-34-startup-win-in-a-modern-compose-app.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="How I Found a 34% Startup Win in a Modern Compose App"/>
+  <meta property="og:description" content="How I Found a 34% Startup Win in a Modern Compose App It is easy to assume the big startup wins are already gone once an Android app is modern, uses Compose, has reasonable structure, and does not …"/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/how-i-found-a-34-startup-win-in-a-modern-compose-app.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*MncHM6rnM_rMwefyiw8Hzg.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="How I Found a 34% Startup Win in a Modern Compose App"/>
+  <meta name="twitter:description" content="How I Found a 34% Startup Win in a Modern Compose App It is easy to assume the big startup wins are already gone once an Android app is modern, uses Compose, has reasonable structure, and does not …"/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*MncHM6rnM_rMwefyiw8Hzg.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"How I Found a 34% Startup Win in a Modern Compose App","description":"How I Found a 34% Startup Win in a Modern Compose App It is easy to assume the big startup wins are already gone once an Android app is modern, uses Compose, has reasonable structure, and does not …","image":["https://miro.medium.com/v2/resize:fit:1200/1*MncHM6rnM_rMwefyiw8Hzg.jpeg"],"datePublished":"2026-03-16","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/how-i-found-a-34-startup-win-in-a-modern-compose-app.html"},"url":"https://jamescullimore.dev/articles/how-i-found-a-34-startup-win-in-a-modern-compose-app.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android &bull; Jetpack Compose &bull; Performance</p>
+      <h1 class="article-title">How I Found a 34% Startup Win in a Modern Compose App</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>&bull;</span>
+        <time datetime="2026-03-16">Mar 16, 2026</time>
+        <span>&bull;</span>
+        <span>10 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*MncHM6rnM_rMwefyiw8Hzg.jpeg" alt="How I Found a 34% Startup Win in a Modern Compose App"/>
+    </figure>
+    <section class="article-content">
+<p>It is easy to assume the big startup wins are already gone once an Android app is modern, uses Compose, has reasonable structure, and does not feel obviously slow. That was my starting assumption here too.</p>
+<p>It turned out to be wrong.</p>
+<p>I was working on a modern Compose app with two materially different startup paths: an initial setup flow and a direct launch into the main operational screen. The app already had a lot going for it: baseline profile support, startup benchmarks, tracing, and a codebase that was not a cleanup disaster.</p>
+<p>And yet there was still a 34% startup win left to find.</p>
+<p>What made the result interesting was that it did not come from one silver bullet. I added recomposition instrumentation to make the UI easier to reason about, and then a StrictMode pass to clean up startup and settings behavior. Baseline profiles helped. Macrobenchmarks helped me prove it. But the biggest absolute gains came from cleanup work that did not start life as “performance optimization.”</p>
+<p>This also was not my first time doing this kind of work. I have gone through similar startup and baseline-profile investigations on four different apps. That matters, because it is easy to talk about performance tooling as if the outcome is always predictable once you add the recommended pieces. It is not. In one of those apps, baseline profiles actually made startup slower. So while this article is anchored in one project, the conclusions are coming from repeated attempts across different codebases, not from a single lucky result.</p>
+<p>The short version is this:</p>
+<ul><li>Baseline profiles were a clear, repeatable win.</li><li>Macrobenchmarks mattered because startup was not one flow.</li><li>Recomposition instrumentation improved visibility more than raw startup numbers.</li><li>A later cleanup pass triggered by StrictMode and product sanity work ended up improving absolute startup by 18 to 34 percent, even though it did not begin as a startup optimization task.</li></ul>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*ZPbZSU0E8d_hbr0XcQ0pdQ.png" alt=""/></figure>
+<h2>The Startup Story Happened In Stages</h2>
+<p>One reason date-based charts are misleading is that they flatten the work into calendar points instead of engineering stages.</p>
+<p>What actually happened was closer to this:</p>
+<ul><li>Stage 1: validate that the baseline profile is materially helping startup on the current app behavior</li><li>Stage 2: do a StrictMode-guided cleanup and product-hardening pass, then benchmark again to see whether absolute startup changed</li></ul>
+<p>That distinction matters because the later gains were not “more baseline profile work.” The baseline profile was still helping, but the bigger absolute shift came from cleaning up behavior around the startup path.</p>
+<p>So when I compare the two benchmark snapshots in this article, I am not really comparing dates. I am comparing two technical stages:</p>
+<ul><li>`Stage 1`: baseline-profile benefit validated on the earlier tree</li><li>`Stage 2`: baseline profile still present, but now on top of startup cleanup from the StrictMode/product-hardening pass</li></ul>
+<h2>Baseline Profiles Were The Most Predictable Win</h2>
+<p>The easiest part of the story to defend is baseline profile impact, because the measurement setup makes the comparison explicit.</p>
+<p>The benchmark script measures the app in two compilation modes inside one run:</p>
+<p>- `before`: package compiled with `verify`- `after`: package compiled with `speed-profile`</p>
+<p>That means each run tells me what the baseline profile is doing on the current tree, not just whether startup changed for some unrelated reason.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/2be074f048aaf5620656d4180dd13b6f.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/2be074f048aaf5620656d4180dd13b6f" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/2be074f048aaf5620656d4180dd13b6f" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>At `Stage 1`, where the main recent change was baseline-profile validation and refresh, the benchmark showed:</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*GR9Rma32kgZGFpdxtcMtNw.png" alt=""/></figure>
+<p>At `Stage 2`, after the StrictMode-guided cleanup and product-hardening pass, the benchmark still showed a strong baseline-profile effect:</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*ERbzi317Wc58AHke57afmQ.png" alt=""/></figure>
+<p>That consistency matters. The baseline profile was not a one-off win that disappeared as the app changed. It stayed useful even after the rest of the startup path improved.</p>
+<p>It also clarifies what changed between the two stages. The baseline-profile effect stayed in roughly the same range. The absolute startup numbers improved because the app itself got cleaner on the path to first frame and early interaction.</p>
+<p>It is also worth saying the uncomfortable part clearly: baseline profiles are not magic, and they are not automatically a win just because you generated one. In one of the four apps where I have done this work, enabling the baseline profile made startup slower. That is exactly why I care so much about measuring the before and after on the actual app instead of treating baseline profiles as something you add on faith.</p>
+<p>This is also why I like showing the benchmark harness instead of only showing a final chart. The script is simple enough to audit. It force-stops the app, clears package state, compiles with a specific mode, launches with `am start -S -W`, and stores raw `TotalTime` samples before summarizing medians.</p>
+<pre><code class="language-text">adb shell pm clear "$PKG" &gt;/dev/null
+adb shell cmd package compile - reset "$PKG" &gt;/dev/null
+adb shell cmd package compile -f -m "$compile_mode" "$PKG" &gt;/dev/null</code></pre>
+<p>That is not glamorous, but it keeps the story grounded.</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*9lHqIagJSLl0o6SfZsaHTA.png" alt=""/></figure>
+<h2>Startup Was Not One Flow, So The Benchmark Could Not Be One Test</h2>
+<p>A lot of startup work gets flattened into a single launcher metric. That was not credible for this app.</p>
+<p>There were two startup paths that mattered:</p>
+<p>- `setup_flow`, where onboarding is not done yet- `main_flow`, where the app launches directly into the primary screen</p>
+<p>The benchmark module measures both explicitly:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/32d4949de71f3a4a9bc2f31233e78014.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/32d4949de71f3a4a9bc2f31233e78014" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/32d4949de71f3a4a9bc2f31233e78014" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That is a small detail, but it changed how I thought about startup work. If I had only measured the happy-path launcher case, I would have missed the fact that setup and direct-entry launches were both worth tracking and both responded slightly differently to changes.</p>
+<p>This also made the eventual benchmark data more persuasive. When both scenarios improve, the result is harder to dismiss as a path-specific accident.</p>
+<h2>Standard Tooling Helped, But It Was Not Fully Reliable</h2>
+<p>One part of the work was much messier than I expected: baseline profile generation itself.</p>
+<p>The usual `BaselineProfileRule` path was not reliably returning on this device. I upgraded AndroidX benchmark artifacts, reduced idle waiting, and isolated the generation test more aggressively. The run still hung at `0/1 completed`.</p>
+<p>That could have turned into one of those situations where the team shrugs, leaves the checked-in profile alone, and keeps talking about baseline profiles as if the workflow were stable. I did not want that.</p>
+<p>So the project ended up with a manual fallback generator that launches the relevant scenarios, triggers `androidx.profileinstaller.action.SAVE_PROFILE`, dumps the ART profile, and filters it into `baseline-prof.txt`.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/b72e71a1f2f3361737cc9c51a7f7493d.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/b72e71a1f2f3361737cc9c51a7f7493d" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/b72e71a1f2f3361737cc9c51a7f7493d" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>I would not present that as the ideal workflow. I would present it as the honest one. Official tooling is still the right first choice, but if it is unstable in your environment, you need a fallback that preserves confidence instead of hand-waving around the problem.</p>
+<p>That is part of the real performance story too. Sometimes the hard part is not identifying an optimization. It is creating a workflow you can trust enough to keep using.</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*i8jn4QejYJNem_q1hdGpYA.png" alt=""/></figure>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*RB7AI1gPLRr2MxQJZ_onfg.png" alt=""/></figure>
+<h2>Recomposition Instrumentation Was More About Visibility Than Raw Startup</h2>
+<p>I also wanted better visibility into what the main Compose surface was doing once it had launched. That led to a small debug-only recomposition overlay on the primary screen.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/46c71aa74756b2c9deb8d2b9602b5838.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/46c71aa74756b2c9deb8d2b9602b5838" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/46c71aa74756b2c9deb8d2b9602b5838" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The overlay tracks section-level recompositions and exposes them in the UI:</p>
+<pre><code class="language-text">@Composable
+private fun DebugRecomposeCounter(section: String) {
+   ...
+}</code></pre>
+<p>And because debug-only tools have a habit of rotting when they are not exercised, there is also an Android test that expands the overlay, checks that rows appear, clears them, and verifies the rows reset.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/a2b0e094985a6ed9d168c74071c56bf8.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/a2b0e094985a6ed9d168c74071c56bf8" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/a2b0e094985a6ed9d168c74071c56bf8" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This part is worth framing carefully. Recomposition instrumentation did not suddenly explain startup all by itself. It was not the source of the 20 percent baseline-profile win, and it was not the main cause of the later absolute startup improvement either.</p>
+<p>What it did do was make the UI less opaque. It gave me a faster way to reason about whether state slicing and UI updates were behaving sanely in the most important screen. That kind of visibility matters, even when the direct win is confidence rather than a benchmark number.</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*xbSd5q059RApIfsi0dAxBQ.png" alt=""/></figure>
+<h2>Stage 2 Was Not “More Baseline Profile Work”</h2>
+<p>This is the part that is easiest to misrepresent if the chart only shows numbers without saying what changed.</p>
+<p>The `Stage 2` improvement did not come from a second wave of profile tuning. It came from a cleanup pass that reduced avoidable work and instability around startup. StrictMode helped push that work into view, but the gains came from the code and product changes that followed.</p>
+<p>The most important ones were:</p>
+<ul><li>removing a receiver-driven UI relaunch path that was creating lifecycle instability</li><li>moving display-settings and provider reads off the critical UI path</li><li>moving blocking event-reporting process I/O off inline execution and giving it a fallback path</li><li>stopping privileged settings screens from thrashing unavailable operations during interaction</li></ul>
+<p>That is why the Stage 2 numbers are better in both compilation modes. If the win had been only about baseline profiles, I would expect the `speed-profile` side to improve more than the `verify` side. Instead, both sides improved because the underlying startup path got healthier.</p>
+<h2>StrictMode Did Not Find A Bunch Of Classic Startup Violations, But It Still Led To Faster Startup</h2>
+<p>This was the most interesting part of the work. I added debug-only StrictMode wiring expecting the usual outcome: find obvious disk or network work on the main thread, fix it, and call that the startup story.</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/dedb9c65b3bda1e0e9c9e5560886ec18.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/dedb9c65b3bda1e0e9c9e5560886ec18" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/dedb9c65b3bda1e0e9c9e5560886ec18" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>That was not really what happened. StrictMode did not surface a huge list of dramatic app-originated startup violations. What it did do was push a set of adjacent quality problems into view:</p>
+<ul><li>a boot receiver that was relaunching UI from background events</li><li>settings screens that looked interactive even when the required privileges were unavailable</li><li>blocking process I/O in event reporting</li><li>provider and preferences reads sitting on the critical UI path</li></ul>
+<p>Those do not all read like “startup optimizations” on paper. But once they were cleaned up, startup got meaningfully faster.</p>
+<p>To isolate that pass, I compared the Stage 2 tree against a temporary copy where only the cleanup-pass files were reverted. That gave a practical A/B comparison without rewriting local history.</p>
+<p>The result was larger than I expected:</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*xe-iNoL6fN5KRy18CNu1jA.png" alt=""/></figure>
+<p>That is the point where the article title became obvious to me. The question was no longer “did baseline profiles help?” They did. The more useful question was what actually improved startup in this app.</p>
+<p>Part of the answer was baseline profiles. Part of it was measurement discipline. But part of it was also product-hardening work that removed launch chaos, reduced main-thread initialization pressure, and stopped doing questionable things during early app life cycle.</p>
+<p>Two of the changes were especially representative.</p>
+<p>The boot receiver stopped force-launching the UI and now only starts the service:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/95c00aafd4bfda35f3c82c25f4598817.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/95c00aafd4bfda35f3c82c25f4598817" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/95c00aafd4bfda35f3c82c25f4598817" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>The display settings state stopped doing the full read inline on first composition and now hydrates asynchronously after the first frame:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/ab8ac100ac4e4aaf0fd87bda32014ea4.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/ab8ac100ac4e4aaf0fd87bda32014ea4" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/ab8ac100ac4e4aaf0fd87bda32014ea4" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>Neither of those changes is especially glamorous. Both are the kind of cleanup that often gets filed under product sanity or engineering quality rather than performance. In practice, they still changed the startup path.</p>
+<h2>The Practical Workflow That Held Up</h2>
+<p>By the end of this work, the performance workflow that felt defensible was much simpler than the full journey:</p>
+<ol><li>Measure more than one startup path.</li><li>Keep baseline profiles because they are a repeatable win.</li><li>Add lightweight instrumentation where the UI is too opaque.</li><li>Use StrictMode as a quality tool, not just a violation counter.</li><li>Benchmark again after cleanup work that is not obviously “performance work.”</li></ol>
+<p>That last step is the one I would stress most.</p>
+<p>If I had only benchmarked after baseline profile changes, I would have learned something true but incomplete. If I had only done cleanup work without benchmarking, I would have had a nicer architecture story and weaker evidence. The value came from combining both.</p>
+<h2>Closing Thoughts</h2>
+<p>The simple version of this story would be: baseline profiles improved startup, macrobenchmarks proved it, and recomposition tooling helped refine Compose behavior. That is true, but incomplete.</p>
+<p>In this app, baseline profiles were the most predictable win. Macrobenchmarks mattered because startup was not one path. Recomposition instrumentation helped me see what the main screen was doing. But the biggest surprise was that a StrictMode-led cleanup pass improved absolute startup even more than some of the explicitly performance-branded work.</p>
+<p>That is the part I would carry into the next app. Performance work is not only about the optimizations you set out to make. Sometimes it comes from using the right tools to expose product and lifecycle problems that were already sitting on the startup path.</p>
+<p>It is also why I no longer talk about baseline profiles as a checkbox. I have now done this work across four apps, and the results were not identical. In this app, the baseline profile was a real win. In another, it made startup worse. The common rule was not “baseline profiles always help.” The common rule was “measure the app you actually have, then keep only what improves it.”</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-03-16">Mar 16, 2026</time></p>
+      <p>Tags: Android, Jetpack Compose, Performance, Startup Performance, Optimization</p>
+      <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../pages/impressum.html">Impressum</a></li>
+<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>
