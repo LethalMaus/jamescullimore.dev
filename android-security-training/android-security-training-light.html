@@ -1,0 +1,343 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Android Security Training Light | James Cullimore</title>
+  <meta name="description" content="A light theme version of the hands-on Android security training landing page for developers and mobile teams.">
+  <link rel="stylesheet" href="android-security-training-light.css">
+</head>
+<body>
+  <header class="site-header" aria-label="Site header">
+    <a class="brand" href="./" aria-label="James Cullimore home">
+      <span class="brand-mark">AST</span>
+      <span>
+        <strong>Android Security Training</strong>
+        <small>James Cullimore</small>
+      </span>
+    </a>
+
+    <nav class="site-nav" aria-label="Primary navigation">
+      <a href="#modules">Modules</a>
+      <a href="#labs">Labs</a>
+      <a href="#outcomes">Outcomes</a>
+      <a href="#contact">Contact</a>
+    </nav>
+
+    <!-- TODO: Replace info@jamescullimore.dev before handover -->
+    <a class="button button-primary header-cta" href="mailto:info@jamescullimore.dev?subject=Android%20Security%20Training">Request training</a>
+  </header>
+
+  <main>
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-content">
+        <p class="eyebrow">Developer enablement for mobile risk</p>
+        <h1 id="hero-title">Android Security Training for Developers</h1>
+        <p class="hero-copy">
+          Hands-on Android security training for development teams who need to test, understand and harden
+          real app attack surfaces.
+        </p>
+        <ul class="hero-badges" aria-label="Training format highlights">
+          <li>Remote or onsite</li>
+          <li>Team workshop</li>
+          <li>Vulnerable and secure app variants</li>
+        </ul>
+        <div class="hero-actions" aria-label="Page actions">
+          <!-- TODO: Replace info@jamescullimore.dev before handover -->
+          <a class="button button-primary" href="mailto:info@jamescullimore.dev?subject=Android%20Security%20Training">Request training</a>
+          <a class="button button-secondary" href="#modules">View syllabus</a>
+        </div>
+      </div>
+
+      <aside class="hero-panel" aria-label="Android security examples">
+        <div class="panel-header">
+          <span class="status-dot"></span>
+          <span>training-lab-light</span>
+        </div>
+        <div class="terminal-lines">
+          <p><span>$</span> adb shell am start<br>   -a android.intent.action.VIEW<br>   -d "ast://account/reset"</p>
+          <p><span>!</span> SSLPeerUnverifiedException:<br>   Certificate pinning failure</p>
+          <p><span>$</span> apktool d clientVulnRe-debug.apk<br>   -o build/review</p>
+          <p><span>&gt;</span> webView.addJavascriptInterface(<br>   bridge, "Android")</p>
+        </div>
+        <dl class="signal-grid">
+          <div>
+            <dt>Coverage</dt>
+            <dd>TLS, APK, IPC, WebView</dd>
+          </div>
+          <div>
+            <dt>Method</dt>
+            <dd>Inspect, exploit, harden, retest</dd>
+          </div>
+        </dl>
+      </aside>
+    </section>
+
+    <section class="value-strip" aria-label="Training value points">
+      <p>Hands-on vulnerable and secure variants</p>
+      <p>Built for Android developers</p>
+      <p>Attack, fix, retest workflow</p>
+      <p>Covers network, storage, IPC and WebView risks</p>
+    </section>
+
+    <section class="problem-section section-band" aria-labelledby="problem-title">
+      <div class="section-kicker">
+        <p class="eyebrow">Why this matters</p>
+        <h2 id="problem-title">Android security issues often hide outside normal app logic.</h2>
+      </div>
+      <div class="problem-copy">
+        <p>
+          Android security risks often live outside the feature code: TLS trust, app signing, deep links,
+          local storage, WebView settings and exported components. This training teaches developers how
+          those risks appear in real Android projects and how to verify the fix.
+        </p>
+      </div>
+    </section>
+
+    <section id="modules" class="section-band" aria-labelledby="modules-title">
+      <div class="section-heading">
+        <p class="eyebrow">Syllabus</p>
+        <h2 id="modules-title">Four focused Android security modules</h2>
+        <p>
+          Each module pairs the underlying Android mechanics with practical testing, secure implementation
+          and verification.
+        </p>
+      </div>
+
+      <div class="module-grid">
+        <article class="module-card">
+          <span class="module-label">Module 01</span>
+          <h3>Network Trust & Payload Encryption</h3>
+          <p>Understand Android HTTPS trust decisions and how to defend sensitive client-server traffic.</p>
+          <ul class="tag-list">
+            <li>HTTPS</li>
+            <li>Certificate pinning</li>
+            <li>NetworkSecurityConfig</li>
+            <li>Certificate Transparency</li>
+            <li>E2E payload concepts</li>
+          </ul>
+        </article>
+
+        <article class="module-card">
+          <span class="module-label">Module 02</span>
+          <h3>Reverse Engineering & APK Tampering</h3>
+          <p>Inspect shipped APKs, identify exposed implementation details and understand tamper controls.</p>
+          <ul class="tag-list">
+            <li>JADX</li>
+            <li>apktool</li>
+            <li>Hardcoded secrets</li>
+            <li>R8 and ProGuard</li>
+            <li>Signing checks</li>
+          </ul>
+        </article>
+
+        <article class="module-card">
+          <span class="module-label">Module 03</span>
+          <h3>Deep Links, Intents & Local Storage</h3>
+          <p>Review Android entry points, URI validation and storage choices for sensitive app data.</p>
+          <ul class="tag-list">
+            <li>App Links</li>
+            <li>URI validation</li>
+            <li>EncryptedSharedPreferences</li>
+            <li>DataStore</li>
+            <li>Room and SQLCipher</li>
+          </ul>
+        </article>
+
+        <article class="module-card">
+          <span class="module-label">Module 04</span>
+          <h3>WebView & Exposed Components</h3>
+          <p>Audit WebView settings and Android components that can expand an app's attack surface.</p>
+          <ul class="tag-list">
+            <li>JavaScript interfaces</li>
+            <li>Unsafe URL loading</li>
+            <li>Exported components</li>
+            <li>Provider leakage</li>
+            <li>Shared UID risks</li>
+          </ul>
+        </article>
+      </div>
+    </section>
+
+    <section id="labs" class="labs section-band" aria-labelledby="labs-title">
+      <div class="labs-copy">
+        <p class="eyebrow">Hands-on labs</p>
+        <h2 id="labs-title">Learn by attacking, fixing and retesting</h2>
+        <p>
+          Participants work with a dedicated Android demo app containing vulnerable and hardened examples.
+          The labs keep the loop concrete: inspect the behavior, exploit the weakness, harden the app and
+          retest the same path.
+        </p>
+        <ul class="tool-list" aria-label="Tools and workflows covered">
+          <li>adb</li>
+          <li>logcat</li>
+          <li>mitmproxy</li>
+          <li>JADX</li>
+          <li>apktool</li>
+          <li>Android Studio</li>
+          <li>vulnerable and secure build variants</li>
+        </ul>
+      </div>
+
+      <div class="workflow" aria-label="Hands-on training workflow">
+        <article>
+          <span>01</span>
+          <h3>Inspect</h3>
+          <p>Trace configuration, logs, manifests, links and runtime behavior.</p>
+        </article>
+        <article>
+          <span>02</span>
+          <h3>Exploit</h3>
+          <p>Reproduce the issue with Android tooling and focused test cases.</p>
+        </article>
+        <article>
+          <span>03</span>
+          <h3>Harden</h3>
+          <p>Apply secure Android defaults and implementation changes.</p>
+        </article>
+        <article>
+          <span>04</span>
+          <h3>Retest</h3>
+          <p>Verify the mitigation using the same attack path and evidence.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="included section-band" aria-labelledby="included-title">
+      <div class="section-heading">
+        <p class="eyebrow">Included materials</p>
+        <h2 id="included-title">What is included</h2>
+        <p>
+          The workshop is built around concrete artifacts teams can inspect during the session and revisit
+          after the training.
+        </p>
+      </div>
+      <div class="included-grid">
+        <article>
+          <h3>Training slides</h3>
+          <p>Focused explanations for each Android security topic and the decisions behind secure defaults.</p>
+        </article>
+        <article>
+          <h3>Dedicated Android demo app</h3>
+          <p>A purpose-built project with examples aligned to the network, APK, storage, IPC and WebView modules.</p>
+        </article>
+        <article>
+          <h3>Vulnerable and secure build variants</h3>
+          <p>Comparable implementations that show both the attack path and the hardened pattern.</p>
+        </article>
+        <article>
+          <h3>Hands-on lab workflow</h3>
+          <p>Exercises using adb, logcat, APK inspection and hardening checks for Android components.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="repo-section section-band" aria-labelledby="repo-title">
+      <div>
+        <p class="eyebrow">Demo app</p>
+        <h2 id="repo-title">Supported by a dedicated Android project</h2>
+        <p>
+          The training is supported by a dedicated Android project with vulnerable and hardened examples for
+          the covered topics.
+        </p>
+      </div>
+      <a class="button button-secondary repo-button" href="https://github.com/LethalMaus/AndroidSecurityTraining" rel="noopener noreferrer">View GitHub repository</a>
+    </section>
+
+    <section class="audience section-band" aria-labelledby="audience-title">
+      <div class="section-heading">
+        <p class="eyebrow">Who it is for</p>
+        <h2 id="audience-title">For teams responsible for Android quality and risk</h2>
+      </div>
+      <div class="audience-grid">
+        <article>Android development teams</article>
+        <article>Mobile engineering leads</article>
+        <article>Security engineers</article>
+        <article>QA and test engineers</article>
+        <article>Teams preparing for audits or security reviews</article>
+      </div>
+    </section>
+
+    <section class="credibility section-band" aria-labelledby="credibility-title">
+      <div class="section-kicker">
+        <p class="eyebrow">Trainer credibility</p>
+        <h2 id="credibility-title">Led by Android security practice, not generic theory</h2>
+      </div>
+      <div class="credibility-card">
+        <p>
+          Led by James Cullimore, the training focuses on the Android security issues developers actually
+          meet during reviews, audits and production hardening work. The material combines focused
+          explanations with vulnerable and hardened examples, so teams can understand both the attack path
+          and the secure implementation pattern.
+        </p>
+        <ul class="credibility-points" aria-label="Training credibility points">
+          <li>Android development and security background</li>
+          <li>Practical developer-focused training</li>
+          <li>Real vulnerable and hardened app examples</li>
+          <li>Focus on issues developers need to recognize and fix</li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="outcomes" class="outcomes section-band" aria-labelledby="outcomes-title">
+      <div class="section-kicker">
+        <p class="eyebrow">Outcomes</p>
+        <h2 id="outcomes-title">After the training, participants should be able to</h2>
+      </div>
+      <ul class="check-list">
+        <li>Diagnose certificate pinning failures</li>
+        <li>Inspect APKs for exposed secrets and tampering risks</li>
+        <li>Identify unsafe deep link and intent handling</li>
+        <li>Evaluate local storage choices</li>
+        <li>Audit WebView configuration</li>
+        <li>Find exposed Android components</li>
+        <li>Apply secure Android defaults</li>
+      </ul>
+    </section>
+
+    <section class="format section-band" aria-labelledby="format-title">
+      <div class="section-heading">
+        <p class="eyebrow">Format</p>
+        <h2 id="format-title">Flexible format for Android engineering teams</h2>
+        <p>
+          The training can be structured as a half-day workshop, full-day workshop or tailored team session.
+          It works for remote or onsite delivery and can be adjusted to the team’s Android and security
+          experience.
+        </p>
+      </div>
+      <div class="format-grid">
+        <article>
+          <h3>Remote or onsite workshop</h3>
+          <p>Suitable for distributed teams, internal enablement sessions or in-person engineering workshops.</p>
+        </article>
+        <article>
+          <h3>Role fit</h3>
+          <p>Built for Android developers, QA engineers and security reviewers working with Android apps.</p>
+        </article>
+        <article>
+          <h3>Adaptable depth</h3>
+          <p>Adjusted to the team's Android and security experience without inventing a one-size-fits-all path.</p>
+        </article>
+        <article>
+          <h3>Hands-on requirements</h3>
+          <p>Participants should know basic Android concepts. Labs work best with Android Studio, adb and a local emulator or test device.</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="contact" class="final-cta" aria-labelledby="contact-title">
+      <p class="eyebrow">Team training</p>
+      <h2 id="contact-title">Bring practical Android security into your team.</h2>
+      <p>
+        Give developers a clear, repeatable way to recognize Android security issues, test them with the
+        right tools and apply secure implementation patterns.
+      </p>
+      <div class="hero-actions">
+        <!-- TODO: Replace info@jamescullimore.dev before handover -->
+        <a class="button button-primary" href="mailto:info@jamescullimore.dev?subject=Android%20Security%20Training">Request training</a>
+        <a class="button button-secondary repo-button" href="https://github.com/LethalMaus/AndroidSecurityTraining" rel="noopener noreferrer">View repository</a>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
