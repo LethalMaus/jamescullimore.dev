@@ -29,6 +29,14 @@
     <lastmod>2026-05-31</lastmod>
   </url>
   <url>
+    <loc>https://jamescullimore.dev/articles/i-patched-an-android-apk-to-show-how-fragile-client-side-checks-can-be.html</loc>
+    <lastmod>2026-08-03</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/how-one-missing-return-cut-my-android-test-runtime-by-72.html</loc>
+    <lastmod>2026-07-22</lastmod>
+  </url>
+  <url>
     <loc>https://jamescullimore.dev/articles/what-adb-can-teach-you-about-broken-android-ipc-protections.html</loc>
     <lastmod>2026-07-16</lastmod>
   </url>
