@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>How One Missing `return` Cut My Android Test Runtime by 72%</title>
+  <meta name="description" content="How one missing return caused repeated timeout waits—and how fixing it cut an Android test suite from nearly 30 minutes to just over 8 minutes."/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/how-one-missing-return-cut-my-android-test-runtime-by-72.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="How One Missing `return` Cut My Android Test Runtime by 72%"/>
+  <meta property="og:description" content="How one missing return caused repeated timeout waits—and how fixing it cut an Android test suite from nearly 30 minutes to just over 8 minutes."/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/how-one-missing-return-cut-my-android-test-runtime-by-72.html"/>
+  <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*Gp9Dp67qe5P5vsU3jz8zdw.jpeg"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="How One Missing `return` Cut My Android Test Runtime by 72%"/>
+  <meta name="twitter:description" content="How one missing return caused repeated timeout waits—and how fixing it cut an Android test suite from nearly 30 minutes to just over 8 minutes."/>
+  <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*Gp9Dp67qe5P5vsU3jz8zdw.jpeg"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <style>
+    .article-content figure img {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+    .article-content .gist-embed {
+      max-width: 100%;
+      overflow-x: auto;
+    }
+  </style>
+  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"How One Missing `return` Cut My Android Test Runtime by 72%","description":"How one missing return caused repeated timeout waits—and how fixing it cut an Android test suite from nearly 30 minutes to just over 8 minutes.","image":["https://miro.medium.com/v2/resize:fit:1200/1*Gp9Dp67qe5P5vsU3jz8zdw.jpeg"],"datePublished":"2026-07-22","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/how-one-missing-return-cut-my-android-test-runtime-by-72.html"},"url":"https://jamescullimore.dev/articles/how-one-missing-return-cut-my-android-test-runtime-by-72.html","inLanguage":"en"}</script>
+</head>
+<body class="article-page">
+<header>
+<nav class="nav">
+<a aria-label="James Cullimore home" class="article-brand-link" href="/">
+<div class="brand">
+<div class="brand-mark">JC</div>
+<div class="brand-text">
+<div class="brand-name">James Cullimore</div>
+<div class="brand-role">Software Engineering</div>
+</div>
+</div>
+</a>
+<ul class="nav-links">
+<li><a href="/#overview">Overview</a></li>
+<li><a href="/#services">Services</a></li>
+<li><a href="/#how-we-work">How we work</a></li>
+<li><a href="/#projects">Projects</a></li>
+<li><a href="/#insights">Insights</a></li>
+<li><a href="/#contact">Contact</a></li>
+<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
+</ul>
+</nav>
+</header>
+<main class="article">
+  <article class="container">
+    <header class="article-header">
+      <p class="article-category">Android • Android Testing • Performance</p>
+      <h1 class="article-title">How One Missing `return` Cut My Android Test Runtime by 72%</h1>
+      <div class="article-meta">
+        <span>By <span class="article-author">James Cullimore</span></span>
+        <span>•</span>
+        <time datetime="2026-07-22">Jul 22, 2026</time>
+        <span>•</span>
+        <span>9 min read</span>
+      </div>
+    </header>
+    <figure class="article-hero">
+      <img src="https://miro.medium.com/v2/resize:fit:1200/1*Gp9Dp67qe5P5vsU3jz8zdw.jpeg" alt="How One Missing `return` Cut My Android Test Runtime by 72%"/>
+    </figure>
+    <section class="article-content">
+<p>Android developers spend a lot of time thinking about build performance. I wrote previously about <a href="https://medium.com/gitconnected/how-i-cut-my-gradle-build-time-by-50-8f3c57534ce6" target="_blank" rel="noopener noreferrer">cutting Gradle build time by 50%</a>, mostly through practical configuration, benchmarking, and a few targeted improvements.</p>
+<p>But once the build itself gets faster, another bottleneck starts to stand out very quickly: tests.</p>
+<p>In my case, the local Android test run had become slow enough that it was no longer just a CI problem. It affected the feedback loop during development, made small changes feel more expensive than they should, and encouraged the kind of behaviour most teams try to avoid: running only the tests they think are relevant and hoping the pipeline catches the rest.</p>
+<p>That was the wrong incentive.</p>
+<p>So I set myself a simple rule before making any changes:</p>
+<p><strong>The test suite had to get faster without skipping tests.</strong></p>
+<p>No default exclusions. No reducing coverage. No moving slow tests out of the normal path just to make the numbers look better.</p>
+<p>The result, on this branch, was a reduction from around <strong>29 minutes 52 seconds</strong> to around <strong>8 minutes 18 seconds</strong> for the same forced test run. That is roughly a <strong>72% reduction</strong>, or about <strong>3.6x faster</strong>.</p>
+<p>The interesting part is that the biggest improvement did not come from a complicated Gradle trick.</p>
+<p>It came from one missing <code>return</code>.</p>
+<h2>Start With A Baseline</h2>
+<p>Before changing anything, I needed a repeatable way to measure the suite.</p>
+<p>This sounds obvious, but it is easy to accidentally benchmark the wrong thing. Gradle can reuse outputs, the daemon can warm up, tests can be up-to-date, and one run on a busy laptop can look very different from another.</p>
+<p>So I measured a few different scenarios:</p>
+<ul><li>A full forced test run using <code>--rerun-tasks</code>.</li><li>Warm runs where Gradle could reuse whatever it was allowed to reuse.</li><li>Smaller targeted runs for the slowest groups of tests.</li><li>A basic slow-test report from the generated test result XML files.</li></ul>
+<p>The full forced run was the number I cared about most because it represented the cost of actually executing the suite, not just asking Gradle whether it could avoid work.</p>
+<p>The baseline was painful:</p>
+<pre><code class="language-sh">Before: 29m 52s
+After: 8m 18s
+Saved: 21m 34s</code></pre>
+<p>That number became the anchor for every decision afterwards.</p>
+<p>If an optimisation made one tiny path faster but made the full run unstable, it did not count. If it skipped tests, it did not count. If it only helped when Gradle avoided running anything, it was useful information, but not the main win.</p>
+<h2>The Numbers</h2>
+<p>Here are the headline numbers from the full forced test runs.</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*lTxeGRNG9vTSNzrwZ5jUaw.png" alt=""/></figure>
+<p>The final run was 1,294 seconds faster than the baseline, which is 21 minutes and 34 seconds saved.</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*Jw3Dno2bT6Fs_XdlQGsXLQ.png" alt=""/></figure>
+<p>These numbers are from one Android test suite on one branch. The exact timings are less important than the pattern: measure the real bottleneck, make small changes, and reject anything that makes the suite less trustworthy.</p>
+<h3>Slowest Test Groups After Optimization</h3>
+<p>After the main fix, the remaining slowest groups looked like this.</p>
+<figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*dZeTD-mS45hdru7cqlY_6Q.png" alt=""/></figure>
+<h2>The Tempting Shortcuts Did Not Work</h2>
+<p>The first ideas were the obvious ones.</p>
+<p>Could the tests run with more forks? Could the slow UI-style tests be split up? Could a few expensive tests be excluded by default? Could optional tooling be disabled for local runs?</p>
+<p>Some of these ideas improved isolated numbers. Some made the suite worse. Some introduced timeout or idling failures. Some were simply the wrong trade-off.</p>
+<p>The most important decision was rejecting anything that made the suite less trustworthy.</p>
+<p>For example, increasing parallel forks sounds like the kind of change that should help. In practice, UI-heavy JVM tests can have shared assumptions around schedulers, loopers, static state, mocked Android framework behaviour, or resource usage. More concurrency does not automatically mean more throughput. Sometimes it just means more contention and less determinism.</p>
+<p>The same applied to skipping the slowest tests. That would have produced a very nice chart, but not a better engineering system.</p>
+<p>If the default test command stops running the tests that catch regressions, the feedback loop is faster only in the most superficial sense.</p>
+<p>The failed experiments were still useful:</p>
+<ul><li><strong>Increase test forks:</strong> caused timeout or idling failures, so I rejected it.</li><li><strong>Split slow UI-flow classes: </strong>timed out or failed, so I rejected it.</li><li><strong>Exclude slow tests by default:</strong> made the suite faster, but reduced trust so I rejected it.</li><li><strong>Suppress logging:</strong> produced no useful improvement.</li><li><strong>Disable optional tooling:</strong> made the measured result worse.</li></ul>
+<p>This is one of the parts of performance work that does not always make it into the final pull request. The rejected ideas matter because they explain why the final solution is shaped the way it is.</p>
+<h2>Use A Small Benchmark Harness</h2>
+<p>The most useful tool in the process was not an optimisation. It was a small local benchmark helper.</p>
+<p>It wrapped the test commands I cared about, supported forced reruns, and parsed test result XML into slow class and slow method reports.</p>
+<p>The goal was not to build a perfect profiling system. It was to make repeated measurement boring.</p>
+<p>That mattered because performance work is full of plausible explanations. A change can feel faster because the daemon is warm. A run can look slower because something else was happening on the machine. A test class can look suspicious because it is large, even though the real issue is a helper it calls hundreds of times.</p>
+<p>Having a simple report changed the conversation from:</p>
+<blockquote><p>This feels slow.</p></blockquote>
+<p>to:</p>
+<blockquote><p>These classes dominate the run, these helpers are used everywhere, and this change moved the full-suite number by this much.</p></blockquote>
+<p>That made it much easier to avoid guessing.</p>
+<h2>The One-Line Fix</h2>
+<p>The biggest win came from a shared UI test helper.</p>
+<p>It was designed to wait for a view to become visible. Conceptually, it did something like this:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/d321981d516668249212a1e1326cb3b5.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/d321981d516668249212a1e1326cb3b5" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/d321981d516668249212a1e1326cb3b5" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>At a glance, this looked reasonable. Try the assertion until it passes or the timeout expires.</p>
+<p>But there was one problem: when the assertion passed, the helper did not return.</p>
+<p>So even if the view was visible immediately, the test still waited until the timeout expired.</p>
+<p>The fix was just this:</p>
+<pre><code class="language-sh">onView(withId(resourceId)).check(matches(isDisplayed()));
+return;</code></pre>
+<p>That is the kind of change that feels almost too small to explain a major runtime reduction. But shared helpers are multipliers.</p>
+<p>This helper was used by several higher-level test actions. Those actions appeared throughout the UI-style test suite. A one-second timeout did not cost one second if it was accidentally paid hundreds of times. It became death by a thousand cuts.</p>
+<p>This was also a good reminder that not all test performance problems are Gradle problems.</p>
+<p>Sometimes Gradle is doing exactly what you asked it to do. The test suite itself is just spending a lot of time waiting for things that have already happened.</p>
+<h2>Small Data Loading Wins Still Help</h2>
+<p>The one-line wait fix was the main improvement, but I also cleaned up a couple of smaller test-data inefficiencies.</p>
+<p>One helper repeatedly loaded resource files from the classpath. Those files were static test fixtures, so reading and decoding them again and again added unnecessary overhead.</p>
+<p>The change was simple: cache the resource content in memory by file name.</p>
+<p>Another helper repeatedly searched through a list of test definitions by ID. That was fine when the data set was small, but it happened often enough to be worth fixing. I built a map once when the fixture was loaded, then used constant-time lookup for each test case.</p>
+<p>Neither of these changes was as dramatic as the wait-loop fix. But they were safe, easy to reason about, and kept the suite doing the same work with less repeated overhead.</p>
+<p>That is usually the kind of test optimisation I prefer:</p>
+<ul><li>Keep the behaviour the same.</li><li>Remove repeated mechanical work.</li><li>Avoid cleverness unless the measurement justifies it.</li></ul>
+<h2>Pipeline Time Matters Too</h2>
+<p>Local runtime was only part of the story. The CI pipeline also had sequential verification stages that did not all depend on each other.</p>
+<p>The original flow was broadly:</p>
+<pre><code class="language-sh">Assemble
+Lint
+Unit tests
+SonarQube
+Security analysis</code></pre>
+<p>Some of those stages really do have ordering constraints. SonarQube, for example, needs the test and coverage reports if you want useful analysis. Running it before tests would make the pipeline faster only by making it less useful.</p>
+<p>But assemble, lint, unit tests, and security analysis were independent enough to run in parallel.</p>
+<p>The safer shape became:</p>
+<div class="gist-embed"><script src="https://gist.github.com/LethalMaus/51b85be14453e4c1801937dbdc70f69a.js"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/51b85be14453e4c1801937dbdc70f69a" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/51b85be14453e4c1801937dbdc70f69a" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
+<p>This was not about making every stage parallel. It was about making independent stages parallel without breaking report handoff.</p>
+<p>The key detail is that I did not just run several Gradle commands in the same workspace at the same time.</p>
+<p>That is asking for trouble.</p>
+<p>Gradle has caches, daemons, build directories, generated files, reports, and all sorts of shared mutable state. If you parallelize CI stages without isolating their workspaces, you can create failures that are almost impossible to reproduce locally.</p>
+<p>Each parallel branch got its own clean checkout and isolated Gradle user home. The unit test branch stashed the reports SonarQube needed, and SonarQube ran afterwards in the normal ordered stage.</p>
+<p>That preserved the dependency that mattered while removing the ordering that did not.</p>
+<h2>What I Would Recommend To Other Teams</h2>
+<p>If I had to turn this into general advice, it would be this.</p>
+<h3>Do Not Start By Skipping Tests</h3>
+<p>Skipping tests can be valid in some workflows, especially when you have explicit smoke, changed-module, or pre-submit strategies.</p>
+<p>But it should not be the first move when optimizing a slow suite.</p>
+<p>First, understand why the suite is slow. If you skip the slowest tests before measuring them, you may hide exactly the problem that needs fixing.</p>
+<h3>Benchmark The Thing You Actually Care About</h3>
+<p>Warm Gradle runs are useful. Incremental runs are useful. Up-to-date checks are useful.</p>
+<p>But if your pain is that the full test suite takes 30 minutes when it actually runs, benchmark that.</p>
+<p>Use forced reruns when you need to measure execution time. Use warm runs when you need to measure local feedback after no-op changes. Keep the numbers separate.</p>
+<h3>Look For Shared Helpers</h3>
+<p>Slow test suites often have a few central helpers used by hundreds or thousands of assertions.</p>
+<p>A small inefficiency in a shared helper can dominate the whole runtime.</p>
+<p>Search for patterns like:</p>
+<ul><li>Fixed sleeps.</li><li>Retry loops.</li><li>Polling helpers.</li><li>Helpers that wait after success.</li><li>Repeated fixture loading.</li><li>Repeated parsing or mapping work.</li></ul>
+<p>The goal is not to remove all waiting. Tests need synchronization. The goal is to stop waiting once the condition has already been met.</p>
+<h3>Be Careful With Parallelism</h3>
+<p>Parallelism is powerful, but it is not free.</p>
+<p>For local tests, more forks can expose hidden shared state and make previously stable tests flaky. For CI, parallel stages can corrupt each other if they share the same workspace or Gradle home.</p>
+<p>Parallelize independent work, but isolate it properly.</p>
+<p>If a stage produces reports that another stage needs, make that dependency explicit with artifacts, stash/unstash, or whatever your CI system provides.</p>
+<h3>Keep SonarQube And Coverage Honest</h3>
+<p>Static analysis stages are often treated as independent, but coverage-aware analysis depends on test outputs.</p>
+<p>If you move analysis earlier just to save time, you may silently reduce the quality of the signal.</p>
+<p>In my case, SonarQube stayed after tests. The pipeline got faster because the independent verification work moved earlier and ran in parallel, not because the analysis lost information.</p>
+<h3>Record The Failed Experiments</h3>
+<p>The changes that did not work were still useful.</p>
+<p>I tried options that looked promising and rejected them because they caused timeouts, instability, or worse runtime. Keeping track of those attempts helped avoid going in circles.</p>
+<p>Performance work benefits from a small lab notebook mindset:</p>
+<ul><li>What did I change?</li><li>What did I expect?</li><li>What happened?</li><li>Did it improve the full suite or only a narrow case?</li><li>Did it affect reliability?</li></ul>
+<p>That last question matters more than the chart.</p>
+<h2>The Final Result</h2>
+<p>The full forced test run went from about <strong>29 minutes 52 seconds</strong> to about <strong>8 minutes 18 seconds</strong>.</p>
+<p>That is around <strong>21 minutes 34 seconds saved</strong> on the same test suite.</p>
+<p>Or, put another way, roughly <strong>72% faster</strong> and <strong>3.6x quicker</strong>.</p>
+<p>The most satisfying part is that this did not come from making the test suite less useful. The tests still ran. The pipeline still produced coverage. The analysis still happened after the reports existed. The changes were mostly about removing accidental waiting and making independent CI work actually independent.</p>
+<h2>Conclusion</h2>
+<p>After improving Gradle build time, I expected the next big win to come from another Gradle setting or some deeper build-cache trick.</p>
+<p>It did not.</p>
+<p>The biggest improvement came from reading the test helpers carefully, benchmarking the full run, and refusing to accept shortcuts that made the suite less trustworthy.</p>
+<p>That is probably the main lesson I would take from this work:</p>
+<p><strong>Fast feedback is not just about making tools faster. It is about making the whole loop honest, measured, and safe to rely on.</strong></p>
+<p>Sometimes that means tuning Gradle.</p>
+<p>Sometimes it means parallelizing CI properly.</p>
+<p>And sometimes it means adding one missing <code>return</code>.</p>
+    </section>
+    <footer class="article-footer">
+      <p>Last updated: <time datetime="2026-07-22">Jul 22, 2026</time></p>
+      <p>Tags: Android, Android Testing, Performance, Test Optimization, CI/CD</p>
+      <p class="article-footer-copy">© 2026 James Cullimore</p>
+    </footer>
+  </article>
+</main>
+<footer>
+<div class="footer-inner">
+<div>© 2026 James Cullimore. All rights reserved.</div>
+<ul class="footer-links">
+<li><a href="../articles.html">Blog</a></li>
+<li><a href="../impressum.html">Impressum</a></li>
+<li><a href="../datenschutz.html">Datenschutz</a></li>
+</ul>
+</div>
+</footer>
+</body>
+</html>
