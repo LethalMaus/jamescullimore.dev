@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Set up Watchful, manage AI providers, understand background checks and get support.">
+<meta name="color-scheme" content="light dark">
+<title>Support · Watchful</title>
+<link rel="icon" href="../assets/app-icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="canonical" href="https://jamescullimore.dev/watchful/support/">
+</head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<div class="wrap">
+<header>
+<a class="wordmark" href="../">
+<img src="../assets/app-icon.svg" alt="" width="42" height="42">Watchful</a>
+<nav aria-label="Main">
+<a href="../#how">How it works</a>
+<a href="../support/">Support</a>
+</nav>
+</header>
+<main id="main" class="legal">
+<span class="eyebrow">A little help getting started</span>
+<h1>Make your first watcher.</h1>
+<ol>
+<li>Open Settings and choose Gemini or OpenAI. Save your own API key. Saving alone does not run a check.</li>
+<li>Choose “Use … for checks” and review the data-sharing explanation. Provider limits and API charges are separate from Pro.</li>
+<li>For nearby searches, set a fallback town and country. Location permission is optional. Each watcher check may send available approximate location information or your saved fallback town to your selected AI provider, even when the watcher is not explicitly location-based.</li>
+<li>Create a watcher from a preset or your own instructions. Be specific about reliable sources and when you want a notification.</li>
+<li>Run it manually first. Open the saved result and sources before enabling automatic checks.</li>
+</ol>
+<h2>Common questions</h2>
+<details open>
+<summary>Why did a check fail?</summary>
+<p>Check the selected provider, API key access and account limits. Gemini model availability differs by project. A connection test does not prove live web search works. There is no automatic paid fallback.</p>
+</details>
+<details>
+<summary>Why didn’t it run at the exact time?</summary>
+<p>Android and iOS control background execution. Timing is approximate and can be affected by connectivity, power-saving settings, permissions, force-stopping the app, and provider limits. Open the app and run manually if an update is time-sensitive.</p>
+</details>
+<details>
+<summary>How do car triggers work?</summary>
+<p>On Android, configure car connection inside a watcher. Choose automatic recognition of supported car names and Bluetooth car-audio devices, or select a specific paired device. On Android 12 and later, allow Nearby devices for this trigger.</p>
+<p>On iPhone, include a watcher in car automation, then configure a personal Bluetooth or CarPlay automation in Shortcuts using “Run car watchers”. Where your iOS version offers the option, choose “Run Immediately” or disable “Ask Before Running” so the automation can run without additional confirmation.</p>
+<p>Set a fallback town for checks without recent location. For location access while the app is in the background, review “Always” or “Allow all the time” in system settings where available. Allow notifications if you want system alerts. Permissions do not guarantee background execution, fresh location or notification delivery; Android and iOS control these behaviours.</p>
+</details>
+<details>
+<summary>What does Pro include?</summary>
+<p>The one-time purchase removes the two-active-watcher limit. It does not include AI usage. Open the Pro page and choose “Restore purchases”, using the same Apple or Google store account used for the purchase. Apple purchases do not transfer to Google Play or vice versa.</p>
+</details>
+<details>
+<summary>Where are my keys and history?</summary>
+<p>They are stored on this device. Remove keys in Settings and delete watchers to remove their history. Removing a key here does not revoke it at the provider.</p>
+</details>
+<h2>Still need help?</h2>
+<p>Email <a href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a> with your phone model, OS version, app version, and the steps that went wrong. Please include accessibility feedback. Never send API keys or private watcher content.</p>
+</main>
+<footer>
+<span>© 2026 James Cullimore</span>
+<nav aria-label="Footer">
+<a href="../policy_ios/">Privacy for iOS</a>
+<a href="../policy_android/">Privacy for Android</a>
+<a href="../support/">Support</a>
+<a href="/watchful/delete-data/">Delete data</a>
+<a href="/impressum.html">Legal notice</a>
+</nav>
+</footer>
+</div>
+</body>
+</html>
