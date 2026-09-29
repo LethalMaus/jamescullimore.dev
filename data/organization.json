@@ -1,0 +1,29 @@
+{
+      "@context": "https://schema.org",
+      "@type": "ProfessionalService",
+      "name": "James Cullimore Software Engineering",
+      "url": "https://jamescullimore.dev/",
+      "logo": "https://jamescullimore.dev/assets/branding/logo-black.png",
+      "image": "https://jamescullimore.dev/assets/branding/social-preview.png",
+      "description": "Senior Android, IoT, Kotlin Multiplatform and full-stack engineering for product teams.",
+      "email": "info@jamescullimore.dev",
+      "telephone": "+49 1590 1727704",
+      "founder": {
+        "@type": "Person",
+        "name": "James Cullimore"
+      },
+      "sameAs": [
+        "https://github.com/LethalMaus",
+        "https://www.linkedin.com/in/james-cullimore/",
+        "https://www.linkedin.com/company/james-cullimore-software-engineering/"
+      ],
+      "areaServed": "Worldwide",
+      "serviceType": [
+        "Android development",
+        "IoT software engineering",
+        "Kotlin Multiplatform development",
+        "Frontend development",
+        "Backend and API development",
+        "Technical consulting"
+      ]
+    }

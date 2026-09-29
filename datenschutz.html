@@ -7,8 +7,8 @@
   <link rel="icon" type="image/x-icon" href="img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32x32.png">
   <link rel="apple-touch-icon" sizes="180x180" href="img/apple-touch-icon.png">
-  <link rel="stylesheet" href="styles.css">
-  <script defer src="assets/analytics-consent.js"></script>
+  <link rel="stylesheet" href="styles.css?v=77842ea06cac">
+  <script defer src="assets/analytics-consent.js?v=daea822fe61e"></script>
   <style>
     .legal-content {
       max-width: 800px;
@@ -44,31 +44,19 @@
       color: var(--muted);
     }
   </style>
+<script defer src="/assets/site.js?v=f0fd21e32408"></script>
+<link rel="canonical" href="https://jamescullimore.dev/datenschutz.html">
+<meta name="description" content="Informationen zum Datenschutz auf der Website von James Cullimore Software Engineering.">
 </head>
 <body>
 
-<header>
-  <nav class="nav">
-    <a href="/" class="brand-link" aria-label="James Cullimore Software Engineering home">
-      <div class="brand">
-        <div class="brand-mark">
-          <img src="assets/branding/logo-black.png" alt="">
-        </div>
-        <div class="brand-text">
-          <div class="brand-name">James Cullimore</div>
-          <div class="brand-role">Developer</div>
-        </div>
-      </div>
-    </a>
-    <ul class="nav-links">
-      <li><a href="/">Home</a></li>
-      <li><a href="blog.html">Blog</a></li>
-      <li><a href="impressum.html">Impressum</a></li>
-    </ul>
-  </nav>
-</header>
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><nav class="site-nav" aria-label="Primary">
+<a class="site-brand" href="/" aria-label="James Cullimore Software Engineering home"><img src="/assets/branding/logo-black.png" width="56" height="56" alt=""><span><strong>James Cullimore</strong><small>Software Engineering</small></span></a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-links">Menu +</button><ul class="site-links" id="site-links"><li><a href="/#services">Services</a></li><li><a href="/#how-we-work">Process</a></li><li><a href="/projects.html">Work</a></li><li><a href="/#insights">Testimonials</a></li><li><a href="/blog.html">Blog</a></li><li><a href="/#contact" class="contact-link project-cta">Discuss your project</a></li></ul>
+</nav></header>
 
-<main style="padding: 3.5rem 1.25rem; min-height: 80vh;">
+<main id="main" style="padding: 3.5rem 1.25rem; min-height: 80vh;">
   <div class="legal-content">
     <h1 class="section-heading" style="margin-bottom: 2rem;">Datenschutzerklärung</h1>
 
@@ -179,16 +167,37 @@
   </div>
 </main>
 
-<footer>
-  <div class="footer-inner">
-    <div>© 2026 James Cullimore. All rights reserved.</div>
-    <ul class="footer-links">
-      <li><a href="blog.html">Blog</a></li>
-      <li><a href="impressum.html">Impressum</a></li>
-      <li><a href="datenschutz.html">Datenschutz</a></li>
-    </ul>
-  </div>
-</footer>
+<footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div>© 2026 James Cullimore. All rights reserved.</div>
+        <div class="footer-social">
+          <a href="https://www.linkedin.com/in/james-cullimore/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/LethalMaus" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Explore</div>
+        <ul class="footer-links" aria-label="Footer site links">
+          <li><a href="/projects.html">Projects</a></li>
+          <li><a href="/#how-we-work">Process</a></li>
+          <li><a href="/#insights">Testimonials</a></li>
+          <li><a href="/courses.html">Courses</a></li>
+          <li><a href="/blog.html">Blog</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Legal</div>
+        <ul class="footer-links" aria-label="Footer legal links">
+          <li><a href="/impressum.html">Impressum</a></li>
+          <li><a href="/datenschutz.html">Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 
 </body>
 </html>

@@ -19,35 +19,20 @@
   <meta name="twitter:description" content="ZeroMQ on Android: Bridging a Linux Service with PUB SUB In a recent project, we had a deceptively simple requirement. We needed reliable, low latency communication between a small Linux based …"/>
   <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*jKF0CYHnFn0_HY4YdXRiuQ.png"/>
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
-  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="../styles.css?v=77842ea06cac"/>
   <link rel="stylesheet" href="assets/style.css"/>
   <link rel="stylesheet" href="assets/generated-article.css"/>
   <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"ZeroMQ on Android: Bridging a Linux Service with PUB SUB","description":"ZeroMQ on Android: Bridging a Linux Service with PUB SUB In a recent project, we had a deceptively simple requirement. We needed reliable, low latency communication between a small Linux based …","image":["https://miro.medium.com/v2/resize:fit:1200/1*jKF0CYHnFn0_HY4YdXRiuQ.png"],"datePublished":"2026-03-09","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/zeromq-on-android-bridging-a-linux-service-with-pub-sub.html"},"url":"https://jamescullimore.dev/articles/zeromq-on-android-bridging-a-linux-service-with-pub-sub.html","inLanguage":"en"}</script>
+<script defer src="/assets/site.js?v=f0fd21e32408"></script>
+<link rel="stylesheet" href="/assets/code-highlight.css?v=52041029feb2"><script defer src="/assets/vendor/highlight/highlight.min.js"></script><script defer src="/assets/vendor/highlight/kotlin.min.js"></script><script defer src="/assets/vendor/highlight/groovy.min.js"></script><script defer src="/assets/code-highlight.js?v=42c749b525bc"></script>
 </head>
 <body class="article-page">
-<header>
-<nav class="nav">
-<a aria-label="James Cullimore home" class="article-brand-link" href="/">
-<div class="brand">
-<div class="brand-mark">JC</div>
-<div class="brand-text">
-<div class="brand-name">James Cullimore</div>
-<div class="brand-role">Software Engineering</div>
-</div>
-</div>
-</a>
-<ul class="nav-links">
-<li><a href="/#overview">Overview</a></li>
-<li><a href="/#services">Services</a></li>
-<li><a href="/#how-we-work">How we work</a></li>
-<li><a href="/#projects">Projects</a></li>
-<li><a href="/#insights">Insights</a></li>
-<li><a href="/#contact">Contact</a></li>
-<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
-</ul>
-</nav>
-</header>
-<main class="article">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><nav class="site-nav" aria-label="Primary">
+<a class="site-brand" href="/" aria-label="James Cullimore Software Engineering home"><img src="/assets/branding/logo-black.png" width="56" height="56" alt=""><span><strong>James Cullimore</strong><small>Software Engineering</small></span></a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-links">Menu +</button><ul class="site-links" id="site-links"><li><a href="/#services">Services</a></li><li><a href="/#how-we-work">Process</a></li><li><a href="/projects.html">Work</a></li><li><a href="/#insights">Testimonials</a></li><li><a href="/blog.html" aria-current="page">Blog</a></li><li><a href="/#contact" class="contact-link project-cta">Discuss your project</a></li></ul>
+</nav></header>
+<main id="main" class="article">
   <article class="container">
     <header class="article-header">
       <p class="article-category">Android • Android App Development • AndroidDev</p>
@@ -90,7 +75,7 @@
 <p>Next, we define the actual library entry:</p>
 <pre><code class="language-text">jeromq = { group = "org.zeromq", name = "jeromq", version.ref = "jeromq" }</code></pre>
 <p>With this in place, the dependency can be added to an Android module like any other library:</p>
-<pre><code class="language-text">implementation(libs.jeromq)</code></pre>
+<pre><code class="language-kotlin">implementation(libs.jeromq)</code></pre>
 <p>Using JeroMQ means the ZeroMQ context and sockets live entirely within the JVM. This aligns well with Android’s process model and makes resource management more predictable. The tradeoff is that you are not using the native ZeroMQ implementation, but for local, low latency communication, this approach has proven more than sufficient.</p>
 <p>Once the dependency is added, no additional configuration is required. You can create a <code>ZContext</code>, open sockets, and start sending or receiving messages immediately.</p>
 <h2>The ZeroMqClient Class and Its Responsibilities</h2>
@@ -126,7 +111,7 @@
 <p>One small logging note: the log tag says “Server received message,” but this code is on the client side receiving messages from the server. If you keep this as is, it still works, but it can be misleading when debugging. Whether you want to adjust that is a style call, but it is worth being aware of.</p>
 <p>Errors are caught and logged, but the coroutine is not restarted automatically. This matches the lightweight design of the client. Connection policy (retry, reconnect, backoff) can be implemented one layer above if needed.</p>
 <h2>Sending Messages Back with sendMessage()</h2>
-<pre><code class="language-text">sendMessage()</code></pre>
+<pre><code class="language-kotlin">sendMessage()</code></pre>
 <p>Receiving messages is only half of the story. The Android app also needs a simple way to publish messages back to the Linux service.</p>
 <p>The <code>sendMessage()</code> function is intentionally small. It validates that the client is running and that the PUB socket exists, then sends the message and logs the result.</p>
 <p>Here is the implementation exactly as used:</p>
@@ -148,7 +133,7 @@
 <p>This order keeps the teardown predictable. In a system like this, you want to avoid leaving sockets alive after the context is already gone.</p>
 <h3>Report state changes on the main thread</h3>
 <p>After disconnecting, the client reports the connection state through:</p>
-<pre><code class="language-text">CoroutineScope(Dispatchers.Main).launch { onConnectionChanged?.invoke(false) }</code></pre>
+<pre><code class="language-kotlin">CoroutineScope(Dispatchers.Main).launch { onConnectionChanged?.invoke(false) }</code></pre>
 <p>This matches the approach used in <code>connect()</code>: state updates are routed back through the main dispatcher so callers can safely update UI state.</p>
 <p>Finally, the <code>finally</code> block sets references to null. This is less about correctness and more about making the object clearly “closed” and eligible for garbage collection without lingering references.</p>
 <h2>Conclusion</h2>
@@ -164,15 +149,36 @@
     </footer>
   </article>
 </main>
-<footer>
-<div class="footer-inner">
-<div>© 2026 James Cullimore. All rights reserved.</div>
-<ul class="footer-links">
-<li><a href="../articles.html">Blog</a></li>
-<li><a href="../pages/impressum.html">Impressum</a></li>
-<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
-</ul>
-</div>
-</footer>
+<footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div>© 2026 James Cullimore. All rights reserved.</div>
+        <div class="footer-social">
+          <a href="https://www.linkedin.com/in/james-cullimore/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/LethalMaus" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Explore</div>
+        <ul class="footer-links" aria-label="Footer site links">
+          <li><a href="/projects.html">Projects</a></li>
+          <li><a href="/#how-we-work">Process</a></li>
+          <li><a href="/#insights">Testimonials</a></li>
+          <li><a href="/courses.html">Courses</a></li>
+          <li><a href="/blog.html">Blog</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Legal</div>
+        <ul class="footer-links" aria-label="Footer legal links">
+          <li><a href="/impressum.html">Impressum</a></li>
+          <li><a href="/datenschutz.html">Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

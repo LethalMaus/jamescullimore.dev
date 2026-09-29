@@ -19,36 +19,21 @@
   <meta name="twitter:description" content="How I Built Seamless Watch ↔ Phone Handover in Wear OS I recently worked on extending an existing Android app to include a Wear OS counterpart. The goal was to build a “handover” feature …"/>
   <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*wCbRT6rPmrUKPSP1tsCrkA.png"/>
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
-  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="../styles.css?v=77842ea06cac"/>
   <link rel="stylesheet" href="assets/style.css"/>
   <link rel="stylesheet" href="assets/generated-article.css"/>
   <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"How I Built Seamless Watch ↔ Phone Handover in Wear OS","description":"How I Built Seamless Watch ↔ Phone Handover in Wear OS I recently worked on extending an existing Android app to include a Wear OS counterpart. The goal was to build a “handover” feature …","image":["https://miro.medium.com/v2/resize:fit:1200/1*wCbRT6rPmrUKPSP1tsCrkA.png"],"datePublished":"2025-07-02","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/how-i-built-seamless-watch-phone-handover-in-wear-os.html"},"url":"https://jamescullimore.dev/articles/how-i-built-seamless-watch-phone-handover-in-wear-os.html","inLanguage":"en"}</script>
   <script src="assets/link-preview.js" defer></script>
+<script defer src="/assets/site.js?v=f0fd21e32408"></script>
+<link rel="stylesheet" href="/assets/code-highlight.css?v=52041029feb2"><script defer src="/assets/vendor/highlight/highlight.min.js"></script><script defer src="/assets/vendor/highlight/kotlin.min.js"></script><script defer src="/assets/vendor/highlight/groovy.min.js"></script><script defer src="/assets/code-highlight.js?v=42c749b525bc"></script>
 </head>
 <body class="article-page">
-<header>
-<nav class="nav">
-<a aria-label="James Cullimore home" class="article-brand-link" href="/">
-<div class="brand">
-<div class="brand-mark">JC</div>
-<div class="brand-text">
-<div class="brand-name">James Cullimore</div>
-<div class="brand-role">Software Engineering</div>
-</div>
-</div>
-</a>
-<ul class="nav-links">
-<li><a href="/#overview">Overview</a></li>
-<li><a href="/#services">Services</a></li>
-<li><a href="/#how-we-work">How we work</a></li>
-<li><a href="/#projects">Projects</a></li>
-<li><a href="/#insights">Insights</a></li>
-<li><a href="/#contact">Contact</a></li>
-<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
-</ul>
-</nav>
-</header>
-<main class="article">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><nav class="site-nav" aria-label="Primary">
+<a class="site-brand" href="/" aria-label="James Cullimore Software Engineering home"><img src="/assets/branding/logo-black.png" width="56" height="56" alt=""><span><strong>James Cullimore</strong><small>Software Engineering</small></span></a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-links">Menu +</button><ul class="site-links" id="site-links"><li><a href="/#services">Services</a></li><li><a href="/#how-we-work">Process</a></li><li><a href="/projects.html">Work</a></li><li><a href="/#insights">Testimonials</a></li><li><a href="/blog.html" aria-current="page">Blog</a></li><li><a href="/#contact" class="contact-link project-cta">Discuss your project</a></li></ul>
+</nav></header>
+<main id="main" class="article">
   <article class="container">
     <header class="article-header">
       <p class="article-category">Android • Android App Development • Kotlin</p>
@@ -72,9 +57,9 @@
 <p>To enable communication between your phone and watch apps, you’ll need the Wearable Data Layer API from Google Play Services.</p>
 <p>Add this to your module-level <code>build.gradle</code> or <code>build.gradle.kts</code> file:</p>
 <p><strong>Groovy:</strong></p>
-<pre><code class="language-text">implementation 'com.google.android.gms:play-services-wearable:19.0.0'</code></pre>
+<pre><code class="language-groovy">implementation 'com.google.android.gms:play-services-wearable:19.0.0'</code></pre>
 <p><strong>Kotlin DSL (using version catalog):</strong></p>
-<pre><code class="language-text">implementation(libs.play.services.wearable)</code></pre>
+<pre><code class="language-kotlin">implementation(libs.play.services.wearable)</code></pre>
 <p>And in your <code>libs.versions.toml</code>:</p>
 <pre><code class="language-text">play-services-wearable = { module = "com.google.android.gms:play-services-wearable", version = "19.0.0" }</code></pre>
 <p>Without this, you won’t be able to use <code>Wearable.getDataClient()</code>, <code>getMessageClient()</code>, or <code>getNodeClient()</code>, which means no messages, no data sync, and no communication between devices.</p>
@@ -95,7 +80,7 @@
 <p>The message itself doesn’t need to carry any heavy data, just the fact that it arrived is enough to trigger something useful. In this case, it kicks off a data sync.</p>
 <p>Make sure the path matches exactly on both the sender and receiver, or nothing happens. No error, no log , just silence. Easy to miss during debugging.</p>
 <h2>Sending Structured Data with publishData()</h2>
-<pre><code class="language-text">publishData()</code></pre>
+<pre><code class="language-kotlin">publishData()</code></pre>
 <p>Messages are fine for triggers, but if you need to actually pass structured information, like text, timestamps, or state, you’ll want to use the <code>DataClient</code>.</p>
 <p>Here’s how that looks in <code>publishData()</code>:</p>
 <div class="gist-embed"><script src="https://gist.github.com/LethalMaus/ead45344805dde04592b98f6c2a00c87.js?file=WearDataListenerService.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/ead45344805dde04592b98f6c2a00c87#file-weardatalistenerservice-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/ead45344805dde04592b98f6c2a00c87#file-weardatalistenerservice-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
@@ -103,7 +88,7 @@
 <p>This pattern lets both devices stay in sync without having to constantly poll each other. Data gets pushed only when something changes.</p>
 <p>If your app is dealing with sensitive data, this is where you should pause and think about encryption, especially if you’re storing or transmitting anything private. The Wear OS data layer doesn’t encrypt payloads by default.</p>
 <h2>Receiving Data with onDataChanged()</h2>
-<pre><code class="language-text">onDataChanged()</code></pre>
+<pre><code class="language-kotlin">onDataChanged()</code></pre>
 <div class="link-preview-root" data-link-preview><a class="link-preview-fallback" href="https://developer.android.com/training/wearables/data/data-items" target="_blank" rel="noopener noreferrer" data-preview-url="https://developer.android.com/training/wearables/data/data-items" data-preview-title="Sync data items with the Data Layer API | Wear OS | Android Developers" data-preview-description="A defines the interface that the system uses to synchronize data between handhelds and wearables. A DataItem generally…" data-preview-site="developer.android.com">Sync data items with the Data Layer API | Wear OS | Android Developers</a></div>
 <p>When the other device pushes data, it lands in <code>onDataChanged()</code>. This is your entry point for reacting to updates from the data layer.</p>
 <p>Here’s the relevant code:</p>
@@ -118,7 +103,7 @@
 <p>This kind of pattern is especially helpful when you want the devices to act like extensions of each other, rather than two independent apps.</p>
 <h2>Restarting the App with a Broadcast Receiver</h2>
 <p>When a handover happens, we want the app to restart itself to reflect the new state. That’s triggered by this broadcast:</p>
-<pre><code class="language-text">sendBroadcast(Intent("restartApp"))</code></pre>
+<pre><code class="language-kotlin">sendBroadcast(Intent("restartApp"))</code></pre>
 <p>And here’s how we catch that on the receiving side:</p>
 <div class="gist-embed"><script src="https://gist.github.com/LethalMaus/8154efd2306f65c791704b7881a4239c.js?file=RestartAppBroadcastReceiver.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/8154efd2306f65c791704b7881a4239c#file-restartappbroadcastreceiver-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/8154efd2306f65c791704b7881a4239c#file-restartappbroadcastreceiver-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
 <p>We register this receiver to listen for the <code>"restartApp"</code> action. When it fires, we unregister it (important to avoid leaks) and call <code>triggerRebirth()</code>, which restarts the app cleanly.</p>
@@ -183,15 +168,36 @@
     </footer>
   </article>
 </main>
-<footer>
-<div class="footer-inner">
-<div>© 2026 James Cullimore. All rights reserved.</div>
-<ul class="footer-links">
-<li><a href="../articles.html">Blog</a></li>
-<li><a href="../pages/impressum.html">Impressum</a></li>
-<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
-</ul>
-</div>
-</footer>
+<footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div>© 2026 James Cullimore. All rights reserved.</div>
+        <div class="footer-social">
+          <a href="https://www.linkedin.com/in/james-cullimore/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/LethalMaus" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Explore</div>
+        <ul class="footer-links" aria-label="Footer site links">
+          <li><a href="/projects.html">Projects</a></li>
+          <li><a href="/#how-we-work">Process</a></li>
+          <li><a href="/#insights">Testimonials</a></li>
+          <li><a href="/courses.html">Courses</a></li>
+          <li><a href="/blog.html">Blog</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Legal</div>
+        <ul class="footer-links" aria-label="Footer legal links">
+          <li><a href="/impressum.html">Impressum</a></li>
+          <li><a href="/datenschutz.html">Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

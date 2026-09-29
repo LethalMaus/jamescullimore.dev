@@ -1,0 +1,96 @@
+<div class="security-landing">
+  <section class="security-hero">
+    <div class="section-inner security-hero-grid">
+      <div>
+        <span class="section-label">Android Security Training</span>
+        <h1>Find the weakness.<br>Understand the fix.</h1>
+        <p class="security-lead">Practical security workshops for the teams building, testing, and protecting Android apps.</p>
+        <p>Work through vulnerable and hardened app examples with James Cullimore. Inspect the behaviour, reproduce the issue, make the fix, and verify it using the same test.</p>
+        <div class="security-actions"><a class="button" href="mailto:info@jamescullimore.dev?subject=Android%20Security%20Training">Request a workshop proposal</a><a class="text-link" href="#labs">See a sample lab</a></div>
+        <div class="security-facts"><span>Remote or onsite</span><span>Hands-on labs</span><span>Adapted to your team</span></div>
+      </div>
+      <aside class="security-lab-card" aria-label="How the training works">
+        <span class="security-label">Inside the workshop</span>
+        <h2>One problem.<br>Two implementations.</h2>
+        <div class="security-example"><span class="security-example-number">01</span><div><h3>Start with the vulnerable app</h3><p>Trace the behaviour and reproduce the weakness with Android tooling.</p></div></div>
+        <div class="security-example"><span class="security-example-number">02</span><div><h3>Compare the hardened version</h3><p>Understand what changed, then retest the same path to verify the defence.</p></div></div>
+        <p class="security-lab-note">Real code, observable behaviour, and a repeatable review process.</p>
+      </aside>
+    </div>
+  </section>
+  <section class="security-proof">
+    <div class="section-inner security-proof-grid"><strong>Delivered for BMW</strong><p>James delivered a 16-hour Android security workshop over four sessions through Education4Industry, for security experts and Android developers.</p><a class="text-link" href="#trainer">Meet your trainer</a></div>
+  </section>
+  <section id="outcomes">
+    <div class="section-inner">
+      <span class="section-label">What your team takes away</span>
+      <h2>Recognise the risk. Verify the mitigation.</h2>
+      <p class="security-intro">Security issues often sit outside normal feature logic: network trust, signing, deep links, storage, and exposed components. The workshop connects those Android mechanics to practical implementation decisions.</p>
+      <div class="security-outcomes">
+        <article><span class="security-label">Understand</span><h3>Know where to look</h3><p>Diagnose certificate pinning failures, inspect APKs for exposed secrets, and recognise unsafe entry points and storage choices.</p></article>
+        <article><span class="security-label">Implement</span><h3>Make a targeted change</h3><p>Apply secure Android defaults, review WebView configuration, and harden deep links, intents, and exposed components.</p></article>
+        <article><span class="security-label">Verify</span><h3>Show that the fix works</h3><p>Retest the same attack path with logs, focused test cases, and the vulnerable and secure build variants.</p></article>
+      </div>
+    </div>
+  </section>
+  <section id="modules" class="security-tinted">
+    <div class="section-inner">
+      <span class="section-label">Example agenda</span><h2 id="agenda">Four sessions. Time to put it into practice.</h2>
+      <p class="security-intro">An illustrative full programme: four 4-hour sessions, each combining explanation, guided lab work, and review. We agree the final agenda around your team’s priorities; focused workshops can cover a smaller selection.</p>
+      <div class="security-modules">
+        <article><span class="security-label">Session 01 · 4 hours</span><h3>Network trust &amp; payload encryption</h3><p>Understand HTTPS trust decisions and how to protect sensitive client-server traffic.</p><details><summary>Explore the topics</summary><ul><li>HTTPS and certificate pinning</li><li>NetworkSecurityConfig</li><li>Certificate Transparency</li><li>End-to-end payload encryption concepts</li></ul></details></article>
+        <article><span class="security-label">Session 02 · 4 hours</span><h3>Reverse engineering &amp; APK tampering</h3><p>Inspect shipped APKs, identify exposed implementation details, and understand tamper controls.</p><details><summary>Explore the topics</summary><ul><li>JADX and apktool</li><li>Hardcoded secrets</li><li>R8 and ProGuard</li><li>App signing and signing checks</li></ul></details></article>
+        <article><span class="security-label">Session 03 · 4 hours</span><h3>Deep links, intents &amp; local storage</h3><p>Review Android entry points, URI validation, and storage choices for sensitive app data.</p><details><summary>Explore the topics</summary><ul><li>App Links and URI validation</li><li>Intent handling</li><li>EncryptedSharedPreferences and DataStore</li><li>Room and SQLCipher</li></ul></details></article>
+        <article><span class="security-label">Session 04 · 4 hours</span><h3>WebView &amp; exposed components</h3><p>Audit WebView settings and Android components that can expand an app’s attack surface.</p><details><summary>Explore the topics</summary><ul><li>JavaScript interfaces and unsafe URL loading</li><li>Exported components</li><li>Content provider leakage</li><li>Shared UID risks</li></ul></details></article>
+      </div>
+    </div>
+  </section>
+  <section id="labs">
+    <div class="section-inner security-two-columns">
+      <div class="sample-lab">
+        <span class="section-label">Try the thinking behind a lab</span>
+        <h2>Who is allowed to start this service?</h2>
+        <p>An example from the IPC module: compare a deliberately exposed Android service with a version that checks who can call it.</p>
+        <ol class="sample-lab-steps">
+          <li><span class="sample-step-number">01</span><div><h3>Reproduce the weakness</h3><p>Attempt to start the exported service from outside the vulnerable app. Observe whether the caller is allowed through.</p></div></li>
+          <li><span class="sample-step-number">02</span><div><h3>Understand the protection</h3><p>Inspect the manifest and compare the hardened variant: keep private components unexported, or require a signature permission where sharing is intentional.</p></div></li>
+          <li><span class="sample-step-number">03</span><div><h3>Retest the caller</h3><p>Repeat the access attempt against the hardened build. Check the installed package and logs to establish why an unauthorised caller is blocked.</p></div></li>
+        </ol>
+        <p class="sample-lab-takeaway"><strong>The takeaway:</strong> verify access in the installed app, rather than relying on what the source manifest appears to say.</p>
+        <a class="text-link" href="/articles/what-adb-can-teach-you-about-broken-android-ipc-protections.html">Read the sample lab walkthrough</a>
+        <p class="sample-tools">Tools in this example: adb, logcat, and the vulnerable and secure app variants.</p>
+      </div>
+      <div class="security-materials"><h3>Included in the workshop</h3><ul><li><strong>Training slides</strong><span>Focused explanations and the decisions behind secure defaults.</span></li><li><strong>A dedicated Android demo app</strong><span>Examples aligned with the network, APK, storage, IPC, and WebView modules.</span></li><li><strong>Vulnerable and secure variants</strong><span>Compare the attack path with the hardened implementation.</span></li><li><strong>Hands-on exercises</strong><span>Inspection, reproduction, hardening, and verification.</span></li></ul><a class="text-link" href="https://github.com/LethalMaus/AndroidSecurityTraining">Explore the training repository</a><p class="sample-tools">Across the programme: Android Studio, adb, logcat, mitmproxy, JADX, and apktool.</p></div>
+    </div>
+  </section>
+  <section id="format" class="security-tinted">
+    <div class="section-inner">
+      <span class="section-label">Plan the workshop</span><h2>Built around your team.</h2>
+      <div class="security-format">
+        <article><h3>Who it is for</h3><p>Android developers, mobile engineering leads, security engineers, and QA/test engineers. Also relevant to teams preparing for security reviews or audits.</p></article>
+        <article><h3>Delivery &amp; scope</h3><p>Remote or onsite. A focused half-day or full-day workshop can cover selected topics; broader coverage can be spread across multiple sessions. We agree the scope and duration together.</p></article>
+        <article><h3>Before the session</h3><p>Participants should know basic Android concepts. Hands-on labs work best with Android Studio, adb, and a local emulator or test device.</p></article>
+      </div>
+    </div>
+  </section>
+  <section id="trainer">
+    <div class="section-inner security-two-columns">
+      <div><span class="section-label">Your trainer</span><h2>Led by James Cullimore.</h2><p>James brings hands-on Android engineering, security work, and developer teaching into the workshop. He also teaches Android testing, networking, and release workflows on droidcon Academy.</p><p>The training is delivered through James Cullimore Software Engineering, with James leading the security sessions.</p><a class="text-link" href="/courses.html">Explore courses &amp; talks</a></div>
+      <div class="security-trainer-note"><h3>Understanding over checklists.</h3><p>The aim is for participants to recognise why an implementation is vulnerable and how to test the mitigation—not just copy a configuration.</p><p>Explanations stay tied to Android behaviour, practical tools, and code that participants can inspect.</p></div>
+    </div>
+  </section>
+  <section id="questions" class="security-tinted workshop-questions">
+    <div class="section-inner security-two-columns">
+      <div><span class="section-label">Before you enquire</span><h2>A few practical questions.</h2><p>You do not need to arrive with a finished training brief. Start with the team, the problem, and the topics that matter most.</p></div>
+      <div class="workshop-faq">
+        <details><summary>Do we need the full four-session programme?</summary><p>No. The agenda above shows one way to cover the full syllabus. A focused half-day or full-day workshop can concentrate on selected topics. We agree the depth and duration before the training.</p></details>
+        <details><summary>Do we need to share our production app?</summary><p>The exercises use a dedicated training app with vulnerable and hardened variants, so participants can work through the lab examples without sharing a production codebase.</p></details>
+        <details><summary>What should participants know beforehand?</summary><p>Basic Android concepts are the starting point. For hands-on exercises, participants should have Android Studio, adb, and an emulator or test device. Tell us about the mix of developers, QA engineers, and security specialists so we can discuss a suitable level.</p></details>
+        <details><summary>What information helps you prepare a proposal?</summary><p>Send your approximate team size, Android and security experience, preferred topics, dates, and whether you prefer remote or onsite delivery. These give us a starting point for discussing scope, format, and cost.</p></details>
+      </div>
+    </div>
+  </section>
+  <section id="contact" class="security-contact">
+    <div class="section-inner"><div class="security-contact-card"><span class="security-label">Team training</span><h2>Plan a workshop for your team.</h2><p>Tell us your team size, experience, preferred topics, and dates. We’ll use that to discuss a suitable agenda, delivery format, and proposal.</p><a class="button" href="mailto:info@jamescullimore.dev?subject=Android%20Security%20Training">Request a workshop proposal</a><a class="security-email" href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a></div></div>
+  </section>
+</div>

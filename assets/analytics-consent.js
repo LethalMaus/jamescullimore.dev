@@ -29,8 +29,9 @@
     gtag('config', measurementId);
   }
 
+  var memoryConsent = null;
   function getConsent() {
-    return localStorage.getItem(consentKey);
+    try { return localStorage.getItem(consentKey) || memoryConsent; } catch (_) { return memoryConsent; }
   }
 
   function syncUi() {
@@ -52,7 +53,8 @@
       analytics_storage: consentValue
     });
 
-    localStorage.setItem(consentKey, granted ? 'granted' : 'denied');
+    memoryConsent = consentValue;
+    try { localStorage.setItem(consentKey, consentValue); } catch (_) {}
 
     if (granted) {
       loadAnalytics();
@@ -67,19 +69,13 @@
     var style = document.createElement('style');
     style.id = styleId;
     style.textContent = [
-      '.analytics-consent-banner{position:fixed;left:20px;right:20px;bottom:20px;z-index:9999;max-width:960px;margin:0 auto;padding:18px 20px;border:1px solid rgba(17,24,39,.14);border-radius:18px;background:rgba(252,252,249,.98);color:#111827;box-shadow:0 20px 50px rgba(15,23,42,.18);backdrop-filter:blur(14px);font:400 14px/1.55 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;}',
-      '.analytics-consent-banner[hidden]{display:none !important;}',
-      '.analytics-consent-copy{margin:0 0 12px;}',
-      '.analytics-consent-copy strong{display:block;margin-bottom:4px;font-size:15px;}',
-      '.analytics-consent-copy a{color:inherit;text-decoration:underline;}',
-      '.analytics-consent-actions{display:flex;gap:10px;flex-wrap:wrap;align-items:center;}',
-      '.analytics-consent-button{appearance:none;border:0;border-radius:999px;padding:10px 16px;font:600 13px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer;transition:transform .15s ease,opacity .15s ease;}',
-      '.analytics-consent-button:hover{transform:translateY(-1px);}',
-      '.analytics-consent-button-primary{background:#0f172a;color:#fff;}',
-      '.analytics-consent-button-secondary{background:#e5e7eb;color:#111827;}',
-      '.analytics-consent-manage{position:fixed;right:18px;bottom:18px;z-index:9998;appearance:none;border:1px solid rgba(17,24,39,.14);border-radius:999px;padding:10px 14px;background:rgba(252,252,249,.95);color:#111827;box-shadow:0 14px 34px rgba(15,23,42,.14);font:600 12px/1 system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;cursor:pointer;backdrop-filter:blur(12px);}',
-      '.analytics-consent-manage[hidden]{display:none !important;}',
-      '@media (max-width:640px){.analytics-consent-banner{left:12px;right:12px;bottom:12px;padding:16px;}.analytics-consent-actions{flex-direction:column;align-items:stretch;}.analytics-consent-button{width:100%;}.analytics-consent-manage{right:12px;bottom:12px;}}'
+      '.analytics-consent-banner{position:fixed;left:auto;right:20px;bottom:max(16px,env(safe-area-inset-bottom));z-index:9999;width:min(420px,calc(100% - 32px));margin:0;padding:18px;background:#fff;border:1px solid #cbd7d1;border-radius:10px;box-shadow:0 8px 32px #183b4020;color:#183b40;font:14px/1.5 system-ui,sans-serif;}',
+      '.analytics-consent-banner[hidden],.analytics-consent-manage[hidden]{display:none!important;}',
+      '.analytics-consent-copy{margin:0 0 12px;font:inherit;}.analytics-consent-copy strong{display:block;margin-bottom:4px;}.analytics-consent-copy a{color:#176b70;text-decoration:underline;}',
+      '.analytics-consent-actions{display:flex;gap:10px;}.analytics-consent-button{flex:1;min-height:44px;appearance:none;border:1px solid #849d92;border-radius:6px;padding:10px 12px;background:#f2f6f0;color:#183b40;font:600 14px/1.3 system-ui,sans-serif;cursor:pointer;}',
+      '.analytics-consent-button:hover{background:#e2ece0;}.analytics-consent-button:focus-visible,.analytics-consent-manage:focus-visible{outline:3px solid #287f91;outline-offset:3px;}',
+      '.analytics-consent-manage{display:block;position:static;margin:16px auto 20px;min-height:44px;appearance:none;border:1px solid #b0c1b7;border-radius:6px;padding:10px 14px;background:#fafaf6;color:#183b40;font:14px/1.4 system-ui,sans-serif;cursor:pointer;}',
+      '@media(max-width:640px){.analytics-consent-banner{right:16px;bottom:max(12px,env(safe-area-inset-bottom));padding:14px;}}'
     ].join('');
     document.head.appendChild(style);
   }
@@ -94,7 +90,7 @@
       banner.setAttribute('aria-label', 'Analytics consent');
       banner.hidden = true;
       banner.innerHTML =
-        '<p class="analytics-consent-copy"><strong>Analytics preferences</strong>This site uses Google Analytics only if you opt in. You can change your choice at any time. <a href="/datenschutz.html">Privacy policy</a></p>' +
+        '<p class="analytics-consent-copy"><strong>Analytics preferences</strong>Allow optional analytics to help improve this site? You can change your choice in the footer. <a href="/datenschutz.html">Privacy policy</a></p>' +
         '<div class="analytics-consent-actions">' +
         '<button type="button" class="analytics-consent-button analytics-consent-button-primary" data-analytics-consent="accept">Allow analytics</button>' +
         '<button type="button" class="analytics-consent-button analytics-consent-button-secondary" data-analytics-consent="decline">Decline</button>' +
@@ -109,7 +105,8 @@
       manage.className = 'analytics-consent-manage';
       manage.textContent = 'Analytics settings';
       manage.hidden = true;
-      document.body.appendChild(manage);
+      var footers = document.querySelectorAll('footer');
+      (footers[footers.length - 1] || document.body).appendChild(manage);
     }
 
     document.addEventListener('click', function (event) {
@@ -124,7 +121,8 @@
       }
 
       if (event.target.id === 'analytics-consent-manage') {
-        localStorage.removeItem(consentKey);
+        memoryConsent = null;
+        try { localStorage.removeItem(consentKey); } catch (_) {}
         syncUi();
       }
     });

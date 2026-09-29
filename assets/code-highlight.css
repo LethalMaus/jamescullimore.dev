@@ -1,0 +1,12 @@
+/* Syntax colours apply only after JavaScript has enhanced a code block. */
+body.article-page .article-content pre:has(code.hljs) { background: #f6f8fa; border-color: #d8dee4; }
+body.article-page .article-content pre code.hljs { color: #24292f; }
+.hljs-comment, .hljs-quote { color: #57606a; font-style: italic; }
+.hljs-keyword, .hljs-selector-tag, .hljs-deletion { color: #b42332; }
+.hljs-string, .hljs-regexp, .hljs-addition, .hljs-meta .hljs-string { color: #116329; }
+.hljs-title, .hljs-section, .hljs-selector-class, .hljs-title.function_ { color: #6639ba; }
+.hljs-number, .hljs-literal, .hljs-attr, .hljs-attribute, .hljs-variable, .hljs-template-variable { color: #0550ae; }
+.hljs-built_in, .hljs-type, .hljs-symbol, .hljs-bullet { color: #953800; }
+.hljs-meta, .hljs-name, .hljs-tag { color: #0550ae; }
+.hljs-emphasis { font-style: italic; }
+.hljs-strong { font-weight: 700; }

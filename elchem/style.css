@@ -926,3 +926,5 @@ footer {
   line-height: 1;
   letter-spacing: -0.065em;
 }
+
+img.brand-mark { display: block; object-fit: contain; background: none; }

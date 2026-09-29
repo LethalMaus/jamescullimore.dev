@@ -1,0 +1,548 @@
+[
+  {
+    "slug": "zuriga",
+    "name": "Zuriga",
+    "kind": "Client work",
+    "focus": [
+      "Kotlin Multiplatform",
+      "IoT",
+      "Android & iOS"
+    ],
+    "summary": "A connected coffee machine app, rebuilt across Android and iOS.",
+    "context": "An existing Kotlin Multiplatform app connected users to their coffee machine. The brief was to take over the app, replace its interface, and improve the business logic around Bluetooth Low Energy communication.",
+    "work": [
+      "Took over the existing codebase, working largely independently with support from the design team.",
+      "Rebuilt the complete user interface across Android and iOS using Kotlin Multiplatform and Compose Multiplatform.",
+      "Improved the BLE-related business logic used to communicate with the connected machine."
+    ],
+    "links": [
+      {
+        "label": "Zuriga website",
+        "url": "https://zuriga.com/"
+      },
+      {
+        "label": "View Android app",
+        "url": "https://play.google.com/store/apps/details?id=compose.mp.zurigaapp"
+      },
+      {
+        "label": "View iOS app",
+        "url": "https://apps.apple.com/us/app/zuriga/id6759371358"
+      }
+    ],
+    "image": null,
+    "outcome": "A fully rewritten interface with a simpler, more modern product feel across Android and iOS, alongside improvements to the machine-communication logic."
+  },
+  {
+    "slug": "fresenius-medical-care",
+    "name": "Fresenius Medical Care",
+    "kind": "Client work",
+    "focus": [
+      "Android / AOSP",
+      "Healthcare",
+      "Accessibility"
+    ],
+    "summary": "Dialysis UI applications built for a custom Android device.",
+    "context": "A custom AOSP-based device connected to a dialysis device needed a new set of applications. The user-facing interface had to present information from the clinic and device and guide users through device-related steps and status.",
+    "work": [
+      "Held responsibility for three applications: the user-facing UI and supporting service apps.",
+      "Built the apps from scratch in collaboration with the design team.",
+      "Integrated accessibility, security, automated testing, and internationalization into the implementation."
+    ],
+    "links": [
+      {
+        "label": "Fresenius Medical Care website",
+        "url": "https://freseniusmedicalcare.com/en/"
+      }
+    ],
+    "image": null,
+    "outcome": "Three purpose-built Android applications, covering the user interface and supporting services, with accessibility and internationalization incorporated from the start. The work provides concrete experience of building Android software for a specialised healthcare device."
+  },
+  {
+    "slug": "blackned",
+    "name": "blackned",
+    "kind": "Client work",
+    "focus": [
+      "Android / AOSP",
+      "Security",
+      "CI/CD"
+    ],
+    "summary": "Android platform engineering with faster build and delivery workflows.",
+    "context": "An AOSP-based communication platform in a high-security environment needed senior Android engineering support. Alongside product development, build and CI/CD workflows were a focus for improvement.",
+    "work": [
+      "Worked with the team as a senior Android developer on the communication platform.",
+      "Improved Gradle build workflows.",
+      "Improved the CI/CD pipeline while working within the constraints of a high-security engineering environment."
+    ],
+    "links": [
+      {
+        "label": "blackned website",
+        "url": "https://blackned.de/company/"
+      }
+    ],
+    "image": null,
+    "outcome": "Reduced Gradle build times by around 50% and total CI/CD pipeline time by around 60% in this project’s development environment, shortening the wait for build and pipeline feedback."
+  },
+  {
+    "slug": "gls",
+    "name": "GLS",
+    "kind": "Client work",
+    "focus": [
+      "Android",
+      "Test automation",
+      "Logistics"
+    ],
+    "summary": "Testing and delivery support for logistics and field operations.",
+    "context": "A multi-app Android environment supporting logistics and field operations. The contribution focused on automated testing, process improvements and knowledge sharing.",
+    "work": [
+      "Supported automated testing across the Android app environment.",
+      "Contributed improvements to engineering processes.",
+      "Shared testing and delivery knowledge with the team."
+    ],
+    "links": [
+      {
+        "label": "GLS website",
+        "url": "https://gls-group.com/GROUP/en/home/"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "starjar",
+    "name": "StarJar",
+    "kind": "Own projects",
+    "focus": [
+      "Android & iOS",
+      "Family app"
+    ],
+    "summary": "Everyday chores become stars, routines and family rewards.",
+    "context": "StarJar gives parents a way to create tasks and choose rewards, while children earn stars for completed chores. Read-aloud support helps children who are not yet reading independently.",
+    "work": [
+      "Task templates, schedules, reminders, badges and streak bonuses.",
+      "Multiple child profiles with parent approval and PIN-protected settings.",
+      "Read-aloud tasks and rewards, with an interface designed for children and parents."
+    ],
+    "links": [
+      {
+        "label": "Explore StarJar",
+        "url": "/starjar/"
+      },
+      {
+        "label": "Get it on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=dev.jamescullimore.starjar"
+      }
+    ],
+    "image": "/starjar/assets/ic_launcher-playstore.png"
+  },
+  {
+    "slug": "dont-go-to-bed",
+    "name": "Don’t Go To Bed",
+    "kind": "Own projects",
+    "focus": [
+      "Family game",
+      "Android & iOS"
+    ],
+    "summary": "A family adventure made with my sons, Leo and Ian.",
+    "context": "Explore, build and find Mammy before nightfall. The game grew out of the boys’ ideas, with playable family characters and a new world each session. Available on Android, iPhone and iPad.",
+    "work": [
+      "Break and collect blocks to build a route through the world.",
+      "Explore from different directions and play together on a trusted local Wi-Fi network.",
+      "Free gameplay, no ads and no game account; optional support tips sit behind a grown-ups gate."
+    ],
+    "links": [
+      {
+        "label": "Explore Don’t Go To Bed",
+        "url": "/dontgotobed/"
+      },
+      {
+        "label": "Watch the gameplay trailer",
+        "url": "https://youtu.be/JN5BdB0Ek_c"
+      },
+      {
+        "label": "Get it on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=dev.jamescullimore.dontgotobed"
+      },
+      {
+        "label": "Download on the App Store",
+        "url": "https://apps.apple.com/app/id6812278045"
+      },
+      {
+        "label": "View the source on GitHub",
+        "url": "https://github.com/LethalMaus/DontGoToBed"
+      }
+    ],
+    "image": "/dontgotobed/assets/game-icon.png"
+  },
+  {
+    "slug": "android-security-training",
+    "name": "Android Security Training",
+    "kind": "Own projects",
+    "focus": [
+      "Android",
+      "Security",
+      "Workshops"
+    ],
+    "summary": "Practical labs that connect Android vulnerabilities to working fixes.",
+    "context": "Hands-on training for Android developers and mobile teams. Vulnerable and secure application variants make it possible to inspect a weakness, understand its cause, apply a fix and retest.",
+    "work": [
+      "Network trust and payload encryption, including HTTPS and certificate pinning.",
+      "Reverse engineering and APK tampering, runtime permissions and IPC.",
+      "WebView and local data risks, with practical verification in the training labs."
+    ],
+    "links": [
+      {
+        "label": "Explore the training and syllabus",
+        "url": "/android-security-training/"
+      },
+      {
+        "label": "View the training repository",
+        "url": "https://github.com/LethalMaus/AndroidSecurityTraining"
+      },
+      {
+        "label": "Discuss a team workshop",
+        "url": "mailto:info@jamescullimore.dev?subject=Android%20Security%20Training"
+      }
+    ],
+    "image": "/assets/icons/android-security-training.svg"
+  },
+  {
+    "slug": "elchem",
+    "name": "Elchem",
+    "kind": "Own projects",
+    "focus": [
+      "Android",
+      "Location-based game"
+    ],
+    "summary": "A real-world map becomes a place for encounters and discovery.",
+    "context": "Elchem combines exploration with a game world of elements, recipes, equipment and encounters. Players choose a route and discover what awaits at the next map point.",
+    "work": [
+      "Map-based exploration with encounters and places to prepare.",
+      "Elements, recipes and equipment woven into the game experience.",
+      "An Android product with gameplay previews and a Google Play listing."
+    ],
+    "links": [
+      {
+        "label": "Explore Elchem",
+        "url": "/elchem/"
+      },
+      {
+        "label": "Get it on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=dev.jamescullimore.elchem"
+      }
+    ],
+    "image": "/elchem/assets/elchem/meta/app-icon.png"
+  },
+  {
+    "slug": "watchful",
+    "name": "Watchful",
+    "kind": "Own projects",
+    "focus": [
+      "Mobile app",
+      "Watchlists"
+    ],
+    "summary": "Keep track of the things you want to check, without the mental list.",
+    "context": "Watchful brings personal watchlists to a phone: from looking for a better price nearby to keeping an eye out for a favourite show. The product page explains the experience, plans and support options. Available on Android, iPhone and iPad.",
+    "work": [
+      "Create a watchlist around the things that matter to you.",
+      "A free starting tier with additional capacity through Pro.",
+      "Dedicated support, privacy information and data deletion guidance."
+    ],
+    "links": [
+      {
+        "label": "Explore Watchful",
+        "url": "/watchful/"
+      },
+      {
+        "label": "Watchful support",
+        "url": "/watchful/support/"
+      },
+      {
+        "label": "Get it on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=dev.jamescullimore.watchful"
+      },
+      {
+        "label": "Download on the App Store",
+        "url": "https://apps.apple.com/app/id6812295504"
+      }
+    ],
+    "image": "/watchful/assets/app-icon.svg"
+  },
+  {
+    "slug": "jc-bachmann",
+    "name": "J&C Bachmann",
+    "kind": "Client work",
+    "focus": [
+      "Android",
+      "Kotlin",
+      "Vue & Node.js"
+    ],
+    "summary": "Modernizing an established Android app and its surrounding platform.",
+    "context": "A long-running collaboration across an Android app, Node.js backend and Vue.js web portal. The existing Java codebase needed continued development and a gradual move to Kotlin.",
+    "work": [
+      "Modernized and extended the Java application while migrating it to Kotlin.",
+      "Worked across the mobile app and surrounding web and backend stack.",
+      "Supported delivery through ongoing collaboration and technical guidance."
+    ],
+    "links": [
+      {
+        "label": "J&C Bachmann website",
+        "url": "https://jcbachmann.com/"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "benefits-me",
+    "name": "Benefits.me",
+    "kind": "Client work",
+    "focus": [
+      "Android",
+      "Team support",
+      "Quality"
+    ],
+    "summary": "Senior Android support inside an existing mobile team.",
+    "context": "Support and guidance for the Benefits.me mobile team, combining Android development expertise with quality management and clear technical feedback.",
+    "work": [
+      "Supported the team’s Android development work.",
+      "Provided practical code and engineering feedback.",
+      "Contributed guidance on programming and quality management."
+    ],
+    "links": [
+      {
+        "label": "Benefits.me website",
+        "url": "https://benefits.me/welcome"
+      },
+      {
+        "label": "View Android app",
+        "url": "https://play.google.com/store/apps/details?id=de.ticketsprinter.mitarbeiteraktionen.production"
+      },
+      {
+        "label": "View iOS app",
+        "url": "https://apps.apple.com/de/app/benefits-me/id1569148351"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "lexoffice",
+    "name": "lexoffice",
+    "kind": "Client work",
+    "focus": [
+      "Android",
+      "UI testing",
+      "Automation"
+    ],
+    "summary": "Strengthening Android UI testing and its infrastructure.",
+    "context": "Work on UI testing and the infrastructure behind it, helping the team advance automated test coverage for the Android application.",
+    "work": [
+      "Applied Android UI testing expertise to the application.",
+      "Worked on the supporting test infrastructure.",
+      "Helped the team increase automated test coverage."
+    ],
+    "links": [
+      {
+        "label": "lexoffice website",
+        "url": "https://www.lexoffice.de/"
+      },
+      {
+        "label": "View Android app (Lexware Office)",
+        "url": "https://play.google.com/store/apps/details?id=de.lexoffice.android"
+      },
+      {
+        "label": "View iOS app (Lexware Office)",
+        "url": "https://apps.apple.com/de/app/lexware/id622526440"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "marktgalerie",
+    "name": "Marktgalerie",
+    "kind": "Client work",
+    "focus": [
+      "Android",
+      "Product delivery",
+      "Technical review"
+    ],
+    "summary": "From prototype review to an app for event photo documentation.",
+    "context": "Market and festival planners needed support for documenting their events through photographs. An initial audit and consulting engagement developed into further application delivery.",
+    "work": [
+      "Reviewed the existing prototype and advised on its development.",
+      "Took on further implementation of the application.",
+      "Built photo documentation support for market and festival planners."
+    ],
+    "links": [
+      {
+        "label": "Marktmeister Pro website",
+        "url": "https://marktmeister-pro.de/"
+      },
+      {
+        "label": "View Android app",
+        "url": "https://play.google.com/store/apps/details?id=de.marktmeister_pro.marktgalerie"
+      },
+      {
+        "label": "View iOS app",
+        "url": "https://apps.apple.com/de/app/marktgalerie/id6744124043"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "neurofly",
+    "name": "Neurofly",
+    "kind": "Client work",
+    "focus": [
+      "Android",
+      "Architecture",
+      "Code review"
+    ],
+    "summary": "Android development guidance and architecture support.",
+    "context": "Collaboration on the Neurofly Android project, with a focus on further development, code review and architectural recommendations.",
+    "work": [
+      "Reviewed code and shared development practices.",
+      "Provided architecture recommendations for the application.",
+      "Supported the project owner and team with Android engineering guidance."
+    ],
+    "links": [
+      {
+        "label": "Bridge the Gap website",
+        "url": "https://bridgethegap.consulting/"
+      },
+      {
+        "label": "Explore the NeuroFly project",
+        "url": "https://openbci.com/community/assistive-neurotechnology-takes-flight-at-ted2023/"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "farmerjoe",
+    "name": "farmerJoe",
+    "kind": "Client work",
+    "focus": [
+      "Software engineering",
+      "Team collaboration"
+    ],
+    "summary": "Engineering support across the stack and the delivery process.",
+    "context": "A collaboration that combined implementation across the technology stack with improvements to engineering processes and team collaboration.",
+    "work": [
+      "Worked across the stack to solve product engineering problems.",
+      "Helped improve development processes.",
+      "Supported the quality and efficiency of team collaboration."
+    ],
+    "links": [
+      {
+        "label": "farmerJoe website",
+        "url": "https://farmerjoe.com/"
+      },
+      {
+        "label": "View Android app",
+        "url": "https://play.google.com/store/apps/details?id=com.farmerjoe.android.react.farmerjoe"
+      },
+      {
+        "label": "View iOS app",
+        "url": "https://apps.apple.com/de/app/farmerjoe/id1216314690"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "wifiwizard",
+    "name": "WiFiWizard",
+    "kind": "Public code",
+    "focus": [
+      "Android",
+      "Jetpack Compose",
+      "Wi-Fi"
+    ],
+    "summary": "An open-source example of Wi-Fi connections and QR scanning on Android.",
+    "context": "A practical Android example combining programmatic Wi-Fi connections with QR code scanning. It provides source code for teams exploring device connectivity in a Compose app.",
+    "work": [
+      "Programmatic Wi-Fi connections with error handling and fallback behaviour.",
+      "ML Kit QR scanning and AdMob integration.",
+      "Jetpack Compose UI with an example Espresso test."
+    ],
+    "links": [
+      {
+        "label": "View source and documentation",
+        "url": "https://github.com/LethalMaus/WiFiWizard"
+      },
+      {
+        "label": "Get it on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=dev.jamescullimore.wifiwizard"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "trustkeyservice",
+    "name": "TrustKeyService",
+    "kind": "Public code",
+    "focus": [
+      "Android Keystore",
+      "AIDL / Binder",
+      "Security"
+    ],
+    "summary": "A proof of concept for keystore-backed operations on a custom Android device.",
+    "context": "An Android Keystore experiment exposing cryptographic operations through a Binder service. It documents a hardware-backed TEE result on a specific device, alongside the limits of what the experiment establishes.",
+    "work": [
+      "Generate and inspect an AES key in Android Keystore.",
+      "Expose generate, inspect, encrypt, decrypt, and delete operations through AIDL.",
+      "Exercise a debug-only test path from a host machine through adb."
+    ],
+    "links": [
+      {
+        "label": "View source and documentation",
+        "url": "https://github.com/LethalMaus/TrustKeyService"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "bluetooth-file-transfer",
+    "name": "Bluetooth File Transfer",
+    "kind": "Public code",
+    "focus": [
+      "Android",
+      "Bluetooth LE",
+      "Device integration"
+    ],
+    "summary": "A BLE file-transfer proof of concept between Android and a laptop.",
+    "context": "The Android phone acts as a BLE peripheral with a GATT file-transfer service. A Python client on a laptop can exchange files with selected Android folders.",
+    "work": [
+      "Upload and download files or folders over BLE.",
+      "Keep advertising and transfer state in an Android foreground service.",
+      "Use a Compose interface for permissions, folder selection, and transfer state."
+    ],
+    "links": [
+      {
+        "label": "View source and documentation",
+        "url": "https://github.com/LethalMaus/BluetoothFileTransfer"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "example-wear-app",
+    "name": "Example Wear App",
+    "kind": "Public code",
+    "focus": [
+      "Wear OS",
+      "Android",
+      "Data Layer"
+    ],
+    "summary": "A phone-and-watch sample demonstrating control handoff and state synchronisation.",
+    "context": "A paired Android and Wear OS sample coordinating control state and profiles through the Wear Data Layer, including fallback behaviour when devices cannot communicate.",
+    "work": [
+      "Coordinate the active controller between phone and watch.",
+      "Synchronise profiles using Data Items.",
+      "Demonstrate connection awareness and a local emergency takeover."
+    ],
+    "links": [
+      {
+        "label": "View source and documentation",
+        "url": "https://github.com/LethalMaus/ExampleWearApp"
+      }
+    ],
+    "image": null
+  }
+]

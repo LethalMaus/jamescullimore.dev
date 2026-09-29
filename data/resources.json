@@ -1,0 +1,24 @@
+{
+  "youtube_playlist": "https://www.youtube.com/playlist?list=PLHfKh8MQgAVCoIzcCR6dfc2RnDAbP6dbt",
+  "academy_profile": "https://academy.droidcon.com/james-cullimore",
+  "courses": [
+    {
+      "title": "Espresso: UI Testing in Android with Jetpack Compose",
+      "url": "https://academy.droidcon.com/course/espresso-a-comprehensive-guide-to-ui-testing-in-android-with-jetpack-compose",
+      "description": "A practical course on Android UI testing with Espresso and Jetpack Compose.",
+      "platform": "droidcon Academy"
+    },
+    {
+      "title": "Triggering In-App Updates Using Firebase Remote Config in Android",
+      "url": "https://academy.droidcon.com/course/triggering-in-app-updates-using-firebase-remote-config-in-android",
+      "description": "Learn to trigger flexible and immediate app updates using Firebase Remote Config.",
+      "platform": "droidcon Academy"
+    },
+    {
+      "title": "Mastering Retrofit in Android: The Ultimate Guide for Jetpack Compose Apps",
+      "url": "https://academy.droidcon.com/course/mastering-retrofit-in-android-the-ultimate-guide-for-jetpack-compose-apps",
+      "description": "Build reliable Android networking with Retrofit: API integration, authentication, caching, and testing in Jetpack Compose apps.",
+      "platform": "droidcon Academy"
+    }
+  ]
+}

@@ -19,35 +19,20 @@
   <meta name="twitter:description" content="Fast Feedback: Winning Back 60% of Our CI Time Speeding up your build pipeline isn’t just about faster Gradle builds, though that’s a great place to start. I covered that part in a previous …"/>
   <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*e6MCHibpW3bKuEjFttx_Og.jpeg"/>
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
-  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="../styles.css?v=77842ea06cac"/>
   <link rel="stylesheet" href="assets/style.css"/>
   <link rel="stylesheet" href="assets/generated-article.css"/>
   <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Fast Feedback: Winning Back 60% of Our CI Time","description":"Fast Feedback: Winning Back 60% of Our CI Time Speeding up your build pipeline isn’t just about faster Gradle builds, though that’s a great place to start. I covered that part in a previous …","image":["https://miro.medium.com/v2/resize:fit:1200/1*e6MCHibpW3bKuEjFttx_Og.jpeg"],"datePublished":"2025-05-09","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/fast-feedback-winning-back-60-of-our-ci-time.html"},"url":"https://jamescullimore.dev/articles/fast-feedback-winning-back-60-of-our-ci-time.html","inLanguage":"en"}</script>
+<script defer src="/assets/site.js?v=f0fd21e32408"></script>
+<link rel="stylesheet" href="/assets/code-highlight.css?v=52041029feb2"><script defer src="/assets/vendor/highlight/highlight.min.js"></script><script defer src="/assets/vendor/highlight/kotlin.min.js"></script><script defer src="/assets/vendor/highlight/groovy.min.js"></script><script defer src="/assets/code-highlight.js?v=42c749b525bc"></script>
 </head>
 <body class="article-page">
-<header>
-<nav class="nav">
-<a aria-label="James Cullimore home" class="article-brand-link" href="/">
-<div class="brand">
-<div class="brand-mark">JC</div>
-<div class="brand-text">
-<div class="brand-name">James Cullimore</div>
-<div class="brand-role">Software Engineering</div>
-</div>
-</div>
-</a>
-<ul class="nav-links">
-<li><a href="/#overview">Overview</a></li>
-<li><a href="/#services">Services</a></li>
-<li><a href="/#how-we-work">How we work</a></li>
-<li><a href="/#projects">Projects</a></li>
-<li><a href="/#insights">Insights</a></li>
-<li><a href="/#contact">Contact</a></li>
-<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
-</ul>
-</nav>
-</header>
-<main class="article">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><nav class="site-nav" aria-label="Primary">
+<a class="site-brand" href="/" aria-label="James Cullimore Software Engineering home"><img src="/assets/branding/logo-black.png" width="56" height="56" alt=""><span><strong>James Cullimore</strong><small>Software Engineering</small></span></a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-links">Menu +</button><ul class="site-links" id="site-links"><li><a href="/#services">Services</a></li><li><a href="/#how-we-work">Process</a></li><li><a href="/projects.html">Work</a></li><li><a href="/#insights">Testimonials</a></li><li><a href="/blog.html" aria-current="page">Blog</a></li><li><a href="/#contact" class="contact-link project-cta">Discuss your project</a></li></ul>
+</nav></header>
+<main id="main" class="article">
   <article class="container">
     <header class="article-header">
       <p class="article-category">Android • Kotlin • Gradle</p>
@@ -64,7 +49,7 @@
       <img src="https://miro.medium.com/v2/resize:fit:1200/1*e6MCHibpW3bKuEjFttx_Og.jpeg" alt="Fast Feedback: Winning Back 60% of Our CI Time"/>
     </figure>
     <section class="article-content">
-<p><strong>Speeding up your build pipeline isn’t just about faster Gradle builds, </strong>though that’s a great place to start. I covered that part in a <a href="/how-i-cut-my-gradle-build-time-by-50-8f3c57534ce6">previous article</a>, where I focused on cutting down Gradle build times directly. That alone gave us a solid boost.</p>
+<p><strong>Speeding up your build pipeline isn’t just about faster Gradle builds, </strong>though that’s a great place to start. I covered that part in a <a href="/articles/how-i-cut-my-gradle-build-time-by-50.html">previous article</a>, where I focused on cutting down Gradle build times directly. That alone gave us a solid boost.</p>
 <p>But faster builds aren’t only about saving time, they’re about faster feedback. The quicker your CI pipeline runs, the sooner you know if something broke. That’s not just a convenience; it directly affects how you work. When feedback takes too long, devs end up waiting, context-switching, and losing momentum. On the flip side, quicker pipelines mean faster fixes, fewer merge conflicts, and more confident changes. It improves both your speed and your flow.</p>
 <p>So what happens after your Gradle tweaks are done and you’re still waiting around?</p>
 <p>This article is all about that. These tips aren’t just Gradle tricks, they’re changes that often fly under the radar until you start poking at your CI config, cache behaviour, and job timings. If your builds still feel slow even after streamlining Gradle, this one’s for you.</p>
@@ -83,11 +68,11 @@
 <figure><img src="https://miro.medium.com/v2/resize:fit:720/format:webp/1*6RR9c04D9R3gjhRCxqvKGA.png" alt=""/></figure>
 <p>We collapsed everything into just <strong>two</strong> stages: <code>validate</code> and <code>deploy</code>. Then we used <code>only:</code> and <code>except:</code> to run jobs conditionally. Reporting only ran on <code>main</code>, and docs were skipped completely in that branch.</p>
 <figure><img src="https://miro.medium.com/v2/resize:fit:640/format:webp/1*mA9y_1mlCGmFGBL04juCzg.png" alt=""/></figure>
-<pre><code class="language-text">assemble
+<pre><code class="language-yaml">assemble
   except:
     - dev
     - main</code></pre>
-<pre><code class="language-text">report
+<pre><code class="language-yaml">report
   only:
     - dev</code></pre>
 <p>That one change took our pipeline from <strong>12 minutes to 6 </strong>with no loss in coverage or visibility.</p>
@@ -95,7 +80,7 @@
 <p>Here’s some outside-the-box thinking.</p>
 <p>Since we couldn’t use a shared cache across all jobs, <strong>every job was doing a clean Gradle build</strong>. That meant downloading Gradle each time, which slowed us down, especially for the longest job, which ran over 4 minutes on its own.</p>
 <p>Eventually we enabled <strong>local</strong> caching with <code>policy: pull/push</code>, but only after one job fetched Gradle first.</p>
-<pre><code class="language-text">default:
+<pre><code class="language-yaml">default:
   image: …
   before_script: …
   cache:
@@ -119,7 +104,7 @@
 <p>Adding this configuration to your <code>gradle.properties</code></p>
 <pre><code class="language-text">org.gradle.parallel=true</code></pre>
 <p>Adding this task to your <code>build.gradle.kts</code> file</p>
-<pre><code class="language-text">tasks.withType&lt;Test&gt; {
+<pre><code class="language-kotlin">tasks.withType&lt;Test&gt; {
     maxParallelForks = Runtime.getRuntime().availableProcessors()
 }</code></pre>
 <p>For <strong>instrumented tests</strong>, it depends on your setup, but Android Studio supports running them on multiple devices in parallel. Check out <a href="https://developer.android.com/studio/test/test-in-android-studio#run-multiple-devices-parallel">this guide</a> for more on that.</p>
@@ -138,15 +123,36 @@
     </footer>
   </article>
 </main>
-<footer>
-<div class="footer-inner">
-<div>© 2026 James Cullimore. All rights reserved.</div>
-<ul class="footer-links">
-<li><a href="../articles.html">Blog</a></li>
-<li><a href="../pages/impressum.html">Impressum</a></li>
-<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
-</ul>
-</div>
-</footer>
+<footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div>© 2026 James Cullimore. All rights reserved.</div>
+        <div class="footer-social">
+          <a href="https://www.linkedin.com/in/james-cullimore/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/LethalMaus" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Explore</div>
+        <ul class="footer-links" aria-label="Footer site links">
+          <li><a href="/projects.html">Projects</a></li>
+          <li><a href="/#how-we-work">Process</a></li>
+          <li><a href="/#insights">Testimonials</a></li>
+          <li><a href="/courses.html">Courses</a></li>
+          <li><a href="/blog.html">Blog</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Legal</div>
+        <ul class="footer-links" aria-label="Footer legal links">
+          <li><a href="/impressum.html">Impressum</a></li>
+          <li><a href="/datenschutz.html">Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

@@ -19,36 +19,21 @@
   <meta name="twitter:description" content="Goodbye AndroidView: A Real CameraX QR Scanner in Compose In a recent project, we needed to add a QR scanner that allows users to quickly connect to a Wi-Fi network. This is not a new problem. I have …"/>
   <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*dQ0hL8953SnmuvLeQOZb1A.png"/>
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
-  <link rel="stylesheet" href="../styles.css"/>
+  <link rel="stylesheet" href="../styles.css?v=77842ea06cac"/>
   <link rel="stylesheet" href="assets/style.css"/>
   <link rel="stylesheet" href="assets/generated-article.css"/>
   <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Goodbye AndroidView: A Real CameraX QR Scanner in Compose","description":"Goodbye AndroidView: A Real CameraX QR Scanner in Compose In a recent project, we needed to add a QR scanner that allows users to quickly connect to a Wi-Fi network. This is not a new problem. I have …","image":["https://miro.medium.com/v2/resize:fit:1200/1*dQ0hL8953SnmuvLeQOZb1A.png"],"datePublished":"2026-01-14","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html"},"url":"https://jamescullimore.dev/articles/goodbye-androidview-a-real-camerax-qr-scanner-in-compose.html","inLanguage":"en"}</script>
   <script src="assets/link-preview.js" defer></script>
+<script defer src="/assets/site.js?v=f0fd21e32408"></script>
+<link rel="stylesheet" href="/assets/code-highlight.css?v=52041029feb2"><script defer src="/assets/vendor/highlight/highlight.min.js"></script><script defer src="/assets/vendor/highlight/kotlin.min.js"></script><script defer src="/assets/vendor/highlight/groovy.min.js"></script><script defer src="/assets/code-highlight.js?v=42c749b525bc"></script>
 </head>
 <body class="article-page">
-<header>
-<nav class="nav">
-<a aria-label="James Cullimore home" class="article-brand-link" href="/">
-<div class="brand">
-<div class="brand-mark">JC</div>
-<div class="brand-text">
-<div class="brand-name">James Cullimore</div>
-<div class="brand-role">Software Engineering</div>
-</div>
-</div>
-</a>
-<ul class="nav-links">
-<li><a href="/#overview">Overview</a></li>
-<li><a href="/#services">Services</a></li>
-<li><a href="/#how-we-work">How we work</a></li>
-<li><a href="/#projects">Projects</a></li>
-<li><a href="/#insights">Insights</a></li>
-<li><a href="/#contact">Contact</a></li>
-<li><a class="nav-cta active" href="../articles.html">Blog</a></li>
-</ul>
-</nav>
-</header>
-<main class="article">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><nav class="site-nav" aria-label="Primary">
+<a class="site-brand" href="/" aria-label="James Cullimore Software Engineering home"><img src="/assets/branding/logo-black.png" width="56" height="56" alt=""><span><strong>James Cullimore</strong><small>Software Engineering</small></span></a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-links">Menu +</button><ul class="site-links" id="site-links"><li><a href="/#services">Services</a></li><li><a href="/#how-we-work">Process</a></li><li><a href="/projects.html">Work</a></li><li><a href="/#insights">Testimonials</a></li><li><a href="/blog.html" aria-current="page">Blog</a></li><li><a href="/#contact" class="contact-link project-cta">Discuss your project</a></li></ul>
+</nav></header>
+<main id="main" class="article">
   <article class="container">
     <header class="article-header">
       <p class="article-category">Android • Android Development • Jetpack Compose</p>
@@ -139,7 +124,7 @@
 <pre><code class="language-sh">val surfaceRequest by viewModel.surfaceRequest.collectAsStateWithLifecycle()</code></pre>
 <p>The <code>CameraPreviewViewModel</code> publishes a <code>SurfaceRequest</code> when CameraX is ready to stream frames. The UI does not pull it. It just reacts when it appears.</p>
 <p><strong>Camera binding is lifecycle-aware, but still Compose-native</strong>You bind in a <code>LaunchedEffect</code>:</p>
-<pre><code class="language-sh">LaunchedEffect(lifecycleOwner, onAnalyze) {
+<pre><code class="language-kotlin">LaunchedEffect(lifecycleOwner, onAnalyze) {
     viewModel.bindToCamera(context.applicationContext, lifecycleOwner, onAnalyze)
 }</code></pre>
 <p>That means:</p>
@@ -171,15 +156,15 @@
 <p>Inside <code>bindToCamera(...)</code>, you assemble two use cases:</p>
 <ul><li><code>cameraPreviewUseCase</code> for the live preview</li><li><code>imageAnalysis</code> for QR decoding</li></ul>
 <p>The analysis use case is configured to keep only the latest frame:</p>
-<pre><code class="language-sh">.setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)</code></pre>
+<pre><code class="language-kotlin">.setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)</code></pre>
 <p>That is exactly what you want for QR scanning. There is no benefit in decoding stale frames, and you do not want analysis lag to build up while the user moves the phone.</p>
 <p>Then you attach an analyzer that hands results back through <code>onAnalyze</code>:</p>
-<pre><code class="language-sh">setAnalyzer(cameraExecutor, QrCodeAnalyzer { qrCode -&gt;
+<pre><code class="language-kotlin">setAnalyzer(cameraExecutor, QrCodeAnalyzer { qrCode -&gt;
     qrCode.wifi?.let { wifi -&gt; onAnalyze(wifi) }
 })</code></pre>
 <p>Notice the boundary here: the analyzer emits a QR code model, and you only forward the Wi-Fi payload if it exists. That keeps the UI contract clean: <code>onAnalyze</code> only receives <code>Barcode.WiFi</code>.</p>
 <h3>awaitCancellation() and guaranteed cleanup</h3>
-<pre><code class="language-text">awaitCancellation()</code></pre>
+<pre><code class="language-kotlin">awaitCancellation()</code></pre>
 <p>This pattern is doing a lot of work for you:</p>
 <div class="gist-embed"><script src="https://gist.github.com/LethalMaus/3a975dec9471273d2112ebcc2529167c.js?file=AwaitCancellation.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/3a975dec9471273d2112ebcc2529167c#file-awaitcancellation-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/3a975dec9471273d2112ebcc2529167c#file-awaitcancellation-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
 <p>Because <code>bindToCamera</code> is called from a <code>LaunchedEffect</code>, it will be cancelled when the composable leaves composition. <code>awaitCancellation()</code> suspends forever until that cancellation happens. When it does, you immediately unbind the camera and shut down the executor in <code>finally</code>.</p>
@@ -198,7 +183,7 @@ if (point != null) {
 <h2>QR analysis with ML Kit and QrCodeAnalyzer</h2>
 <pre><code class="language-text">QrCodeAnalyzer</code></pre>
 <p>Up to this point, everything has been about getting a Compose-native preview on screen and binding the right CameraX use cases. The QR scanning part happens in one very small seam in your <code>ImageAnalysis</code> setup:</p>
-<pre><code class="language-sh">setAnalyzer(cameraExecutor, QrCodeAnalyzer { qrCode -&gt;
+<pre><code class="language-kotlin">setAnalyzer(cameraExecutor, QrCodeAnalyzer { qrCode -&gt;
     qrCode.wifi?.let { wifi -&gt; onAnalyze(wifi) }
 })</code></pre>
 <p>That line tells us a lot about the design, even without looking at the <code>QrCodeAnalyzer</code> implementation.</p>
@@ -210,7 +195,7 @@ if (point != null) {
 <h3>Why STRATEGY_KEEP_ONLY_LATEST is the right choice</h3>
 <pre><code class="language-text">STRATEGY_KEEP_ONLY_LATEST</code></pre>
 <p>You configured image analysis like this:</p>
-<pre><code class="language-sh">.setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)</code></pre>
+<pre><code class="language-kotlin">.setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)</code></pre>
 <p>For QR scanning, this is exactly what you want. If decoding takes a little longer on some devices, you do not want a queue of old frames. You want the newest frame available when the analyzer is ready again. Android’s CameraX docs explicitly call out <code>STRATEGY_KEEP_ONLY_LATEST</code> as the non-blocking approach for analysis.</p>
 <h3>What QrCodeAnalyzer typically does</h3>
 <pre><code class="language-text">QrCodeAnalyzer</code></pre>
@@ -264,14 +249,14 @@ if (point != null) {
 <p>Doing this work on resume is the right timing for those real-world loops.</p>
 <h3>Avoid repeated connection attempts from repeated scans</h3>
 <p>Right now, your analyzer forwards every Wi-Fi payload it sees:</p>
-<pre><code class="language-sh">qrCode.wifi?.let { wifi -&gt; onAnalyze(wifi) }</code></pre>
+<pre><code class="language-kotlin">qrCode.wifi?.let { wifi -&gt; onAnalyze(wifi) }</code></pre>
 <p>That is fine because your UI layer effectively disables scanning once you transition to <code>CONNECTING</code>. But there is still a small edge case window: you can get multiple callbacks before the UI state flips.</p>
 <p>A common production pattern is to add a simple throttle or “first valid scan wins” guard in the layer that handles <code>onAnalyze</code>. You do not have to change your camera pipeline to do this. The clean boundary you already have makes it easy to add later.</p>
 <p>If you decide to mention this in the article, frame it as:</p>
 <ul><li>keep the analyzer simple and fast</li><li>control scan frequency where business logic lives</li></ul>
 <h3>Keep analysis non-blocking and responsive</h3>
 <p>Your use of:</p>
-<pre><code class="language-sh">.setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)</code></pre>
+<pre><code class="language-kotlin">.setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)</code></pre>
 <p>is a production-friendly default. CameraX describes this as the non-blocking approach where the analyzer receives the most recent frame available, rather than building up a backlog.</p>
 <p>For QR scanning, that is exactly the behavior users expect. If they move the camera, the scanner should react to what is currently in view, not what was in view half a second ago.</p>
 <h3>Make cleanup predictable</h3>
@@ -283,9 +268,9 @@ if (point != null) {
 <p>In practice though, you will still see:</p>
 <ul><li>blank passwords for open networks</li><li>missing or unusual values from third-party QR generators</li><li>encryption types that do not map cleanly</li></ul>
 <p>Your logic already accounts for that:</p>
-<pre><code class="language-sh">password.ifBlank { null }</code></pre>
+<pre><code class="language-kotlin">password.ifBlank { null }</code></pre>
 <p>and</p>
-<pre><code class="language-sh">else -&gt; SecurityType.UNKNOWN</code></pre>
+<pre><code class="language-kotlin">else -&gt; SecurityType.UNKNOWN</code></pre>
 <p>Those are the kinds of small defensive moves that keep a scanner from becoming brittle.</p>
 <h2>Conclusion</h2>
 <p>What I wanted from this feature was simple: scan a Wi-Fi QR code, extract the credentials, and help the user connect. The frustrating part was never ML Kit or even CameraX itself. It was the feeling that a modern Compose screen still had to fall back to <code>AndroidView</code> for something as common as a camera preview.</p>
@@ -303,15 +288,36 @@ if (point != null) {
     </footer>
   </article>
 </main>
-<footer>
-<div class="footer-inner">
-<div>© 2026 James Cullimore. All rights reserved.</div>
-<ul class="footer-links">
-<li><a href="../articles.html">Blog</a></li>
-<li><a href="../pages/impressum.html">Impressum</a></li>
-<li><a href="../pages/datenschutz.html">Datenschutz</a></li>
-</ul>
-</div>
-</footer>
+<footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div>© 2026 James Cullimore. All rights reserved.</div>
+        <div class="footer-social">
+          <a href="https://www.linkedin.com/in/james-cullimore/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/LethalMaus" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Explore</div>
+        <ul class="footer-links" aria-label="Footer site links">
+          <li><a href="/projects.html">Projects</a></li>
+          <li><a href="/#how-we-work">Process</a></li>
+          <li><a href="/#insights">Testimonials</a></li>
+          <li><a href="/courses.html">Courses</a></li>
+          <li><a href="/blog.html">Blog</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Legal</div>
+        <ul class="footer-links" aria-label="Footer legal links">
+          <li><a href="/impressum.html">Impressum</a></li>
+          <li><a href="/datenschutz.html">Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
 </body>
 </html>

@@ -1,32 +1,124 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://jamescullimore.dev/</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/projects.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/talks.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <loc>https://jamescullimore.dev/courses.html</loc>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/blog.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/articles.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <loc>https://jamescullimore.dev/blog/page-2.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/blog/page-3.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/blog/page-4.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/blog/page-5.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/blog/page-6.html</loc>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/impressum.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/datenschutz.html</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/zuriga.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/fresenius-medical-care.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/blackned.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/gls.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/starjar.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/dont-go-to-bed.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/android-security-training.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/elchem.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/watchful.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/jc-bachmann.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/benefits-me.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/lexoffice.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/marktgalerie.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/neurofly.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/farmerjoe.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/wifiwizard.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/trustkeyservice.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/bluetooth-file-transfer.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/example-wear-app.html</loc>
+    <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/articles/what-adb-can-teach-you-about-broken-android-ipc-protections.html</loc>
@@ -284,14 +376,60 @@
     <loc>https://jamescullimore.dev/articles/the-importance-of-ui-tests-on-android-and-when-not-to-write-them.html</loc>
     <lastmod>2023-07-28</lastmod>
   </url>
-  <url><loc>https://jamescullimore.dev/watchful/</loc><lastmod>2026-09-21</lastmod></url>
-  <url><loc>https://jamescullimore.dev/watchful/support/</loc><lastmod>2026-09-21</lastmod></url>
-  <url><loc>https://jamescullimore.dev/watchful/policy_android/</loc><lastmod>2026-09-21</lastmod></url>
-  <url><loc>https://jamescullimore.dev/watchful/policy_ios/</loc><lastmod>2026-09-21</lastmod></url>
-  <url><loc>https://jamescullimore.dev/watchful/delete-data/</loc><lastmod>2026-09-21</lastmod></url>
-  <url><loc>https://jamescullimore.dev/dontgotobed/</loc><lastmod>2026-09-21</lastmod></url>
-  <url><loc>https://jamescullimore.dev/dontgotobed/support/</loc><lastmod>2026-09-21</lastmod></url>
-  <url><loc>https://jamescullimore.dev/dontgotobed/privacy/android/</loc><lastmod>2026-09-21</lastmod></url>
-  <url><loc>https://jamescullimore.dev/dontgotobed/privacy/ios/</loc><lastmod>2026-09-21</lastmod></url>
-  <url><loc>https://jamescullimore.dev/dontgotobed/delete-data/</loc><lastmod>2026-09-21</lastmod></url>
+  <url>
+    <loc>https://jamescullimore.dev/starjar/</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/elchem/</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/android-security-training/</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/5-minute-bedtime-stories-for-android-devs.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/watchful/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/watchful/support/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/watchful/policy_android/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/watchful/policy_ios/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/watchful/delete-data/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/dontgotobed/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/dontgotobed/support/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/dontgotobed/privacy/android/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/dontgotobed/privacy/ios/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/dontgotobed/delete-data/</loc>
+    <lastmod>2026-09-21</lastmod>
+  </url>
 </urlset>
