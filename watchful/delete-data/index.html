@@ -24,7 +24,7 @@
 <main id="main" class="legal">
 <span class="eyebrow">Your choices</span>
 <h1>Delete your Watchful data.</h1>
-<p>No app account is required. You can remove local data yourself and contact us about publisher-held records.</p>
+<p>Personal-key checks do not require a Watchful account. Included checks create an installation account without an email login. You can delete that account in the app, remove local data separately, and contact us about support records.</p>
 <h2>On your device</h2>
 <ol>
 <li>In Settings, choose “Pause all AI checks”. Requests already sent may finish.</li>
@@ -36,6 +36,14 @@
 <p>Deleting local data does not remove records held by AI providers or app stores. Contact those providers for their records. Records that must be retained by law may remain; deleting data does not itself request a refund.</p>
 <p>Support email is handled in Google Workspace (Gmail). Requesting deletion of support mail does not cancel a purchase or revoke an API key. We may ask for proportionate information to locate your records and verify the request, and will explain any records that need to be retained.</p>
 <p>Read the <a href="../policy_android/">Android policy</a> or <a href="../policy_ios/">iOS policy</a> for details.</p>
+<h2>Optional included AI checks</h2>
+<p>If you choose included checks, Watchful creates an installation account through Supabase without asking for an email or password. Supabase stores the account and secure session credentials are kept on your device. Apple DeviceCheck or Google Play Integrity verifies the device. RevenueCat verifies store purchases and links them to this account.</p>
+<p>Watchful forwards your watcher instructions, preferences, notification rules and available approximate location or fallback town through its backend to the provider you select, OpenAI or Gemini. Only OpenAI receives previous OpenAI comparison state. Provider keys stay on the server. The backend may also retrieve public publisher feeds or release records to check source dates; it does not send installation identifiers or purchase information to those publishers. We do not intentionally store watcher prompts, locations or generated results in the backend database or application logs. Service providers may separately retain data under their own policies; requesting non-stored interactions does not eliminate all provider or infrastructure retention.</p>
+<p>The backend stores installation and purchase linkage, allowance and usage records, request identifiers, watcher slot and cooldown identifiers, device verification and rate-limit records, and estimated request costs. Hashed identifiers are pseudonymous, not anonymous. The release backend database is hosted in Frankfurt, Germany (European Union). Supabase, RevenueCat, Apple, Google and OpenAI may process information in other countries under their respective arrangements. See their privacy information: <a href="https://supabase.com/privacy">Supabase</a>, <a href="https://www.revenuecat.com/privacy/">RevenueCat</a>, <a href="https://ai.google.dev/gemini-api/terms">Gemini API</a> and <a href="https://openai.com/policies/privacy-policy/">OpenAI</a>.</p>
+<h2>Deleting an included-check account</h2>
+<p>Use the funded-account deletion control on the Pro and included-checks screen. It remains available without an active subscription. Cancel the store subscription separately before deleting the account: account deletion and uninstalling do not cancel billing. Deletion removes the Supabase account, RevenueCat customer, device and rate-limit records and active watcher slot identifiers. It does not remove local watchers or personal API keys; use the separate app controls for those.</p>
+<p>Minimized hashed purchase linkage, consumed allowance and request accounting records may remain for up to 400 days after the applicable expiry or event to prevent repeated free allowances and support accounting. Completed deletion receipts contain no account identifier and expire after 30 days. Unconfirmed deletion preparations expire after one day. Failed deletion jobs retain the information needed to complete deletion and retry every ten minutes; contact support if deletion remains pending. Active failures are not falsely marked complete by expiry.</p>
+<p>Verified-device entries expire after ten minutes and challenges after two minutes. Other device, rate and watcher cooldown metadata expires after one day. Scheduled cleanup runs hourly, so removal can occur up to an hour after an expiry. Provider and store retention is separate. For assistance, email <a href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a>; never send passwords, device passcodes or API keys.</p>
 </main>
 <footer>
 <span>© 2026 James Cullimore</span>
