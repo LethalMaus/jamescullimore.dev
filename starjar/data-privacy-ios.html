@@ -31,7 +31,7 @@
         </div>
         <div class="hero-copy">
           <h1>iOS Privacy Policy</h1>
-          <p>Effective date: September 22, 2026.</p>
+          <p>Effective date: October 2, 2026.</p>
         </div>
       </header>
 
@@ -39,68 +39,88 @@
         <h2>Who we are and who this policy covers</h2>
         <p>This policy covers StarJar for iPhone and iPad, provided by James Cullimore – Software Engineering.
         StarJar helps parents and children manage family chores, stars and rewards. Parents set up and manage the app.
-        Contact: <a href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a>.
-        See our <a href="../impressum.html">legal notice</a> for provider details.</p>
-        <p>The Android app has a <a href="data-privacy.html">separate privacy policy</a>. Visiting this website is also
+        Contact <a href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a> or see our
+        <a href="../impressum.html">legal notice</a> for provider details.</p>
+        <p>The Android app has a <a href="data-privacy.html">separate policy</a>. Visiting this website is also
         subject to our <a href="../datenschutz.html">website privacy information</a>.</p>
 
-        <h2>Family information stays on your device</h2>
-        <p>Family profile names, avatars, parent PINs, chores, rewards, stars and activity history are stored in the app’s
-        local device storage. There is no StarJar cloud account or family-data synchronization service. We do not send
-        this family content to RevenueCat. Device backups may be handled by Apple according to your device settings.</p>
-        <p>Children can use profiles created by a parent. Use nicknames rather than full names if preferred. Keep the
-        parent PIN private. A PIN protects parent controls; it does not make the local storage an encrypted vault.</p>
+        <h2>Local family data and optional Google Drive sync</h2>
+        <p>StarJar stores profiles, chores, rewards, star balances and activity history on your device. Children use
+        profiles managed by a parent; they do not need a StarJar email account. Use nicknames where possible.
+        Parent profiles and PINs stay local and are not included in family sync.</p>
+        <p>In versions offering Family sync, a parent with Premium can choose to connect Google Drive. Each device
+        communicates directly with Google and uses the same parent-selected Google account. Only children explicitly
+        added to the cloud family are synchronized. Their names, appearance choices, tasks, rewards, balances and
+        activity histories, including pending requests and historical snapshots, are stored in the account’s hidden
+        StarJar application-data folder. StarJar requests access to its application storage, not your other Drive files.
+        We do not operate a server storing this family content.</p>
+        <p>Google processes account authorization and stored content under its own terms and
+        <a href="https://policies.google.com/privacy">privacy policy</a>. The app retains an account identifier to
+        prevent synchronization to the wrong account. Network connections expose technical information such as IP
+        addresses to the receiving service. Sync uses HTTPS and Google’s storage protections; StarJar does not add
+        end-to-end encryption to the family files. Each authorized installation has access to the family folder.
+        A parent PIN protects app controls, not a separate child-only cloud credential.</p>
+        <p>Cloud credentials are stored separately from family data: iOS Keychain on that device. The sync cache and
+        StarJar’s stored cloud credentials are excluded from the app’s ordinary cloud backup. Other local data may
+        be included in operating-system backups according to device settings. Keep your device and parent PIN secure.</p>
 
-        <h2>Purchases and RevenueCat</h2>
-        <p>Apple processes App Store payments and manages subscriptions. StarJar uses RevenueCat to validate purchases,
-        maintain Premium access, restore purchases and provide purchase reporting. RevenueCat is initialized when the
-        app launches, including before a purchase. It uses an anonymous app identifier and receives purchase history,
-        receipt/transaction information and technical information such as operating system and device details, app
-        version and activity timestamps. Network requests also expose connection information such as an IP address to
-        the receiving service. An anonymous identifier is not a promise that all information is aggregated.</p>
-        <p>StarJar does not provide family names, PINs, chore descriptions, reward descriptions or an email-based account
-        identifier to RevenueCat. We do not receive your payment-card number through the app. The parent PIN is required
-        before the in-app purchase screen, restoration controls and its external legal links are available.</p>
-        <p>RevenueCat describes using TLS for transport and AWS data centers in the United States for storage.
-        Processing on our behalf is subject to our agreements with RevenueCat and its data-processing terms.
-        Read <a href="https://www.revenuecat.com/privacy">RevenueCat’s privacy policy</a> and
-        <a href="https://www.apple.com/legal/privacy/">Apple’s privacy policy</a>.</p>
+        <h2>Purchases and Premium</h2>
+        <p>Apple processes payments and subscriptions. StarJar uses RevenueCat to validate purchases, maintain
+        Premium access, restore purchases and provide purchase reporting. RevenueCat initializes at app launch and
+        receives a pseudonymous app identifier, purchase history, transaction information and technical information
+        such as app version, operating system, device details and activity timestamps. Network requests expose
+        connection information to the receiving service. A pseudonymous identifier does not mean that all data is anonymous.</p>
+        <p>When connecting a family, StarJar links purchase access to a random family identifier also stored in the
+        private Drive folder. Other authorized family devices use this identifier to check access. We do not send
+        family names, parent PINs, chore or reward content or activity histories to RevenueCat. We do not receive
+        your payment-card number. Purchase and restore controls are in the parent area.</p>
+        <p>RevenueCat describes encrypted transport and storage in US data centers. Processing on our behalf is
+        subject to the applicable service agreements and data-processing terms. See
+        <a href="https://www.revenuecat.com/privacy">RevenueCat’s privacy policy</a> and <a href="https://www.apple.com/legal/privacy/">Apple’s privacy policy</a>.</p>
 
-        <h2>Analytics, advertising and external services</h2>
-        <p>The iOS app does not include Firebase Analytics or Firebase Crashlytics. It has no third-party advertising
-        and does not request an advertising identifier. RevenueCat’s purchase reporting remains in use. The iOS app
-        does not show the YouTube trailer. Links to support, the privacy policy and Apple’s terms open external
-        services with their own privacy practices. If you email support, we receive your email address and the
-        information you choose to include; please avoid sending children’s personal information.</p>
+        <h2>Analytics and external services</h2>
+        <p>The iOS app does not include Firebase Analytics or Crashlytics, third-party advertising, an advertising
+        identifier request or the YouTube trailer. RevenueCat purchase reporting remains in use. External support,
+        privacy and terms links have their own privacy practices. If you email us, we receive your email address and
+        information you include; please avoid sending unnecessary information about children.</p>
 
         <h2>Why information is processed</h2>
-        <p>Local family information is used to provide the features you configure. Purchase-related information is used
-        to deliver and restore paid access, prevent purchase fraud and understand purchase performance. Support
-        correspondence is used to respond to your request. Where applicable, we rely on performance of the requested
-        service, legal obligations, and legitimate interests in reliable purchase administration and support.
-        We do not use a child’s local profile as an advertising or marketing account.</p>
+        <p>Family information provides the features configured by parents, including optional synchronization.
+        Purchase information provides and restores paid access, supports fraud prevention and purchase reporting.
+        Support correspondence is used to answer requests. Applicable grounds include performance of requested
+        services, legal obligations, and legitimate interests in reliable administration and support; consent applies
+        where required. We do not use children’s profiles for advertising or marketing.</p>
 
-        <h2>Retention, deletion and subscription cancellation</h2>
-        <p>In the parent area, Settings → Clear All Data removes local profiles, PINs, chores, rewards and progress
-        after confirmation. Uninstalling removes the app’s local data subject to your device’s backup behavior.
-        Neither action cancels subscriptions or deletes Apple or RevenueCat transaction records. Apple may continue
-        renewals and purchase-related server processing after uninstalling.</p>
-        <p>Cancel recurring subscriptions in your Apple subscription settings. For help accessing or deleting
-        purchase-related information or support correspondence, contact info@jamescullimore.dev. We will assess the
-        request and instruct our service providers where appropriate. Transaction and related records may need to
-        be retained to provide paid access, restore purchases, resolve disputes or meet legal obligations. We do not
-        promise a fixed deletion period for records that Apple or RevenueCat must retain.</p>
+        <h2>Retention and deletion</h2>
+        <p>Disconnect in Family sync stops that device’s sync and removes cloud credentials saved by StarJar, while
+        preserving local data and unsent changes. You can also revoke authorization in your Google account settings.
+        StarJar does not maintain a separate server-side device-revocation list.</p>
+        <p>Deleting an individual synced child retains a deletion record and recovery history. To erase the cloud
+        family, use the parent area’s cloud-family removal control. This deletes family content through Google’s API;
+        a small marker without child content remains to prevent older devices from recreating it. Interrupted removal
+        can be retried. Google’s retention and backup policies may still apply.</p>
+        <p>Current child activity history is retained while the child is kept. Older full recovery snapshots are
+        periodically compacted, retaining recent recovery versions and small ancestry records for conflict detection.
+        Recovery exports contain child snapshots and history, but no parent PINs, cloud credentials, provider account
+        identity or RevenueCat family identifier. Export files are not encrypted by StarJar; protect the destination.</p>
+        <p>After disconnecting or removing the cloud family, Clear All Data removes this installation’s local profiles,
+        PINs, tasks, rewards and progress. Copies on other devices, exported files and operating-system backups need
+        separate deletion. Uninstalling does not erase the cloud family or previously exported files.</p>
+        <p>Data deletion and uninstalling do not cancel subscriptions or delete store, RevenueCat or other providers’
+        records. Cancel recurring subscriptions in your Apple subscription settings. For help with access or deletion requests,
+        contact info@jamescullimore.dev. Purchase records may be retained to provide paid access, restore purchases,
+        resolve disputes or meet legal obligations; we do not promise a fixed deletion period for those records.</p>
 
         <h2>Your choices and rights</h2>
-        <p>Parents can edit or delete local family information using the app. Depending on applicable law, you may have
-        rights to access, correct, delete or receive a copy of personal information, restrict or object to processing,
-        and complain to your local data-protection authority. Contact us to exercise these rights or raise a concern
-        about a child’s information. We may need enough information to identify the relevant purchase or support
-        request without requesting unnecessary information about a child.</p>
+        <p>You can use StarJar without connecting Google Drive. Parents can manage family information and use the
+        available export and deletion controls. Depending on applicable law, you may have rights to access, correct,
+        delete or receive a copy of personal information, restrict or object to processing, withdraw consent, and
+        complain to a data-protection authority. Contact us about these rights or a child’s information. We may need
+        enough information to locate the relevant record without requesting unnecessary information about a child.</p>
 
         <h2>Security and changes</h2>
-        <p>Protect your device and parent PIN. No storage or transmission system can be guaranteed completely secure.
-        We will update this page when our processing changes and show the effective date above.</p>
+        <p>No storage or transmission system can be guaranteed completely secure. Protect devices, provider accounts,
+        parent PINs and exported files. We update this page when processing changes and show the effective date above.</p>
       </section>
 
       <footer class="footer">
