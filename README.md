@@ -43,3 +43,13 @@ Article code highlighting uses locally hosted Highlight.js 11.11.1 (`assets/vend
 Canonical URLs use `https://jamescullimore.dev`. Legacy routes, including `/starjar.html`, retain static redirects with fallback links. StarJar privacy-policy URLs remain unchanged. Shared fonts and store badges stay in `assets/`.
 
 Private handoffs, reviews, audits and drafts belong in the Git-ignored `.jc/` folder. Keep website templates, data and maintenance scripts with the site so it can be rebuilt. The build script does not commit, push or deploy changes.
+
+## Project order
+
+`data/projects.json` groups work into apps and platforms, client websites, own projects and public code. Array order determines the display order within each section, following the confirmed project chronology. Dates are not displayed. The optional `engagement` field distinguishes client work from full-time or mixed roles.
+
+## Book PDF analytics
+
+The book page uses the existing consent-gated GA4 property. After consent, its PDF links send `book_pdf_download` for the download button and `book_pdf_open` for links that open the PDF. All five PDF links are covered. These events count clicks, not completed downloads or unique readers; declined consent, blocked analytics and direct PDF visits are not counted.
+
+After publishing, verify the events in GA4 Realtime, then use their Event count in the Events report. The `link_location` parameter identifies the header, hero download/open button, excerpt or footer; register it as an event-scoped custom dimension if you want that breakdown in reports. GA4 may also record its automatic `file_download` event; use the custom book events alone for these totals rather than adding both together.

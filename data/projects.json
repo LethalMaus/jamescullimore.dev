@@ -1,8 +1,33 @@
 [
   {
+    "slug": "gls",
+    "name": "GLS",
+    "kind": "Apps & platforms",
+    "focus": [
+      "Android",
+      "Test automation",
+      "Logistics"
+    ],
+    "summary": "Testing and delivery support for logistics and field operations.",
+    "context": "A multi-app Android environment supporting logistics and field operations. The contribution focused on automated testing, process improvements and knowledge sharing.",
+    "work": [
+      "Supported automated testing across the Android app environment.",
+      "Contributed improvements to engineering processes.",
+      "Shared testing and delivery knowledge with the team."
+    ],
+    "links": [
+      {
+        "label": "GLS website",
+        "url": "https://gls-group.com/GROUP/en/home/"
+      }
+    ],
+    "image": null,
+    "engagement": "Client work"
+  },
+  {
     "slug": "zuriga",
     "name": "Zuriga",
-    "kind": "Client work",
+    "kind": "Apps & platforms",
     "focus": [
       "Kotlin Multiplatform",
       "IoT",
@@ -30,12 +55,45 @@
       }
     ],
     "image": null,
-    "outcome": "A fully rewritten interface with a simpler, more modern product feel across Android and iOS, alongside improvements to the machine-communication logic."
+    "outcome": "A fully rewritten interface with a simpler, more modern product feel across Android and iOS, alongside improvements to the machine-communication logic.",
+    "engagement": "Client work"
+  },
+  {
+    "slug": "siresca",
+    "name": "Siresca",
+    "kind": "Apps & platforms",
+    "engagement": "Client work",
+    "focus": [
+      "Android",
+      "Augmented reality",
+      "Construction"
+    ],
+    "summary": "Android development for an app supporting electrical installation work on site.",
+    "context": "Siresca overlays installation plans on the real construction site using augmented reality and supports documentation, progress tracking and task capture. James contributed to the existing Android app through Milk Interactive.",
+    "work": [
+      "Developed features for the Android application.",
+      "Fixed bugs in the existing codebase."
+    ],
+    "links": [
+      {
+        "label": "Siresca website",
+        "url": "https://siresca.ch/"
+      },
+      {
+        "label": "View Android app",
+        "url": "https://play.google.com/store/apps/details?id=ch.siresca.app"
+      },
+      {
+        "label": "View iOS app",
+        "url": "https://apps.apple.com/ch/app/siresca/id1630335934"
+      }
+    ],
+    "image": null
   },
   {
     "slug": "fresenius-medical-care",
     "name": "Fresenius Medical Care",
-    "kind": "Client work",
+    "kind": "Apps & platforms",
     "focus": [
       "Android / AOSP",
       "Healthcare",
@@ -55,12 +113,13 @@
       }
     ],
     "image": null,
-    "outcome": "Three purpose-built Android applications, covering the user interface and supporting services, with accessibility and internationalization incorporated from the start. The work provides concrete experience of building Android software for a specialised healthcare device."
+    "outcome": "Three purpose-built Android applications, covering the user interface and supporting services, with accessibility and internationalization incorporated from the start. The work provides concrete experience of building Android software for a specialised healthcare device.",
+    "engagement": "Client work"
   },
   {
     "slug": "blackned",
     "name": "blackned",
-    "kind": "Client work",
+    "kind": "Apps & platforms",
     "focus": [
       "Android / AOSP",
       "Security",
@@ -80,28 +139,268 @@
       }
     ],
     "image": null,
-    "outcome": "Reduced Gradle build times by around 50% and total CI/CD pipeline time by around 60% in this project’s development environment, shortening the wait for build and pipeline feedback."
+    "outcome": "Reduced Gradle build times by around 50% and total CI/CD pipeline time by around 60% in this project’s development environment, shortening the wait for build and pipeline feedback.",
+    "engagement": "Client work"
   },
   {
-    "slug": "gls",
-    "name": "GLS",
-    "kind": "Client work",
+    "slug": "lexoffice",
+    "name": "lexoffice",
+    "kind": "Apps & platforms",
     "focus": [
       "Android",
-      "Test automation",
-      "Logistics"
+      "UI testing",
+      "Automation"
     ],
-    "summary": "Testing and delivery support for logistics and field operations.",
-    "context": "A multi-app Android environment supporting logistics and field operations. The contribution focused on automated testing, process improvements and knowledge sharing.",
+    "summary": "Strengthening Android UI testing and its infrastructure.",
+    "context": "James worked on lexoffice first as a freelance Android developer and later as a full-time senior Android developer. His contributions spanned UI testing and its infrastructure, feature development and engineering improvements across the Android app environment.",
     "work": [
-      "Supported automated testing across the Android app environment.",
-      "Contributed improvements to engineering processes.",
-      "Shared testing and delivery knowledge with the team."
+      "Applied Android UI testing expertise to the application.",
+      "Worked on the supporting test infrastructure.",
+      "Helped the team increase automated test coverage.",
+      "Delivered features and bug fixes during the later full-time role."
     ],
     "links": [
       {
-        "label": "GLS website",
-        "url": "https://gls-group.com/GROUP/en/home/"
+        "label": "lexoffice website",
+        "url": "https://www.lexoffice.de/"
+      },
+      {
+        "label": "View Android app (Lexware Office)",
+        "url": "https://play.google.com/store/apps/details?id=de.lexoffice.android"
+      },
+      {
+        "label": "View iOS app (Lexware Office)",
+        "url": "https://apps.apple.com/de/app/lexware/id622526440"
+      }
+    ],
+    "image": null,
+    "engagement": "Freelance & full-time roles"
+  },
+  {
+    "slug": "esperotech-wearit4u",
+    "name": "EsperoTech / wearit4U",
+    "kind": "Apps & platforms",
+    "focus": [
+      "Android",
+      "Healthcare",
+      "App maintenance"
+    ],
+    "summary": "Android feature development and bug fixes for an orthopedic wear-time app.",
+    "context": "Through EsperoTech, James contributed to the wearit4U Android app, a product for documenting the actual wear time of orthopedic aids.",
+    "work": [
+      "Developed new features for the Android app.",
+      "Fixed bugs in the existing application."
+    ],
+    "links": [
+      {
+        "label": "View Android app",
+        "url": "https://play.google.com/store/apps/details?id=net.novamotum.wearit4u"
+      },
+      {
+        "label": "View iOS app",
+        "url": "https://apps.apple.com/at/app/wearit4u/id1489299389"
+      }
+    ],
+    "image": null,
+    "engagement": "Client work"
+  },
+  {
+    "slug": "neurofly",
+    "name": "Neurofly",
+    "kind": "Apps & platforms",
+    "focus": [
+      "Android",
+      "Architecture",
+      "Code review"
+    ],
+    "summary": "Android development guidance and architecture support.",
+    "context": "Collaboration on the Neurofly Android project, with a focus on further development, code review and architectural recommendations.",
+    "work": [
+      "Reviewed code and shared development practices.",
+      "Provided architecture recommendations for the application.",
+      "Supported the project owner and team with Android engineering guidance."
+    ],
+    "links": [
+      {
+        "label": "Bridge the Gap website",
+        "url": "https://bridgethegap.consulting/"
+      },
+      {
+        "label": "Explore the NeuroFly project",
+        "url": "https://openbci.com/community/assistive-neurotechnology-takes-flight-at-ted2023/"
+      }
+    ],
+    "image": null,
+    "engagement": "Client work"
+  },
+  {
+    "slug": "marktgalerie",
+    "name": "LTE Consulting / Marktmeister Pro",
+    "kind": "Apps & platforms",
+    "focus": [
+      "Android",
+      "Product delivery",
+      "Technical review"
+    ],
+    "summary": "Development across around five apps, including Marktgalerie and Markttagmeister.",
+    "context": "A collaboration with LTE Consulting covering around five applications. The work included Marktgalerie for event photo documentation, Markttagmeister for on-site event organisation, and SeeQRe for scanning and decoding QR codes. Marktgalerie began with a prototype audit and consulting before expanding into further development.",
+    "work": [
+      "Contributed Android development, architecture, app design and feature implementation across the app portfolio.",
+      "Reviewed the Marktgalerie prototype and took on further development of its photo documentation features.",
+      "Worked on apps supporting event organisation and QR-code scanning."
+    ],
+    "links": [
+      {
+        "label": "Marktmeister Pro website",
+        "url": "https://marktmeister-pro.de/"
+      },
+      {
+        "label": "View Marktgalerie on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=de.marktmeister_pro.marktgalerie"
+      },
+      {
+        "label": "View Marktgalerie on the App Store",
+        "url": "https://apps.apple.com/de/app/marktgalerie/id6744124043"
+      },
+      {
+        "label": "View Markttagmeister on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=de.marktmeister_pro.markttagmeister"
+      },
+      {
+        "label": "View Markttagmeister on the App Store",
+        "url": "https://apps.apple.com/de/app/markttagmeister/id6742852848"
+      },
+      {
+        "label": "View SeeQRe on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=de.lte.seeqre"
+      }
+    ],
+    "image": null,
+    "engagement": "Client work"
+  },
+  {
+    "slug": "jc-bachmann",
+    "name": "J&C Bachmann",
+    "kind": "Apps & platforms",
+    "focus": [
+      "Android",
+      "Kotlin",
+      "Vue & Node.js"
+    ],
+    "summary": "Modernizing an established Android app and its surrounding platform.",
+    "context": "A long-running collaboration across an Android app, Node.js backend and Vue.js web portal. The existing Java codebase needed continued development and a gradual move to Kotlin.",
+    "work": [
+      "Modernized and extended the Java application while migrating it to Kotlin.",
+      "Worked across the mobile app and surrounding web and backend stack.",
+      "Supported delivery through ongoing collaboration and technical guidance."
+    ],
+    "links": [
+      {
+        "label": "J&C Bachmann website",
+        "url": "https://jcbachmann.com/"
+      }
+    ],
+    "image": null,
+    "engagement": "Client work"
+  },
+  {
+    "slug": "benefits-me",
+    "name": "Benefits.me",
+    "kind": "Apps & platforms",
+    "focus": [
+      "Android",
+      "Team support",
+      "Quality"
+    ],
+    "summary": "Senior Android support inside an existing mobile team.",
+    "context": "Support and guidance for the Benefits.me mobile team, combining Android development expertise with quality management and clear technical feedback.",
+    "work": [
+      "Supported the team’s Android development work.",
+      "Provided practical code and engineering feedback.",
+      "Contributed guidance on programming and quality management."
+    ],
+    "links": [
+      {
+        "label": "Benefits.me website",
+        "url": "https://benefits.me/welcome"
+      },
+      {
+        "label": "View Android app",
+        "url": "https://play.google.com/store/apps/details?id=de.ticketsprinter.mitarbeiteraktionen.production"
+      },
+      {
+        "label": "View iOS app",
+        "url": "https://apps.apple.com/de/app/benefits-me/id1569148351"
+      }
+    ],
+    "image": null,
+    "engagement": "Client work"
+  },
+  {
+    "slug": "farmerjoe",
+    "name": "farmerJoe",
+    "kind": "Apps & platforms",
+    "focus": [
+      "Software engineering",
+      "Team collaboration"
+    ],
+    "summary": "Engineering support across the stack and the delivery process.",
+    "context": "As a full-time software engineer at farmerJoe, James worked across mobile apps, the React web application and a Firebase backend for a platform connecting farmers and food-industry businesses.",
+    "work": [
+      "Worked across the stack to solve product engineering problems.",
+      "Helped improve development processes.",
+      "Supported the quality and efficiency of team collaboration."
+    ],
+    "links": [
+      {
+        "label": "farmerJoe website",
+        "url": "https://farmerjoe.com/"
+      },
+      {
+        "label": "View Android app",
+        "url": "https://play.google.com/store/apps/details?id=com.farmerjoe.android.react.farmerjoe"
+      },
+      {
+        "label": "View iOS app",
+        "url": "https://apps.apple.com/de/app/farmerjoe/id1216314690"
+      }
+    ],
+    "image": null,
+    "engagement": "Full-time role"
+  },
+  {
+    "slug": "hansgrohe",
+    "name": "Hansgrohe Group",
+    "kind": "Apps & platforms",
+    "engagement": "Full-time role",
+    "focus": [
+      "Android",
+      "IoT",
+      "Automated testing"
+    ],
+    "summary": "Connected product apps for homeowners and professional installers.",
+    "context": "As a full-time mobile application developer at Hansgrohe Group, James worked on hansgrohe home and hansgrohe SmartExpert. The products connected homeowners and trained installers with digital water and shower systems. His core focus was Android, with contributions across iOS and backend integration.",
+    "work": [
+      "Developed Android applications using Kotlin and MVVM, including leading Android delivery for SmartExpert.",
+      "Integrated apps with connected devices, backend APIs and third-party services.",
+      "Implemented automated UI and unit tests and contributed code reviews and technical documentation."
+    ],
+    "links": [
+      {
+        "label": "View SmartExpert on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.hansgrohe.smart.expert"
+      },
+      {
+        "label": "View SmartExpert on the App Store",
+        "url": "https://apps.apple.com/gb/app/hansgrohe-smartexpert/id1506185661"
+      },
+      {
+        "label": "View hansgrohe home on Google Play",
+        "url": "https://play.google.com/store/apps/details?id=com.hansgrohe.poseidon"
+      },
+      {
+        "label": "View hansgrohe home on the App Store",
+        "url": "https://apps.apple.com/de/app/hansgrohe-home/id1389138494"
       }
     ],
     "image": null
@@ -267,185 +566,6 @@
     "image": "/watchful/assets/app-icon.svg"
   },
   {
-    "slug": "jc-bachmann",
-    "name": "J&C Bachmann",
-    "kind": "Client work",
-    "focus": [
-      "Android",
-      "Kotlin",
-      "Vue & Node.js"
-    ],
-    "summary": "Modernizing an established Android app and its surrounding platform.",
-    "context": "A long-running collaboration across an Android app, Node.js backend and Vue.js web portal. The existing Java codebase needed continued development and a gradual move to Kotlin.",
-    "work": [
-      "Modernized and extended the Java application while migrating it to Kotlin.",
-      "Worked across the mobile app and surrounding web and backend stack.",
-      "Supported delivery through ongoing collaboration and technical guidance."
-    ],
-    "links": [
-      {
-        "label": "J&C Bachmann website",
-        "url": "https://jcbachmann.com/"
-      }
-    ],
-    "image": null
-  },
-  {
-    "slug": "benefits-me",
-    "name": "Benefits.me",
-    "kind": "Client work",
-    "focus": [
-      "Android",
-      "Team support",
-      "Quality"
-    ],
-    "summary": "Senior Android support inside an existing mobile team.",
-    "context": "Support and guidance for the Benefits.me mobile team, combining Android development expertise with quality management and clear technical feedback.",
-    "work": [
-      "Supported the team’s Android development work.",
-      "Provided practical code and engineering feedback.",
-      "Contributed guidance on programming and quality management."
-    ],
-    "links": [
-      {
-        "label": "Benefits.me website",
-        "url": "https://benefits.me/welcome"
-      },
-      {
-        "label": "View Android app",
-        "url": "https://play.google.com/store/apps/details?id=de.ticketsprinter.mitarbeiteraktionen.production"
-      },
-      {
-        "label": "View iOS app",
-        "url": "https://apps.apple.com/de/app/benefits-me/id1569148351"
-      }
-    ],
-    "image": null
-  },
-  {
-    "slug": "lexoffice",
-    "name": "lexoffice",
-    "kind": "Client work",
-    "focus": [
-      "Android",
-      "UI testing",
-      "Automation"
-    ],
-    "summary": "Strengthening Android UI testing and its infrastructure.",
-    "context": "Work on UI testing and the infrastructure behind it, helping the team advance automated test coverage for the Android application.",
-    "work": [
-      "Applied Android UI testing expertise to the application.",
-      "Worked on the supporting test infrastructure.",
-      "Helped the team increase automated test coverage."
-    ],
-    "links": [
-      {
-        "label": "lexoffice website",
-        "url": "https://www.lexoffice.de/"
-      },
-      {
-        "label": "View Android app (Lexware Office)",
-        "url": "https://play.google.com/store/apps/details?id=de.lexoffice.android"
-      },
-      {
-        "label": "View iOS app (Lexware Office)",
-        "url": "https://apps.apple.com/de/app/lexware/id622526440"
-      }
-    ],
-    "image": null
-  },
-  {
-    "slug": "marktgalerie",
-    "name": "Marktgalerie",
-    "kind": "Client work",
-    "focus": [
-      "Android",
-      "Product delivery",
-      "Technical review"
-    ],
-    "summary": "From prototype review to an app for event photo documentation.",
-    "context": "Market and festival planners needed support for documenting their events through photographs. An initial audit and consulting engagement developed into further application delivery.",
-    "work": [
-      "Reviewed the existing prototype and advised on its development.",
-      "Took on further implementation of the application.",
-      "Built photo documentation support for market and festival planners."
-    ],
-    "links": [
-      {
-        "label": "Marktmeister Pro website",
-        "url": "https://marktmeister-pro.de/"
-      },
-      {
-        "label": "View Android app",
-        "url": "https://play.google.com/store/apps/details?id=de.marktmeister_pro.marktgalerie"
-      },
-      {
-        "label": "View iOS app",
-        "url": "https://apps.apple.com/de/app/marktgalerie/id6744124043"
-      }
-    ],
-    "image": null
-  },
-  {
-    "slug": "neurofly",
-    "name": "Neurofly",
-    "kind": "Client work",
-    "focus": [
-      "Android",
-      "Architecture",
-      "Code review"
-    ],
-    "summary": "Android development guidance and architecture support.",
-    "context": "Collaboration on the Neurofly Android project, with a focus on further development, code review and architectural recommendations.",
-    "work": [
-      "Reviewed code and shared development practices.",
-      "Provided architecture recommendations for the application.",
-      "Supported the project owner and team with Android engineering guidance."
-    ],
-    "links": [
-      {
-        "label": "Bridge the Gap website",
-        "url": "https://bridgethegap.consulting/"
-      },
-      {
-        "label": "Explore the NeuroFly project",
-        "url": "https://openbci.com/community/assistive-neurotechnology-takes-flight-at-ted2023/"
-      }
-    ],
-    "image": null
-  },
-  {
-    "slug": "farmerjoe",
-    "name": "farmerJoe",
-    "kind": "Client work",
-    "focus": [
-      "Software engineering",
-      "Team collaboration"
-    ],
-    "summary": "Engineering support across the stack and the delivery process.",
-    "context": "A collaboration that combined implementation across the technology stack with improvements to engineering processes and team collaboration.",
-    "work": [
-      "Worked across the stack to solve product engineering problems.",
-      "Helped improve development processes.",
-      "Supported the quality and efficiency of team collaboration."
-    ],
-    "links": [
-      {
-        "label": "farmerJoe website",
-        "url": "https://farmerjoe.com/"
-      },
-      {
-        "label": "View Android app",
-        "url": "https://play.google.com/store/apps/details?id=com.farmerjoe.android.react.farmerjoe"
-      },
-      {
-        "label": "View iOS app",
-        "url": "https://apps.apple.com/de/app/farmerjoe/id1216314690"
-      }
-    ],
-    "image": null
-  },
-  {
     "slug": "wifiwizard",
     "name": "WiFiWizard",
     "kind": "Public code",
@@ -541,6 +661,50 @@
       {
         "label": "View source and documentation",
         "url": "https://github.com/LethalMaus/ExampleWearApp"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "the-muse-agency",
+    "name": "The Muse Agency",
+    "kind": "Client websites",
+    "focus": [
+      "Web development",
+      "Talent & content"
+    ],
+    "summary": "A website showcasing the people and creative services behind The Muse Agency.",
+    "context": "The Muse Agency brings together talent and content creation in Dublin. Its website introduces the agency, its roster of creators and its content services.",
+    "work": [
+      "Built the agency website with sections for talent and content creation.",
+      "Created a route from browsing the agency’s work to making an enquiry."
+    ],
+    "links": [
+      {
+        "label": "Visit The Muse Agency",
+        "url": "https://lethalmaus.github.io/themuseagency/"
+      }
+    ],
+    "image": null
+  },
+  {
+    "slug": "atelier-wiessalla",
+    "name": "Atelier Wiessalla",
+    "kind": "Client websites",
+    "focus": [
+      "Web development",
+      "Artist & workshop website"
+    ],
+    "summary": "A website introducing Inga Wiessalla’s creative workshop in Düsseldorf.",
+    "context": "Atelier Wiessalla offers individual creative sessions and family activities using origami, drawing and other techniques. The website introduces Inga, her approach and the ways visitors can work with her.",
+    "work": [
+      "Built a website presenting the workshop, its activities and the artist’s background.",
+      "Included contact information and legal pages alongside the workshop content."
+    ],
+    "links": [
+      {
+        "label": "Visit Atelier Wiessalla",
+        "url": "https://lethalmaus.github.io/atelier-wiessalla/"
       }
     ],
     "image": null

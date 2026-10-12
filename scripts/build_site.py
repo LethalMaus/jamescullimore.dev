@@ -8,6 +8,10 @@ STYLE_VERSION = hashlib.sha256((ROOT / 'styles.css').read_bytes()).hexdigest()[:
 esc = html.escape
 load = lambda name: json.loads((ROOT / 'data' / name).read_text())
 projects = load('projects.json')
+# Preserve the editorial order within each section from the project catalogue.
+project_groups = [('Apps & platforms', 'client-work', 'Apps & platforms'), ('Client websites', 'client-websites', 'Client websites'), ('Own projects', 'own-projects', 'Apps, games & developer tools'), ('Public code', 'public-code', 'GitHub examples & experiments')]
+projects = [p for kind, _, _ in project_groups for p in projects if p['kind'] == kind]
+
 articles = load('articles.json')
 resources = load('resources.json')
 
@@ -43,7 +47,7 @@ def write(path,text):
 
 def project_card(p):
     pic=f'<img class="project-icon" src="{p["image"]}" alt="" width="64" height="64" loading="lazy">' if p.get('image') else ''
-    return f'''<article class="project-card">{pic}<span class="eyebrow">{esc(p['kind'])}</span><h3><a href="/projects/{p['slug']}.html">{esc(p['name'])}</a></h3><p>{esc(p['summary'])}</p><div class="card-bottom"><span>{esc(' · '.join(p['focus']))}</span><span class="card-arrow" aria-hidden="true">↗</span></div></article>'''
+    return f'''<article class="project-card">{pic}<span class="eyebrow">{esc(p.get('engagement', p['kind']))}</span><h3><a href="/projects/{p['slug']}.html">{esc(p['name'])}</a></h3><p>{esc(p['summary'])}</p><div class="card-bottom"><span>{esc(' · '.join(p['focus']))}</span><span class="card-arrow" aria-hidden="true">↗</span></div></article>'''
 
 def excerpt(text,length=155):
     return text if len(text)<=length else text[:length].rsplit(' ',1)[0].rstrip('.,;:')+'…'
@@ -65,10 +69,10 @@ for slug in own_slugs:
 home=home.replace('{{own_projects}}', ''.join(own_cards))
 write('index.html',page('Android, IoT & Kotlin Multiplatform Engineering','Senior Android, IoT and Kotlin Multiplatform engineering. Build mobile products, modernize existing apps, and improve testing with James Cullimore.','/',home,schema=load('organization.json')))
 
-intro='<section class="page-intro"><div class="section-inner"><span class="eyebrow">The project catalogue</span><h1>Work, in a little more detail.</h1><p class="lead">Client collaborations, independent products and public engineering examples. Explore the context, the contribution and the product behind each project.</p><nav class="project-tabs" aria-label="Project categories"><a href="#client-work">Client work</a><a href="#own-projects">Own projects</a><a href="#public-code">GitHub projects</a></nav></div></section>'
+intro='<section class="page-intro"><div class="section-inner"><span class="eyebrow">The project catalogue</span><h1>Work, in a little more detail.</h1><p class="lead">Client collaborations, work from employed roles, independent products and public engineering examples. Explore the context, the contribution and the product behind each project.</p><nav class="project-tabs" aria-label="Project categories"><a href="#client-work">Apps &amp; platforms</a><a href="#client-websites">Client websites</a><a href="#own-projects">Own projects</a><a href="#public-code">GitHub projects</a></nav></div></section>'
 groups=''
-for kind,anchor,heading in [('Client work','client-work','Client collaborations'),('Own projects','own-projects','Apps, games & developer tools'),('Public code','public-code','GitHub examples & experiments')]:
-    groups+=f'<section class="project-group" id="{anchor}"><span class="eyebrow">{kind}</span><h2>{heading}</h2><div class="project-grid">'+''.join(project_card(p) for p in projects if p['kind']==kind)+'</div></section>'
+for kind,anchor,heading in project_groups:
+    groups+=f'<section class="project-group" id="{anchor}"><span class="eyebrow">{esc(kind)}</span><h2>{esc(heading)}</h2><div class="project-grid">'+''.join(project_card(p) for p in projects if p['kind']==kind)+'</div></section>'
 content=intro+'<div class="section"><div class="section-inner">'+groups+'<div class="section-actions"><a class="text-link" href="https://github.com/LethalMaus?tab=repositories">More projects on GitHub</a></div></div></div>'
 schema={'@context':'https://schema.org','@type':'CollectionPage','name':'Projects by James Cullimore','url':BASE+'/projects.html','mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+'/projects/'+p['slug']+'.html','name':p['name']} for i,p in enumerate(projects)]}}
 write('projects.html',page('Projects — Client Work, Apps & Games','Explore client engineering work, StarJar, Don’t Go To Bed, Android Security Training, Elchem and Watchful. Project details, product sites and app links.','/projects.html',content,'Work',schema))
@@ -87,16 +91,17 @@ for p in projects:
     quote=''
     t=next((t for t in testimonials if t['company']==testimonial_names.get(p['slug'])),None)
     if t:
-        quote=f'<section><h2>From the client</h2><blockquote><p>“{esc(t["text"])}”</p><cite>{esc(t["author"])}, {esc(t["company"])}</cite></blockquote></section>'
+        quote=f'<section><h2>From the team</h2><blockquote><p>“{esc(t["text"])}”</p><cite>{esc(t["author"])}, {esc(t["company"])}</cite></blockquote></section>'
     outcome = f'<section><h2>The result</h2><p>{esc(p["outcome"])}</p></section>' if p.get('outcome') else ''
-    content=f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/projects.html">Projects</a> / {esc(p['name'])}</nav><span class="eyebrow">{p['kind']}</span><h1>{esc(p['name'])}</h1><p class="lead">{esc(p['summary'])}</p><div class="detail-tags">{tags}</div><a class="text-link" href="#project-links">Project links <span aria-hidden="true">↓</span></a></div></section>
+    content=f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/projects.html">Projects</a> / {esc(p['name'])}</nav><span class="eyebrow">{esc(p.get('engagement', p['kind']))}</span><h1>{esc(p['name'])}</h1><p class="lead">{esc(p['summary'])}</p><div class="detail-tags">{tags}</div><a class="text-link" href="#project-links">Project links <span aria-hidden="true">↓</span></a></div></section>
 <section class="section"><div class="section-inner detail-layout"><div class="detail-content"><section><h2>{"The brief" if p.get("outcome") else "The project"}</h2><p>{esc(p['context'])}</p></section><section><h2>{'Inside the product' if p['kind']=='Own projects' else 'What it demonstrates' if p['kind']=='Public code' else 'What we delivered' if p.get('outcome') else 'The contribution'}</h2><ul>{''.join('<li>'+esc(w)+'</li>' for w in p['work'])}</ul></section>{outcome}{quote}<section><h2>Working on something similar?</h2><p>Tell us about your product, your team and the support you need.</p><a class="button" href="/#contact">Discuss your project ↗</a></section></div><aside class="detail-aside" id="project-links">{image}<h2>Explore the project</h2>{links}<hr><a href="/projects.html">← All projects</a></aside></div></section>'''
     schema={'@context':'https://schema.org','@type':'WebPage','name':p['name']+' — project details','description':p['summary'],'url':BASE+path,'breadcrumb':{'@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem','position':1,'name':'Home','item':BASE+'/'},{'@type':'ListItem','position':2,'name':'Projects','item':BASE+'/projects.html'},{'@type':'ListItem','position':3,'name':p['name'],'item':BASE+path}]}}
     write(path.lstrip('/'),page(p['name']+' — Project Details',p['summary'],path,content,'Work',schema,image=p['image'] if p.get('image') and not p['image'].endswith('.svg') else '/assets/branding/social-preview.png'))
 
+talk_slides=''.join(f'<article class="service"><span class="eyebrow">Talk slides</span><h3>{esc(t["title"])}</h3><p>{esc(t["description"])}</p><a class="text-link" href="{esc(t["url"])}">View slides on Speaker Deck ↗</a></article>' for t in resources['talk_slides'])
 courses=''.join(f'<article class="service"><span class="eyebrow">{esc(c["platform"])}</span><h3>{esc(c["title"])}</h3><p>{esc(c["description"])}</p><a class="text-link" href="{esc(c["url"])}">View course ↗</a></article>' for c in resources['courses'])
-content=f'''<section class="page-intro"><div class="section-inner"><span class="eyebrow">Learn from practical experience</span><h1>Courses, talks &amp; workshops</h1><p class="lead">Explore conference videos, learn with droidcon Academy, or bring a focused Android workshop to your team.</p></div></section><section class="section"><div class="section-inner community-grid"><div><h2>Watch a talk</h2><p class="lead">Engineering ideas, lessons from delivery, and the decisions behind better Android apps.</p></div><div><div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/MXHt0_2iKgA" title="James Cullimore conference talk" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>{playlist_link()}</div></div></section><section class="section soft"><div class="section-inner"><div class="section-heading-row"><h2>Learn at your own pace</h2><a class="text-link" href="{esc(resources['academy_profile'])}">My droidcon Academy profile ↗</a></div><div class="course-grid">{courses}<article class="service"><span class="eyebrow">Team workshop</span><h3>Android Security Training</h3><p>Hands-on labs with vulnerable and secure app variants. Inspect, fix and verify Android security issues.</p><a class="text-link" href="/android-security-training/">Explore the syllabus ↗</a></article><article class="service"><span class="eyebrow">Free book</span><h3>5 Minute Bedtime Stories for Android Devs</h3><p>Short stories about production surprises, developer folklore and the decisions every mobile team recognises.</p><a class="text-link" href="/5-minute-bedtime-stories-for-android-devs.html">Read the book ↗</a></article></div></div></section>'''
-write('courses.html',page('Android Courses, Talks & Workshops','Watch James Cullimore’s conference videos, explore droidcon Academy courses and book practical Android security training for your team.','/courses.html',content,'Courses'))
+content=f'''<section class="page-intro"><div class="section-inner"><span class="eyebrow">Learn from practical experience</span><h1>Courses, talks &amp; workshops</h1><p class="lead">Explore conference videos and slides, learn with droidcon Academy, or bring a focused Android workshop to your team.</p></div></section><section class="section soft"><div class="section-inner"><div class="section-heading-row"><h2>Learn at your own pace</h2><a class="text-link" href="{esc(resources['academy_profile'])}">My droidcon Academy profile ↗</a></div><div class="course-grid">{courses}<article class="service"><span class="eyebrow">Team workshop</span><h3>Android Security Training</h3><p>Hands-on labs with vulnerable and secure app variants. Inspect, fix and verify Android security issues.</p><a class="text-link" href="/android-security-training/">Explore the syllabus ↗</a></article><article class="service"><span class="eyebrow">Free book</span><h3>5 Minute Bedtime Stories for Android Devs</h3><p>Short stories about production surprises, developer folklore and the decisions every mobile team recognises.</p><a class="text-link" href="/5-minute-bedtime-stories-for-android-devs.html">Read the book ↗</a></article></div></div></section><section class="section"><div class="section-inner community-grid"><div><h2>Watch a talk</h2><p class="lead">Engineering ideas, lessons from delivery, and the decisions behind better Android apps.</p></div><div><div class="video-frame"><iframe src="https://www.youtube-nocookie.com/embed/MXHt0_2iKgA" title="James Cullimore conference talk" loading="lazy" allow="encrypted-media; picture-in-picture" allowfullscreen></iframe></div>{playlist_link()}</div></div></section><section class="section" id="talk-slides"><div class="section-inner"><div class="section-heading-row"><h2>Browse the talk slides</h2><a class="text-link" href="{esc(resources['speakerdeck_profile'])}">All decks on Speaker Deck ↗</a></div><p>Revisit a talk or explore the slides at your own pace.</p><div class="course-grid">{talk_slides}</div></div></section>'''
+write('courses.html',page('Android Courses, Talks & Workshops','Watch James Cullimore’s conference videos, browse Speaker Deck slides, explore droidcon Academy courses and book Android security training.','/courses.html',content,'Courses'))
 
 page_count=math.ceil(len(articles)/12)
 def blog_path(n): return '/blog.html' if n==1 else f'/blog/page-{n}.html'
@@ -142,12 +147,12 @@ ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}
 old=ET.parse(ROOT/'sitemap.xml')
 dates={u.find('s:loc',ns).text:u.find('s:lastmod',ns).text for u in old.findall('s:url',ns) if u.find('s:lastmod',ns) is not None}
 urls=[BASE+'/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
-urls += [url for url in dates if '/watchful/' in url or '/dontgotobed/' in url]
+urls += [url for url in dates if any(folder in url for folder in ['/watchful/', '/dontgotobed/', '/elchem/'])]
 ET.register_namespace('',ns['s']);tree=ET.Element('{'+ns['s']+'}urlset')
 for url in dict.fromkeys(urls):
     node=ET.SubElement(tree,'url');ET.SubElement(node,'loc').text=url
     # Existing article dates reflect content updates, not template-only changes.
-    date=dates.get(url) if '/articles/' in url or '/watchful/' in url or '/dontgotobed/' in url else '2026-09-28'
+    date=dates.get(url)
     if date: ET.SubElement(node,'lastmod').text=date
 ET.indent(tree,space='  ')
 ET.ElementTree(tree).write(ROOT/'sitemap.xml',encoding='utf-8',xml_declaration=True)
@@ -155,7 +160,7 @@ print(f'Built homepage, {len(projects)} project details, courses, {page_count} b
 
 # Content-based asset URLs keep previews and deployed pages current after edits.
 from urllib.parse import urlsplit
-versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
+versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
 asset_versions = {(ROOT/name).resolve(): hashlib.sha256((ROOT/name).read_bytes()).hexdigest()[:12] for name in versioned}
 for f in ROOT.rglob('*.html'):
     if 'templates' in f.relative_to(ROOT).parts or any(part.startswith('.') for part in f.relative_to(ROOT).parts): continue

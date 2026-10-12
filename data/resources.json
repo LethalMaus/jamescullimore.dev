@@ -20,5 +20,33 @@
       "description": "Build reliable Android networking with Retrofit: API integration, authentication, caching, and testing in Jetpack Compose apps.",
       "platform": "droidcon Academy"
     }
+  ],
+  "speakerdeck_profile": "https://speakerdeck.com/jamescullimore",
+  "talk_slides": [
+    {
+      "title": "Building a Mobile Game Without an Engine, a Budget, or a Clue",
+      "url": "https://speakerdeck.com/jamescullimore/building-a-mobile-game-without-an-engine-a-budget-or-a-clue",
+      "description": "Lessons from building and shipping a Kotlin mobile game with limited time and budget."
+    },
+    {
+      "title": "Faster Feedback: Cut Gradle Build and Pipeline Times in Half",
+      "url": "https://speakerdeck.com/jamescullimore/faster-feedback-cut-gradle-build-and-pipeline-times-in-half",
+      "description": "Practical Gradle and CI pipeline improvements, with measurement guiding each change."
+    },
+    {
+      "title": "How Android Developers Can Start Writing On Medium",
+      "url": "https://speakerdeck.com/jamescullimore/how-android-developers-can-start-writing-on-medium",
+      "description": "Find useful topics, structure your articles and build a sustainable writing habit."
+    },
+    {
+      "title": "Hotfix Heaven: Why In-App Updates Are a MUST",
+      "url": "https://speakerdeck.com/jamescullimore/hotfix-heaven-why-in-app-updates-are-a-must",
+      "description": "Android in-app updates, rollout strategies and lessons from production."
+    },
+    {
+      "title": "We Need An App!",
+      "url": "https://speakerdeck.com/jamescullimore/we-need-an-app",
+      "description": "From an app idea to an MVP: scope, platform choices, testing and launch planning."
+    }
   ]
 }

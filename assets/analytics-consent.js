@@ -48,6 +48,7 @@
 
   function setConsent(granted) {
     var consentValue = granted ? 'granted' : 'denied';
+    window['ga-disable-' + measurementId] = !granted;
 
     gtag('consent', 'update', {
       analytics_storage: consentValue
@@ -129,9 +130,13 @@
   }
 
   window.setAnalyticsConsent = setConsent;
+  window.trackAnalyticsEvent = function (name, parameters) {
+    if (getConsent() !== 'granted' || !window[loadedFlag]) return;
+    gtag('event', name, parameters);
+  };
 
   if (getConsent() === 'granted') {
-    loadAnalytics();
+    setConsent(true);
   }
 
   if (document.readyState === 'loading') {

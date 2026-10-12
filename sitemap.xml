@@ -6,11 +6,11 @@
   </url>
   <url>
     <loc>https://jamescullimore.dev/projects.html</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/courses.html</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/blog.html</loc>
@@ -42,11 +42,18 @@
   </url>
   <url>
     <loc>https://jamescullimore.dev/datenschutz.html</loc>
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/gls.html</loc>
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/projects/zuriga.html</loc>
     <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/siresca.html</loc>
   </url>
   <url>
     <loc>https://jamescullimore.dev/projects/fresenius-medical-care.html</loc>
@@ -57,8 +64,43 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/projects/gls.html</loc>
+    <loc>https://jamescullimore.dev/projects/lexoffice.html</loc>
     <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/esperotech-wearit4u.html</loc>
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/neurofly.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/marktgalerie.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/jc-bachmann.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/benefits-me.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/farmerjoe.html</loc>
+    <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/hansgrohe.html</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/the-muse-agency.html</loc>
+    <lastmod>2026-10-12</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/projects/atelier-wiessalla.html</loc>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/projects/starjar.html</loc>
@@ -78,30 +120,6 @@
   </url>
   <url>
     <loc>https://jamescullimore.dev/projects/watchful.html</loc>
-    <lastmod>2026-09-28</lastmod>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/projects/jc-bachmann.html</loc>
-    <lastmod>2026-09-28</lastmod>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/projects/benefits-me.html</loc>
-    <lastmod>2026-09-28</lastmod>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/projects/lexoffice.html</loc>
-    <lastmod>2026-09-28</lastmod>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/projects/marktgalerie.html</loc>
-    <lastmod>2026-09-28</lastmod>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/projects/neurofly.html</loc>
-    <lastmod>2026-09-28</lastmod>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/projects/farmerjoe.html</loc>
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
@@ -390,7 +408,7 @@
   </url>
   <url>
     <loc>https://jamescullimore.dev/5-minute-bedtime-stories-for-android-devs.html</loc>
-    <lastmod>2026-09-28</lastmod>
+    <lastmod>2026-10-12</lastmod>
   </url>
   <url>
     <loc>https://jamescullimore.dev/watchful/</loc>
