@@ -428,6 +428,10 @@
       {
         "label": "Get it on Google Play",
         "url": "https://play.google.com/store/apps/details?id=dev.jamescullimore.starjar"
+      },
+      {
+        "label": "Download on the App Store",
+        "url": "https://apps.apple.com/app/id6758762270"
       }
     ],
     "image": "/starjar/assets/ic_launcher-playstore.png"
