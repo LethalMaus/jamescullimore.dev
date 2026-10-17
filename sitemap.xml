@@ -450,4 +450,17 @@
     <loc>https://jamescullimore.dev/dontgotobed/delete-data/</loc>
     <lastmod>2026-09-21</lastmod>
   </url>
-<url><loc>https://jamescullimore.dev/watchful/terms/</loc><lastmod>2026-10-01</lastmod></url></urlset>
+  <url>
+    <loc>https://jamescullimore.dev/watchful/terms/</loc>
+    <lastmod>2026-10-01</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/services/android-kotlin-multiplatform/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/services/android-app-rescue/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/services/android-testing-build-optimisation/</loc>
+  </url>
+</urlset>

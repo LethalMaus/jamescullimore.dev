@@ -53,3 +53,40 @@ Private handoffs, reviews, audits and drafts belong in the Git-ignored `.jc/` fo
 The book page uses the existing consent-gated GA4 property. After consent, its PDF links send `book_pdf_download` for the download button and `book_pdf_open` for links that open the PDF. All five PDF links are covered. These events count clicks, not completed downloads or unique readers; declined consent, blocked analytics and direct PDF visits are not counted.
 
 After publishing, verify the events in GA4 Realtime, then use their Event count in the Events report. The `link_location` parameter identifies the header, hero download/open button, excerpt or footer; register it as an event-scoped custom dimension if you want that breakdown in reports. GA4 may also record its automatic `file_download` event; use the custom book events alone for these totals rather than adding both together.
+
+## Enquiry and app-store click analytics
+
+The homepage, generated portfolio pages (excluding Elchem), and StarJar, Watchful
+and Don't Go To Bed landing pages use `assets/conversion-analytics.js` with the
+existing consent-gated GA4 property. `contact_click` records email/phone link
+intent; `app_store_click` records known product store links with `app_id`,
+`store`, `page_path` and `link_location`. Email addresses, phone numbers and
+message contents are not included in these custom events. Support contacts
+are also clicks; do not interpret all contact events as sales leads.
+
+These are not completed enquiries or app installs. Declined/revoked consent
+and blocked analytics are not counted. After publishing, verify events in GA4
+Realtime and register the event parameters as custom dimensions for reporting.
+Compare store clicks with actual acquisition figures in the store consoles.
+
+With the preview server and isolated Chrome running, test mobile product pages,
+keyboard navigation and conversion consent (analytics requests blocked) using:
+
+```sh
+node scripts/conversion_check.cjs
+```
+
+## Service pages and product previews
+
+`data/services.json` supplies the three service pages under `/services/`.
+The build renders their scope, relevant projects, FAQs and enquiry links through
+the shared page shell, adds their canonical URLs to the sitemap and preserves
+existing product policy URLs even when they have no modification date.
+Homepage service links live in `templates/home.html`.
+
+StarJar’s `chores-and-stars.webp` and `reward-store.webp` come from its existing
+English Pixel 9 marketing captures (`screenshot1.png` and `screenshot3.png`).
+Watchful’s `watchlist-preview.webp` comes from the iPhone 6.9-inch
+`01-less-checking.png` in its September 2026 Apple Store Kit. These are compressed
+720px-wide copies, with no changes to the depicted UI. Captions identify the
+example content and platform; each image links to a larger view.

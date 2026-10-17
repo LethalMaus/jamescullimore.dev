@@ -2697,3 +2697,7 @@ body.article-page .article-content img { max-width: 100%; height: auto; }
 
 .contact-action { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; margin: 22px 0 26px; }
 .contact-email-cta { max-width: 100%; white-space: normal; text-align: center; }
+
+/* Keep the app CTA above the case-study card’s stretched link. */
+.home-page .app-download-link { position: relative; z-index: 2; display: inline-flex; align-items: center; min-height: 44px; }
+.home-page .app-download-link:focus-visible { outline: 3px solid var(--color-teal-700); outline-offset: 4px; }

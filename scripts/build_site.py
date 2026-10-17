@@ -14,6 +14,7 @@ projects = [p for kind, _, _ in project_groups for p in projects if p['kind'] ==
 
 articles = load('articles.json')
 resources = load('resources.json')
+services = load('services.json')
 
 def header(active=''):
     links = [('/#services','Services'),('/#how-we-work','Process'),('/projects.html','Work'),('/#insights','Testimonials'),('/blog.html','Blog'),('/#contact','Discuss your project')]
@@ -29,7 +30,9 @@ def footer():
 
 def page(title,description,path,content,active='',schema=None,scripts='',image='/assets/branding/social-preview.png'):
     url=BASE+path
-    body_class = 'home-page' if path == '/' else 'portfolio-page'
+    if path != '/projects/elchem.html':
+        scripts += '<script defer src="/assets/conversion-analytics.js"></script>'
+    body_class = 'home-page' if path == '/' else 'portfolio-page service-page' if path.startswith('/services/') else 'portfolio-page'
     extra_styles = '' if path == '/' else '<link rel="stylesheet" href="/assets/portfolio-pages.css">'
     schema=schema or {'@context':'https://schema.org','@type':'WebPage','name':title,'description':description,'url':url}
     image=image if image.startswith('https:') else BASE+image
@@ -66,8 +69,13 @@ own_cards = []
 for slug in own_slugs:
     p = next(p for p in projects if p['slug'] == slug)
     own_cards.append(f'<article class="work-card"><img class="own-product-icon" src="{esc(p["image"])}" alt="" width="56" height="56" loading="lazy"><h3 class="work-title"><a href="/projects/{p["slug"]}.html">{esc(p["name"])}</a></h3><p class="work-text">{esc(p["summary"])}</p></article>')
+product_paths = {'dont-go-to-bed': '/dontgotobed/', 'starjar': '/starjar/', 'watchful': '/watchful/'}
+for i, slug in enumerate(own_slugs):
+    if slug in product_paths:
+        name = next(p['name'] for p in projects if p['slug'] == slug)
+        own_cards[i] = own_cards[i].replace('</article>', f'<p><a class="text-link app-download-link" href="{product_paths[slug]}">Explore {esc(name)} &amp; get the app</a></p></article>')
 home=home.replace('{{own_projects}}', ''.join(own_cards))
-write('index.html',page('Android, IoT & Kotlin Multiplatform Engineering','Senior Android, IoT and Kotlin Multiplatform engineering. Build mobile products, modernize existing apps, and improve testing with James Cullimore.','/',home,schema=load('organization.json')))
+write('index.html',page('Freelance Android & Kotlin Multiplatform Developer','Freelance Android and Kotlin Multiplatform development, app security and test automation. Based in Germany, working in English and German.','/',home,schema=load('organization.json')))
 
 intro='<section class="page-intro"><div class="section-inner"><span class="eyebrow">The project catalogue</span><h1>Work, in a little more detail.</h1><p class="lead">Client collaborations, work from employed roles, independent products and public engineering examples. Explore the context, the contribution and the product behind each project.</p><nav class="project-tabs" aria-label="Project categories"><a href="#client-work">Apps &amp; platforms</a><a href="#client-websites">Client websites</a><a href="#own-projects">Own projects</a><a href="#public-code">GitHub projects</a></nav></div></section>'
 groups=''
@@ -76,6 +84,24 @@ for kind,anchor,heading in project_groups:
 content=intro+'<div class="section"><div class="section-inner">'+groups+'<div class="section-actions"><a class="text-link" href="https://github.com/LethalMaus?tab=repositories">More projects on GitHub</a></div></div></div>'
 schema={'@context':'https://schema.org','@type':'CollectionPage','name':'Projects by James Cullimore','url':BASE+'/projects.html','mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+'/projects/'+p['slug']+'.html','name':p['name']} for i,p in enumerate(projects)]}}
 write('projects.html',page('Projects — Client Work, Apps & Games','Explore client engineering work, StarJar, Don’t Go To Bed, Android Security Training, Elchem and Watchful. Project details, product sites and app links.','/projects.html',content,'Work',schema))
+
+# Focused service pages use the same shell and verified project catalogue.
+from urllib.parse import quote
+for service in services:
+    path = '/services/' + service['slug'] + '/'
+    email = 'mailto:info@jamescullimore.dev?subject=' + quote(service['subject'])
+    work = ''.join(f'<article class="service"><span class="service-number" aria-hidden="true">0{i+1}</span><h3>{esc(title)}</h3><p>{esc(body)}</p></article>' for i, (title, body) in enumerate(service['work']))
+    proof = ''.join(project_card(next(p for p in projects if p['slug'] == slug)) for slug in service['proof'])
+    questions = ''.join(f'<details><summary>{esc(question)}</summary><p>{esc(answer)}</p></details>' for question, answer in service['questions'])
+    related = ''.join(f'<a href="/services/{other["slug"]}/">{esc(other["title"])}</a>' for other in services if other != service)
+    content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">Services</a></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Discuss your project</a><a class="text-link" href="#relevant-work">See relevant work</a></div><p class="service-byline">James Cullimore <span aria-hidden="true">·</span> Based in Germany <span aria-hidden="true">·</span> English &amp; German</p></div></section>
+<section class="section"><div class="section-inner"><h2>Where I can help</h2><p class="lead">{esc(service['fit'])}</p><div class="service-deliverables">{work}</div></div></section>
+<section class="section soft"><div class="section-inner"><h2>A manageable first step</h2><p class="service-reading">{esc(service['start'])}</p></div></section>
+<section class="section" id="relevant-work"><div class="section-inner"><span class="eyebrow">From the project catalogue</span><h2>Relevant work</h2><div class="project-grid">{proof}</div></div></section>
+<section class="section soft"><div class="section-inner service-faq"><h2>Before we start</h2>{questions}</div></section>
+<section class="section service-enquiry"><div class="section-inner"><h2>Tell me where you need help.</h2><p class="service-reading">{esc(service['prompt'])}</p><div class="service-actions"><a class="button" href="{email}">Email James about your project</a><a class="text-link" href="/#contact">Other ways to get in touch</a></div><nav class="related-services" aria-label="Related services">{related}<a href="/android-security-training/">Android security workshops</a></nav></div></section>'''
+    schema = {'@context':'https://schema.org', '@type':'Service', 'name':service['title'], 'description':service['description'], 'url':BASE+path, 'provider':{'@type':'Person','name':'James Cullimore','url':BASE+'/'}}
+    write(path.lstrip('/')+'index.html', page(service['title'], service['description'], path, content, schema=schema))
 
 # The training landing page shares the company shell and has its own scoped layout.
 training = (ROOT/'templates/security-training.html').read_text()
@@ -147,7 +173,9 @@ ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}
 old=ET.parse(ROOT/'sitemap.xml')
 dates={u.find('s:loc',ns).text:u.find('s:lastmod',ns).text for u in old.findall('s:url',ns) if u.find('s:lastmod',ns) is not None}
 urls=[BASE+'/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
-urls += [url for url in dates if any(folder in url for folder in ['/watchful/', '/dontgotobed/', '/elchem/'])]
+# Retain existing product URLs, including policy pages without lastmod values.
+urls += [u.find('s:loc', ns).text for u in old.findall('s:url', ns) if any(folder in u.find('s:loc', ns).text for folder in ['/watchful/', '/dontgotobed/', '/elchem/', '/scrumscore/'])]
+urls += [BASE + '/services/' + service['slug'] + '/' for service in services]
 ET.register_namespace('',ns['s']);tree=ET.Element('{'+ns['s']+'}urlset')
 for url in dict.fromkeys(urls):
     node=ET.SubElement(tree,'url');ET.SubElement(node,'loc').text=url
@@ -160,7 +188,7 @@ print(f'Built homepage, {len(projects)} project details, courses, {page_count} b
 
 # Content-based asset URLs keep previews and deployed pages current after edits.
 from urllib.parse import urlsplit
-versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
+versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
 asset_versions = {(ROOT/name).resolve(): hashlib.sha256((ROOT/name).read_bytes()).hexdigest()[:12] for name in versioned}
 for f in ROOT.rglob('*.html'):
     if 'templates' in f.relative_to(ROOT).parts or any(part.startswith('.') for part in f.relative_to(ROOT).parts): continue

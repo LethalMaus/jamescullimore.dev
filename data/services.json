@@ -1,0 +1,68 @@
+[
+  {
+    "slug": "android-kotlin-multiplatform",
+    "title": "Freelance Android & Kotlin Multiplatform Development",
+    "heading": "Android expertise. A practical route to Android and iOS.",
+    "description": "Freelance Android and Kotlin Multiplatform development with James Cullimore. Compose interfaces, BLE integrations and senior support for existing teams.",
+    "intro": "You need an app built, an existing product moved forward, or someone who can take ownership of the difficult parts. I work with Android and Kotlin Multiplatform teams on implementation, architecture and connected-device integrations.",
+    "fit": "For product teams adding senior capacity, rebuilding an interface or deciding which parts of an Android and iOS product should share code.",
+    "work": [
+      ["Android delivery", "Build features in Kotlin and Jetpack Compose, work through integration problems and support the team through review and release."],
+      ["Kotlin Multiplatform", "Assess what is worth sharing, integrate shared code with platform-specific behaviour, and build interfaces with Compose Multiplatform where it fits the product."],
+      ["Connected products", "Work through BLE communication, device state and the boundary between an app and the hardware it controls."]
+    ],
+    "start": "Start with the product, the platforms and the part that needs help. I’ll review the existing setup with you and agree a first piece of work: a feature, an integration or a technical assessment. For an existing team, we can work within your review and delivery process.",
+    "proof": ["zuriga", "fresenius-medical-care", "benefits-me"],
+    "questions": [
+      ["Can you join an existing team?", "Yes. Work can cover hands-on development, code review and technical guidance alongside your developers and designers."],
+      ["Do we need to move everything to KMP?", "No. We can assess a specific shared module or feature first. Platform requirements and maintenance costs should drive that decision."],
+      ["Where do you work?", "I’m based in Germany and work in English and German, mostly remotely. Onsite visits and workshops can be discussed as part of the engagement."]
+    ],
+    "subject": "Android and KMP project enquiry",
+    "prompt": "Tell me about your product, target platforms and the work you need help with. If there’s an existing codebase, a short description of its current state is enough to start."
+  },
+  {
+    "slug": "android-app-rescue",
+    "title": "Android App Rescue & Modernisation",
+    "heading": "Get your Android app moving again.",
+    "description": "Android app rescue, codebase reviews and gradual modernisation with James Cullimore. Get help with fragile releases, legacy Java and stalled delivery.",
+    "intro": "An app doesn’t have to be beyond repair to need outside help. Perhaps every release is difficult, a handover has left gaps, or the next feature keeps getting buried under old problems. I help teams understand the code they have and make a practical plan for improving it.",
+    "fit": "For teams taking over an unfamiliar app, maintaining a Java codebase or struggling to make changes with confidence.",
+    "work": [
+      ["Understand the problem", "Review the codebase, build setup and release process with your team. Reproduce the blockers and separate urgent defects from longer-term maintenance work."],
+      ["Stabilise the important paths", "Agree which user journeys and failures matter most, then address them with focused implementation and appropriate regression checks."],
+      ["Modernise in useful steps", "Move Java code towards Kotlin, replace problematic dependencies or improve architecture around the features you are actually changing."]
+    ],
+    "start": "A focused review is a useful first step when the scope is unclear. We agree which parts to inspect, discuss the findings and prioritise the work. From there I can implement changes with your team or take on an agreed piece of the recovery work.",
+    "proof": ["jc-bachmann", "zuriga", "neurofly"],
+    "questions": [
+      ["Does this mean a rewrite?", "Not automatically. Existing behaviour, release constraints and the cost of maintaining a replacement all matter. A targeted change may be the better starting point."],
+      ["Can you help after another developer leaves?", "Yes. We can start with the repository, build instructions and known issues, identify the gaps and agree a manageable handover and implementation scope."],
+      ["Can we start with a review only?", "Yes. A review can be a standalone engagement. Its scope and expected outputs are agreed before work starts."]
+    ],
+    "subject": "Android app rescue enquiry",
+    "prompt": "Tell me what the app does, what is blocking delivery and whether there is a deadline. Please leave credentials and customer data out of the initial email."
+  },
+  {
+    "slug": "android-testing-build-optimisation",
+    "title": "Android Test Automation & Gradle Build Optimisation",
+    "heading": "Spend less time waiting for confidence in a release.",
+    "description": "Android test automation, Gradle and CI optimisation with James Cullimore. Investigate slow builds, improve UI test infrastructure and focus release checks.",
+    "intro": "Slow builds and unreliable tests make even small changes expensive. I help Android teams find where feedback is getting stuck and improve the checks they use to ship.",
+    "fit": "For teams with long Gradle or CI runs, fragile UI tests, or too much repetitive manual release testing.",
+    "work": [
+      ["Build and CI investigation", "Measure the existing workflow, inspect the slow stages and make changes against a repeatable baseline. Keep the checks that catch real problems."],
+      ["Useful test coverage", "Choose checks around important behaviour and past failures. Improve unit, integration or UI testing where it gives the team actionable feedback."],
+      ["Test infrastructure", "Investigate flaky tests, improve their setup and make failures easier to diagnose. Document the workflow so the team can maintain it."]
+    ],
+    "start": "Bring a representative build, a recent pipeline run and the tests that cause the most trouble. We can agree a focused investigation, establish a baseline and choose the first improvement to implement and verify.",
+    "proof": ["blackned", "lexoffice", "gls"],
+    "questions": [
+      ["Can you guarantee a percentage improvement?", "No. The opportunity depends on your project and its constraints. The blackned case study below reports results from that engagement; it is not a forecast for another codebase."],
+      ["Do we need more UI tests?", "Not necessarily. The aim is useful feedback. Some behaviours are better checked below the UI, while key user journeys may justify end-to-end coverage."],
+      ["Can you work with our existing CI?", "We start by looking at your current pipeline, infrastructure and access constraints. The scope can focus on the parts you can change without replacing the whole setup."]
+    ],
+    "subject": "Android testing and build optimisation enquiry",
+    "prompt": "Tell me where the team is losing time: local builds, CI, unreliable tests or manual release checks. Existing timings are helpful if you have them."
+  }
+]
