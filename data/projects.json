@@ -8,10 +8,11 @@
       "Test automation",
       "Logistics"
     ],
-    "summary": "Testing and delivery support for logistics and field operations.",
-    "context": "A multi-app Android environment supporting logistics and field operations. The contribution focused on automated testing, process improvements and knowledge sharing.",
+    "summary": "Android test automation and build optimisation for logistics and field operations, with substantial reductions in build times.",
+    "context": "A multi-app Android environment supporting logistics and field operations. The contribution covered automated testing, build optimisation, engineering processes and knowledge sharing.",
     "work": [
       "Supported automated testing across the Android app environment.",
+      "Optimised builds alongside the test automation work to shorten feedback times for the team.",
       "Contributed improvements to engineering processes.",
       "Shared testing and delivery knowledge with the team."
     ],
@@ -22,7 +23,8 @@
       }
     ],
     "image": null,
-    "engagement": "Client work"
+    "engagement": "Client work",
+    "outcome": "Substantially reduced build times alongside improvements to automated testing, giving the team faster feedback on changes."
   },
   {
     "slug": "zuriga",
