@@ -137,7 +137,7 @@ copies of their original `leo_front.png` and `ian_front.png`, preserving alpha.
 
 ### Website discovery and conversion routes
 
-`/apps/` is the visitor-facing directory for the three released apps. Its cards
+`/apps/` is the visitor-facing directory for the three released apps and Elchem, labelled in development. Its cards
 lead to product landing pages; app project details do the same. Client project
 pages link to services that cite them as relevant work. The shared footer and
 homepage expose the directory without changing the product-page designs.

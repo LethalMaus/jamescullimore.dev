@@ -121,7 +121,7 @@
 }
 
 /* App discovery keeps download journeys separate from the project catalogue. */
-.portfolio-page .app-discovery-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
+.portfolio-page .app-discovery-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 24px; }
 .portfolio-page .app-discovery-card { display: flex; flex-direction: column; gap: 16px; padding: 28px; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-surface); min-width: 0; }
 .portfolio-page .app-discovery-card > img { object-fit: contain; border-radius: 16px; }
 .portfolio-page .app-discovery-card h2, .portfolio-page .app-discovery-card p, .portfolio-page .app-discovery-card .eyebrow { margin: 0; }
