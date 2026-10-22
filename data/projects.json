@@ -434,7 +434,7 @@
         "url": "https://apps.apple.com/app/id6758762270"
       }
     ],
-    "image": "/starjar/assets/ic_launcher-playstore.png"
+    "image": "/starjar/assets/app-icon-144.webp"
   },
   {
     "slug": "dont-go-to-bed",
@@ -473,7 +473,7 @@
         "url": "https://github.com/LethalMaus/DontGoToBed"
       }
     ],
-    "image": "/dontgotobed/assets/game-icon.png"
+    "image": "/dontgotobed/assets/game-icon-144.webp"
   },
   {
     "slug": "android-security-training",

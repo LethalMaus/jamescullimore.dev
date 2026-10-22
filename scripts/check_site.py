@@ -99,6 +99,13 @@ for item in json.loads((ROOT/'data/videos.json').read_text()):
     embed='https://www.youtube-nocookie.com/embed/'+item['id']
     if video.get('embedUrl')!=embed or f'src="{embed}"' not in text or not video.get('uploadDate') or not video.get('thumbnailUrl'):
         errors.append(f'{path}: missing visible video or video metadata')
+# Product previews defer players; dedicated watch pages above retain static embeds.
+for product in ['starjar','watchful','dontgotobed']:
+    target=ROOT/product/'index.html';text=files.get(target,'')
+    if 'class="video-preview"' not in text or 'data-video-id=' not in text or '<iframe' in text:
+        errors.append(f'{product}: expected a lightweight trailer link before activation')
+    if '/assets/video-preview.js' not in text or '/assets/video-preview.css' not in text:
+        errors.append(f'{product}: missing trailer enhancement assets')
 print(f'Checked {len(docs)} HTML files and {len(urls)} sitemap URLs.')
 if errors:
     print('\n'.join(errors));raise SystemExit(1)

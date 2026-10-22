@@ -1,0 +1,37 @@
+[
+  {
+    "service": "android-kotlin-multiplatform",
+    "project": "zuriga",
+    "quote_project": "benefits-me",
+    "author": "Jascha Sombrutzki",
+    "excerpt": "He works extremely precisely and is capable of providing both useful and comprehensible feedback. The team and I greatly value his advice.",
+    "de": {
+      "context": "Eine bestehende Kotlin-Multiplatform-App verband Nutzer mit ihrer Kaffeemaschine. Die Aufgabe war, die App zu übernehmen, die Oberfläche zu ersetzen und die BLE-bezogene Geschäftslogik zu verbessern.",
+      "work": "Übernahme der Codebasis, Neuaufbau der Oberfläche für Android und iOS mit Compose Multiplatform und Verbesserungen der Maschinenkommunikation, mit Unterstützung des Designteams.",
+      "outcome": "Eine vollständig neu aufgebaute Oberfläche für Android und iOS sowie verbesserte Logik für die Kommunikation mit der Kaffeemaschine."
+    }
+  },
+  {
+    "service": "android-app-rescue",
+    "project": "jc-bachmann",
+    "quote_project": "jc-bachmann",
+    "author": "Michael Nagel",
+    "excerpt": "He has a remarkable ability to modernize and extend our established Java codebase, apply modern best practices to it, and gracefully migrate it to Kotlin, while respecting the existing structure.",
+    "de": {
+      "context": "Eine etablierte Java-Android-App und die zugehörige Plattform benötigten Weiterentwicklung und Modernisierung.",
+      "work": "Modernisierung und Erweiterung der Android-App, schrittweise Migration nach Kotlin unter Berücksichtigung der bestehenden Struktur sowie Arbeit am Node.js-Backend und Vue.js-Portal."
+    }
+  },
+  {
+    "service": "android-testing-build-optimisation",
+    "project": "blackned",
+    "quote_project": "lexoffice",
+    "author": "Michael Götze",
+    "excerpt": "He possesses a very broad and in-depth knowledge of UI testing and its associated infrastructure. He applied this knowledge intensively to significantly advance code coverage.",
+    "de": {
+      "context": "Eine AOSP-basierte Kommunikationsplattform in einer Umgebung mit hohen Sicherheitsanforderungen benötigte Unterstützung durch einen erfahrenen Android-Entwickler. Build- und CI/CD-Abläufe waren ein Schwerpunkt.",
+      "work": "Android-Entwicklung im Team sowie Verbesserungen der Gradle-Builds und der CI/CD-Pipeline unter den bestehenden Sicherheitsvorgaben.",
+      "outcome": "Die Gradle-Build-Zeiten sanken in dieser Projektumgebung um rund 50 %, die Gesamtdauer der CI/CD-Pipeline um rund 60 %. Diese Ergebnisse sind keine Prognose für andere Projekte."
+    }
+  }
+]

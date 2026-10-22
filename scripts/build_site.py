@@ -149,6 +149,22 @@ for guide in guides:
     schema = {'@context':'https://schema.org','@type':'Article','headline':guide['title'],'description':guide['description'],'datePublished':guide['date'],'author':{'@type':'Person','name':'James Cullimore','url':BASE+'/'},'mainEntityOfPage':BASE+path,'inLanguage':lang}
     write(path.lstrip('/')+'index.html', page(guide['title'],guide['description'],path,content,schema=schema,scripts='<link rel="stylesheet" href="/assets/guides.css">',lang=lang,alternates=alternates))
 
+# Service evidence is drawn from the existing catalogue and published testimonials.
+service_evidence = load('service-evidence.json')
+testimonials=load('testimonials.json') if (ROOT/'data/testimonials.json').exists() else json.loads((ROOT/'testimonials.json').read_text())
+def evidence_block(service_slug, lang='en'):
+    item = next(e for e in service_evidence if e['service'] == service_slug)
+    project = next(p for p in projects if p['slug'] == item['project'])
+    testimonial = next(t for t in testimonials if t['author'] == item['author'])
+    assert item['excerpt'] in testimonial['text'], 'Testimonial excerpts must match the published source'
+    de = lang == 'de'
+    context = item['de']['context'] if de else project['context']
+    work = item['de']['work'] if de else ' '.join(project['work'])
+    outcome = item['de'].get('outcome') if de else project.get('outcome')
+    result = f'<dt>{"Dokumentiertes Ergebnis" if de else "Documented result"}</dt><dd>{esc(outcome)}</dd>' if outcome else ''
+    caveat = '<p class="evidence-note">Results from this project’s environment; not a forecast for another codebase.</p>' if not de and item['project'] == 'blackned' else ''
+    return f'''<div class="service-evidence"><div><span class="eyebrow">{"Ein konkretes Beispiel" if de else "A closer look"}</span><h3>{esc(project['name'])}</h3><dl><dt>{"Die Aufgabe" if de else "The brief"}</dt><dd>{esc(context)}</dd><dt>{"Mein Beitrag" if de else "My contribution"}</dt><dd>{esc(work)}</dd>{result}</dl>{caveat}<a href="/projects/{project['slug']}.html" hreflang="en">{"Projektbeschreibung lesen (Englisch)" if de else "Read the project details"}</a></div><aside><h3>{"Aus der Zusammenarbeit mit" if de else "From the team at"} {esc(testimonial['company'])}</h3><blockquote lang="en"><p>“{esc(item['excerpt'])}”</p><cite>{esc(testimonial['author'])}, {esc(testimonial['company'])}</cite></blockquote><p class="evidence-note">{"Auszug aus dem veröffentlichten Originalzitat auf Englisch." if de else "Excerpt from the published testimonial."}</p><a href="/projects/{item['quote_project']}.html" hreflang="en">{"Vollständiges Zitat und Projekt (Englisch)" if de else "Read the full testimonial and project"}</a></aside></div>'''
+
 # Focused service pages use the same shell and verified project catalogue.
 from urllib.parse import quote
 for service in services:
@@ -158,6 +174,7 @@ for service in services:
     alternates = {'en':path, 'de':de_path, 'x-default':path}
     email = 'mailto:info@jamescullimore.dev?subject=' + quote(service['subject'])
     work = ''.join(f'<article class="service"><span class="service-number" aria-hidden="true">0{i+1}</span><h3>{esc(title)}</h3><p>{esc(body)}</p></article>' for i, (title, body) in enumerate(service['work']))
+    evidence = evidence_block(service['slug'])
     proof = ''.join(project_card(next(p for p in projects if p['slug'] == slug)) for slug in service['proof'])
     questions = ''.join(f'<details><summary>{esc(question)}</summary><p>{esc(answer)}</p></details>' for question, answer in service['questions'])
     guide_link = ''.join(f'<p class="service-reading"><a class="text-link" href="/guides/{guide["slug"]}/">Read the guide: {esc(guide["title"])}</a></p>' for guide in guides if guide.get('service') == service['slug'] and guide.get('lang', 'en') == 'en')
@@ -165,7 +182,7 @@ for service in services:
     content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">Services</a></nav><nav class="language-switch" aria-label="Page language"><span aria-current="page" lang="en">English</span><a href="{de_path}" hreflang="de" lang="de">Deutsch</a></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Discuss your project</a><a class="text-link" href="#relevant-work">See relevant work</a></div><p class="service-byline">James Cullimore <span aria-hidden="true">·</span> Based in Germany <span aria-hidden="true">·</span> English &amp; German</p></div></section>
 <section class="section"><div class="section-inner"><h2>Where I can help</h2><p class="lead">{esc(service['fit'])}</p><div class="service-deliverables">{work}</div></div></section>
 <section class="section soft"><div class="section-inner"><h2>A manageable first step</h2><p class="service-reading">{esc(service['start'])}</p>{guide_link}</div></section>
-<section class="section" id="relevant-work"><div class="section-inner"><span class="eyebrow">From the project catalogue</span><h2>Relevant work</h2><div class="project-grid">{proof}</div></div></section>
+<section class="section" id="relevant-work"><div class="section-inner"><span class="eyebrow">From the project catalogue</span><h2>Relevant work</h2>{evidence}<div class="project-grid">{proof}</div></div></section>
 <section class="section soft"><div class="section-inner service-faq"><h2>Before we start</h2>{questions}</div></section>
 <section class="section service-enquiry"><div class="section-inner"><h2>Tell me where you need help.</h2><p class="service-reading">{esc(service['prompt'])}</p><div class="service-actions"><a class="button" href="{email}">Email James about your project</a><a class="text-link" href="/#contact">Other ways to get in touch</a></div><nav class="related-services" aria-label="Related services">{related}<a href="/android-security-training/">Android security workshops</a></nav></div></section>'''
     schema = {'@context':'https://schema.org', '@type':'Service', 'name':service['title'], 'description':service['description'], 'url':BASE+path, 'provider':{'@type':'Person','name':'James Cullimore','url':BASE+'/'}}
@@ -178,6 +195,7 @@ for service in services_de:
     en_path = '/services/' + service['slug'] + '/'
     email = 'mailto:info@jamescullimore.dev?subject=' + quote(service['subject'])
     work = ''.join(f'<article class="service"><span class="service-number" aria-hidden="true">0{i+1}</span><h3>{esc(title)}</h3><p>{esc(body)}</p></article>' for i,(title,body) in enumerate(service['work']))
+    evidence = evidence_block(service['slug'], 'de')
     proof = ''
     for slug in original['proof']:
         project = next(item for item in projects if item['slug'] == slug)
@@ -188,7 +206,7 @@ for service in services_de:
     content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Seitenpfad"><a href="/de/leistungen/">Leistungen</a></nav><nav class="language-switch" aria-label="Seitensprache"><a href="{en_path}" hreflang="en" lang="en">English</a><span aria-current="page" lang="de">Deutsch</span></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Projekt besprechen</a><a class="text-link" href="#relevante-projekte">Passende Projekte ansehen</a></div><p class="service-byline">James Cullimore · Standort Deutschland · Deutsch und Englisch</p></div></section>
 <section class="section"><div class="section-inner"><h2>Wobei ich helfen kann</h2><p class="lead">{esc(service['fit'])}</p><div class="service-deliverables">{work}</div></div></section>
 <section class="section soft"><div class="section-inner"><h2>Ein überschaubarer erster Schritt</h2><p class="service-reading">{esc(service['start'])}</p>{guide_link}</div></section>
-<section class="section" id="relevante-projekte"><div class="section-inner"><h2>Passende Projekterfahrung</h2><div class="project-grid">{proof}</div></div></section>
+<section class="section" id="relevante-projekte"><div class="section-inner"><h2>Passende Projekterfahrung</h2>{evidence}<div class="project-grid">{proof}</div></div></section>
 <section class="section soft"><div class="section-inner service-faq"><h2>Vor der Zusammenarbeit</h2>{questions}</div></section>
 <section class="section service-enquiry"><div class="section-inner"><h2>Wo brauchen Sie Unterstützung?</h2><p class="service-reading">{esc(service['prompt'])}</p><div class="service-actions"><a class="button" href="{email}">James zum Projekt schreiben</a><a class="text-link" href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a></div><nav class="related-services" aria-label="Weitere Leistungen">{related}</nav></div></section>'''
     schema = {'@context':'https://schema.org','@type':'Service','name':service['title'],'description':service['description'],'url':BASE+path,'provider':{'@type':'Person','name':'James Cullimore','url':BASE+'/'}}
@@ -202,7 +220,6 @@ write('de/leistungen/index.html', page('Android-Freelancer in Deutschland – Le
 training = (ROOT/'templates/security-training.html').read_text()
 write('android-security-training/index.html', page('Android Security Training & Workshops', 'Hands-on Android security workshops led by James Cullimore. Explore four practical modules, vulnerable and secure app labs, and tailored team training.', '/android-security-training/', training, scripts='<link rel="stylesheet" href="/android-security-training/training.css">'))
 
-testimonials=load('testimonials.json') if (ROOT/'data/testimonials.json').exists() else json.loads((ROOT/'testimonials.json').read_text())
 testimonial_names={'jc-bachmann':'J&C Bachmann','benefits-me':'Benefits.me','lexoffice':'Lexoffice','marktgalerie':'Marktmeister Pro','neurofly':'Neurofly','farmerjoe':'farmerJoe'}
 for p in projects:
     path='/projects/'+p['slug']+'.html'
@@ -313,7 +330,7 @@ print(f'Built homepage, {len(projects)} project details, courses, {page_count} b
 
 # Content-based asset URLs keep previews and deployed pages current after edits.
 from urllib.parse import urlsplit
-versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/article-service.css', 'assets/guides.css', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
+versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/article-service.css', 'assets/guides.css', 'assets/video-preview.css', 'assets/video-preview.js', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
 asset_versions = {(ROOT/name).resolve(): hashlib.sha256((ROOT/name).read_bytes()).hexdigest()[:12] for name in versioned}
 for f in ROOT.rglob('*.html'):
     if 'templates' in f.relative_to(ROOT).parts or any(part.startswith('.') for part in f.relative_to(ROOT).parts): continue

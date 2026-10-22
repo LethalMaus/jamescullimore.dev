@@ -144,3 +144,14 @@ html[lang="de"] .service-page h1, html[lang="de"] .service-page h2, html[lang="d
 .video-context { color: var(--color-text-secondary); font-size: 14px; margin: 16px 0; }
 .video-watch h2 { margin-top: 32px; }
 @media(max-width: 760px) { .video-library-grid { grid-template-columns: 1fr; } }
+
+.service-evidence { display: grid; grid-template-columns: minmax(0,1.3fr) minmax(0,1fr); gap: clamp(24px,4vw,48px); margin: 28px 0 36px; padding: clamp(20px,4vw,36px); border: 1px solid var(--color-border); border-radius: 18px; background: var(--color-cream-100); }
+.service-evidence h3 { margin: 10px 0 20px; }
+.service-evidence dt { font-weight: 700; margin: 20px 0 6px; }
+.service-evidence dd { margin: 0; line-height: 1.75; }
+.service-evidence aside { align-self: start; padding-top: 12px; }
+.service-evidence blockquote p { line-height: 1.8; margin-bottom: 18px; }
+.service-evidence cite { font-style: normal; font-size: 14px; }
+.service-evidence a { display: inline-block; padding-block: 10px; text-decoration: underline; text-underline-offset: .2em; }
+.evidence-note { color: var(--color-text-secondary); font-size: 14px; line-height: 1.6; margin: 18px 0 4px; }
+@media(max-width:760px) { .service-evidence { grid-template-columns: minmax(0,1fr); } }

@@ -1,6 +1,6 @@
 @font-face {
   font-family: "Nunito";
-  src: url("/assets/fonts/Nunito-VariableFont_wght.ttf") format("truetype");
+  src: url("/assets/fonts/Nunito-VariableFont_wght.woff2") format("woff2");
   font-weight: 200 1000;
   font-style: normal;
   font-display: swap;
@@ -8,10 +8,30 @@
 
 @font-face {
   font-family: "Nunito";
-  src: url("/assets/fonts/Nunito-Italic-VariableFont_wght.ttf") format("truetype");
+  src: url("/assets/fonts/Nunito-Italic-VariableFont_wght.woff2") format("woff2");
   font-weight: 200 1000;
   font-style: italic;
   font-display: swap;
+}
+
+/* Match the fallback metrics while the same Nunito font downloads. */
+@font-face {
+  font-family: "Nunito Fallback";
+  src: local("Arial");
+  font-weight: 200 550;
+  size-adjust: 100.3%;
+  ascent-override: 100.8%;
+  descent-override: 35.2%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Nunito Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 600 1000;
+  size-adjust: 96.3%;
+  ascent-override: 105%;
+  descent-override: 36.66%;
+  line-gap-override: 0%;
 }
 
 :root {
@@ -34,7 +54,7 @@
 
 body {
   margin: 0;
-  font-family: "Nunito", system-ui, sans-serif;
+  font-family: "Nunito", "Nunito Fallback", system-ui, sans-serif;
   color: var(--text);
   background: radial-gradient(1200px 800px at 80% -10%, #1c2a4a 0%, var(--bg) 55%)
     no-repeat,
@@ -97,7 +117,7 @@ a {
 }
 
 .brand-name {
-  font-family: "Nunito", system-ui, sans-serif;
+  font-family: "Nunito", "Nunito Fallback", system-ui, sans-serif;
   font-size: 24px;
   font-weight: 700;
 }
@@ -117,7 +137,7 @@ a {
 }
 
 .hero-copy h1 {
-  font-family: "Nunito", system-ui, sans-serif;
+  font-family: "Nunito", "Nunito Fallback", system-ui, sans-serif;
   font-size: clamp(32px, 3vw + 20px, 54px);
   margin: 0 0 16px;
 }
@@ -233,7 +253,7 @@ a {
 }
 
 .section h2 {
-  font-family: "Nunito", system-ui, sans-serif;
+  font-family: "Nunito", "Nunito Fallback", system-ui, sans-serif;
   font-size: clamp(24px, 2vw + 16px, 36px);
   margin: 0 0 20px;
 }

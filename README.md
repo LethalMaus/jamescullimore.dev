@@ -223,3 +223,38 @@ issues and new queries. Use 28-day comparisons for content decisions once
 there is enough history, and a monthly review after the site settles. Review
 again after major changes or an alert. Consent-based Analytics will not count
 all Search Console visits, and query totals may omit anonymised searches.
+
+### Product-page performance and service evidence
+
+StarJar uses compressed copies of the same approved artwork and WOFF2 versions
+of the existing Nunito fonts. The Arial fallback uses matching ascent/descent
+metrics to reduce movement while Nunito loads. Original assets remain available.
+DGTB uses small display copies of the existing Leo/Ian artwork and icon; Daddy
+still uses the exact approved front-frame extraction documented above.
+
+The three released product pages use `assets/video-preview.js` and `.css` to
+load YouTube players after activation. Their initial links work without
+JavaScript; enhanced buttons support keyboard activation and focus the player.
+The dedicated `/videos/` pages retain static embeds and VideoObject metadata.
+Public YouTube thumbnails are stored under `assets/video-posters/`.
+
+`data/service-evidence.json` selects a documented case study and an exact excerpt
+from an existing published testimonial for each service. The builder validates
+that excerpts match their source text. German pages translate the project
+context but label testimonial excerpts as English originals. Do not convert a
+quote about one company into evidence about a different engagement, or reuse
+project-specific savings as promises for future work.
+
+Run `node scripts/video_check.cjs` for activation, fallback and service layout
+checks. `node scripts/performance_check.cjs` measures the three live released-app
+pages at 390px, 150ms simulated latency, 1.6Mbps download and 4x CPU slowdown,
+with cache disabled and Analytics hosts blocked. Override `AUDIT_ORIGIN` for a
+local preview and `PERF_REPORT` for the output path. Results are laboratory
+observations, not real-user Core Web Vitals. Resource Timing byte totals omit
+cross-origin resources without timing permission and iframe subresources.
+Compare live before/after measurements; local hosting uses different compression.
+
+Account snapshots and review notes belong in ignored `reports/private/`, not in
+the published site. Check indexing roughly a week after a change, then use a
+28-day performance review once data is available. No automatic review schedule
+is created by these scripts.
