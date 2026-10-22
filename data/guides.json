@@ -5,6 +5,35 @@
     "description": "Compare Android app modernisation, targeted replacement and a full rewrite. A practical guide with project examples and a checklist for an initial code review.",
     "date": "2026-10-22",
     "service": "android-app-rescue",
-    "projects": ["jc-bachmann", "zuriga"]
+    "projects": [
+      "jc-bachmann",
+      "zuriga"
+    ],
+    "translation": "android-app-modernisieren-oder-neu-entwickeln"
+  },
+  {
+    "slug": "android-app-modernisieren-oder-neu-entwickeln",
+    "path": "/de/ratgeber/android-app-modernisieren-oder-neu-entwickeln/",
+    "lang": "de",
+    "title": "Android-App modernisieren oder neu entwickeln?",
+    "description": "Schrittweise Modernisierung, gezielter Ersatz oder komplette Neuentwicklung: Entscheidungshilfe mit Projektbeispielen und einer Checkliste für die erste Prüfung.",
+    "date": "2026-10-22",
+    "service": "android-app-rescue",
+    "projects": [],
+    "translation": "modernise-or-rewrite-android-app"
+  },
+  {
+    "slug": "starjar-first-task-and-reward",
+    "path": "/starjar/getting-started/",
+    "title": "Getting started with StarJar: your first task and reward",
+    "description": "Set up a child profile, create a chore, review completed tasks and choose a reward in StarJar. A practical first routine for your family.",
+    "date": "2026-10-22"
+  },
+  {
+    "slug": "watchful-first-watcher",
+    "path": "/watchful/getting-started/",
+    "title": "Getting started with Watchful: create your first watcher",
+    "description": "Choose an AI provider, write a useful watcher, run your first check and review its sources before enabling automatic checks in Watchful.",
+    "date": "2026-10-22"
   }
 ]

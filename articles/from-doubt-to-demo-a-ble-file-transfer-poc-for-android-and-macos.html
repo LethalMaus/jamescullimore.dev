@@ -25,6 +25,8 @@
   <script type="application/ld+json" data-seo-schema="article">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "From Doubt to Demo: A BLE File Transfer PoC for Android and macOS", "description": "A BLE file-transfer proof of concept between Android and macOS: a custom GATT service, a Python client and lessons from testing both directions.", "image": ["https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg"], "datePublished": "2026-04-10", "author": {"@type": "Person", "name": "James Cullimore"}, "publisher": {"@type": "Organization", "name": "James Cullimore Software Engineering", "url": "https://jamescullimore.dev/"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html"}, "url": "https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html", "inLanguage": "en"}</script>
 <script defer src="/assets/site.js?v=fc686ace8a11"></script>
 <link rel="stylesheet" href="/assets/article-service.css?v=83924de2398f">
+<script defer src="/assets/analytics-consent.js?v=39410635d34d"></script>
+<script defer src="/assets/conversion-analytics.js?v=db70951e99b0"></script>
 </head>
 <body class="article-page">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -121,7 +123,7 @@
 <ul><li>run an Android app as a BLE peripheral</li><li>connect to it from a laptop</li><li>browse files from a shared Android folder</li><li>upload files from the laptop into Android</li><li>download files from Android back to the laptop</li></ul>
 <p>In other words, it proves the exact thing I needed the PoC to prove: transferring files to and from Android via Bluetooth between the app and a machine is possible.</p>
 <p>That does not settle every design question that comes after.</p>
-<p>It does not tell me whether BLE is the final transport choice.It does not tell me whether a different protocol would be better.It does not tell me whether an existing product or library might solve the same problem more efficiently.</p>
+<p>It does not tell me whether BLE is the final transport choice. It does not tell me whether a different protocol would be better. It does not tell me whether an existing product or library might solve the same problem more efficiently.</p>
 <p>But that is fine. The PoC was not supposed to answer every future question.</p>
 <p>It was supposed to remove doubt around the core concept and replace it with a working example.</p>
 <h2>Closing Thoughts</h2>

@@ -27,6 +27,8 @@
 <script defer src="/assets/site.js?v=fc686ace8a11"></script>
 <link rel="stylesheet" href="/assets/code-highlight.css?v=52041029feb2"><script defer src="/assets/vendor/highlight/highlight.min.js"></script><script defer src="/assets/vendor/highlight/kotlin.min.js"></script><script defer src="/assets/vendor/highlight/groovy.min.js"></script><script defer src="/assets/code-highlight.js?v=42c749b525bc"></script>
 <link rel="stylesheet" href="/assets/article-service.css?v=83924de2398f">
+<script defer src="/assets/analytics-consent.js?v=39410635d34d"></script>
+<script defer src="/assets/conversion-analytics.js?v=db70951e99b0"></script>
 </head>
 <body class="article-page">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -96,7 +98,8 @@
 <div class="gist-embed"><script src="https://gist.github.com/LethalMaus/449f1f0214e53e0187b8a070d61758e3.js?file=WearDataListenerService.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/449f1f0214e53e0187b8a070d61758e3#file-weardatalistenerservice-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/449f1f0214e53e0187b8a070d61758e3#file-weardatalistenerservice-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
 <p>Every time data is updated, this gets called. We loop through each <code>DataEvent</code>, check if it’s a change, and look at the path. If it matches something we care about (in this case, <code>/data-path-1</code>), we pass the item to <code>setData()</code>.</p>
 <p>Again, paths need to match perfectly between sender and receiver. I can’t stress this enough, most “it’s not working” issues in Wear data sync come down to mismatched paths.</p>
-<p>You can also listen for deleted data if your app needs cleanup behavior, but it’s optional.Applying Received Data with <code>setData()</code></p>
+<p>You can also listen for deleted data if your app needs cleanup behavior, but it’s optional.</p>
+<h3>Applying Received Data with <code>setData()</code></h3>
 <p>Once data comes in and matches our expected path, we need to do something with it. That’s the job of <code>setData()</code>:</p>
 <div class="gist-embed"><script src="https://gist.github.com/LethalMaus/02d7e471e3558ed998534f1de2790610.js?file=WearDataListenerService.kt"></script><noscript><p>Code example: <a href="https://gist.github.com/LethalMaus/02d7e471e3558ed998534f1de2790610#file-weardatalistenerservice-kt" target="_blank" rel="noopener noreferrer">View this code on GitHub Gist</a></p></noscript><p class="gist-fallback">If the embedded code does not load, <a href="https://gist.github.com/LethalMaus/02d7e471e3558ed998534f1de2790610#file-weardatalistenerservice-kt" target="_blank" rel="noopener noreferrer">open it on GitHub Gist</a>.</p></div>
 <p>We extract the data using <code>DataMapItem.fromDataItem()</code>, then grab the value tied to <code>"foo"</code>. In this example, it’s just stored in shared preferences, but you can adapt this to trigger UI changes, update state, or whatever fits your use case.</p>

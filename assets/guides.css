@@ -1,4 +1,4 @@
-.portfolio-page .guide-reading { max-width: 900px; }
+.portfolio-page main .section-inner.guide-reading { max-width: 900px; }
 .guide-reading > section { min-height: 0; padding: 32px 0; margin: 0; scroll-margin-top: 100px; }
 .guide-reading p { margin: 16px 0; line-height: 1.8; }
 .guide-reading h3 { margin-top: 28px; }
@@ -17,3 +17,10 @@
 .guide-table-wrap thead { background: var(--color-cream-100); }
 .guide-table-wrap th[scope="row"] { min-width: 150px; }
 @media print { .guide-table-wrap { overflow: visible; } .guide-table-wrap table { min-width: 0; } .guide-contents, .guide-enquiry .service-actions { display: none; } }
+
+.guide-reading h1, .guide-reading h2, .guide-reading h3 { overflow-wrap: anywhere; }
+.guide-screenshot { margin: 28px auto; max-width: 330px; }
+.guide-screenshot img { display: block; width: 100%; height: auto; border-radius: 18px; border: 1px solid var(--color-border); }
+.guide-screenshot figcaption { margin-top: 12px; font-size: 14px; line-height: 1.6; color: var(--color-text-secondary); }
+.guide-reading .service-actions { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+.guide-reading blockquote { margin: 24px 0; padding: 20px; border-left: 4px solid var(--color-teal-700); background: var(--color-cream-100); }

@@ -21,6 +21,9 @@ article_services = load('article-services.json')
 videos = load('videos.json')
 guides = load('guides.json')
 
+def guide_path(guide):
+    return guide.get('path', '/guides/' + guide['slug'] + '/')
+
 def header(active='', lang='en'):
     if lang == 'de':
         return header_de()
@@ -131,12 +134,20 @@ for video in videos:
 video_intro = '<section class="page-intro"><div class="section-inner"><span class="eyebrow">See the apps in action</span><h1>App and game videos</h1><p class="lead">Explore the official trailers for StarJar, Watchful, Don’t Go To Bed and Elchem, then visit each app’s page for current features and availability.</p></div></section>'
 write('videos/index.html', page('App & Game Videos','Watch StarJar, Watchful, Don’t Go To Bed and Elchem videos. Official trailers with product information and links to explore each app.','/videos/',video_intro+'<section class="section"><div class="section-inner video-library-grid">'+video_cards+'</div></section>'))
 
-# Authored decision guides connect practical buying questions to relevant work.
+# Authored guides share metadata and reciprocal translation links.
 for guide in guides:
-    path = '/guides/' + guide['slug'] + '/'
+    path = guide_path(guide)
+    lang = guide.get('lang', 'en')
     content = (ROOT / 'templates/guides' / (guide['slug'] + '.html')).read_text()
-    schema = {'@context':'https://schema.org','@type':'Article','headline':guide['title'],'description':guide['description'],'datePublished':guide['date'],'author':{'@type':'Person','name':'James Cullimore','url':BASE+'/'},'mainEntityOfPage':BASE+path,'inLanguage':'en'}
-    write(path.lstrip('/')+'index.html', page(guide['title'],guide['description'],path,content,schema=schema,scripts='<link rel="stylesheet" href="/assets/guides.css">'))
+    alternates = None
+    if guide.get('translation'):
+        translated = next(g for g in guides if g['slug'] == guide['translation'])
+        alternates = {lang: path, translated.get('lang', 'en'): guide_path(translated)}
+        alternates['x-default'] = alternates['en']
+        switch = '<nav class="language-switch" aria-label="'+('Seitensprache' if lang == 'de' else 'Page language')+'">'+''.join(f'<span aria-current="page" lang="{code}">{label}</span>' if code == lang else f'<a href="{alternates[code]}" hreflang="{code}" lang="{code}">{label}</a>' for code,label in [('en','English'),('de','Deutsch')])+'</nav>'
+        content = content.replace('<span class="eyebrow">',switch+'<span class="eyebrow">',1)
+    schema = {'@context':'https://schema.org','@type':'Article','headline':guide['title'],'description':guide['description'],'datePublished':guide['date'],'author':{'@type':'Person','name':'James Cullimore','url':BASE+'/'},'mainEntityOfPage':BASE+path,'inLanguage':lang}
+    write(path.lstrip('/')+'index.html', page(guide['title'],guide['description'],path,content,schema=schema,scripts='<link rel="stylesheet" href="/assets/guides.css">',lang=lang,alternates=alternates))
 
 # Focused service pages use the same shell and verified project catalogue.
 from urllib.parse import quote
@@ -149,7 +160,7 @@ for service in services:
     work = ''.join(f'<article class="service"><span class="service-number" aria-hidden="true">0{i+1}</span><h3>{esc(title)}</h3><p>{esc(body)}</p></article>' for i, (title, body) in enumerate(service['work']))
     proof = ''.join(project_card(next(p for p in projects if p['slug'] == slug)) for slug in service['proof'])
     questions = ''.join(f'<details><summary>{esc(question)}</summary><p>{esc(answer)}</p></details>' for question, answer in service['questions'])
-    guide_link = ''.join(f'<p class="service-reading"><a class="text-link" href="/guides/{guide["slug"]}/">Read the guide: {esc(guide["title"])}</a></p>' for guide in guides if guide['service'] == service['slug'])
+    guide_link = ''.join(f'<p class="service-reading"><a class="text-link" href="/guides/{guide["slug"]}/">Read the guide: {esc(guide["title"])}</a></p>' for guide in guides if guide.get('service') == service['slug'] and guide.get('lang', 'en') == 'en')
     related = ''.join(f'<a href="/services/{other["slug"]}/">{esc(other["title"])}</a>' for other in services if other != service)
     content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">Services</a></nav><nav class="language-switch" aria-label="Page language"><span aria-current="page" lang="en">English</span><a href="{de_path}" hreflang="de" lang="de">Deutsch</a></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Discuss your project</a><a class="text-link" href="#relevant-work">See relevant work</a></div><p class="service-byline">James Cullimore <span aria-hidden="true">·</span> Based in Germany <span aria-hidden="true">·</span> English &amp; German</p></div></section>
 <section class="section"><div class="section-inner"><h2>Where I can help</h2><p class="lead">{esc(service['fit'])}</p><div class="service-deliverables">{work}</div></div></section>
@@ -172,10 +183,11 @@ for service in services_de:
         project = next(item for item in projects if item['slug'] == slug)
         proof += f'<article class="project-card"><span class="eyebrow">Projekterfahrung</span><h3><a href="/projects/{slug}.html" hreflang="en">{esc(project["name"])}</a></h3><p>{esc(project_summaries_de[slug])}</p><div class="card-bottom"><span>Projektbeschreibung auf Englisch</span><span aria-hidden="true">↗</span></div></article>'
     questions = ''.join(f'<details><summary>{esc(question)}</summary><p>{esc(answer)}</p></details>' for question,answer in service['questions'])
+    guide_link = ''.join(f'<p class="service-reading"><a class="text-link" href="{guide_path(guide)}">Zum Leitfaden: {esc(guide["title"])}</a></p>' for guide in guides if guide.get('service') == service['slug'] and guide.get('lang') == 'de')
     related = ''.join(f'<a href="/de/leistungen/{other["de_slug"]}/">{esc(other["title"])}</a>' for other in services_de if other != service)
     content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Seitenpfad"><a href="/de/leistungen/">Leistungen</a></nav><nav class="language-switch" aria-label="Seitensprache"><a href="{en_path}" hreflang="en" lang="en">English</a><span aria-current="page" lang="de">Deutsch</span></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Projekt besprechen</a><a class="text-link" href="#relevante-projekte">Passende Projekte ansehen</a></div><p class="service-byline">James Cullimore · Standort Deutschland · Deutsch und Englisch</p></div></section>
 <section class="section"><div class="section-inner"><h2>Wobei ich helfen kann</h2><p class="lead">{esc(service['fit'])}</p><div class="service-deliverables">{work}</div></div></section>
-<section class="section soft"><div class="section-inner"><h2>Ein überschaubarer erster Schritt</h2><p class="service-reading">{esc(service['start'])}</p></div></section>
+<section class="section soft"><div class="section-inner"><h2>Ein überschaubarer erster Schritt</h2><p class="service-reading">{esc(service['start'])}</p>{guide_link}</div></section>
 <section class="section" id="relevante-projekte"><div class="section-inner"><h2>Passende Projekterfahrung</h2><div class="project-grid">{proof}</div></div></section>
 <section class="section soft"><div class="section-inner service-faq"><h2>Vor der Zusammenarbeit</h2>{questions}</div></section>
 <section class="section service-enquiry"><div class="section-inner"><h2>Wo brauchen Sie Unterstützung?</h2><p class="service-reading">{esc(service['prompt'])}</p><div class="service-actions"><a class="button" href="{email}">James zum Projekt schreiben</a><a class="text-link" href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a></div><nav class="related-services" aria-label="Weitere Leistungen">{related}</nav></div></section>'''
@@ -208,7 +220,7 @@ for p in projects:
         relevant = [service for service in services if p['slug'] in service['proof']]
         if relevant:
             next_step = '<section><h2>Need similar help?</h2><p>Explore the relevant services and how we can start.</p><ul>' + ''.join(f'<li><a href="/services/{service["slug"]}/">{esc(service["title"])}</a></li>' for service in relevant) + '</ul><a class="button" href="/#contact">Discuss your project</a></section>'
-    decision_links = ''.join(f'<p><a href="/guides/{guide["slug"]}/">{esc(guide["title"])}</a></p>' for guide in guides if p['slug'] in guide['projects'])
+    decision_links = ''.join(f'<p><a href="/guides/{guide["slug"]}/">{esc(guide["title"])}</a></p>' for guide in guides if p['slug'] in guide.get('projects', []) and guide.get('lang', 'en') == 'en')
     if decision_links:
         next_step += '<section><h2>Planning a similar change?</h2>'+decision_links+'</section>'
     outcome = f'<section><h2>The result</h2><p>{esc(p["outcome"])}</p></section>' if p.get('outcome') else ''
@@ -230,7 +242,7 @@ for n in range(1,page_count+1):
     if n<page_count: pagination=pagination.replace('</nav>',f'<a href="{blog_path(n+1)}" rel="next">Next →</a></nav>')
     content=f'''<section class="page-intro"><div class="section-inner"><span class="eyebrow">The engineering notebook</span><h1>Notes from the work.</h1><p class="lead">Android development, architecture, performance, security and the experience of building software.</p><form class="blog-tools" role="search" hidden><label>Search articles<input id="blog-search" type="search" placeholder="Try Kotlin, testing or security…" autocomplete="off"></label><label>Topic<select id="blog-topic"><option value="">All topics</option><option>Security</option><option>Testing</option><option>Performance</option><option>Architecture</option><option>Compose</option><option>IoT &amp; Wear OS</option><option>Developer life</option></select></label></form><p class="blog-status" id="blog-status" role="status">{len(articles)} articles · Page {n} of {page_count}</p></div></section><section class="section"><div class="section-inner"><div class="blog-grid" id="blog-grid">{''.join(blog_card(a) for a in articles[(n-1)*12:n*12])}</div>{pagination}<button class="button secondary" id="more-results" type="button" hidden>Show more results</button></div></section>'''
     if n == 1:
-        guide_links = ''.join(f'<li><a href="/guides/{guide["slug"]}/">{esc(guide["title"])}</a><p>{esc(guide["description"])}</p></li>' for guide in guides)
+        guide_links = ''.join(f'<li><a href="/guides/{guide["slug"]}/">{esc(guide["title"])}</a><p>{esc(guide["description"])}</p></li>' for guide in guides if guide.get('service') and guide.get('lang', 'en') == 'en')
         content += '<section class="section soft"><div class="section-inner"><h2>Planning work on an existing app?</h2><ul>'+guide_links+'</ul></div></section>'
     schema={'@context':'https://schema.org','@type':'CollectionPage','name':'Engineering articles'+(f' — page {n}' if n>1 else ''),'url':BASE+path,'mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+a['url'],'name':a['title']} for i,a in enumerate(articles[(n-1)*12:n*12])]}}
     write(path.lstrip('/'),page('Android Engineering Blog'+(f' — Page {n}' if n>1 else ''),'Practical articles on Android, Kotlin, testing, security, architecture and software delivery.'+(f' Browse page {n} of the archive.' if n>1 else ''),path,content,'Blog',schema,scripts='<script defer src="/assets/blog.js"></script>'))
@@ -266,6 +278,9 @@ for f in [*(ROOT/'articles').glob('*.html'),ROOT/'impressum.html',ROOT/'datensch
         if '/assets/code-highlight.js' not in s:
             s=s.replace('</head>', '<link rel="stylesheet" href="/assets/code-highlight.css"><script defer src="/assets/vendor/highlight/highlight.min.js"></script><script defer src="/assets/vendor/highlight/kotlin.min.js"></script><script defer src="/assets/vendor/highlight/groovy.min.js"></script><script defer src="/assets/code-highlight.js"></script>\n</head>')
     if f.parent.name == 'articles':
+        for asset in ['analytics-consent.js', 'conversion-analytics.js']:
+            if '/assets/' + asset not in s:
+                s = s.replace('</head>', f'<script defer src="/assets/{asset}"></script>\n</head>')
         s = re.sub(r'<!-- article-service:start -->.*?<!-- article-service:end -->', '', s, flags=re.S)
         recommendation = next((item for item in article_services if f.stem in item['articles']), None)
         if recommendation:
@@ -282,7 +297,7 @@ dates={u.find('s:loc',ns).text:u.find('s:lastmod',ns).text for u in old.findall(
 urls=[BASE+'/',BASE+'/apps/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
 # Retain existing product URLs, including policy pages without lastmod values.
 urls += [u.find('s:loc', ns).text for u in old.findall('s:url', ns) if any(folder in u.find('s:loc', ns).text for folder in ['/watchful/', '/dontgotobed/', '/elchem/', '/scrumscore/'])]
-urls += [BASE + '/guides/' + guide['slug'] + '/' for guide in guides]
+urls += [BASE + guide_path(guide) for guide in guides]
 urls += [BASE + '/videos/'] + [BASE + '/videos/' + video['slug'] + '/' for video in videos]
 urls += [BASE + '/de/leistungen/'] + [BASE + '/de/leistungen/' + service['de_slug'] + '/' for service in services_de]
 urls += [BASE + '/services/' + service['slug'] + '/' for service in services]

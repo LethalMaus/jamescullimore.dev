@@ -186,3 +186,40 @@ The modernisation guide uses the J&C Bachmann and Zuriga facts recorded in
 `data/projects.json` and links to Android's official Compose migration guidance.
 Keep project examples factual; do not imply measured savings or outcomes that
 are not documented. Publication dates belong to the authored content.
+
+The guide catalogue also supports explicit `path`, `lang` and reciprocal
+`translation` fields. English/German modernisation guides link to each other
+and to their corresponding service page. `check_site.py` validates their
+language metadata and sitemap inclusion.
+
+StarJar and Watchful have written `/getting-started/` walkthroughs. Their
+instructions use the existing product/support documentation and current
+website screenshots. Examples are labelled as examples, not screenshots of
+that exact workflow. Keep Watchful's own-key and iOS credit options distinct.
+When a tutorial is published, verify its content and add it to the video
+catalogue before linking it from the corresponding walkthrough. Do not use
+trailer metadata for a tutorial that does not yet exist.
+
+### Blog and analytics checks
+
+`node scripts/blog_check.cjs` checks every article in `data/articles.json` and
+all six archive pages at 320, 390 and 1440 pixels, plus enlarged text. It requires
+the local preview on port 8765 and an isolated Chrome CDP endpoint on 9223
+(override with `AUDIT_ORIGIN` / `AUDIT_CDP_PORT`). It reports broken images,
+page overflow, heading problems and uncontained code blocks to
+`/tmp/blog-audit.json`. External image failures may need a network recheck.
+Google Analytics hosts are blocked during these layout checks.
+
+Authored articles now receive the same consent and conversion scripts as the
+portfolio pages when built. The static checker guards against losing them.
+`conversion_check.cjs` verifies store-click behaviour before consent, after
+acceptance, after decline and after revocation. These events indicate clicks,
+not completed installs or submitted enquiries. Browser tests alone do not
+prove events reached a particular GA4 property: check its stream measurement
+ID and confirm receipt in Realtime or DebugView.
+
+For this site's current growth work, review Search Console weekly for indexing
+issues and new queries. Use 28-day comparisons for content decisions once
+there is enough history, and a monthly review after the site settles. Review
+again after major changes or an alert. Consent-based Analytics will not count
+all Search Console visits, and query totals may omit anonymised searches.

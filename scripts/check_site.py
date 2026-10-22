@@ -74,6 +74,22 @@ for item in json.loads((ROOT/'data/services-de.json').read_text()):
         if not d or d.language!=lang or d.alternates!=expected:
             errors.append(f'{path}: incorrect language or reciprocal alternates')
         if d and expected[lang] not in urls:errors.append(f'{path}: translated service missing from sitemap')
+# Guides must be discoverable, and translations must agree in both directions.
+guides=json.loads((ROOT/'data/guides.json').read_text())
+def guide_route(g):return g.get('path','/guides/'+g['slug']+'/')
+for guide in guides:
+    path=guide_route(guide);target,_=resolve(path,ROOT/'index.html');d=docs.get(target)
+    if not d or 'https://jamescullimore.dev'+path not in urls:errors.append(f'{path}: guide missing from sitemap')
+    if guide.get('translation'):
+        other=next(g for g in guides if g['slug']==guide['translation'])
+        expected={g.get('lang','en'):'https://jamescullimore.dev'+guide_route(g) for g in [guide,other]}
+        expected['x-default']=expected['en']
+        if not d or d.language!=guide.get('lang','en') or d.alternates!=expected:errors.append(f'{path}: incorrect guide language alternates')
+# Article landing visits need the same consent-controlled analytics as the rest of the site.
+for article in json.loads((ROOT/'data/articles.json').read_text()):
+    target,_=resolve(article['url'],ROOT/'index.html')
+    for asset in ['analytics-consent.js','conversion-analytics.js']:
+        if '/assets/'+asset not in files.get(target,''):errors.append(f'{article["url"]}: missing {asset}')
 # Watch pages must expose the configured video in static HTML, with verified metadata.
 for item in json.loads((ROOT/'data/videos.json').read_text()):
     path='/videos/'+item['slug']+'/'

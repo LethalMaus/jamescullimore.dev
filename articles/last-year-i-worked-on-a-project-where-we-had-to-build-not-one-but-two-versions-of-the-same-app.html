@@ -25,6 +25,8 @@
   <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"Testing Android Work Profiles Without Losing Your Mind","description":"Last year, I worked on a project where we had to build not one, but two versions of the same app. One ran in the personal profile. The other ran in the work profile. They needed to share selected information across Android profile boundaries.","image":["https://miro.medium.com/v2/resize:fit:1200/1*t4fmIxnKNsaK4DnQw-z3_g.jpeg"],"datePublished":"2026-07-08","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/last-year-i-worked-on-a-project-where-we-had-to-build-not-one-but-two-versions-of-the-same-app.html"},"url":"https://jamescullimore.dev/articles/last-year-i-worked-on-a-project-where-we-had-to-build-not-one-but-two-versions-of-the-same-app.html","inLanguage":"en"}</script>
 <script defer src="/assets/site.js?v=fc686ace8a11"></script>
 <link rel="stylesheet" href="/assets/code-highlight.css?v=52041029feb2"><script defer src="/assets/vendor/highlight/highlight.min.js"></script><script defer src="/assets/vendor/highlight/kotlin.min.js"></script><script defer src="/assets/vendor/highlight/groovy.min.js"></script><script defer src="/assets/code-highlight.js?v=42c749b525bc"></script>
+<script defer src="/assets/analytics-consent.js?v=39410635d34d"></script>
+<script defer src="/assets/conversion-analytics.js?v=db70951e99b0"></script>
 </head>
 <body class="article-page">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -55,14 +57,14 @@
 <p>This article is about what I learned while building and testing apps in a work-profile environment and the practical problems that don’t show up in basic documentation.</p>
 <h2>Why Work Profiles Exist</h2>
 <p>Work profiles were introduced in Android 5.0 (API 21) as a way to solve a very real enterprise problem.</p>
-<p>Employees want to use their personal devices at work.Companies want control over corporate data.</p>
+<p>Employees want to use their personal devices at work. Companies want control over corporate data.</p>
 <p>A work profile creates a managed environment on the same device. The IT admin controls:</p>
 <ul><li>Which apps are available</li><li>Which device features are enabled</li><li>Which data can cross profile boundaries</li></ul>
 <p>To the user, it feels like two separate spaces living on one phone.</p>
 <p>To us as developers, it means we are no longer operating in a single, predictable runtime environment.</p>
 <h2>What This Means for Us as Developers</h2>
 <p>The important thing is this:</p>
-<p>You don’t need special APIs to “support” work profiles.You need to follow Android best practices very strictly.</p>
+<p>You don’t need special APIs to “support” work profiles. You need to follow Android best practices very strictly.</p>
 <p>Suddenly things that were previously “probably fine” can break:</p>
 <ul><li>Intents may silently fail</li><li>File URIs may become invalid</li><li>Notification listeners may stop working</li><li>System apps may not exist in the work profile</li></ul>
 <p>And here is the tricky part:You don’t control these rules. The IT admin does.</p>
@@ -105,8 +107,8 @@
     "com.example.myapp.fileprovider",
     file
 )</code></pre>
-<p>Content URIs are profile-aware.File URIs are not.</p>
-<p>Again, this isn’t new Android knowledge.But work profiles turn bad habits into production failures.</p>
+<p>Content URIs are profile-aware. File URIs are not.</p>
+<p>Again, this isn’t new Android knowledge. But work profiles turn bad habits into production failures.</p>
 <h3>NotificationListenerService Does Not Behave the Same</h3>
 <p>If your app runs in the work profile, your <code>NotificationListenerService</code> will be ignored.</p>
 <p>If your app runs in the personal profile, you may not receive notifications from work-profile apps unless the IT admin explicitly allowlists your app.</p>
@@ -123,15 +125,15 @@
 <p>These are edge cases most consumer apps never encounter.</p>
 <p>Enterprise apps hit them constantly.</p>
 <h2>The Real Problem: Testing Across Profiles</h2>
-<p>Understanding work profiles is manageable.Testing them properly is where things become painful.</p>
+<p>Understanding work profiles is manageable. Testing them properly is where things become painful.</p>
 <p>In our case, the app was not a single APK.</p>
 <p>It was split into three parts:</p>
 <ul><li>The main app</li><li>A companion app</li><li>An androidTest APK for instrumentation</li></ul>
-<p>All three had to exist in the work profile.All three had to exist in the personal profile.</p>
+<p>All three had to exist in the work profile. All three had to exist in the personal profile.</p>
 <p>Every time we wanted to test something inside the work profile, the workflow looked like this:</p>
 <ol><li>Assemble the debug APK</li><li>Assemble the androidTest APK</li><li>Push both to the device</li><li>Install them specifically to the work profile user</li><li>Run instrumentation using the correct <code>--user</code> flag</li></ol>
 <p>Do this a few times manually and you start questioning your life choices.</p>
-<p>The real friction was not writing code.It was the repetition.</p>
+<p>The real friction was not writing code. It was the repetition.</p>
 <p>And repetition in development is a signal: automate it.</p>
 <h2>Understanding the --user Flag</h2>
 <pre><code class="language-text">--user</code></pre>
@@ -197,7 +199,7 @@ tasks.register&lt;Exec&gt;("connectedDevDebugWorkProfileAndroidTest") {
 <p>Now I could run:</p>
 <pre><code class="language-text">./gradlew connectedDevDebugWorkProfileAndroidTest</code></pre>
 <p>And everything was handled in the correct order.</p>
-<p>No manual pushing.No forgetting the <code>--user</code> flag.No installing to the wrong profile by accident.</p>
+<p>No manual pushing. No forgetting the <code>--user</code> flag. No installing to the wrong profile by accident.</p>
 <p>It turned a frustrating workflow into a single command.</p>
 <p>And in enterprise development, that kind of automation pays for itself very quickly.</p>
 <h2>Conclusion</h2>
