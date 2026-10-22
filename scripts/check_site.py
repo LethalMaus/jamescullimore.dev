@@ -7,9 +7,11 @@ import json, re, xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
 class Document(HTMLParser):
     def __init__(self,text):
-        super().__init__();self.links=[];self.ids=[];self.h1=0;self.canonical=[];self.description=[];self.refresh=[];self.noindex=False;self.feed(text)
+        super().__init__();self.language=None;self.alternates={};self.links=[];self.ids=[];self.h1=0;self.canonical=[];self.description=[];self.refresh=[];self.noindex=False;self.feed(text)
     def handle_starttag(self,tag,attrs):
         d=dict(attrs)
+        if tag=='html':self.language=d.get('lang')
+        if tag=='link' and d.get('rel')=='alternate' and d.get('hreflang'):self.alternates[d['hreflang']]=d.get('href')
         if 'id' in d:self.ids.append(d['id'])
         if tag=='meta' and d.get('http-equiv','').lower()=='refresh':self.refresh.append(d.get('content',''))
         if tag=='meta' and d.get('name','').lower() in ['robots','googlebot'] and 'noindex' in d.get('content','').lower():self.noindex=True
@@ -62,6 +64,25 @@ for item in json.loads((ROOT/'data/redirects.json').read_text()):
         errors.append(f'{item["path"]}: redirect destination is not a canonical indexable page')
     if anchor and target and anchor not in target.ids:errors.append(f'{item["path"]}: missing redirect anchor')
     if 'https://jamescullimore.dev/'+item['path'] in urls:errors.append(f'{item["path"]}: redirect present in sitemap')
+# Each translated service must point both ways, while keeping its own canonical.
+for item in json.loads((ROOT/'data/services-de.json').read_text()):
+    en='/services/'+item['slug']+'/'
+    de='/de/leistungen/'+item['de_slug']+'/'
+    expected={'en':'https://jamescullimore.dev'+en,'de':'https://jamescullimore.dev'+de,'x-default':'https://jamescullimore.dev'+en}
+    for lang,path in [('en',en),('de',de)]:
+        target,_=resolve(path,ROOT/'index.html');d=docs.get(target)
+        if not d or d.language!=lang or d.alternates!=expected:
+            errors.append(f'{path}: incorrect language or reciprocal alternates')
+        if d and expected[lang] not in urls:errors.append(f'{path}: translated service missing from sitemap')
+# Watch pages must expose the configured video in static HTML, with verified metadata.
+for item in json.loads((ROOT/'data/videos.json').read_text()):
+    path='/videos/'+item['slug']+'/'
+    target,_=resolve(path,ROOT/'index.html');text=files.get(target,'')
+    schemas=[json.loads(raw) for raw in re.findall(r'<script[^>]*type="application/ld\+json"[^>]*>(.*?)</script>',text,re.S)]
+    video=next((obj for obj in schemas if obj.get('@type')=='VideoObject'),{})
+    embed='https://www.youtube-nocookie.com/embed/'+item['id']
+    if video.get('embedUrl')!=embed or f'src="{embed}"' not in text or not video.get('uploadDate') or not video.get('thumbnailUrl'):
+        errors.append(f'{path}: missing visible video or video metadata')
 print(f'Checked {len(docs)} HTML files and {len(urls)} sitemap URLs.')
 if errors:
     print('\n'.join(errors));raise SystemExit(1)

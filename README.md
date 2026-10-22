@@ -147,3 +147,30 @@ The build adds one contextual recommendation after each selected article and
 replaces it on subsequent builds. Keep these mappings relevant to the article;
 do not automatically add sales messages to every post. The article body and
 publication date remain authored content.
+
+### German services and video pages
+
+`data/services-de.json` contains the German versions of the three English
+services. `data/project-summaries-de.json` supplies translated summaries of the
+same project evidence. `/de/leistungen/` is the German services directory.
+Each translated service has its own canonical URL and reciprocal `en`, `de`
+and `x-default` links. The directory is not declared an alternate of the
+English homepage because its scope differs. Navigation and consent controls
+follow the page language; the saved consent choice is shared across languages.
+
+`data/videos.json` generates `/videos/` and one watch page per public video.
+Titles, channel identity and thumbnails were checked with YouTube oEmbed on
+22 October 2026; publication timestamps were verified from the public watch
+pages. The player is in static HTML, uses the privacy-enhanced YouTube domain,
+and does not autoplay. VideoObject metadata uses the verified upload date and
+thumbnail. Embedding does not guarantee video-search indexing.
+
+For a new tutorial, add its public video ID, verified publication timestamp,
+accurate title, summary, product route and useful written context to the
+catalogue, then rebuild. Label tutorials separately from trailers. Do not
+relabel old footage as current or publish local App Review recordings merely
+because they exist. Keep tutorial summaries grounded in the actual recording;
+chapters, transcripts and step-by-step instructions need a content review.
+
+Run `python3 scripts/check_site.py` to validate language alternates, video
+embeds and metadata alongside the existing site checks.

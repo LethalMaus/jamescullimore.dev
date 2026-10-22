@@ -15,9 +15,14 @@ projects = [p for kind, _, _ in project_groups for p in projects if p['kind'] ==
 articles = load('articles.json')
 resources = load('resources.json')
 services = load('services.json')
+services_de = load('services-de.json')
+project_summaries_de = load('project-summaries-de.json')
 article_services = load('article-services.json')
+videos = load('videos.json')
 
-def header(active=''):
+def header(active='', lang='en'):
+    if lang == 'de':
+        return header_de()
     links = [('/#services','Services'),('/#how-we-work','Process'),('/projects.html','Work'),('/#insights','Testimonials'),('/blog.html','Blog'),('/#contact','Discuss your project')]
     items = ''.join(f'<li><a href="{url}"'+(' aria-current="page"' if active==label else '')+(' class="contact-link project-cta"' if label=='Discuss your project' else '')+f'>{esc(label)}</a></li>' for url,label in links)
     return f'''<a class="skip-link" href="#main">Skip to content</a>
@@ -26,25 +31,31 @@ def header(active=''):
 <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-links">Menu +</button><ul class="site-links" id="site-links">{items}</ul>
 </nav></header>'''
 
-def footer():
+def footer(lang='en'):
+    if lang == 'de':
+        return (ROOT/'templates/footer-de.html').read_text().strip()
     return (ROOT/'templates/footer.html').read_text().strip()
 
-def page(title,description,path,content,active='',schema=None,scripts='',image='/assets/branding/social-preview.png'):
+def header_de():
+    return '<a class="skip-link" href="#main">Zum Inhalt</a><header class="site-header"><nav class="site-nav" aria-label="Hauptnavigation"><a class="site-brand" href="/de/leistungen/"><img src="/assets/branding/logo-black.png" width="56" height="56" alt=""><span><strong>James Cullimore</strong><small>Softwareentwicklung</small></span></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-links">Menü +</button><ul class="site-links" id="site-links"><li><a href="/de/leistungen/">Leistungen</a></li><li><a href="/projects.html" hreflang="en">Projekte (Englisch)</a></li><li><a href="/apps/" hreflang="en">Apps (Englisch)</a></li><li><a class="contact-link" href="mailto:info@jamescullimore.dev?subject=Projektanfrage">Projekt besprechen</a></li></ul></nav></header>'
+
+def page(title,description,path,content,active='',schema=None,scripts='',image='/assets/branding/social-preview.png',lang='en',alternates=None):
     url=BASE+path
+    alternate_tags = ''.join(f'<link rel="alternate" hreflang="{code}" href="{BASE}{route}">' for code,route in (alternates or {}).items())
     if path != '/projects/elchem.html':
         scripts += '<script defer src="/assets/conversion-analytics.js"></script>'
-    body_class = 'home-page' if path == '/' else 'portfolio-page service-page' if path.startswith('/services/') else 'portfolio-page'
+    body_class = 'home-page' if path == '/' else 'portfolio-page service-page' if path.startswith(('/services/', '/de/leistungen/')) else 'portfolio-page'
     extra_styles = '' if path == '/' else '<link rel="stylesheet" href="/assets/portfolio-pages.css">'
     schema=schema or {'@context':'https://schema.org','@type':'WebPage','name':title,'description':description,'url':url}
     image=image if image.startswith('https:') else BASE+image
     return f'''<!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<html lang="{lang}"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{esc(title)} | James Cullimore</title><meta name="description" content="{esc(description,quote=True)}"><meta name="author" content="James Cullimore"><meta name="theme-color" content="#fcfcf9">
-<link rel="canonical" href="{esc(url)}"><link rel="icon" href="/img/favicon.ico"><link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<link rel="canonical" href="{esc(url)}">{alternate_tags}<link rel="icon" href="/img/favicon.ico"><link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <meta property="og:type" content="website"><meta property="og:title" content="{esc(title,quote=True)}"><meta property="og:description" content="{esc(description,quote=True)}"><meta property="og:url" content="{url}"><meta property="og:site_name" content="James Cullimore Software Engineering"><meta property="og:image" content="{esc(image)}"><meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" href="/styles.css?v={STYLE_VERSION}">{extra_styles}<script defer src="/assets/site.js"></script><script defer src="/assets/analytics-consent.js"></script>{scripts}
 <script type="application/ld+json">{json.dumps(schema,ensure_ascii=False).replace('</','<\\/')}</script>
-</head><body class="{body_class}">{header(active)}<main id="main">{content}</main>{footer()}</body></html>'''
+</head><body class="{body_class}">{header(active,lang)}<main id="main">{content}</main>{footer(lang)}</body></html>'''
 
 def write(path,text):
     p=ROOT/path;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text+'\n')
@@ -99,28 +110,72 @@ for slug, (heading, description, pricing) in app_summaries.items():
     app = next(p for p in projects if p['slug'] == slug)
     platform = 'Android · In development' if slug == 'elchem' else 'Android & iOS'
     action = 'Explore Elchem' if slug == 'elchem' else f'Explore {app["name"]} & download'
-    app_cards += f'<article class="app-discovery-card"><img src="{esc(app["image"])}" width="72" height="72" alt=""><span class="eyebrow">{esc(platform)}</span><h2>{esc(app["name"])}</h2><h3>{esc(heading)}</h3><p>{esc(description)}</p><p class="app-plan">{esc(pricing)}</p><a class="button" href="{discovery_paths[slug]}">{esc(action)}</a></article>'
+    watch = next(video for video in videos if video['product_path'] == discovery_paths[slug])
+    app_cards += f'<article class="app-discovery-card"><img src="{esc(app["image"])}" width="72" height="72" alt=""><span class="eyebrow">{esc(platform)}</span><h2>{esc(app["name"])}</h2><h3>{esc(heading)}</h3><p>{esc(description)}</p><p class="app-plan">{esc(pricing)}</p><a class="button" href="{discovery_paths[slug]}">{esc(action)}</a><a class="text-link" href="/videos/{watch['slug']}/">Watch the {esc(app["name"])} trailer</a></article>'
 app_content = f'<section class="page-intro"><div class="section-inner"><span class="eyebrow">Made by James Cullimore</span><h1>Apps for everyday life.<br>Games for a little adventure.</h1><p class="lead">Chore rewards, personal web alerts, a family adventure and Elchem’s world of elements. Explore the apps you can download and the game still in development.</p></div></section><section class="section"><div class="section-inner app-discovery-grid">{app_cards}</div></section><section class="section soft"><div class="section-inner"><h2>Need help building your own app?</h2><p class="lead">I also work with product teams on Android and Kotlin Multiplatform development, app modernisation and automated testing.</p><a class="text-link" href="/services/android-kotlin-multiplatform/">Explore Android and KMP development services</a></div></section>'
 app_schema = {'@context':'https://schema.org','@type':'CollectionPage','name':'Apps and games for Android and iOS','url':BASE+'/apps/','mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+discovery_paths[slug]} for i,slug in enumerate(app_summaries)]}}
 write('apps/index.html', page('Apps & Games for Android and iOS', 'Explore StarJar, Watchful and Don’t Go To Bed for Android and iOS, plus Elchem’s map-based adventure in development. Screenshots, gameplay and app links.', '/apps/', app_content, schema=app_schema))
+
+# Dedicated watch pages keep the video as the primary content.
+video_cards = ''
+for video in videos:
+    path = '/videos/' + video['slug'] + '/'
+    youtube = 'https://www.youtube.com/watch?v=' + video['id']
+    embed = 'https://www.youtube-nocookie.com/embed/' + video['id']
+    thumbnail = 'https://i.ytimg.com/vi/' + video['id'] + '/hqdefault.jpg'
+    video_cards += f'<article class="video-library-card"><a href="{path}"><img src="{thumbnail}" width="480" height="360" alt="" loading="lazy"><h2>{esc(video["title"])}</h2></a><p>{esc(video["description"])}</p><span class="eyebrow">{esc(video["kind"])}</span></article>'
+    content = f'<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/videos/">App videos</a> / {esc(video["product"])}</nav><h1>{esc(video["title"])}</h1><p class="lead">{esc(video["description"])}</p></div></section><section class="section"><div class="section-inner video-watch"><div class="video-watch-frame"><iframe src="{embed}" title="{esc(video["title"])}" referrerpolicy="strict-origin-when-cross-origin" allow="encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div><p class="video-context">{esc(video["note"])}</p><p><a class="text-link" href="{youtube}">Watch on YouTube</a> · Published <time datetime="{video["upload_date"]}">{video["upload_date"][:10]}</time></p><h2>About {esc(video["product"])}</h2><p class="lead">{esc(video["context"])}</p><div class="service-actions"><a class="button" href="{video["product_path"]}">Explore {esc(video["product"])}</a><a class="text-link" href="/videos/">More app videos</a></div></div></section>'
+    schema = {'@context':'https://schema.org','@type':'VideoObject','@id':BASE+path+'#video','name':video['title'],'description':video['description'],'thumbnailUrl':[thumbnail],'uploadDate':video['upload_date'],'embedUrl':embed,'url':BASE+path,'mainEntityOfPage':BASE+path,'publisher':{'@type':'Person','name':'James Cullimore','url':BASE+'/'}}
+    write(path.lstrip('/')+'index.html', page(video['title'],video['description'],path,content,schema=schema,image=thumbnail))
+video_intro = '<section class="page-intro"><div class="section-inner"><span class="eyebrow">See the apps in action</span><h1>App and game videos</h1><p class="lead">Explore the official trailers for StarJar, Watchful, Don’t Go To Bed and Elchem, then visit each app’s page for current features and availability.</p></div></section>'
+write('videos/index.html', page('App & Game Videos','Watch StarJar, Watchful, Don’t Go To Bed and Elchem videos. Official trailers with product information and links to explore each app.','/videos/',video_intro+'<section class="section"><div class="section-inner video-library-grid">'+video_cards+'</div></section>'))
 
 # Focused service pages use the same shell and verified project catalogue.
 from urllib.parse import quote
 for service in services:
     path = '/services/' + service['slug'] + '/'
+    translated = next(item for item in services_de if item['slug'] == service['slug'])
+    de_path = '/de/leistungen/' + translated['de_slug'] + '/'
+    alternates = {'en':path, 'de':de_path, 'x-default':path}
     email = 'mailto:info@jamescullimore.dev?subject=' + quote(service['subject'])
     work = ''.join(f'<article class="service"><span class="service-number" aria-hidden="true">0{i+1}</span><h3>{esc(title)}</h3><p>{esc(body)}</p></article>' for i, (title, body) in enumerate(service['work']))
     proof = ''.join(project_card(next(p for p in projects if p['slug'] == slug)) for slug in service['proof'])
     questions = ''.join(f'<details><summary>{esc(question)}</summary><p>{esc(answer)}</p></details>' for question, answer in service['questions'])
     related = ''.join(f'<a href="/services/{other["slug"]}/">{esc(other["title"])}</a>' for other in services if other != service)
-    content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">Services</a></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Discuss your project</a><a class="text-link" href="#relevant-work">See relevant work</a></div><p class="service-byline">James Cullimore <span aria-hidden="true">·</span> Based in Germany <span aria-hidden="true">·</span> English &amp; German</p></div></section>
+    content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">Services</a></nav><nav class="language-switch" aria-label="Page language"><span aria-current="page" lang="en">English</span><a href="{de_path}" hreflang="de" lang="de">Deutsch</a></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Discuss your project</a><a class="text-link" href="#relevant-work">See relevant work</a></div><p class="service-byline">James Cullimore <span aria-hidden="true">·</span> Based in Germany <span aria-hidden="true">·</span> English &amp; German</p></div></section>
 <section class="section"><div class="section-inner"><h2>Where I can help</h2><p class="lead">{esc(service['fit'])}</p><div class="service-deliverables">{work}</div></div></section>
 <section class="section soft"><div class="section-inner"><h2>A manageable first step</h2><p class="service-reading">{esc(service['start'])}</p></div></section>
 <section class="section" id="relevant-work"><div class="section-inner"><span class="eyebrow">From the project catalogue</span><h2>Relevant work</h2><div class="project-grid">{proof}</div></div></section>
 <section class="section soft"><div class="section-inner service-faq"><h2>Before we start</h2>{questions}</div></section>
 <section class="section service-enquiry"><div class="section-inner"><h2>Tell me where you need help.</h2><p class="service-reading">{esc(service['prompt'])}</p><div class="service-actions"><a class="button" href="{email}">Email James about your project</a><a class="text-link" href="/#contact">Other ways to get in touch</a></div><nav class="related-services" aria-label="Related services">{related}<a href="/android-security-training/">Android security workshops</a></nav></div></section>'''
     schema = {'@context':'https://schema.org', '@type':'Service', 'name':service['title'], 'description':service['description'], 'url':BASE+path, 'provider':{'@type':'Person','name':'James Cullimore','url':BASE+'/'}}
-    write(path.lstrip('/')+'index.html', page(service['title'], service['description'], path, content, schema=schema))
+    write(path.lstrip('/')+'index.html', page(service['title'], service['description'], path, content, schema=schema, alternates=alternates))
+
+# German services have self canonicals and reciprocal language alternates.
+for service in services_de:
+    original = next(item for item in services if item['slug'] == service['slug'])
+    path = '/de/leistungen/' + service['de_slug'] + '/'
+    en_path = '/services/' + service['slug'] + '/'
+    email = 'mailto:info@jamescullimore.dev?subject=' + quote(service['subject'])
+    work = ''.join(f'<article class="service"><span class="service-number" aria-hidden="true">0{i+1}</span><h3>{esc(title)}</h3><p>{esc(body)}</p></article>' for i,(title,body) in enumerate(service['work']))
+    proof = ''
+    for slug in original['proof']:
+        project = next(item for item in projects if item['slug'] == slug)
+        proof += f'<article class="project-card"><span class="eyebrow">Projekterfahrung</span><h3><a href="/projects/{slug}.html" hreflang="en">{esc(project["name"])}</a></h3><p>{esc(project_summaries_de[slug])}</p><div class="card-bottom"><span>Projektbeschreibung auf Englisch</span><span aria-hidden="true">↗</span></div></article>'
+    questions = ''.join(f'<details><summary>{esc(question)}</summary><p>{esc(answer)}</p></details>' for question,answer in service['questions'])
+    related = ''.join(f'<a href="/de/leistungen/{other["de_slug"]}/">{esc(other["title"])}</a>' for other in services_de if other != service)
+    content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Seitenpfad"><a href="/de/leistungen/">Leistungen</a></nav><nav class="language-switch" aria-label="Seitensprache"><a href="{en_path}" hreflang="en" lang="en">English</a><span aria-current="page" lang="de">Deutsch</span></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Projekt besprechen</a><a class="text-link" href="#relevante-projekte">Passende Projekte ansehen</a></div><p class="service-byline">James Cullimore · Standort Deutschland · Deutsch und Englisch</p></div></section>
+<section class="section"><div class="section-inner"><h2>Wobei ich helfen kann</h2><p class="lead">{esc(service['fit'])}</p><div class="service-deliverables">{work}</div></div></section>
+<section class="section soft"><div class="section-inner"><h2>Ein überschaubarer erster Schritt</h2><p class="service-reading">{esc(service['start'])}</p></div></section>
+<section class="section" id="relevante-projekte"><div class="section-inner"><h2>Passende Projekterfahrung</h2><div class="project-grid">{proof}</div></div></section>
+<section class="section soft"><div class="section-inner service-faq"><h2>Vor der Zusammenarbeit</h2>{questions}</div></section>
+<section class="section service-enquiry"><div class="section-inner"><h2>Wo brauchen Sie Unterstützung?</h2><p class="service-reading">{esc(service['prompt'])}</p><div class="service-actions"><a class="button" href="{email}">James zum Projekt schreiben</a><a class="text-link" href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a></div><nav class="related-services" aria-label="Weitere Leistungen">{related}</nav></div></section>'''
+    schema = {'@context':'https://schema.org','@type':'Service','name':service['title'],'description':service['description'],'url':BASE+path,'provider':{'@type':'Person','name':'James Cullimore','url':BASE+'/'}}
+    write(path.lstrip('/')+'index.html', page(service['title'],service['description'],path,content,schema=schema,lang='de',alternates={'en':en_path,'de':path,'x-default':en_path}))
+
+service_cards_de = ''.join(f'<article class="project-card"><h2><a href="/de/leistungen/{item["de_slug"]}/">{esc(item["title"])}</a></h2><p>{esc(item["fit"])}</p><a class="text-link" href="/de/leistungen/{item["de_slug"]}/">Leistung ansehen</a></article>' for item in services_de)
+content_de = f'<section class="page-intro"><div class="section-inner"><span class="eyebrow">James Cullimore · Freiberuflicher Softwareentwickler</span><h1>Android-Entwicklung, Modernisierung und zuverlässigere Releases.</h1><p class="lead">Ich unterstütze Produktteams bei Android und Kotlin Multiplatform, bei der Übernahme bestehender Apps sowie bei Tests und Build-Prozessen. Standort Deutschland, Zusammenarbeit auf Deutsch und Englisch, überwiegend remote.</p><div class="service-actions"><a class="button" href="mailto:info@jamescullimore.dev?subject=Projektanfrage">Projekt besprechen</a><a class="text-link" href="/#services" hreflang="en" lang="en">Services in English</a></div></div></section><section class="section"><div class="section-inner"><div class="project-grid">{service_cards_de}</div></div></section>'
+write('de/leistungen/index.html', page('Android-Freelancer in Deutschland – Leistungen','Android, Kotlin Multiplatform, App-Modernisierung, Testautomatisierung und Gradle-Optimierung. Freiberufliche Entwicklung mit James Cullimore.','/de/leistungen/',content_de,lang='de'))
 
 # The training landing page shares the company shell and has its own scoped layout.
 training = (ROOT/'templates/security-training.html').read_text()
@@ -212,6 +267,8 @@ dates={u.find('s:loc',ns).text:u.find('s:lastmod',ns).text for u in old.findall(
 urls=[BASE+'/',BASE+'/apps/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
 # Retain existing product URLs, including policy pages without lastmod values.
 urls += [u.find('s:loc', ns).text for u in old.findall('s:url', ns) if any(folder in u.find('s:loc', ns).text for folder in ['/watchful/', '/dontgotobed/', '/elchem/', '/scrumscore/'])]
+urls += [BASE + '/videos/'] + [BASE + '/videos/' + video['slug'] + '/' for video in videos]
+urls += [BASE + '/de/leistungen/'] + [BASE + '/de/leistungen/' + service['de_slug'] + '/' for service in services_de]
 urls += [BASE + '/services/' + service['slug'] + '/' for service in services]
 ET.register_namespace('',ns['s']);tree=ET.Element('{'+ns['s']+'}urlset')
 for url in dict.fromkeys(urls):
@@ -225,7 +282,7 @@ print(f'Built homepage, {len(projects)} project details, courses, {page_count} b
 
 # Content-based asset URLs keep previews and deployed pages current after edits.
 from urllib.parse import urlsplit
-versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
+versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/article-service.css', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
 asset_versions = {(ROOT/name).resolve(): hashlib.sha256((ROOT/name).read_bytes()).hexdigest()[:12] for name in versioned}
 for f in ROOT.rglob('*.html'):
     if 'templates' in f.relative_to(ROOT).parts or any(part.startswith('.') for part in f.relative_to(ROOT).parts): continue

@@ -1,4 +1,5 @@
 (function () {
+  var isGerman = document.documentElement.lang === 'de';
   var measurementId = 'G-TYPWQYLWYH';
   var consentKey = 'analytics_consent';
   var loadedFlag = '__gaLoaded';
@@ -88,7 +89,7 @@
       var banner = document.createElement('section');
       banner.className = 'analytics-consent-banner';
       banner.id = 'analytics-consent-banner';
-      banner.setAttribute('aria-label', 'Analytics consent');
+      banner.setAttribute('aria-label', isGerman ? 'Einwilligung zur Webanalyse' : 'Analytics consent');
       banner.hidden = true;
       banner.innerHTML =
         '<p class="analytics-consent-copy"><strong>Analytics preferences</strong>Allow optional analytics to help improve this site? You can change your choice in the footer. <a href="/datenschutz.html">Privacy policy</a></p>' +
@@ -96,6 +97,11 @@
         '<button type="button" class="analytics-consent-button analytics-consent-button-primary" data-analytics-consent="accept">Allow analytics</button>' +
         '<button type="button" class="analytics-consent-button analytics-consent-button-secondary" data-analytics-consent="decline">Decline</button>' +
         '</div>';
+      if (isGerman) {
+        banner.querySelector('.analytics-consent-copy').innerHTML = '<strong>Einstellungen zur Webanalyse</strong>Optionale Webanalyse zulassen, um diese Website zu verbessern? Sie können Ihre Auswahl im Fußbereich ändern. <a href="/datenschutz.html">Datenschutzerklärung</a>';
+        banner.querySelector('[data-analytics-consent="accept"]').textContent = 'Webanalyse zulassen';
+        banner.querySelector('[data-analytics-consent="decline"]').textContent = 'Ablehnen';
+      }
       document.body.appendChild(banner);
     }
 
@@ -104,7 +110,7 @@
       manage.type = 'button';
       manage.id = 'analytics-consent-manage';
       manage.className = 'analytics-consent-manage';
-      manage.textContent = 'Analytics settings';
+      manage.textContent = isGerman ? 'Webanalyse-Einstellungen' : 'Analytics settings';
       manage.hidden = true;
       var footers = document.querySelectorAll('footer');
       (footers[footers.length - 1] || document.body).appendChild(manage);

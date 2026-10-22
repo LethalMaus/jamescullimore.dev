@@ -129,3 +129,18 @@
 .portfolio-page .app-discovery-card .app-plan { font-size: 14px; color: var(--color-text-secondary); }
 .portfolio-page .app-discovery-card .button { margin-top: auto; text-align: center; }
 @media(max-width: 900px) { .portfolio-page .app-discovery-grid { grid-template-columns: 1fr; } }
+
+.language-switch { display: flex; flex-wrap: wrap; gap: 16px; margin: 16px 0 24px; align-items: center; }
+.language-switch a, .language-switch span { padding: 10px 0; min-height: 44px; }
+.language-switch a { text-decoration: underline; }
+.language-switch [aria-current="page"] { font-weight: 700; }
+html[lang="de"] .service-page h1, html[lang="de"] .service-page h2, html[lang="de"] .service-page h3 { overflow-wrap: anywhere; hyphens: auto; }
+.video-library-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 32px; }
+.video-library-card img { display: block; width: 100%; height: auto; aspect-ratio: 4/3; object-fit: cover; border-radius: 16px; margin-bottom: 16px; }
+.video-library-card a { color: var(--color-text); }
+.video-library-card a:hover { text-decoration: underline; }
+.video-watch-frame { aspect-ratio: 16/9; width: 100%; background: #111; border-radius: 16px; overflow: hidden; }
+.video-watch-frame iframe { width: 100%; height: 100%; border: 0; display: block; }
+.video-context { color: var(--color-text-secondary); font-size: 14px; margin: 16px 0; }
+.video-watch h2 { margin-top: 32px; }
+@media(max-width: 760px) { .video-library-grid { grid-template-columns: 1fr; } }

@@ -1,0 +1,65 @@
+[
+  {
+    "slug": "android-kotlin-multiplatform", "de_slug": "android-kotlin-multiplatform",
+    "title": "Freelancer für Android & Kotlin Multiplatform",
+    "heading": "Android-Erfahrung für Ihr Produkt. Gemeinsam entwickeln für Android und iOS.",
+    "description": "Freiberufliche Android- und Kotlin-Multiplatform-Entwicklung mit James Cullimore. Compose-Oberflächen, BLE-Integration und Unterstützung für Ihr Team.",
+    "intro": "Sie möchten eine App entwickeln, ein bestehendes Produkt voranbringen oder schwierige technische Aufgaben abgeben. Ich unterstütze Android- und Kotlin-Multiplatform-Teams bei der Umsetzung, der Architektur und der Anbindung vernetzter Geräte.",
+    "fit": "Für Produktteams, die erfahrene Unterstützung brauchen, eine Oberfläche erneuern oder klären möchten, welche Teile einer Android- und iOS-App gemeinsamen Code nutzen sollten.",
+    "work": [
+      ["Android-Entwicklung", "Funktionen mit Kotlin und Jetpack Compose umsetzen, Integrationsprobleme lösen und Ihr Team bei Code-Reviews und Releases unterstützen."],
+      ["Kotlin Multiplatform", "Prüfen, welcher Code sich sinnvoll teilen lässt, gemeinsame Module mit plattformspezifischem Verhalten verbinden und passende Oberflächen mit Compose Multiplatform entwickeln."],
+      ["Vernetzte Geräte", "BLE-Kommunikation, Gerätezustände und das Zusammenspiel zwischen App und Hardware bearbeiten."]
+    ],
+    "start": "Wir sprechen zuerst über Ihr Produkt, die Zielplattformen und die konkrete Aufgabe. Nach einem Blick auf den bestehenden Aufbau vereinbaren wir einen ersten Schritt: eine Funktion, eine Integration oder eine technische Bewertung. In bestehenden Teams arbeite ich innerhalb Ihrer Review- und Entwicklungsprozesse.",
+    "questions": [
+      ["Können Sie unser bestehendes Team unterstützen?", "Ja. Ich übernehme Entwicklungsaufgaben, Code-Reviews und technische Beratung in Zusammenarbeit mit Ihren Entwicklern und Designern."],
+      ["Müssen wir die gesamte App auf KMP umstellen?", "Nein. Wir können mit einem einzelnen Modul oder einer Funktion beginnen. Entscheidend sind die Anforderungen der Plattformen und der spätere Wartungsaufwand."],
+      ["Wo arbeiten Sie?", "Ich lebe in Deutschland und arbeite auf Deutsch und Englisch, überwiegend remote. Termine vor Ort und Workshops können wir im Rahmen des Projekts vereinbaren."]
+    ],
+    "subject": "Anfrage zu Android und Kotlin Multiplatform",
+    "prompt": "Beschreiben Sie kurz Ihr Produkt, die Zielplattformen und die Aufgabe, bei der Sie Unterstützung brauchen. Bei einer bestehenden App genügt zunächst ein kurzer Überblick über den aktuellen Stand."
+  },
+  {
+    "slug": "android-app-rescue", "de_slug": "android-app-modernisierung",
+    "title": "Android-App modernisieren & bestehenden Code übernehmen",
+    "heading": "Bringen Sie Ihre Android-App wieder voran.",
+    "description": "Android-Apps stabilisieren, bestehenden Code übernehmen und schrittweise modernisieren. Technische Reviews und Umsetzung mit James Cullimore.",
+    "intro": "Jedes Release wird mühsam, nach einer Übergabe fehlen Informationen oder neue Funktionen bleiben hinter alten Problemen liegen. Ich helfe Teams, ihren bestehenden Code zu verstehen und einen umsetzbaren Weg zur Verbesserung zu finden.",
+    "fit": "Für Teams, die eine unbekannte App übernehmen, Java-Code pflegen oder Änderungen wieder mit mehr Sicherheit ausliefern möchten.",
+    "work": [
+      ["Das Problem verstehen", "Code, Build-Konfiguration und Release-Prozess mit Ihrem Team prüfen. Blockaden nachvollziehen und dringende Fehler von längerfristiger Wartung unterscheiden."],
+      ["Wichtige Abläufe stabilisieren", "Gemeinsam festlegen, welche Nutzerabläufe und Fehler zuerst bearbeitet werden müssen. Änderungen gezielt umsetzen und mit passenden Regressionstests absichern."],
+      ["Schrittweise modernisieren", "Java-Code nach Kotlin überführen, problematische Abhängigkeiten ersetzen oder die Architektur dort verbessern, wo ohnehin Funktionen geändert werden."]
+    ],
+    "start": "Wenn der Umfang noch unklar ist, beginnen wir mit einem gezielten Review. Wir legen fest, welche Bereiche ich prüfe, besprechen die Ergebnisse und priorisieren die nächsten Schritte. Anschließend kann ich Änderungen mit Ihrem Team umsetzen oder einen vereinbarten Teil der Arbeit übernehmen.",
+    "questions": [
+      ["Muss die App komplett neu geschrieben werden?", "Nicht automatisch. Bestehendes Verhalten, Release-Vorgaben und der Wartungsaufwand einer neuen Lösung spielen eine Rolle. Eine gezielte Änderung kann der bessere Einstieg sein."],
+      ["Können Sie nach dem Weggang eines Entwicklers helfen?", "Ja. Wir können mit dem Repository, den Build-Anweisungen und den bekannten Problemen beginnen, Lücken identifizieren und eine überschaubare Übergabe und Umsetzung vereinbaren."],
+      ["Können wir zunächst nur ein Review beauftragen?", "Ja. Ein Review kann ein eigenständiger Auftrag sein. Umfang und erwartete Ergebnisse vereinbaren wir vor Beginn."]
+    ],
+    "subject": "Anfrage zur Android-App-Modernisierung",
+    "prompt": "Beschreiben Sie, was die App macht, was die Weiterentwicklung blockiert und ob es einen Termin gibt. Bitte senden Sie in der ersten E-Mail keine Zugangsdaten oder Kundendaten."
+  },
+  {
+    "slug": "android-testing-build-optimisation", "de_slug": "android-testautomatisierung-gradle",
+    "title": "Android-Testautomatisierung & Gradle-Optimierung",
+    "heading": "Schneller wissen, ob eine Änderung funktioniert.",
+    "description": "Android-Testautomatisierung sowie Gradle- und CI-Optimierung mit James Cullimore. Langsame Builds untersuchen und zuverlässigere Tests aufbauen.",
+    "intro": "Langsame Builds und unzuverlässige Tests machen selbst kleine Änderungen aufwendig. Ich helfe Android-Teams herauszufinden, wo Rückmeldungen zu lange dauern, und ihre Prüfungen für Releases zu verbessern.",
+    "fit": "Für Teams mit langen Gradle- oder CI-Laufzeiten, instabilen UI-Tests oder zu viel wiederkehrender manueller Release-Prüfung.",
+    "work": [
+      ["Build und CI untersuchen", "Den bestehenden Ablauf messen, langsame Schritte untersuchen und Änderungen anhand einer wiederholbaren Ausgangsmessung bewerten. Prüfungen erhalten, die echte Probleme finden."],
+      ["Sinnvolle Testabdeckung", "Wichtige Verhaltensweisen und frühere Fehler als Ausgangspunkt nutzen. Unit-, Integrations- oder UI-Tests dort verbessern, wo sie verwertbare Rückmeldungen liefern."],
+      ["Testinfrastruktur verbessern", "Instabile Tests untersuchen, ihre Voraussetzungen verbessern und Fehler leichter nachvollziehbar machen. Den Ablauf so dokumentieren, dass Ihr Team ihn weiter pflegen kann."]
+    ],
+    "start": "Ein repräsentativer Build, ein aktueller Pipeline-Durchlauf und die problematischen Tests sind ein guter Anfang. Wir vereinbaren eine gezielte Untersuchung, ermitteln die Ausgangswerte und wählen die erste Verbesserung, die wir umsetzen und überprüfen.",
+    "questions": [
+      ["Garantieren Sie eine bestimmte Zeitersparnis?", "Nein. Das Potenzial hängt vom Projekt und seinen Rahmenbedingungen ab. Die Ergebnisse im blackned-Projekt sind Erfahrungen aus diesem Auftrag, keine Prognose für eine andere Codebasis."],
+      ["Brauchen wir mehr UI-Tests?", "Nicht unbedingt. Das Ziel sind nützliche Rückmeldungen. Manche Verhaltensweisen lassen sich besser unterhalb der Oberfläche prüfen; zentrale Nutzerabläufe können Ende-zu-Ende-Tests rechtfertigen."],
+      ["Können Sie mit unserer bestehenden CI arbeiten?", "Wir betrachten zunächst Ihre Pipeline, Infrastruktur und Zugriffsbedingungen. Der Auftrag kann sich auf die Teile konzentrieren, die Sie verbessern können, ohne den gesamten Aufbau zu ersetzen."]
+    ],
+    "subject": "Anfrage zu Android-Tests und Build-Optimierung",
+    "prompt": "Wo verliert Ihr Team Zeit: bei lokalen Builds, in der CI, durch unzuverlässige Tests oder manuelle Release-Prüfungen? Vorhandene Laufzeiten sind hilfreich, aber keine Voraussetzung für die erste Nachricht."
+  }
+]

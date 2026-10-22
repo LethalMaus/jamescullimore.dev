@@ -1,18 +1,20 @@
 (() => {
   const nav = document.querySelector('.site-nav');
   const toggle = nav?.querySelector('.menu-toggle');
+  const menuLabel = document.documentElement.lang === 'de' ? 'Menü +' : 'Menu +';
+  const closeLabel = document.documentElement.lang === 'de' ? 'Schließen −' : 'Close −';
   if (!toggle) return;
   nav.classList.add('enhanced');
   function closeMenu(restoreFocus = false) {
     nav.classList.remove('open');
     toggle.setAttribute('aria-expanded', 'false');
-    toggle.textContent = 'Menu +';
+    toggle.textContent = menuLabel;
     if (restoreFocus) toggle.focus();
   }
   toggle.addEventListener('click', () => {
     const open = nav.classList.toggle('open');
     toggle.setAttribute('aria-expanded', String(open));
-    toggle.textContent = open ? 'Close −' : 'Menu +';
+    toggle.textContent = open ? closeLabel : menuLabel;
   });
   nav.querySelectorAll('.site-links a').forEach(a => a.addEventListener('click', () => {
     closeMenu();
