@@ -119,3 +119,13 @@
   .service-page .service-enquiry { padding-inline: 20px; }
   .service-page main .page-intro { padding-top: 36px; }
 }
+
+/* App discovery keeps download journeys separate from the project catalogue. */
+.portfolio-page .app-discovery-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 24px; }
+.portfolio-page .app-discovery-card { display: flex; flex-direction: column; gap: 16px; padding: 28px; border: 1px solid var(--color-border); border-radius: 20px; background: var(--color-surface); min-width: 0; }
+.portfolio-page .app-discovery-card > img { object-fit: contain; border-radius: 16px; }
+.portfolio-page .app-discovery-card h2, .portfolio-page .app-discovery-card p, .portfolio-page .app-discovery-card .eyebrow { margin: 0; }
+.portfolio-page .app-discovery-card h3 { font-size: 18px; }
+.portfolio-page .app-discovery-card .app-plan { font-size: 14px; color: var(--color-text-secondary); }
+.portfolio-page .app-discovery-card .button { margin-top: auto; text-align: center; }
+@media(max-width: 900px) { .portfolio-page .app-discovery-grid { grid-template-columns: 1fr; } }

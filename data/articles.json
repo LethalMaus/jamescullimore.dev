@@ -100,7 +100,7 @@
     "image": "https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg",
     "date": "April 10, 2026 • 7 min read",
     "title": "From Doubt to Demo: A BLE File Transfer PoC for Android and macOS",
-    "excerpt": "From Doubt to Demo: A BLE File Transfer PoC for Android and macOS GitHub - LethalMaus/BluetoothFileTransfer Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on …",
+    "excerpt": "A BLE file-transfer proof of concept between Android and macOS: a custom GATT service, a Python client and lessons from testing both directions.",
     "tags": [
       "Android",
       "Android App Development",

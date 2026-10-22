@@ -1,0 +1,46 @@
+[
+  {
+    "destination": "/services/android-testing-build-optimisation/",
+    "label": "Android testing and build optimisation",
+    "heading": "Builds or tests slowing your team down?",
+    "copy": "I help Android teams investigate slow builds, improve test infrastructure and get useful feedback from CI.",
+    "articles": [
+      "how-i-cut-my-gradle-build-time-by-50",
+      "fast-feedback-winning-back-60-of-our-ci-time",
+      "the-importance-of-ui-tests-on-android-and-when-not-to-write-them",
+      "pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android"
+    ]
+  },
+  {
+    "destination": "/services/android-kotlin-multiplatform/",
+    "label": "Android and Kotlin Multiplatform development",
+    "heading": "Building a connected Android product?",
+    "copy": "I work with teams on Android development, shared Kotlin code and BLE integrations. See the service and related client work.",
+    "articles": [
+      "from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos",
+      "building-a-reliable-control-handoff-with-the-wear-os-data-layer",
+      "how-i-built-seamless-watch-phone-handover-in-wear-os"
+    ]
+  },
+  {
+    "destination": "/android-security-training/",
+    "label": "Android security training and workshops",
+    "heading": "Work through these security problems with your team.",
+    "copy": "Explore hands-on Android security workshops with vulnerable and secure app labs, and an agenda tailored to your team.",
+    "articles": [
+      "what-adb-can-teach-you-about-broken-android-ipc-protections",
+      "why-https-alone-is-not-enough-for-sensitive-android-payloads",
+      "breaking-and-defending-https-on-android-a-hands-on-certificate-pinning-lab"
+    ]
+  },
+  {
+    "destination": "/services/android-app-rescue/",
+    "label": "Android app rescue and modernisation",
+    "heading": "Working through an Android migration?",
+    "copy": "A focused codebase review can help identify what to change first. I also work with teams on implementation and gradual modernisation.",
+    "articles": [
+      "goodbye-androidview-a-real-camerax-qr-scanner-in-compose",
+      "stop-using-playerview-in-compose-media3-playersurface-done-right"
+    ]
+  }
+]

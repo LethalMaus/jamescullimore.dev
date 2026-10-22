@@ -134,3 +134,16 @@ the standalone `papa_front.png` portrait: James corrected that choice on
 22 October 2026. The obsolete website `papa-approved.webp` has been removed.
 Leo’s 13 October refresh and Ian’s 4 October refresh remain lossless WebP
 copies of their original `leo_front.png` and `ian_front.png`, preserving alpha.
+
+### Website discovery and conversion routes
+
+`/apps/` is the visitor-facing directory for the three released apps. Its cards
+lead to product landing pages; app project details do the same. Client project
+pages link to services that cite them as relevant work. The shared footer and
+homepage expose the directory without changing the product-page designs.
+
+`data/article-services.json` contains deliberate article-to-service mappings.
+The build adds one contextual recommendation after each selected article and
+replaces it on subsequent builds. Keep these mappings relevant to the article;
+do not automatically add sales messages to every post. The article body and
+publication date remain authored content.

@@ -15,6 +15,7 @@ projects = [p for kind, _, _ in project_groups for p in projects if p['kind'] ==
 articles = load('articles.json')
 resources = load('resources.json')
 services = load('services.json')
+article_services = load('article-services.json')
 
 def header(active=''):
     links = [('/#services','Services'),('/#how-we-work','Process'),('/projects.html','Work'),('/#insights','Testimonials'),('/blog.html','Blog'),('/#contact','Discuss your project')]
@@ -85,6 +86,20 @@ content=intro+'<div class="section"><div class="section-inner">'+groups+'<div cl
 schema={'@context':'https://schema.org','@type':'CollectionPage','name':'Projects by James Cullimore','url':BASE+'/projects.html','mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+'/projects/'+p['slug']+'.html','name':p['name']} for i,p in enumerate(projects)]}}
 write('projects.html',page('Projects — Client Work, Apps & Games','Explore client engineering work, StarJar, Don’t Go To Bed, Android Security Training, Elchem and Watchful. Project details, product sites and app links.','/projects.html',content,'Work',schema))
 
+# A visitor-facing directory, separate from engineering case studies.
+app_summaries = {
+    'starjar': ('Chores and rewards for families', 'Create chores, review completed tasks and let children save stars for rewards you choose together.', 'Free plan; optional Premium adds unlimited tasks and rewards, plus multiple child profiles.'),
+    'watchful': ('Personal alerts for public web updates', 'Describe the prices, releases or other public information you want to follow. Watchful checks for matches and links to the sources.', 'Two active watchers with your own AI API key; provider usage costs are separate. The iOS app also offers monthly AI credit plans.'),
+    'dont-go-to-bed': ('A family building and exploration adventure', 'Play solo or together on the same trusted Wi-Fi. Build a path, explore the world and find Mammy before nightfall.', 'All characters and gameplay are free. Optional tips support development.')
+}
+app_cards = ''
+for slug, (heading, description, pricing) in app_summaries.items():
+    app = next(p for p in projects if p['slug'] == slug)
+    app_cards += f'<article class="app-discovery-card"><img src="{esc(app["image"])}" width="72" height="72" alt=""><span class="eyebrow">Android &amp; iOS</span><h2>{esc(app["name"])}</h2><h3>{esc(heading)}</h3><p>{esc(description)}</p><p class="app-plan">{esc(pricing)}</p><a class="button" href="{product_paths[slug]}">Explore {esc(app["name"])} &amp; download</a></article>'
+app_content = f'<section class="page-intro"><div class="section-inner"><span class="eyebrow">Made by James Cullimore</span><h1>Apps for everyday life.<br>A game for family time.</h1><p class="lead">A chore and reward app, personal web alerts and a family adventure. Explore the screenshots, see how each app works and choose your download for Android or iOS.</p></div></section><section class="section"><div class="section-inner app-discovery-grid">{app_cards}</div></section><section class="section soft"><div class="section-inner"><h2>Need help building your own app?</h2><p class="lead">I also work with product teams on Android and Kotlin Multiplatform development, app modernisation and automated testing.</p><a class="text-link" href="/services/android-kotlin-multiplatform/">Explore Android and KMP development services</a></div></section>'
+app_schema = {'@context':'https://schema.org','@type':'CollectionPage','name':'Apps and games for Android and iOS','url':BASE+'/apps/','mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+product_paths[slug]} for i,slug in enumerate(app_summaries)]}}
+write('apps/index.html', page('Apps & Games for Android and iOS', 'Explore StarJar chore rewards, Watchful web alerts and Don’t Go To Bed, a free family adventure. See screenshots and download for Android and iOS.', '/apps/', app_content, schema=app_schema))
+
 # Focused service pages use the same shell and verified project catalogue.
 from urllib.parse import quote
 for service in services:
@@ -118,9 +133,16 @@ for p in projects:
     t=next((t for t in testimonials if t['company']==testimonial_names.get(p['slug'])),None)
     if t:
         quote=f'<section><h2>From the team</h2><blockquote><p>“{esc(t["text"])}”</p><cite>{esc(t["author"])}, {esc(t["company"])}</cite></blockquote></section>'
+    next_step = '<section><h2>Working on something similar?</h2><p>Tell us about your product, your team and the support you need.</p><a class="button" href="/#contact">Discuss your project ↗</a></section>'
+    if p['slug'] in product_paths:
+        next_step = f'<section><h2>Try {esc(p["name"])}.</h2><p>See the app in action, read the FAQs and choose your store.</p><a class="button" href="{product_paths[p["slug"]]}">Explore {esc(p["name"])} &amp; download</a><p><a href="/apps/">Browse all apps and games</a></p></section>'
+    else:
+        relevant = [service for service in services if p['slug'] in service['proof']]
+        if relevant:
+            next_step = '<section><h2>Need similar help?</h2><p>Explore the relevant services and how we can start.</p><ul>' + ''.join(f'<li><a href="/services/{service["slug"]}/">{esc(service["title"])}</a></li>' for service in relevant) + '</ul><a class="button" href="/#contact">Discuss your project</a></section>'
     outcome = f'<section><h2>The result</h2><p>{esc(p["outcome"])}</p></section>' if p.get('outcome') else ''
     content=f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/projects.html">Projects</a> / {esc(p['name'])}</nav><span class="eyebrow">{esc(p.get('engagement', p['kind']))}</span><h1>{esc(p['name'])}</h1><p class="lead">{esc(p['summary'])}</p><div class="detail-tags">{tags}</div><a class="text-link" href="#project-links">Project links <span aria-hidden="true">↓</span></a></div></section>
-<section class="section"><div class="section-inner detail-layout"><div class="detail-content"><section><h2>{"The brief" if p.get("outcome") else "The project"}</h2><p>{esc(p['context'])}</p></section><section><h2>{'Inside the product' if p['kind']=='Own projects' else 'What it demonstrates' if p['kind']=='Public code' else 'What we delivered' if p.get('outcome') else 'The contribution'}</h2><ul>{''.join('<li>'+esc(w)+'</li>' for w in p['work'])}</ul></section>{outcome}{quote}<section><h2>Working on something similar?</h2><p>Tell us about your product, your team and the support you need.</p><a class="button" href="/#contact">Discuss your project ↗</a></section></div><aside class="detail-aside" id="project-links">{image}<h2>Explore the project</h2>{links}<hr><a href="/projects.html">← All projects</a></aside></div></section>'''
+<section class="section"><div class="section-inner detail-layout"><div class="detail-content"><section><h2>{"The brief" if p.get("outcome") else "The project"}</h2><p>{esc(p['context'])}</p></section><section><h2>{'Inside the product' if p['kind']=='Own projects' else 'What it demonstrates' if p['kind']=='Public code' else 'What we delivered' if p.get('outcome') else 'The contribution'}</h2><ul>{''.join('<li>'+esc(w)+'</li>' for w in p['work'])}</ul></section>{outcome}{quote}{next_step}</div><aside class="detail-aside" id="project-links">{image}<h2>Explore the project</h2>{links}<hr><a href="/projects.html">← All projects</a></aside></div></section>'''
     schema={'@context':'https://schema.org','@type':'WebPage','name':p['name']+' — project details','description':p['summary'],'url':BASE+path,'breadcrumb':{'@type':'BreadcrumbList','itemListElement':[{'@type':'ListItem','position':1,'name':'Home','item':BASE+'/'},{'@type':'ListItem','position':2,'name':'Projects','item':BASE+'/projects.html'},{'@type':'ListItem','position':3,'name':p['name'],'item':BASE+path}]}}
     write(path.lstrip('/'),page(p['name']+' — Project Details',p['summary'],path,content,'Work',schema,image=p['image'] if p.get('image') and not p['image'].endswith('.svg') else '/assets/branding/social-preview.png'))
 
@@ -169,13 +191,21 @@ for f in [*(ROOT/'articles').glob('*.html'),ROOT/'impressum.html',ROOT/'datensch
     if f.parent.name == 'articles' and '<pre' in s:
         if '/assets/code-highlight.js' not in s:
             s=s.replace('</head>', '<link rel="stylesheet" href="/assets/code-highlight.css"><script defer src="/assets/vendor/highlight/highlight.min.js"></script><script defer src="/assets/vendor/highlight/kotlin.min.js"></script><script defer src="/assets/vendor/highlight/groovy.min.js"></script><script defer src="/assets/code-highlight.js"></script>\n</head>')
+    if f.parent.name == 'articles':
+        s = re.sub(r'<!-- article-service:start -->.*?<!-- article-service:end -->', '', s, flags=re.S)
+        recommendation = next((item for item in article_services if f.stem in item['articles']), None)
+        if recommendation:
+            box = f'<!-- article-service:start --><aside class="article-service" aria-labelledby="article-service-title"><h2 id="article-service-title">{esc(recommendation["heading"])}</h2><p>{esc(recommendation["copy"])}</p><a href="{recommendation["destination"]}">{esc(recommendation["label"])}</a></aside><!-- article-service:end -->'
+            s = s.replace('</main>', box + '</main>', 1)
+            if '/assets/article-service.css' not in s:
+                s = s.replace('</head>', '<link rel="stylesheet" href="/assets/article-service.css">\n</head>')
     f.write_text(s)
 
 # List canonical, substantive pages only, retaining known publication/modification dates.
 ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}
 old=ET.parse(ROOT/'sitemap.xml')
 dates={u.find('s:loc',ns).text:u.find('s:lastmod',ns).text for u in old.findall('s:url',ns) if u.find('s:lastmod',ns) is not None}
-urls=[BASE+'/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
+urls=[BASE+'/',BASE+'/apps/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
 # Retain existing product URLs, including policy pages without lastmod values.
 urls += [u.find('s:loc', ns).text for u in old.findall('s:url', ns) if any(folder in u.find('s:loc', ns).text for folder in ['/watchful/', '/dontgotobed/', '/elchem/', '/scrumscore/'])]
 urls += [BASE + '/services/' + service['slug'] + '/' for service in services]

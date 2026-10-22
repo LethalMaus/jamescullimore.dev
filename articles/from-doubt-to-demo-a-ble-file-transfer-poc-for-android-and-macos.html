@@ -4,26 +4,27 @@
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>From Doubt to Demo: A BLE File Transfer PoC for Android and macOS</title>
-  <meta name="description" content="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS GitHub - LethalMaus/BluetoothFileTransfer Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on …"/>
+  <meta name="description" content="A BLE file-transfer proof of concept between Android and macOS: a custom GATT service, a Python client and lessons from testing both directions."/>
   <meta name="author" content="James Cullimore"/>
   <meta name="robots" content="index, follow"/>
   <link rel="canonical" href="https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html"/>
   <meta property="og:type" content="article"/>
   <meta property="og:title" content="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS"/>
-  <meta property="og:description" content="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS GitHub - LethalMaus/BluetoothFileTransfer Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on …"/>
+  <meta property="og:description" content="A BLE file-transfer proof of concept between Android and macOS: a custom GATT service, a Python client and lessons from testing both directions."/>
   <meta property="og:url" content="https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html"/>
   <meta property="og:image" content="https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg"/>
   <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
   <meta name="twitter:card" content="summary_large_image"/>
   <meta name="twitter:title" content="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS"/>
-  <meta name="twitter:description" content="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS GitHub - LethalMaus/BluetoothFileTransfer Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on …"/>
+  <meta name="twitter:description" content="A BLE file-transfer proof of concept between Android and macOS: a custom GATT service, a Python client and lessons from testing both directions."/>
   <meta name="twitter:image" content="https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg"/>
   <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
   <link rel="stylesheet" href="../styles.css?v=70f4e499d886"/>
   <link rel="stylesheet" href="assets/style.css"/>
   <link rel="stylesheet" href="assets/generated-article.css"/>
-  <script type="application/ld+json" data-seo-schema="article">{"@context":"https://schema.org","@type":"BlogPosting","headline":"From Doubt to Demo: A BLE File Transfer PoC for Android and macOS","description":"From Doubt to Demo: A BLE File Transfer PoC for Android and macOS GitHub - LethalMaus/BluetoothFileTransfer Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on …","image":["https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg"],"datePublished":"2026-04-10","author":{"@type":"Person","name":"James Cullimore"},"publisher":{"@type":"Organization","name":"James Cullimore Software Engineering","url":"https://jamescullimore.dev/"},"mainEntityOfPage":{"@type":"WebPage","@id":"https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html"},"url":"https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html","inLanguage":"en"}</script>
+  <script type="application/ld+json" data-seo-schema="article">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "From Doubt to Demo: A BLE File Transfer PoC for Android and macOS", "description": "A BLE file-transfer proof of concept between Android and macOS: a custom GATT service, a Python client and lessons from testing both directions.", "image": ["https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg"], "datePublished": "2026-04-10", "author": {"@type": "Person", "name": "James Cullimore"}, "publisher": {"@type": "Organization", "name": "James Cullimore Software Engineering", "url": "https://jamescullimore.dev/"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html"}, "url": "https://jamescullimore.dev/articles/from-doubt-to-demo-a-ble-file-transfer-poc-for-android-and-macos.html", "inLanguage": "en"}</script>
 <script defer src="/assets/site.js?v=f0fd21e32408"></script>
+<link rel="stylesheet" href="/assets/article-service.css">
 </head>
 <body class="article-page">
 <a class="skip-link" href="#main">Skip to content</a>
@@ -48,9 +49,7 @@
       <img src="https://miro.medium.com/v2/resize:fit:1200/1*626Oamagzra9AVvaiLByCg.jpeg" alt="From Doubt to Demo: A BLE File Transfer PoC for Android and macOS"/>
     </figure>
     <section class="article-content">
-<h2>GitHub - LethalMaus/BluetoothFileTransfer</h2>
-<h3>Contribute to LethalMaus/BluetoothFileTransfer development by creating an account on GitHub.</h3>
-<p>github.com</p>
+<p><a href="https://github.com/LethalMaus/BluetoothFileTransfer">View the BLE file-transfer proof of concept on GitHub</a>.</p>
 <p>This repo exists because I needed a proof of concept for work.</p>
 <p>I cannot go into the wider product context, but the technical question was clear enough: can we transfer files to and from an Android app over Bluetooth with another machine acting as the peer?</p>
 <p>I did not need a perfect product answer first. I needed a hands-on answer.</p>
@@ -139,7 +138,7 @@
       <p class="article-footer-copy">&copy; 2026 James Cullimore</p>
     </footer>
   </article>
-</main>
+<!-- article-service:start --><aside class="article-service" aria-labelledby="article-service-title"><h2 id="article-service-title">Building a connected Android product?</h2><p>I work with teams on Android development, shared Kotlin code and BLE integrations. See the service and related client work.</p><a href="/services/android-kotlin-multiplatform/">Android and Kotlin Multiplatform development</a></aside><!-- article-service:end --></main>
 <footer class="site-footer">
     <div class="footer-inner">
       <div class="footer-brand">
@@ -153,6 +152,8 @@
       <div class="footer-nav-group">
         <div class="footer-heading">Explore</div>
         <ul class="footer-links" aria-label="Footer site links">
+          <li><a href="/apps/">Apps &amp; games</a></li>
+          <li><a href="/#services">Development services</a></li>
           <li><a href="/projects.html">Projects</a></li>
           <li><a href="/#how-we-work">Process</a></li>
           <li><a href="/#insights">Testimonials</a></li>
