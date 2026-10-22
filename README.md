@@ -125,8 +125,12 @@ plans are described as iOS options; do not infer Android availability or ship
 features from unreleased local app sources. Prices and plan availability remain
 in the stores rather than hard-coded here.
 
-Don’t Go To Bed’s hero uses the approved game portraits from
-`DontGoToBed/composeApp/src/commonMain/composeResources/drawable/`: Daddy’s
-14 October 2026 portrait, Leo’s 13 October refresh and Ian’s 4 October refresh.
-The `*-approved.webp` website copies are lossless WebP conversions of the
-original `papa_front.png`, `leo_front.png` and `ian_front.png`, preserving alpha.
+Don’t Go To Bed’s hero artwork comes from
+`DontGoToBed/composeApp/src/commonMain/composeResources/drawable/`.
+Daddy uses the front frame of `papa_original_marketing_v1.png`: x=127, y=31,
+width=302, height=498, matching `RefreshedCharacterArt.kt`. The website’s
+`papa-marketing-front.webp` is a lossless extraction of that frame. Do not use
+the standalone `papa_front.png` portrait: James corrected that choice on
+22 October 2026. The obsolete website `papa-approved.webp` has been removed.
+Leo’s 13 October refresh and Ian’s 4 October refresh remain lossless WebP
+copies of their original `leo_front.png` and `ian_front.png`, preserving alpha.
