@@ -124,3 +124,9 @@ Play listing, and the existing product support pages. Watchful’s monthly credi
 plans are described as iOS options; do not infer Android availability or ship
 features from unreleased local app sources. Prices and plan availability remain
 in the stores rather than hard-coded here.
+
+Don’t Go To Bed’s hero uses the approved game portraits from
+`DontGoToBed/composeApp/src/commonMain/composeResources/drawable/`: Daddy’s
+14 October 2026 portrait, Leo’s 13 October refresh and Ian’s 4 October refresh.
+The `*-approved.webp` website copies are lossless WebP conversions of the
+original `papa_front.png`, `leo_front.png` and `ian_front.png`, preserving alpha.
