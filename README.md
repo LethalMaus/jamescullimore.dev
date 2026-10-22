@@ -90,3 +90,22 @@ Watchful’s `watchlist-preview.webp` comes from the iPhone 6.9-inch
 `01-less-checking.png` in its September 2026 Apple Store Kit. These are compressed
 720px-wide copies, with no changes to the depicted UI. Captions identify the
 example content and platform; each image links to a larger view.
+
+## Indexing and old addresses
+
+`data/redirects.json` maps known former URLs to their current destinations.
+The build writes immediate HTML redirects because this site uses static GitHub
+Pages hosting. Redirect canonicals omit fragments, while contact links retain
+`#contact` for visitors. Redirects are deliberately excluded from the sitemap;
+Search Console may correctly report them as “Page with redirect”.
+
+The old Wear OS handover article address redirects to the version used by the
+blog and sitemap. Former `/pages/` navigation routes and the old Gradle article
+link are also retained. Removed drafts without a corresponding replacement
+remain 404s. `404.html` helps visitors navigate without redirecting unrelated
+missing URLs to the homepage; GitHub Pages retains their 404 status.
+
+The static checker verifies redirect targets, matching canonicals, valid anchors,
+and that redirect/noindex pages do not enter the sitemap. To investigate Google’s
+selected canonical for a specific URL, use its Search Console URL Inspection
+report: HTTP checks alone cannot reveal Google’s indexing decision.

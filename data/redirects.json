@@ -1,0 +1,16 @@
+[
+  {"path":"starjar.html","destination":"/starjar/","title":"Continue to StarJar"},
+  {"path":"talks.html","destination":"/courses.html","title":"Courses, talks & workshops"},
+  {"path":"articles.html","destination":"/blog.html","title":"Continue to the blog"},
+  {"path":"contact.html","destination":"/#contact","title":"Contact James Cullimore"},
+  {"path":"team.html","destination":"/","title":"James Cullimore Software Engineering"},
+  {"path":"pages/blog.html","destination":"/blog.html","title":"Continue to the blog"},
+  {"path":"pages/contact.html","destination":"/#contact","title":"Contact James Cullimore"},
+  {"path":"pages/projects.html","destination":"/projects.html","title":"Explore the projects"},
+  {"path":"pages/talks.html","destination":"/courses.html","title":"Courses, talks & workshops"},
+  {"path":"pages/team.html","destination":"/","title":"James Cullimore Software Engineering"},
+  {"path":"pages/impressum.html","destination":"/impressum.html","title":"Impressum"},
+  {"path":"pages/datenschutz.html","destination":"/datenschutz.html","title":"Datenschutz"},
+  {"path":"articles/wear-os-seamless-handover.html","destination":"/articles/how-i-built-seamless-watch-phone-handover-in-wear-os.html","title":"How I Built Seamless Watch and Phone Handover in Wear OS"},
+  {"path":"how-i-cut-my-gradle-build-time-by-50-8f3c57534ce6/index.html","destination":"/articles/how-i-cut-my-gradle-build-time-by-50.html","title":"How I Cut My Gradle Build Time by 50%"}
+]

@@ -7,10 +7,12 @@ import json, re, xml.etree.ElementTree as ET
 ROOT=Path(__file__).resolve().parents[1]
 class Document(HTMLParser):
     def __init__(self,text):
-        super().__init__();self.links=[];self.ids=[];self.h1=0;self.canonical=[];self.description=[];self.feed(text)
+        super().__init__();self.links=[];self.ids=[];self.h1=0;self.canonical=[];self.description=[];self.refresh=[];self.noindex=False;self.feed(text)
     def handle_starttag(self,tag,attrs):
         d=dict(attrs)
         if 'id' in d:self.ids.append(d['id'])
+        if tag=='meta' and d.get('http-equiv','').lower()=='refresh':self.refresh.append(d.get('content',''))
+        if tag=='meta' and d.get('name','').lower() in ['robots','googlebot'] and 'noindex' in d.get('content','').lower():self.noindex=True
         if tag=='h1':self.h1+=1
         if tag=='a' and d.get('href'):self.links.append(d['href'])
         if tag in ['img','script','iframe'] and d.get('src'):self.links.append(d['src'])
@@ -44,9 +46,22 @@ for url in urls:
     path=urlsplit(url).path
     p,_=resolve(path,ROOT/'index.html');d=docs.get(p)
     if not d:errors.append(f'Sitemap: missing {url}');continue
+    if d.refresh or d.noindex:errors.append(f'{path}: redirect/noindex page must not be in sitemap')
     if d.h1!=1:errors.append(f'{path}: expected one h1, got {d.h1}')
     if d.canonical!=[url]:errors.append(f'{path}: canonical mismatch {d.canonical}')
     if len(d.description)!=1 or not d.description[0]:errors.append(f'{path}: missing/duplicate description')
+# Legacy aliases must lead directly to a substantive, canonical page.
+for item in json.loads((ROOT/'data/redirects.json').read_text()):
+    source=ROOT/item['path']; d=docs.get(source)
+    destination,anchor=resolve(item['destination'],source)
+    target=docs.get(destination)
+    canonical='https://jamescullimore.dev'+item['destination'].split('#',1)[0]
+    if not d or d.refresh!=['0;url='+item['destination']] or d.canonical!=[canonical]:
+        errors.append(f'{item["path"]}: invalid redirect or canonical')
+    if not target or target.refresh or target.noindex or target.canonical!=[canonical]:
+        errors.append(f'{item["path"]}: redirect destination is not a canonical indexable page')
+    if anchor and target and anchor not in target.ids:errors.append(f'{item["path"]}: missing redirect anchor')
+    if 'https://jamescullimore.dev/'+item['path'] in urls:errors.append(f'{item["path"]}: redirect present in sitemap')
 print(f'Checked {len(docs)} HTML files and {len(urls)} sitemap URLs.')
 if errors:
     print('\n'.join(errors));raise SystemExit(1)

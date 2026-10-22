@@ -140,12 +140,15 @@ for n in range(1,page_count+1):
     write(path.lstrip('/'),page('Android Engineering Blog'+(f' — Page {n}' if n>1 else ''),'Practical articles on Android, Kotlin, testing, security, architecture and software delivery.'+(f' Browse page {n} of the archive.' if n>1 else ''),path,content,'Blog',schema,scripts='<script defer src="/assets/blog.js"></script>'))
 
 def redirect(path,dest,title):
-    write(path,f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)}</title><link rel="canonical" href="{BASE+dest}"><meta http-equiv="refresh" content="0;url={dest}"></head><body><p><a href="{dest}">{esc(title)}</a></p></body></html>')
-redirect('starjar.html','/starjar/','Continue to StarJar')
-redirect('talks.html','/courses.html','Courses, talks & workshops')
-redirect('articles.html','/blog.html','Continue to the blog')
-redirect('contact.html','/#contact','Contact James Cullimore')
-redirect('team.html','/','James Cullimore Software Engineering')
+    canonical = BASE + dest.split('#', 1)[0]
+    write(path,f'<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>{esc(title)}</title><link rel="canonical" href="{canonical}"><meta http-equiv="refresh" content="0;url={dest}"></head><body><p><a href="{dest}">{esc(title)}</a></p></body></html>')
+for item in load('redirects.json'):
+    redirect(item['path'], item['destination'], item['title'])
+
+# GitHub Pages retains HTTP 404 while rendering this helpful fallback.
+missing = page('Page not found', 'Find services, apps and articles by James Cullimore.', '/404.html', '<section class="page-intro"><div class="section-inner"><span class="eyebrow">404 · Page not found</span><h1>That page is no longer here.</h1><p class="lead">The address may be out of date or mistyped. These links will help you find your way.</p><nav class="project-tabs" aria-label="Find a page"><a href="/">Home</a><a href="/#services">Services</a><a href="/projects.html">Projects &amp; apps</a><a href="/blog.html">Articles</a><a href="/#contact">Contact James</a></nav></div></section>')
+missing = missing.replace(f'<link rel="canonical" href="{BASE}/404.html">', '<meta name="robots" content="noindex, follow">')
+write('404.html', missing)
 
 # Keep authored articles and legal text, while synchronizing the shared navigation.
 for f in [*(ROOT/'articles').glob('*.html'),ROOT/'impressum.html',ROOT/'datenschutz.html']:
