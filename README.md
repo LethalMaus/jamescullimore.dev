@@ -109,3 +109,18 @@ The static checker verifies redirect targets, matching canonicals, valid anchors
 and that redirect/noindex pages do not enter the sitemap. To investigate Google’s
 selected canonical for a specific URL, use its Search Console URL Inspection
 report: HTTP checks alone cannot reveal Google’s indexing decision.
+
+### App search content
+
+StarJar, Watchful and Don’t Go To Bed have static, visible product FAQs and
+`MobileApplication` JSON-LD in their landing pages. Keep schema descriptions,
+platforms, download links and free-download offers consistent with visible copy.
+No ratings or reviews are asserted: this markup alone does not meet Google’s
+software-app rich-result requirements. FAQs are for visitors, without FAQ rich-result markup.
+
+Pricing and released features were checked against the public App Store listings
+on 22 October 2026 (IDs 6758762270, 6812295504 and 6812278045), StarJar’s Google
+Play listing, and the existing product support pages. Watchful’s monthly credit
+plans are described as iOS options; do not infer Android availability or ship
+features from unreleased local app sources. Prices and plan availability remain
+in the stores rather than hard-coded here.

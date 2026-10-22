@@ -39,6 +39,16 @@ const projectCount = JSON.parse(fs.readFileSync(require('node:path').join(__dirn
     assert.equal(await evalJS('dataLayer.filter(x=>x[1]==="app_store_click")[0][2].app_id'),path.split('/')[1]);
     await evalJS('setAnalyticsConsent(false)'); await click(badge); assert.equal(await count(),1,'Revocation stops tracking');
   }
+  for (const path of ['/starjar/', '/watchful/', '/dontgotobed/']) {
+    await resize(390); await visit(path);
+    assert.equal(await evalJS(`JSON.parse(document.querySelector('script[type="application/ld+json"]').textContent)['@type']`),'MobileApplication');
+    await evalJS('document.querySelector("summary").focus()');
+    await call('Input.dispatchKeyEvent',{type:'keyDown',key:' ',code:'Space',windowsVirtualKeyCode:32});
+    await call('Input.dispatchKeyEvent',{type:'keyUp',key:' ',code:'Space',windowsVirtualKeyCode:32});
+    assert.equal(await evalJS('document.querySelector("details").open'),true,'App FAQ keyboard access');
+    await evalJS('document.querySelectorAll("details").forEach(d=>d.open=true); document.documentElement.style.fontSize="200%"');
+    assert.equal(await evalJS('document.documentElement.scrollWidth <= innerWidth'),true,'Expanded app FAQs at 200% text');
+  }
   await visit('/');
   assert.equal(await evalJS(`(()=>{const a=document.querySelector('.app-download-link');a.scrollIntoView({block:'center',behavior:'instant'});const r=a.getBoundingClientRect();return document.elementFromPoint(r.x+r.width/2,r.y+r.height/2).closest('a').pathname===a.pathname;})()`),true,'App link is not covered by case-study link');
   for (const path of ['/services/android-kotlin-multiplatform/', '/services/android-app-rescue/', '/services/android-testing-build-optimisation/']) {

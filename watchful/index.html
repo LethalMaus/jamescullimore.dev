@@ -13,6 +13,39 @@
 <meta property="og:type" content="website"><meta property="og:title" content="Watchful – AI Web Monitoring App for Android &amp; iOS"><meta property="og:url" content="https://jamescullimore.dev/watchful/"><meta property="og:image" content="https://jamescullimore.dev/assets/branding/social-preview.png"><meta name="twitter:card" content="summary_large_image"><meta property="og:description" content="Monitor the web for prices, releases and updates with Watchful for Android and iOS. Use your own OpenAI or Gemini API key. Two active watchers free.">
 <script defer src="/assets/analytics-consent.js?v=373d82de23f9"></script>
 <script defer src="/assets/conversion-analytics.js?v=db70951e99b0"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "MobileApplication",
+  "@id": "https://jamescullimore.dev/watchful/#app",
+  "name": "Watchful",
+  "url": "https://jamescullimore.dev/watchful/",
+  "description": "An AI web monitoring app for public information, prices and releases, with personal watchers and source links.",
+  "applicationCategory": "UtilitiesApplication",
+  "operatingSystem": [
+    "Android",
+    "iOS"
+  ],
+  "image": "https://jamescullimore.dev/watchful/assets/app-icon.svg",
+  "screenshot": [
+    "https://jamescullimore.dev/watchful/assets/watchlist-preview.webp"
+  ],
+  "installUrl": [
+    "https://play.google.com/store/apps/details?id=dev.jamescullimore.watchful",
+    "https://apps.apple.com/app/id6812295504"
+  ],
+  "author": {
+    "@type": "Person",
+    "name": "James Cullimore",
+    "url": "https://jamescullimore.dev/"
+  },
+  "offers": {
+    "@type": "Offer",
+    "price": 0,
+    "description": "Free download; optional in-app purchases."
+  }
+}
+</script>
 </head>
 <body>
 <a class="skip" href="#main">Skip to content</a>
@@ -30,8 +63,8 @@
 <div>
 <span class="eyebrow">Your interests. A little less checking.</span>
 <h1>Keep an eye on it.<br>Get on with your day.</h1>
-<p class="lead">Tell Watchful what matters. It checks the web and lets you know when a result meets your conditions. OpenAI remembers previous findings; Gemini provides independent checks with results available for the current app session.</p>
-<p class="note">Available on Android, iPhone and iPad. Requires your own OpenAI or Gemini API key; AI usage is billed separately by your provider.</p>
+<p class="lead">Watchful is an AI web monitoring app for prices, releases and other public updates. Tell it what matters. It checks the web and lets you know when a result meets your conditions.</p>
+<p class="note">Available on Android, iPhone and iPad. Use your own OpenAI or Gemini API key, with usage billed by your provider. The iOS app also offers optional monthly plans with AI credits.</p>
 <div class="store-downloads">
 <a href="https://apps.apple.com/app/id6812295504"><img src="/assets/app-store-download.svg" alt="Download on the App Store" width="144" height="48"></a>
 <a href="https://play.google.com/store/apps/details?id=dev.jamescullimore.watchful"><img src="/assets/google_play_badge.png" alt="Get it on Google Play" width="162" height="48"></a>
@@ -58,7 +91,7 @@
 <article>
 <span class="number">1</span>
 <h3>Choose your AI</h3>
-<p>Connect Gemini or OpenAI with your own API key. Review what you share before enabling checks.</p>
+<p>Connect Gemini or OpenAI with your own API key, or choose an available AI credit plan in the iOS app. Review what you share before enabling checks.</p>
 </article>
 <article>
 <span class="number">2</span>
@@ -85,17 +118,26 @@
 <span class="eyebrow">Pro</span>
 <p class="price">One-time purchase</p>
 <p>The price shown in your App Store or Google Play store applies.</p>
-<p>Remove the app’s active-watcher limit. No recurring app subscription.</p>
+<p>Remove the active-watcher limit when using your own API key. Lifetime Pro is a one-time purchase.</p>
 </article>
 </div>
-<p class="note">AI usage is billed separately by your selected provider. Pro does not include API credit. Purchases restore within the same store ecosystem.</p>
+<p class="note">With your own API key, AI usage is billed separately by your provider. Lifetime Pro does not include API credit. The iOS app also offers monthly subscriptions that include Pro and AI credits; see the app for available plans and prices. Purchases restore within the same store ecosystem.</p>
 </section>
 <section>
 <h2>Your watchlist belongs on your phone.</h2>
-<p class="lead">Watchers, OpenAI history, and preferences are stored locally. Gemini results stay in memory only for the current app session. API keys use secure device storage. Each check shares the necessary content with your selected AI provider.</p>
+<p class="lead">Watchers, OpenAI history, and preferences are stored locally. Gemini results stay in memory only for the current app session. API keys use secure device storage. Each check shares the necessary content with the AI providers used for that check. iOS credit checks use OpenAI web research followed by your selected OpenAI or Gemini model.</p>
 <a href="policy_ios/">Privacy for iOS</a> · <a href="policy_android/">Privacy for Android</a>
 </section>
-<section aria-labelledby="get-watchful"><h2 id="get-watchful">Give your first watcher a job.</h2><p>Start with two active watchers for free. Bring your own AI API key.</p><div class="store-downloads">
+<section aria-labelledby="watchful-questions">
+<h2 id="watchful-questions">Before you set your first watcher</h2>
+<details><summary>What can I monitor with Watchful?</summary><p>Public information such as product prices, release announcements and local updates. Describe what you want to find and the conditions that should trigger an alert. Results include source links so you can check the information yourself.</p></details>
+<details><summary>Do I need my own AI API key?</summary><p>You can use an OpenAI or Gemini API key on Android and iOS. Your provider bills that usage separately. On iOS, optional monthly plans also include AI credits. Check the available options in the app before subscribing.</p></details>
+<details><summary>Does lifetime Pro include AI usage?</summary><p>No. Lifetime Pro removes the active-watcher limit for your own API key. Provider usage is separate. The iOS monthly credit plans include Pro and an allowance of AI credits; a credit is a usage allowance, not a guaranteed number of checks.</p></details>
+<details><summary>Will checks run at an exact time?</summary><p>Background timing depends on your phone’s operating system, power settings and connectivity. For time-sensitive information, run a manual check and verify the source.</p></details>
+<details><summary>Does Watchful remember previous results?</summary><p>OpenAI history is stored on your device. Gemini results are available for the current app session and do not compare previous findings.</p></details>
+<p>Need help setting up a watcher? Visit <a href="support/">Watchful support</a>.</p>
+</section>
+<section aria-labelledby="get-watchful"><h2 id="get-watchful">Give your first watcher a job.</h2><p>Start with two active watchers using your own AI API key. Provider usage is billed separately.</p><div class="store-downloads">
 <a href="https://apps.apple.com/app/id6812295504"><img src="/assets/app-store-download.svg" alt="Download on the App Store" width="144" height="48"></a>
 <a href="https://play.google.com/store/apps/details?id=dev.jamescullimore.watchful"><img src="/assets/google_play_badge.png" alt="Get it on Google Play" width="162" height="48"></a>
 </div></section>

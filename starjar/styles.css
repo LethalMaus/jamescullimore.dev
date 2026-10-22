@@ -490,3 +490,8 @@ a {
   .showcase-card { padding: 26px 18px 20px; }
   .hero-media { margin-bottom: 30px; }
 }
+
+.app-faq { max-width: 800px; margin-inline: auto; }
+.app-faq details { border-bottom: 1px solid #ffffff26; padding: 12px 0; }
+.app-faq summary { cursor: pointer; font-weight: 800; min-height: 44px; padding: 12px 0; }
+.app-faq p { color: #c1c8d5; line-height: 1.7; }
