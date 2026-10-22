@@ -1,0 +1,10 @@
+[
+  {
+    "slug": "modernise-or-rewrite-android-app",
+    "title": "Modernise or Rewrite Your Android App?",
+    "description": "Compare Android app modernisation, targeted replacement and a full rewrite. A practical guide with project examples and a checklist for an initial code review.",
+    "date": "2026-10-22",
+    "service": "android-app-rescue",
+    "projects": ["jc-bachmann", "zuriga"]
+  }
+]

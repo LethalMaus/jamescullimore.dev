@@ -19,6 +19,7 @@ services_de = load('services-de.json')
 project_summaries_de = load('project-summaries-de.json')
 article_services = load('article-services.json')
 videos = load('videos.json')
+guides = load('guides.json')
 
 def header(active='', lang='en'):
     if lang == 'de':
@@ -130,6 +131,13 @@ for video in videos:
 video_intro = '<section class="page-intro"><div class="section-inner"><span class="eyebrow">See the apps in action</span><h1>App and game videos</h1><p class="lead">Explore the official trailers for StarJar, Watchful, Don’t Go To Bed and Elchem, then visit each app’s page for current features and availability.</p></div></section>'
 write('videos/index.html', page('App & Game Videos','Watch StarJar, Watchful, Don’t Go To Bed and Elchem videos. Official trailers with product information and links to explore each app.','/videos/',video_intro+'<section class="section"><div class="section-inner video-library-grid">'+video_cards+'</div></section>'))
 
+# Authored decision guides connect practical buying questions to relevant work.
+for guide in guides:
+    path = '/guides/' + guide['slug'] + '/'
+    content = (ROOT / 'templates/guides' / (guide['slug'] + '.html')).read_text()
+    schema = {'@context':'https://schema.org','@type':'Article','headline':guide['title'],'description':guide['description'],'datePublished':guide['date'],'author':{'@type':'Person','name':'James Cullimore','url':BASE+'/'},'mainEntityOfPage':BASE+path,'inLanguage':'en'}
+    write(path.lstrip('/')+'index.html', page(guide['title'],guide['description'],path,content,schema=schema,scripts='<link rel="stylesheet" href="/assets/guides.css">'))
+
 # Focused service pages use the same shell and verified project catalogue.
 from urllib.parse import quote
 for service in services:
@@ -141,10 +149,11 @@ for service in services:
     work = ''.join(f'<article class="service"><span class="service-number" aria-hidden="true">0{i+1}</span><h3>{esc(title)}</h3><p>{esc(body)}</p></article>' for i, (title, body) in enumerate(service['work']))
     proof = ''.join(project_card(next(p for p in projects if p['slug'] == slug)) for slug in service['proof'])
     questions = ''.join(f'<details><summary>{esc(question)}</summary><p>{esc(answer)}</p></details>' for question, answer in service['questions'])
+    guide_link = ''.join(f'<p class="service-reading"><a class="text-link" href="/guides/{guide["slug"]}/">Read the guide: {esc(guide["title"])}</a></p>' for guide in guides if guide['service'] == service['slug'])
     related = ''.join(f'<a href="/services/{other["slug"]}/">{esc(other["title"])}</a>' for other in services if other != service)
     content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">Services</a></nav><nav class="language-switch" aria-label="Page language"><span aria-current="page" lang="en">English</span><a href="{de_path}" hreflang="de" lang="de">Deutsch</a></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Discuss your project</a><a class="text-link" href="#relevant-work">See relevant work</a></div><p class="service-byline">James Cullimore <span aria-hidden="true">·</span> Based in Germany <span aria-hidden="true">·</span> English &amp; German</p></div></section>
 <section class="section"><div class="section-inner"><h2>Where I can help</h2><p class="lead">{esc(service['fit'])}</p><div class="service-deliverables">{work}</div></div></section>
-<section class="section soft"><div class="section-inner"><h2>A manageable first step</h2><p class="service-reading">{esc(service['start'])}</p></div></section>
+<section class="section soft"><div class="section-inner"><h2>A manageable first step</h2><p class="service-reading">{esc(service['start'])}</p>{guide_link}</div></section>
 <section class="section" id="relevant-work"><div class="section-inner"><span class="eyebrow">From the project catalogue</span><h2>Relevant work</h2><div class="project-grid">{proof}</div></div></section>
 <section class="section soft"><div class="section-inner service-faq"><h2>Before we start</h2>{questions}</div></section>
 <section class="section service-enquiry"><div class="section-inner"><h2>Tell me where you need help.</h2><p class="service-reading">{esc(service['prompt'])}</p><div class="service-actions"><a class="button" href="{email}">Email James about your project</a><a class="text-link" href="/#contact">Other ways to get in touch</a></div><nav class="related-services" aria-label="Related services">{related}<a href="/android-security-training/">Android security workshops</a></nav></div></section>'''
@@ -199,6 +208,9 @@ for p in projects:
         relevant = [service for service in services if p['slug'] in service['proof']]
         if relevant:
             next_step = '<section><h2>Need similar help?</h2><p>Explore the relevant services and how we can start.</p><ul>' + ''.join(f'<li><a href="/services/{service["slug"]}/">{esc(service["title"])}</a></li>' for service in relevant) + '</ul><a class="button" href="/#contact">Discuss your project</a></section>'
+    decision_links = ''.join(f'<p><a href="/guides/{guide["slug"]}/">{esc(guide["title"])}</a></p>' for guide in guides if p['slug'] in guide['projects'])
+    if decision_links:
+        next_step += '<section><h2>Planning a similar change?</h2>'+decision_links+'</section>'
     outcome = f'<section><h2>The result</h2><p>{esc(p["outcome"])}</p></section>' if p.get('outcome') else ''
     content=f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/projects.html">Projects</a> / {esc(p['name'])}</nav><span class="eyebrow">{esc(p.get('engagement', p['kind']))}</span><h1>{esc(p['name'])}</h1><p class="lead">{esc(p['summary'])}</p><div class="detail-tags">{tags}</div><a class="text-link" href="#project-links">Project links <span aria-hidden="true">↓</span></a></div></section>
 <section class="section"><div class="section-inner detail-layout"><div class="detail-content"><section><h2>{"The brief" if p.get("outcome") else "The project"}</h2><p>{esc(p['context'])}</p></section><section><h2>{'Inside the product' if p['kind']=='Own projects' else 'What it demonstrates' if p['kind']=='Public code' else 'What we delivered' if p.get('outcome') else 'The contribution'}</h2><ul>{''.join('<li>'+esc(w)+'</li>' for w in p['work'])}</ul></section>{outcome}{quote}{next_step}</div><aside class="detail-aside" id="project-links">{image}<h2>Explore the project</h2>{links}<hr><a href="/projects.html">← All projects</a></aside></div></section>'''
@@ -217,6 +229,9 @@ for n in range(1,page_count+1):
     pagination='<nav class="pagination" aria-label="Blog pages">'+''.join(f'<a href="{blog_path(i)}"'+(' aria-current="page"' if i==n else '')+f' aria-label="Page {i}">{i}</a>' for i in range(1,page_count+1))+'</nav>'
     if n<page_count: pagination=pagination.replace('</nav>',f'<a href="{blog_path(n+1)}" rel="next">Next →</a></nav>')
     content=f'''<section class="page-intro"><div class="section-inner"><span class="eyebrow">The engineering notebook</span><h1>Notes from the work.</h1><p class="lead">Android development, architecture, performance, security and the experience of building software.</p><form class="blog-tools" role="search" hidden><label>Search articles<input id="blog-search" type="search" placeholder="Try Kotlin, testing or security…" autocomplete="off"></label><label>Topic<select id="blog-topic"><option value="">All topics</option><option>Security</option><option>Testing</option><option>Performance</option><option>Architecture</option><option>Compose</option><option>IoT &amp; Wear OS</option><option>Developer life</option></select></label></form><p class="blog-status" id="blog-status" role="status">{len(articles)} articles · Page {n} of {page_count}</p></div></section><section class="section"><div class="section-inner"><div class="blog-grid" id="blog-grid">{''.join(blog_card(a) for a in articles[(n-1)*12:n*12])}</div>{pagination}<button class="button secondary" id="more-results" type="button" hidden>Show more results</button></div></section>'''
+    if n == 1:
+        guide_links = ''.join(f'<li><a href="/guides/{guide["slug"]}/">{esc(guide["title"])}</a><p>{esc(guide["description"])}</p></li>' for guide in guides)
+        content += '<section class="section soft"><div class="section-inner"><h2>Planning work on an existing app?</h2><ul>'+guide_links+'</ul></div></section>'
     schema={'@context':'https://schema.org','@type':'CollectionPage','name':'Engineering articles'+(f' — page {n}' if n>1 else ''),'url':BASE+path,'mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+a['url'],'name':a['title']} for i,a in enumerate(articles[(n-1)*12:n*12])]}}
     write(path.lstrip('/'),page('Android Engineering Blog'+(f' — Page {n}' if n>1 else ''),'Practical articles on Android, Kotlin, testing, security, architecture and software delivery.'+(f' Browse page {n} of the archive.' if n>1 else ''),path,content,'Blog',schema,scripts='<script defer src="/assets/blog.js"></script>'))
 
@@ -267,6 +282,7 @@ dates={u.find('s:loc',ns).text:u.find('s:lastmod',ns).text for u in old.findall(
 urls=[BASE+'/',BASE+'/apps/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
 # Retain existing product URLs, including policy pages without lastmod values.
 urls += [u.find('s:loc', ns).text for u in old.findall('s:url', ns) if any(folder in u.find('s:loc', ns).text for folder in ['/watchful/', '/dontgotobed/', '/elchem/', '/scrumscore/'])]
+urls += [BASE + '/guides/' + guide['slug'] + '/' for guide in guides]
 urls += [BASE + '/videos/'] + [BASE + '/videos/' + video['slug'] + '/' for video in videos]
 urls += [BASE + '/de/leistungen/'] + [BASE + '/de/leistungen/' + service['de_slug'] + '/' for service in services_de]
 urls += [BASE + '/services/' + service['slug'] + '/' for service in services]
@@ -282,7 +298,7 @@ print(f'Built homepage, {len(projects)} project details, courses, {page_count} b
 
 # Content-based asset URLs keep previews and deployed pages current after edits.
 from urllib.parse import urlsplit
-versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/article-service.css', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
+versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/article-service.css', 'assets/guides.css', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
 asset_versions = {(ROOT/name).resolve(): hashlib.sha256((ROOT/name).read_bytes()).hexdigest()[:12] for name in versioned}
 for f in ROOT.rglob('*.html'):
     if 'templates' in f.relative_to(ROOT).parts or any(part.startswith('.') for part in f.relative_to(ROOT).parts): continue

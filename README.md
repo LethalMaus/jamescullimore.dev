@@ -174,3 +174,15 @@ chapters, transcripts and step-by-step instructions need a content review.
 
 Run `python3 scripts/check_site.py` to validate language alternates, video
 embeds and metadata alongside the existing site checks.
+
+### Client decision guides
+
+`data/guides.json` supplies metadata and service/project links for authored
+content in `templates/guides/`. The builder generates each `/guides/<slug>/`
+page with a canonical URL, Article metadata and sitemap entry. Relevant
+services, case studies and the first blog archive page link back to the guide.
+
+The modernisation guide uses the J&C Bachmann and Zuriga facts recorded in
+`data/projects.json` and links to Android's official Compose migration guidance.
+Keep project examples factual; do not imply measured savings or outcomes that
+are not documented. Publication dates belong to the authored content.
