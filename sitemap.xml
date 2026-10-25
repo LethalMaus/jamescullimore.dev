@@ -5,6 +5,9 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
+    <loc>https://jamescullimore.dev/apps/</loc>
+  </url>
+  <url>
     <loc>https://jamescullimore.dev/projects.html</loc>
     <lastmod>2026-10-12</lastmod>
   </url>
@@ -137,6 +140,12 @@
   <url>
     <loc>https://jamescullimore.dev/projects/example-wear-app.html</loc>
     <lastmod>2026-09-28</lastmod>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/i-patched-an-android-apk-to-show-how-fragile-client-side-checks-can-be.html</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/articles/how-one-missing-return-cut-my-android-test-runtime-by-72.html</loc>
   </url>
   <url>
     <loc>https://jamescullimore.dev/articles/what-adb-can-teach-you-about-broken-android-ipc-protections.html</loc>
@@ -455,43 +464,14 @@
     <lastmod>2026-10-01</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/services/android-kotlin-multiplatform/</loc>
+    <loc>https://jamescullimore.dev/watchful/getting-started/</loc>
+    <lastmod>2026-10-22</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/services/android-app-rescue/</loc>
+    <loc>https://jamescullimore.dev/elchem/policy_android/</loc>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/services/android-testing-build-optimisation/</loc>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/apps/</loc>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/de/leistungen/</loc>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/videos/</loc>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/de/leistungen/android-kotlin-multiplatform/</loc>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/de/leistungen/android-app-modernisierung/</loc>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/de/leistungen/android-testautomatisierung-gradle/</loc>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/videos/dont-go-to-bed-trailer/</loc>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/videos/watchful-trailer/</loc>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/videos/starjar-trailer/</loc>
-  </url>
-  <url>
-    <loc>https://jamescullimore.dev/videos/elchem-trailer/</loc>
+    <loc>https://jamescullimore.dev/elchem/policy_ios/</loc>
   </url>
   <url>
     <loc>https://jamescullimore.dev/guides/modernise-or-rewrite-android-app/</loc>
@@ -506,7 +486,39 @@
     <lastmod>2026-10-22</lastmod>
   </url>
   <url>
-    <loc>https://jamescullimore.dev/watchful/getting-started/</loc>
-    <lastmod>2026-10-22</lastmod>
+    <loc>https://jamescullimore.dev/videos/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/videos/dont-go-to-bed-trailer/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/videos/watchful-trailer/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/videos/starjar-trailer/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/videos/elchem-trailer/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/de/leistungen/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/de/leistungen/android-kotlin-multiplatform/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/de/leistungen/android-app-modernisierung/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/de/leistungen/android-testautomatisierung-gradle/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/services/android-kotlin-multiplatform/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/services/android-app-rescue/</loc>
+  </url>
+  <url>
+    <loc>https://jamescullimore.dev/services/android-testing-build-optimisation/</loc>
   </url>
 </urlset>

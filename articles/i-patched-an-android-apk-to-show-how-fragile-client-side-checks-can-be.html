@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>I Patched an Android APK to Show How Fragile Client-Side Checks Can Be</title>
+  <meta name="description" content="An Android security lab showing how APK patching exposes fragile client-side checks, bundled secrets and unsafe dynamic code loading."/>
+  <meta name="author" content="James Cullimore"/>
+  <meta name="robots" content="index, follow"/>
+  <link rel="canonical" href="https://jamescullimore.dev/articles/i-patched-an-android-apk-to-show-how-fragile-client-side-checks-can-be.html"/>
+  <meta property="og:type" content="article"/>
+  <meta property="og:title" content="I Patched an Android APK to Show How Fragile Client-Side Checks Can Be"/>
+  <meta property="og:description" content="An Android security lab showing how APK patching exposes fragile client-side checks, bundled secrets and unsafe dynamic code loading."/>
+  <meta property="og:url" content="https://jamescullimore.dev/articles/i-patched-an-android-apk-to-show-how-fragile-client-side-checks-can-be.html"/>
+  <meta property="og:image" content="https://cdn-images-1.medium.com/max/1024/1*EHyyNUobQyRp5RMa_7Wnqw.png"/>
+  <meta property="og:site_name" content="James Cullimore - Software Engineering"/>
+  <meta name="twitter:card" content="summary_large_image"/>
+  <meta name="twitter:title" content="I Patched an Android APK to Show How Fragile Client-Side Checks Can Be"/>
+  <meta name="twitter:description" content="An Android security lab showing how APK patching exposes fragile client-side checks, bundled secrets and unsafe dynamic code loading."/>
+  <meta name="twitter:image" content="https://cdn-images-1.medium.com/max/1024/1*EHyyNUobQyRp5RMa_7Wnqw.png"/>
+  <link rel="icon" type="image/png" sizes="32x32" href="../img/favicon-32x32.png"/>
+  <link rel="stylesheet" href="../styles.css?v=70f4e499d886"/>
+  <link rel="stylesheet" href="assets/style.css"/>
+  <link rel="stylesheet" href="assets/generated-article.css"/>
+  <script type="application/ld+json" data-seo-schema="article">{"@context": "https://schema.org", "@type": "BlogPosting", "headline": "I Patched an Android APK to Show How Fragile Client-Side Checks Can Be", "description": "An Android security lab showing how APK patching exposes fragile client-side checks, bundled secrets and unsafe dynamic code loading.", "image": ["https://cdn-images-1.medium.com/max/1024/1*EHyyNUobQyRp5RMa_7Wnqw.png"], "datePublished": "2026-08-03", "author": {"@type": "Person", "name": "James Cullimore"}, "publisher": {"@type": "Organization", "name": "James Cullimore Software Engineering", "url": "https://jamescullimore.dev/"}, "mainEntityOfPage": {"@type": "WebPage", "@id": "https://jamescullimore.dev/articles/i-patched-an-android-apk-to-show-how-fragile-client-side-checks-can-be.html"}, "url": "https://jamescullimore.dev/articles/i-patched-an-android-apk-to-show-how-fragile-client-side-checks-can-be.html", "inLanguage": "en"}</script>
+<script defer src="/assets/site.js?v=fc686ace8a11"></script>
+<link rel="stylesheet" href="/assets/code-highlight.css?v=52041029feb2"><script defer src="/assets/vendor/highlight/highlight.min.js"></script><script defer src="/assets/vendor/highlight/kotlin.min.js"></script><script defer src="/assets/vendor/highlight/groovy.min.js"></script><script defer src="/assets/code-highlight.js?v=42c749b525bc"></script>
+<link rel="stylesheet" href="/assets/article-service.css?v=83924de2398f">
+<script defer src="/assets/analytics-consent.js?v=39410635d34d"></script>
+<script defer src="/assets/conversion-analytics.js?v=db70951e99b0"></script>
+<link rel="stylesheet" href="/assets/article-features.css?v=58a4b59a3207">
+</head>
+<body class="article-page">
+<a class="skip-link" href="#main">Skip to content</a>
+<header class="site-header"><nav class="site-nav" aria-label="Primary">
+<a class="site-brand" href="/" aria-label="James Cullimore Software Engineering home"><img src="/assets/branding/logo-black.png" width="56" height="56" alt=""><span><strong>James Cullimore</strong><small>Software Engineering</small></span></a>
+<button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-links">Menu +</button><ul class="site-links" id="site-links"><li><a href="/#services">Services</a></li><li><a href="/#how-we-work">Process</a></li><li><a href="/projects.html">Work</a></li><li><a href="/#insights">Testimonials</a></li><li><a href="/blog.html" aria-current="page">Blog</a></li><li><a href="/#contact" class="contact-link project-cta">Discuss your project</a></li></ul>
+</nav></header>
+<main id="main" class="article"><article class="container">
+<header class="article-header"><p class="article-category">Android | Security | Reverse Engineering</p><h1 class="article-title">I Patched an Android APK to Show How Fragile Client-Side Checks Can Be</h1><div class="article-meta"><span>By <span class="article-author">James Cullimore</span></span><span>•</span><time datetime="2026-08-03">Aug 3, 2026</time><span>•</span><span>9 min read</span></div><!-- article-features:start --><div class="article-features" aria-label="Featured in newsletters and websites"><a class="feature-pill" href="https://androidweekly.net/issues/issue-739">Featured in Android Weekly · #739<span aria-hidden="true"> ↗</span></a></div><!-- article-features:end --></header>
+<figure class="article-hero"><img src="https://cdn-images-1.medium.com/max/1024/1*EHyyNUobQyRp5RMa_7Wnqw.png" alt="I Patched an Android APK to Show How Fragile Client-Side Checks Can Be" width="1024" height="576"></figure>
+<section class="article-content"><p>When people talk about reverse-engineering resistance on Android, the conversation often jumps straight to obfuscation.</p><p>Obfuscation matters. R8 matters. Naming things less helpfully can raise the cost of analysis. But in most practical reviews, that is not where the first useful finding comes from.</p><p>The first useful finding is usually much simpler: a hardcoded secret, a readable asset, a client-side check that can be patched, or a dynamic loading path that trusts a file it should never execute.</p><p>That is why I like the reverse-engineering lab in the Android Security Training project. It does not treat resilience as a checklist item. It gives you a secure build and a deliberately vulnerable one, then lets you compare the difference directly. You can open the APK. You can inspect the code. You can patch the vulnerable path. And then you can see what changes when the secure build refuses the same shortcuts.</p><p><a href="https://github.com/LethalMaus/AndroidSecurityTraining">GitHub - LethalMaus/AndroidSecurityTraining</a></p><h2>The Vulnerable Build Gives Attackers Too Much to Work With</h2><p>The first vulnerable example is intentionally blunt:</p><figure class="article-embed"><pre><code class="language-kotlin">private val SUPER_SECRET_API_KEY = &quot;sk_live_REPLACE_ME_123456&quot;
+
+override fun getHardcodedSecret(): String = SUPER_SECRET_API_KEY
+
+override fun readLeakyAsset(context: Context): String = try {
+    context.assets.open(&quot;sensitive.txt&quot;).use { it.readBytes().toString(Charsets.UTF_8) }
+} catch (t: Throwable) {
+    &quot;Asset missing: ${t.message}&quot;
+}
+</code></pre><figcaption><a href="https://gist.github.com/LethalMaus/425f02c11719ad7c2cd0800a9bc8bda8">View code on GitHub Gist</a></figcaption></figure><p>It shows two common mistakes at once: secrets compiled into the APK and sensitive material shipped in <code>assets/</code>.</p><p>Neither one requires advanced reversing. If a key appears as a string in the app, JADX can usually find it. If a file ships in <code>assets/</code>, <code>unzip</code> or <code>apktool</code> can usually extract it. That is the point of the demo. The problem is not that an attacker has a magic tool. The problem is that the build packaged information that should not have been there in the first place.</p><p>This is why I still like showing the mechanics plainly. Many developers already know they should not ship secrets in a client app. What changes the conversation is seeing how little work it takes to recover them once they do.</p><h2>Patching an APK Is Less Dramatic Than It Sounds</h2><p>The tamper-check part of the lab is useful for the same reason. The vulnerable app can be decoded, patched, rebuilt, re-signed, and installed again.</p><p>The workflow is ordinary:</p><figure class="article-embed"><pre><code class="language-plaintext">./gradlew :app:assembleVulnReDebug
+apktool d app/build/outputs/apk/vulnRe/debug/app-vuln-re-debug.apk
+# patch the relevant smali branch
+apktool b app-vuln-re-debug
+apksigner sign --ks debug.keystore app-vuln-re-debug/dist/app-vuln-re-debug.apk
+adb install -r app-vuln-re-debug/dist/app-vuln-re-debug.apk
+</code></pre><figcaption><a href="https://gist.github.com/LethalMaus/64fc6bbdca7c3ebededf8d4f9805fc71">View code on GitHub Gist</a></figcaption></figure><p>That matters because “someone could patch this” can sound abstract until you do it once. If a critical decision exists only on the client and can be changed by flipping a branch, it is fragile by design.</p><p>Client-side checks can still be useful. They can add friction, detect obvious tampering, and improve telemetry. But they should not be the only thing standing between an attacker and a sensitive server-side decision.</p><h2>The Secure Build Is Stronger Because It Uses Policy</h2><p>The secure helper takes a different shape:</p><figure class="article-embed"><pre><code class="language-kotlin">override fun verifyExpectedSignature(context: Context): Boolean {
+    val actual = runCatching { signingCertSha256B64(context) }.getOrNull() ?: return false
+    val expected = EXPECTED_CERT_DIGEST_B64 // Release signing certificate SHA-256 (Base64 NO_WRAP)
+    return expected.isNotBlank() &amp;&amp; actual == expected
+}
+
+override suspend fun tryDynamicDexLoad(context: Context, dexOrJarPath: String): String {
+    val path = if (dexOrJarPath.equals(&quot;self&quot;, ignoreCase = true)) context.packageCodePath else dexOrJarPath
+    return &quot;Dynamic code loading is blocked by policy in secure builds (requested=&#x27;$path&#x27;).&quot;
+}
+</code></pre><figcaption><a href="https://gist.github.com/LethalMaus/c460b3ec95bec7ed66ab5f82c911065a">View code on GitHub Gist</a></figcaption></figure><p>It computes the app signing certificate digest at runtime and compares it with the expected release signing digest. That is a more meaningful identity check than trusting a package name or assuming the installed app is still the one you shipped.</p><p>It also refuses dynamic code loading in secure builds.</p><p>I like that decision because it is clear. The secure flavor does not try to make untrusted runtime code loading “mostly okay.” It says the feature is not part of the secure policy.</p><p>There is still nuance here. Runtime signature verification is useful, but it does not replace server-side authorization or backend trust decisions. Obfuscation is useful, but it does not fix hardcoded secrets. The secure build is better because the controls line up with the risk instead of decorating it.</p><h2>Dynamic Code Loading Becomes a Liability Quickly</h2><p>The vulnerable dynamic loading path is the most interesting part of the lab:</p><figure class="article-embed"><pre><code class="language-kotlin">override suspend fun tryDynamicDexLoad(context: Context, dexOrJarPath: String): String {
+    return runCatching {
+        // Interpret input as a simple file name located in the app&#x27;s external files directory,
+        // except for the special keyword &#x27;self&#x27; which loads the current APK.
+        val input = dexOrJarPath.trim().trim(&#x27;&quot;&#x27;, &#x27;\&#x27;&#x27;)
+        val isSelf = input.equals(&quot;self&quot;, ignoreCase = true)
+
+        val src: File = if (isSelf) {
+            File(context.packageCodePath)
+        } else {
+            val baseRoot = context.getExternalFilesDir(null) ?: context.filesDir
+            val nameOnly = File(input).name // guard against paths; keep only the last segment
+            File(baseRoot, nameOnly)
+        }
+
+        if (!src.exists()) return@runCatching &quot;Dynamic load failed: File not found at ${src.absolutePath}&quot;
+        if (!src.isFile) return@runCatching &quot;Dynamic load failed: Not a file: ${src.absolutePath}&quot;
+
+        // If loading external dex/jar by name, copy it into internal code cache first
+        val loadFile: File = if (!isSelf) {
+            val nameOnly = src.name
+            val internalDex = File(context.codeCacheDir, nameOnly)
+            runCatching {
+                src.inputStream().use { input -&gt;
+                    internalDex.outputStream().use { output -&gt;
+                        input.copyTo(output)
+                    }
+                }
+            }.onFailure { ioErr -&gt;
+                return@runCatching &quot;Dynamic load failed: IOException while copying to internal cache: ${ioErr.message} (src=${src.absolutePath})&quot;
+            }
+            internalDex.setReadable(true, true)
+            internalDex.setWritable(false, true)
+            internalDex
+        } else src
+
+        val optDir = File(context.codeCacheDir, &quot;dexopt&quot;).apply { mkdirs() }
+        val cl = DexClassLoader(loadFile.absolutePath, optDir.absolutePath, null, context.classLoader)
+
+        // Self-load demo
+        if (isSelf) {
+            val appBuildConfig = runCatching { cl.loadClass(&quot;dev.jamescullimore.android_security_training.BuildConfig&quot;) }.getOrNull()
+            if (appBuildConfig != null) {
+                val appIdField = runCatching { appBuildConfig.getField(&quot;APPLICATION_ID&quot;) }.getOrNull()
+                val versionNameField = runCatching { appBuildConfig.getField(&quot;VERSION_NAME&quot;) }.getOrNull()
+                val appId = runCatching { appIdField?.get(null) as? String }.getOrNull()
+                val versionName = runCatching { versionNameField?.get(null) as? String }.getOrNull()
+                return@runCatching &quot;Loaded self APK via DexClassLoader: BuildConfig{APPLICATION_ID=$appId, VERSION_NAME=$versionName} (path=${src.absolutePath})&quot;
+            }
+        }
+
+        // Preferred demo: dev.training.dynamic.Hello.greet()
+        val tryPreferred = runCatching {
+            val k = cl.loadClass(&quot;dev.training.dynamic.Hello&quot;)
+            val m = k.getDeclaredMethod(&quot;greet&quot;)
+            m.invoke(null) as? String
+        }.getOrNull()
+        if (tryPreferred != null) return@runCatching &quot;Loaded dev.training.dynamic.Hello.greet(): ${tryPreferred} (path=${src.absolutePath})&quot;
+
+        // Keep failure simple now
+        &quot;Dynamic load failed: ClassNotFound for dev.training.dynamic.Hello.greet() (path=${src.absolutePath})&quot;
+    }.getOrElse { err -&gt; &quot;Dynamic load failed: ${err.javaClass.simpleName}: ${err.message}&quot; }
+}
+</code></pre><figcaption><a href="https://gist.github.com/LethalMaus/8498dd8a165f6615b8a803a64c7fed20">View code on GitHub Gist</a></figcaption></figure><p>The helper accepts a file name, looks in the app-specific external files directory, copies the DEX or JAR into the internal code cache, and loads it with <code>DexClassLoader</code>. It also supports a <code>self</code> mode to load the app APK itself for demonstration.</p><p>That is a good teaching example because the trust boundary is visible. A file that originates outside the app’s trusted code path is copied into a place where it can be executed with the app’s privileges. Even though the demo trims path input down to a file name, the larger policy problem remains: the vulnerable build accepts runtime code from a location the secure build should not trust.</p><p>The hands-on version is straightforward. Build a minimal <code>dev.training.dynamic.Hello</code> class, convert it to DEX, push it into the app-specific external directory, and enter <code>dynamic.dex</code> in the vulnerable UI. If the class resolves, the app executes code that was not part of the original build.</p><p>That is exactly why “we only use <code>DexClassLoader</code> for one small internal feature” should make you slow down. If runtime code loading is genuinely required, it needs strong provenance checks, strict allowlisting, and a threat model that survives hostile input. Most apps are better off not doing it.</p><h2>What I Would Check in a Real Review</h2><p>The lab examples are small, but the review questions transfer directly to production apps.</p><p>I would start with the APK itself, not only the source tree. Search the decompiled output for URLs, API keys, feature flags, tokens, and words like <code>secret</code>, <code>private</code>, <code>debug</code>, <code>admin</code>, and <code>internal</code>. Then inspect <code>assets/</code>, <code>res/raw/</code>, and bundled configuration files. If sensitive material is there, the app has already lost control of it.</p><p>After that, I would look for client-side decisions that are too valuable to trust locally. Premium access, account state, fraud checks, feature entitlements, and backend authorization should not depend on a branch inside the APK. The client can collect signals and improve the experience, but the server should make the decision that matters.</p><p>Finally, I would search for runtime loading APIs and plugin-like behavior. <code>DexClassLoader</code>, <code>PathClassLoader</code>, native library loading, script engines, and downloaded configuration that changes behavior all deserve a closer look. The question is not only whether the code compiles. The question is who controls the bytes that eventually run.</p><h2>A Better Secure Pattern</h2><p>The safer pattern is usually less exciting than the attack.</p><p>Do not put long-lived secrets in the app. Treat obfuscation as friction, not as secrecy. Move sensitive authorization to the backend. If the app needs to prove its own identity to a server, combine normal authentication with signing identity checks, Play Integrity or another attestation signal where appropriate, and server-side enforcement.</p><p>For dynamic code, the default answer should be no. If there is a real business need, keep the loading path narrow, verify provenance cryptographically, avoid writable external locations, and fail closed when validation is missing or ambiguous.</p><h2>Closing Thoughts</h2><p>The reverse-engineering lab works because it stays grounded. It does not pretend obfuscation is useless, and it does not pretend obfuscation is enough.</p><p>The first line of defence is more basic: do not ship secrets in the APK, do not treat assets as hidden storage, do not rely on patchable client checks for decisions that matter, and do not execute untrusted code at runtime unless you can defend the entire loading path.</p><p>If the vulnerable APK gives away the useful parts before anyone even opens smali, the reversing was not too advanced. The build was too generous.</p><hr><p><a href="https://levelup.gitconnected.com/i-patched-an-android-apk-to-show-how-fragile-client-side-checks-can-be-582a180df60e">I Patched an Android APK to Show How Fragile Client-Side Checks Can Be</a> was originally published in <a href="https://levelup.gitconnected.com">Level Up Coding</a> on Medium, where people are continuing the conversation by highlighting and responding to this story.</p></section>
+<p><a href="/blog.html">Back to all articles</a></p></article><!-- article-service:start --><aside class="article-service" aria-labelledby="article-service-title"><h2 id="article-service-title">Work through these security problems with your team.</h2><p>Explore hands-on Android security workshops with vulnerable and secure app labs, and an agenda tailored to your team.</p><a href="/android-security-training/">Android security training and workshops</a></aside><!-- article-service:end --></main>
+<footer class="site-footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <div>© 2026 James Cullimore. All rights reserved.</div>
+        <div class="footer-social">
+          <a href="https://www.linkedin.com/in/james-cullimore/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+          <a href="https://github.com/LethalMaus" target="_blank" rel="noopener noreferrer">GitHub</a>
+        </div>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Explore</div>
+        <ul class="footer-links" aria-label="Footer site links">
+          <li><a href="/apps/">Apps &amp; games</a></li>
+          <li><a href="/videos/">App videos</a></li>
+          <li><a href="/de/leistungen/" hreflang="de" lang="de">Leistungen auf Deutsch</a></li>
+          <li><a href="/#services">Development services</a></li>
+          <li><a href="/projects.html">Projects</a></li>
+          <li><a href="/#how-we-work">Process</a></li>
+          <li><a href="/#insights">Testimonials</a></li>
+          <li><a href="/courses.html">Courses</a></li>
+          <li><a href="/blog.html">Blog</a></li>
+          <li><a href="/#contact">Contact</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-nav-group">
+        <div class="footer-heading">Legal</div>
+        <ul class="footer-links" aria-label="Footer legal links">
+          <li><a href="/impressum.html">Impressum</a></li>
+          <li><a href="/datenschutz.html">Datenschutz</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>

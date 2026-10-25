@@ -1,5 +1,50 @@
 [
   {
+    "url": "/articles/i-patched-an-android-apk-to-show-how-fragile-client-side-checks-can-be.html",
+    "image": "https://cdn-images-1.medium.com/max/1024/1*EHyyNUobQyRp5RMa_7Wnqw.png",
+    "date": "Aug 3, 2026 • 9 min read",
+    "title": "I Patched an Android APK to Show How Fragile Client-Side Checks Can Be",
+    "excerpt": "When people talk about reverse-engineering resistance on Android, the conversation often jumps straight to obfuscation.",
+    "tags": [
+      "Android",
+      "Security",
+      "Reverse Engineering"
+    ],
+    "source_url": "https://levelup.gitconnected.com/i-patched-an-android-apk-to-show-how-fragile-client-side-checks-can-be-582a180df60e",
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#739",
+        "url": "https://androidweekly.net/issues/issue-739"
+      }
+    ]
+  },
+  {
+    "url": "/articles/how-one-missing-return-cut-my-android-test-runtime-by-72.html",
+    "image": "https://cdn-images-1.medium.com/max/1024/1*Gp9Dp67qe5P5vsU3jz8zdw.jpeg",
+    "date": "Jul 22, 2026 • 12 min read",
+    "title": "How One Missing `return` Cut My Android Test Runtime by 72%",
+    "excerpt": "Android developers spend a lot of time thinking about build performance. I wrote previously about cutting Gradle build time by 50%, mostly through practical configuration, benchmarking, and a few targeted improvements.",
+    "tags": [
+      "Android",
+      "Testing",
+      "Performance"
+    ],
+    "source_url": "https://levelup.gitconnected.com/how-one-missing-return-cut-my-android-test-runtime-by-72-74ab4ccd5aa7",
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#737",
+        "url": "https://androidweekly.net/issues/issue-737"
+      },
+      {
+        "name": "Software Testing Weekly",
+        "edition": "#321",
+        "url": "https://softwaretestingweekly.com/issues/321/"
+      }
+    ]
+  },
+  {
     "url": "/articles/what-adb-can-teach-you-about-broken-android-ipc-protections.html",
     "image": "https://miro.medium.com/v2/resize:fit:1200/1*EHyyNUobQyRp5RMa_7Wnqw.png",
     "date": "Jul 16, 2026 • 4 min read",
