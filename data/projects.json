@@ -714,5 +714,58 @@
       }
     ],
     "image": null
+  },
+  {
+    "slug": "einzigartiganderssein",
+    "name": "Einzigartiganderssein",
+    "kind": "Client websites",
+    "engagement": "Client work",
+    "focus": [
+      "WordPress",
+      "Website updates"
+    ],
+    "summary": "WordPress website changes and ongoing support for Einzigartiganderssein, a Swiss client, by freelance developer James Cullimore.",
+    "context": "Work on an existing WordPress website, making changes to support the client’s business.",
+    "work": [
+      "Made changes to the client’s WordPress website.",
+      "Supported website updates as part of the client engagement."
+    ],
+    "links": [
+      {
+        "label": "Visit Einzigartiganderssein",
+        "url": "https://einzigartiganderssein.ch/"
+      }
+    ],
+    "image": null,
+    "seo_title": "WordPress Support: Einzigartiganderssein"
+  },
+  {
+    "slug": "horoskop-paradies",
+    "name": "Horoskop-Paradies",
+    "kind": "Client websites",
+    "engagement": "Client work",
+    "focus": [
+      "Automation",
+      "Webflow",
+      "Technical leadership"
+    ],
+    "summary": "Business-process and email automation, Webflow updates and technical advice for Horoskop-Paradies, with support for wider business decisions.",
+    "context": "The engagement extended beyond website development into the day-to-day technical and business decisions behind Horoskop-Paradies. I acted as a technical lead and adviser, taking on responsibilities comparable to a CTO alongside hands-on implementation.",
+    "work": [
+      "Automated background processes, including email sending, and worked on scripts and AutoHotkey automation.",
+      "Worked on Webflow updates, APIs and webhooks.",
+      "Researched astrology APIs and automation options to inform implementation decisions.",
+      "Helped make decisions about analytics, Google Ads and social media.",
+      "Searched for bloggers and marketing support to help the business.",
+      "Worked directly with the client on technical priorities and wider business decisions."
+    ],
+    "links": [
+      {
+        "label": "Visit Horoskop-Paradies",
+        "url": "https://www.horoskop-paradies.ch/"
+      }
+    ],
+    "image": null,
+    "seo_title": "Automation & Technical Advice: Horoskop-Paradies"
   }
 ]
