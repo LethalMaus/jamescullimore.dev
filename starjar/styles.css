@@ -515,3 +515,11 @@ a {
 .app-faq details { border-bottom: 1px solid #ffffff26; padding: 12px 0; }
 .app-faq summary { cursor: pointer; font-weight: 800; min-height: 44px; padding: 12px 0; }
 .app-faq p { color: #c1c8d5; line-height: 1.7; }
+
+/* Consistent store badge footprints; preserve official artwork and clear space.
+   The German Play PNG includes 29px transparent top/bottom margins in 250px.
+   Its visible artwork is 192px high: 52.0833px image = 40px visible badge. */
+.cta-row { flex-wrap: wrap; align-items: center; gap: 8px; }
+.cta-row .badge-link { flex: 0 0 156px; width: 156px; height: 64px; border-radius: 0; }
+.cta-row .store-badge { height: 40px; width: auto; max-width: none; flex-shrink: 0; }
+.cta-row img[src$="google-play-badge-de.png"] { height: 52.083333px; }
