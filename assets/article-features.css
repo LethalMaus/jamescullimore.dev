@@ -32,3 +32,9 @@
   .feature-badges { gap: 8px; }
 }
 @media (prefers-reduced-motion: reduce) { .article-features .feature-pill { transition: none; } }
+.home-publications { display: flex; align-items: center; justify-content: space-between; gap: 28px; padding: 24px 0; border-top: 1px solid #d8e3dd; border-bottom: 1px solid #d8e3dd; }
+.home-publication-names { display: flex; flex-wrap: wrap; gap: 18px 24px; }
+.home-publications > .text-link { flex-shrink: 0; font-size: 14px; }
+.blog-collection-link { margin: 8px 0 0; font-size: 14px; }
+.blog-collection-link a { text-decoration: underline; }
+@media (max-width: 760px) { .home-publications { align-items: flex-start; flex-direction: column; gap: 18px; } }

@@ -38,6 +38,100 @@ node scripts/browser_check.cjs
 
 Article code highlighting uses locally hosted Highlight.js 11.11.1 (`assets/vendor/highlight/`, BSD-3-Clause licence included). The enhancement preserves the authored code and leaves it readable without JavaScript.
 
+Blog entries in `data/articles.json` may include `featured_in`, an array of
+`name`, `url` and optional `edition` fields. Each URL must point to the edition
+or page that links to that article. The builder renders these links as pills
+on archive cards and article headers; `assets/blog.js` renders the same pills
+in search results. An empty array means no feature is selected for display.
+Keep feature research and unresolved leads in `.jc/blog-feature-audit.json`.
+The displayed selection contains 37 mentions across 25 articles and eight
+publications. Keep it focused on the selected developer and testing newsletters;
+exclude aggregators, general reference links, Habr and AppTractor. The full
+research record is retained separately. Counts in the credibility strip are
+calculated from the displayed data.
+
+`data/publications.json` records locally hosted publication icons and their
+original sources. Other publications use typographic initials. Archive cards
+show two badges with a native expandable list; article pages show all selected
+badges.
+
+The October 2026 audit checked all 66 articles; eight Kotlin Weekly editions
+were unavailable, so the recorded features are not an exhaustive claim.
+
+Run `node scripts/blog_features_check.cjs` with the preview server and Chrome
+endpoint above to check feature links, search, topic filters, pagination,
+responsive layouts, and the two latest imported posts. The imported posts
+retain the published RSS text, with code restored from James's public gists;
+their reading times are local estimates at 200 words per minute.
+
+The blog's **Show → Featured articles** filter combines with text search and
+topic filtering. `/blog/featured.html` is a static collection of all selected
+featured articles, so homepage links and readers without JavaScript still
+reach the collection. The homepage publication strip sits before the enquiry
+section as supporting evidence; it does not replace the service offer or
+client testimonials.
+
+### Medium imports and link maintenance
+
+Prepare missing recent posts without changing the site:
+
+```sh
+python3 scripts/import_medium.py
+```
+
+The command fetches the public Medium RSS feed, compares post IDs, permalinks
+and titles against the catalogue, and creates a fresh review folder under
+`.jc/medium-imports/`. RSS contains only recent posts, so run this after new
+publications; it is not a complete historical archive sync. A saved feed can
+be checked offline with `--feed-file /path/to/feed.xml`.
+
+Review each staged HTML page and its `manifest.json` entry against Medium.
+Check the full text, title, excerpt, tags, date, images and code examples.
+The importer removes executable/tracking markup and flags embedded content
+for manual restoration rather than silently publishing an incomplete post.
+Restore and verify any missing code, clear resolved `issues`, and set
+`reviewed` to `true`. Apply the reviewed folder explicitly:
+
+```sh
+python3 scripts/import_medium.py --apply --output .jc/medium-imports/REVIEW_FOLDER
+python3 scripts/build_site.py
+python3 scripts/check_site.py
+```
+
+Applying skips already imported posts and refuses to overwrite existing files.
+Neither preparation nor application commits, pushes or deploys anything.
+Do not reuse a non-empty staging directory: this protects review edits.
+
+Check feature links and stored original Medium URLs, or include every external
+hyperlink in the indexed article pages:
+
+```sh
+python3 scripts/check_blog_links.py
+python3 scripts/check_blog_links.py --include-article-links
+```
+
+Reports go to `.jc/blog-maintenance/link-report.json` and `.txt`. Failed
+requests are retried once. HTTP 404/410 and recognised soft-404 pages are
+reported separately from access restrictions, server errors and network
+failures. Every result retains its referring articles. Review failures in a
+browser before assuming a link is broken. Links and badges are never removed
+or edited. Repeated missing-page responses for Kotlin Weekly, Android Weekly
+and jetc.dev produce brief message drafts in the report; nothing is sent.
+The eight previously unavailable, unselected Kotlin Weekly editions remain
+in the historical research audit and are not added to the recurring check.
+
+`.github/workflows/blog-maintenance.yml` prepares recent Medium imports and
+checks all article/feature links monthly, on the first day at 08:23 UTC, or on
+manual dispatch. It has read-only repository permission and saves reports and
+staged posts in a 60-day Actions artifact. Review failures mark the run as
+failed; notification delivery depends on your GitHub settings. The schedule
+starts only after the workflow is on the default branch and Actions is enabled.
+It never applies imports, publishes changes, or contacts newsletter authors.
+
+Run `python3 scripts/test_blog_maintenance.py` for offline import and link-check
+regressions. Browser coverage for the featured collection, combined filters,
+and homepage strip is included in `node scripts/blog_features_check.cjs`.
+
 ## URLs and local notes
 
 Canonical URLs use `https://jamescullimore.dev`. Legacy routes, including `/starjar.html`, retain static redirects with fallback links. StarJar privacy-policy URLs remain unchanged. Shared fonts and store badges stay in `assets/`.

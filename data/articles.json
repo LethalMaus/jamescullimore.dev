@@ -54,6 +54,13 @@
       "Android",
       "ADB",
       "IPC Security"
+    ],
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#736",
+        "url": "https://androidweekly.net/issues/issue-736"
+      }
     ]
   },
   {
@@ -66,19 +73,42 @@
       "Android",
       "QA Automation",
       "AI Agents"
+    ],
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#736",
+        "url": "https://androidweekly.net/issues/issue-736"
+      },
+      {
+        "name": "Software Testing Weekly",
+        "edition": "#321",
+        "url": "https://softwaretestingweekly.com/issues/321/"
+      },
+      {
+        "name": "Software Testing Notes",
+        "edition": "#224",
+        "url": "https://softwaretestingnotes.substack.com/p/issue-224-software-testing-notes"
+      },
+      {
+        "name": "Software Testing Notes",
+        "edition": "#225",
+        "url": "https://softwaretestingnotes.substack.com/p/issue-225-software-testing-notes"
+      }
     ]
   },
   {
     "url": "/articles/last-year-i-worked-on-a-project-where-we-had-to-build-not-one-but-two-versions-of-the-same-app.html",
     "image": "https://miro.medium.com/v2/resize:fit:1200/1*t4fmIxnKNsaK4DnQw-z3_g.jpeg",
     "date": "Jul 8, 2026 • 6 min read",
-    "title": "Last year, I worked on a project where we had to build not one, but two versions of the same app.",
+    "title": "Testing Android Work Profiles Without Losing Your Mind",
     "excerpt": "Last year, I worked on a project where we had to build not one, but two versions of the same app. One ran in the personal profile. The other ran in the work profile. They needed to share selected information across Android profile boundaries.",
     "tags": [
       "Android",
       "App Architecture",
       "Product Development"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/development-life-and-the-mask-no-one-sees.html",
@@ -90,7 +120,8 @@
       "Developer Life",
       "Software Development",
       "Career"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/preview-driven-screenshot-testing-for-locales-keys-and-font-scale.html",
@@ -102,6 +133,18 @@
       "Android",
       "Jetpack Compose",
       "Screenshot Testing"
+    ],
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#732",
+        "url": "https://androidweekly.net/issues/issue-732"
+      },
+      {
+        "name": "jetc.dev",
+        "edition": "#319",
+        "url": "https://jetc.dev/issues/319.html"
+      }
     ]
   },
   {
@@ -114,6 +157,23 @@
       "Android",
       "Android App Development",
       "AndroidDev"
+    ],
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#728",
+        "url": "https://androidweekly.net/issues/issue-728"
+      },
+      {
+        "name": "jetc.dev",
+        "edition": "#315",
+        "url": "https://jetc.dev/issues/315.html"
+      },
+      {
+        "name": "Kotlin Weekly",
+        "edition": "#514",
+        "url": "https://mailchi.mp/kotlinweekly/kotlin-weekly-514"
+      }
     ]
   },
   {
@@ -126,6 +186,13 @@
       "Android",
       "Android App Development",
       "AndroidDev"
+    ],
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#726",
+        "url": "https://androidweekly.net/issues/issue-726"
+      }
     ]
   },
   {
@@ -138,6 +205,18 @@
       "Android",
       "Android App Development",
       "Android Development"
+    ],
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#724",
+        "url": "https://androidweekly.net/issues/issue-724"
+      },
+      {
+        "name": "Kotlin Weekly",
+        "edition": "#508",
+        "url": "https://mailchi.mp/kotlinweekly/kotlin-weekly-508"
+      }
     ]
   },
   {
@@ -150,7 +229,8 @@
       "Android",
       "Android App Development",
       "Android Development"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/turning-a-wear-os-complication-into-a-launcher-shortcut.html",
@@ -162,6 +242,13 @@
       "Android",
       "Android Development",
       "Wearables"
+    ],
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#720",
+        "url": "https://androidweekly.net/issues/issue-720"
+      }
     ]
   },
   {
@@ -174,6 +261,13 @@
       "Android",
       "Android Development",
       "Android App Development"
+    ],
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#720",
+        "url": "https://androidweekly.net/issues/issue-720"
+      }
     ]
   },
   {
@@ -186,6 +280,18 @@
       "Android",
       "Jetpack Compose",
       "Performance"
+    ],
+    "featured_in": [
+      {
+        "name": "Android Weekly",
+        "edition": "#719",
+        "url": "https://androidweekly.net/issues/issue-719"
+      },
+      {
+        "name": "jetc.dev",
+        "edition": "#307",
+        "url": "https://jetc.dev/issues/307.html"
+      }
     ]
   },
   {
@@ -198,6 +304,13 @@
       "Android",
       "Android App Development",
       "AndroidDev"
+    ],
+    "featured_in": [
+      {
+        "name": "Kotlin Weekly",
+        "edition": "#510",
+        "url": "https://mailchi.mp/kotlinweekly/kotlin-weekly-510"
+      }
     ]
   },
   {
@@ -210,7 +323,8 @@
       "Android",
       "Android Development",
       "Security"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/building-a-reliable-control-handoff-with-the-wear-os-data-layer.html",
@@ -222,7 +336,8 @@
       "Android",
       "Android Development",
       "Wearables"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/stop-using-playerview-in-compose-media3-playersurface-done-right.html",
@@ -234,6 +349,13 @@
       "Android",
       "Android Development",
       "Jetpack Compose"
+    ],
+    "featured_in": [
+      {
+        "name": "jetc.dev",
+        "edition": "#299",
+        "url": "https://jetc.dev/issues/299.html"
+      }
     ]
   },
   {
@@ -246,6 +368,18 @@
       "Android",
       "Android Development",
       "Jetpack Compose"
+    ],
+    "featured_in": [
+      {
+        "name": "jetc.dev",
+        "edition": "#298",
+        "url": "https://jetc.dev/issues/298.html"
+      },
+      {
+        "name": "Kotlin Weekly",
+        "edition": "#495",
+        "url": "https://mailchi.mp/kotlinweekly/kotlin-weekly-495"
+      }
     ]
   },
   {
@@ -258,7 +392,8 @@
       "Android",
       "Software Development",
       "Work Life Balance"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/one-repo-to-rule-them-all-android-modules-with-git-submodules.html",
@@ -270,7 +405,8 @@
       "Android",
       "Kotlin",
       "Git"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/how-i-built-seamless-watch-phone-handover-in-wear-os.html",
@@ -282,7 +418,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/two-sides-of-200-android-interviews.html",
@@ -294,7 +431,8 @@
       "Android",
       "Interview",
       "Android App Development"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/fast-feedback-winning-back-60-of-our-ci-time.html",
@@ -306,6 +444,13 @@
       "Android",
       "Kotlin",
       "Gradle"
+    ],
+    "featured_in": [
+      {
+        "name": "Mobile Automation Newsletter",
+        "edition": "#58",
+        "url": "https://www.testableapple.com/newsletter/58/"
+      }
     ]
   },
   {
@@ -318,7 +463,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/how-i-cut-my-gradle-build-time-by-50.html",
@@ -330,6 +476,18 @@
       "Android",
       "Android App Development",
       "Kotlin"
+    ],
+    "featured_in": [
+      {
+        "name": "Mobile Automation Newsletter",
+        "edition": "#56",
+        "url": "https://www.testableapple.com/newsletter/56/"
+      },
+      {
+        "name": "Gradle Newsletter",
+        "edition": "May 2025",
+        "url": "https://newsletter.gradle.org/html/2025-05-28-May2025/"
+      }
     ]
   },
   {
@@ -342,7 +500,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/pip-boy-perfect-your-wasteland-survival-guide-to-maestro-ui-testing-on-android.html",
@@ -354,6 +513,13 @@
       "Android",
       "Android App Development",
       "Automation Testing"
+    ],
+    "featured_in": [
+      {
+        "name": "Mobile Automation Newsletter",
+        "edition": "#31",
+        "url": "https://www.testableapple.com/newsletter/31/"
+      }
     ]
   },
   {
@@ -366,6 +532,13 @@
       "Android",
       "Android App Development",
       "Gradle"
+    ],
+    "featured_in": [
+      {
+        "name": "Mobile Automation Newsletter",
+        "edition": "#31",
+        "url": "https://www.testableapple.com/newsletter/31/"
+      }
     ]
   },
   {
@@ -378,7 +551,8 @@
       "Android",
       "Kotlin",
       "Android App Development"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/say-goodbye-to-dependency-hell-simplify-your-android-development-with-version-catalogs.html",
@@ -390,7 +564,8 @@
       "Android",
       "Android App Development",
       "Gradle"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/grit-and-guts-migrating-from-groovy-to-kotlin-in-gradle.html",
@@ -402,6 +577,13 @@
       "Android",
       "Android App Development",
       "Kotlin"
+    ],
+    "featured_in": [
+      {
+        "name": "Mobile Automation Newsletter",
+        "edition": "#29",
+        "url": "https://www.testableapple.com/newsletter/29/"
+      }
     ]
   },
   {
@@ -414,7 +596,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/monetizing-marvels-a-developers-guide-to-in-app-purchases-on-android.html",
@@ -426,7 +609,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/permission-slips-and-flag-waving-navigating-the-android-development-skyline.html",
@@ -438,7 +622,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/room-to-grow-walking-through-the-gardens-of-android-databases.html",
@@ -450,7 +635,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/android-symphony-a-ux-melody-with-tooltips-popups-and-dialogs.html",
@@ -462,6 +648,13 @@
       "Android",
       "Android App Development",
       "Kotlin"
+    ],
+    "featured_in": [
+      {
+        "name": "jetc.dev",
+        "edition": "#203",
+        "url": "https://jetc.dev/issues/203.html"
+      }
     ]
   },
   {
@@ -474,7 +667,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/accessibility-amplified-a-journey-to-inclusive-android-apps.html",
@@ -486,6 +680,18 @@
       "Android",
       "Android App Development",
       "Kotlin"
+    ],
+    "featured_in": [
+      {
+        "name": "Accessible Mobile Apps",
+        "edition": "#56",
+        "url": "https://www.appt.news/accessible-mobile-apps-issue-56/"
+      },
+      {
+        "name": "Mobile Automation Newsletter",
+        "edition": "#25",
+        "url": "https://www.testableapple.com/newsletter/25/"
+      }
     ]
   },
   {
@@ -498,7 +704,8 @@
       "Android",
       "Android App Development",
       "Proguard"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/yo-ho-ho-and-a-heap-of-memory-leak-woes-leakcanary-to-the-rescue.html",
@@ -510,6 +717,13 @@
       "Android",
       "Android App Development",
       "Kotlin"
+    ],
+    "featured_in": [
+      {
+        "name": "Mobile Automation Newsletter",
+        "edition": "#22",
+        "url": "https://www.testableapple.com/newsletter/22/"
+      }
     ]
   },
   {
@@ -522,6 +736,13 @@
       "Android",
       "Android App Development",
       "Kotlin"
+    ],
+    "featured_in": [
+      {
+        "name": "jetc.dev",
+        "edition": "#198",
+        "url": "https://jetc.dev/issues/198.html"
+      }
     ]
   },
   {
@@ -534,7 +755,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/spring-loaded-perfection-coil-and-jetpack-compose-for-effortless-image-loading.html",
@@ -546,7 +768,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/pixels-to-profits-monetizing-jetpack-compose-apps-with-admob.html",
@@ -558,7 +781,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/stepping-into-the-alternative-universe-of-automated-testing-for-android-mobile-espresso.html",
@@ -570,6 +794,13 @@
       "Android",
       "Android App Development",
       "Testing"
+    ],
+    "featured_in": [
+      {
+        "name": "Mobile Automation Newsletter",
+        "edition": "#20",
+        "url": "https://www.testableapple.com/newsletter/20/"
+      }
     ]
   },
   {
@@ -582,7 +813,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/challenge-accepted-hacks-for-effortless-oauth2-login-testing-on-android.html",
@@ -594,6 +826,13 @@
       "Android",
       "Android App Development",
       "Kotlin"
+    ],
+    "featured_in": [
+      {
+        "name": "Mobile Automation Newsletter",
+        "edition": "#19",
+        "url": "https://www.testableapple.com/newsletter/19/"
+      }
     ]
   },
   {
@@ -606,7 +845,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/defending-against-mitm-attacks-the-android-certificate-pinning-approach.html",
@@ -618,7 +858,8 @@
       "Android",
       "Kotlin",
       "Android App Development"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/wifi-wizardry-a-developers-guide-to-android-network-magic.html",
@@ -630,7 +871,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/locking-in-data-confidence-decoding-androids-encrypted-preferences-arsenal.html",
@@ -642,7 +884,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/beyond-tight-coupling-crafting-agile-apps-with-interface-driven-decoupling.html",
@@ -654,7 +897,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/diving-into-the-license-abyss-an-android-odyssey-through-font-image-and-library-licenses.html",
@@ -666,7 +910,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/tailoring-apps-with-finesse-using-build-variants.html",
@@ -678,7 +923,8 @@
       "Android",
       "Android App Development",
       "Kotlin"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/simplify-recyclerview-development-on-android-with-binding-collection-adapter.html",
@@ -690,7 +936,8 @@
       "Android",
       "Kotlin",
       "Android App Development"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/decoding-the-google-play-store-a-guide-to-optimal-app-publishing.html",
@@ -702,7 +949,8 @@
       "Android",
       "Android App Development",
       "AndroidDev"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/git-it-together.html",
@@ -714,7 +962,8 @@
       "Git",
       "Yaml",
       "Development"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/we-need-more-animations.html",
@@ -726,7 +975,8 @@
       "Jetpack Compose",
       "Android",
       "Android App Development"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/embracing-open-source-projects-fueling-growth-for-android-developers.html",
@@ -738,7 +988,8 @@
       "Android",
       "Android App Development",
       "Droidcon"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/leveraging-firebase-for-internal-app-deployment-with-auto-generated-release-notes.html",
@@ -750,7 +1001,8 @@
       "Android",
       "Android App Development",
       "Firebase"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/preparing-your-android-app-for-international-markets-i18n.html",
@@ -762,7 +1014,8 @@
       "Android",
       "Android App Development",
       "Internationalization"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/simplifying-android-development-the-right-approach-to-modulation.html",
@@ -774,7 +1027,8 @@
       "Android",
       "Android App Development",
       "AndroidDev"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/the-power-of-android-immediate-and-flexible-in-app-updates-enhancing-security-and-user-experience.html",
@@ -786,7 +1040,8 @@
       "Android",
       "Android Development",
       "Android App Development"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/the-risks-of-an-insecure-android-app-and-how-to-prevent-them.html",
@@ -798,7 +1053,8 @@
       "Android",
       "AndroidDev",
       "Android App Development"
-    ]
+    ],
+    "featured_in": []
   },
   {
     "url": "/articles/the-importance-of-ui-tests-on-android-and-when-not-to-write-them.html",
@@ -810,6 +1066,7 @@
       "Android",
       "Android App Development",
       "AndroidDev"
-    ]
+    ],
+    "featured_in": []
   }
 ]

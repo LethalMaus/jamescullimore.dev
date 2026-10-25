@@ -13,6 +13,7 @@ project_groups = [('Apps & platforms', 'client-work', 'Apps & platforms'), ('Cli
 projects = [p for kind, _, _ in project_groups for p in projects if p['kind'] == kind]
 
 articles = load('articles.json')
+publications = load('publications.json')
 resources = load('resources.json')
 services = load('services.json')
 services_de = load('services-de.json')
@@ -71,15 +72,48 @@ def project_card(p):
 def excerpt(text,length=155):
     return text if len(text)<=length else text[:length].rsplit(' ',1)[0].rstrip('.,;:')+'…'
 
+def publication_mark(name):
+    icon = publications.get(name, {}).get('icon')
+    if icon:
+        return f'<img class="publication-mark" src="{esc(icon)}" alt="" width="24" height="24" loading="lazy">'
+    initials = ''.join(word[0] for word in name.split()[:2]).upper()
+    return f'<span class="publication-mark publication-monogram" aria-hidden="true">{esc(initials)}</span>'
+
+def feature_badge(item):
+    edition = f'<small class="feature-edition">{esc(item["edition"])}</small>' if item.get('edition') else ''
+    return f'<a class="feature-pill" href="{esc(item["url"])}">{publication_mark(item["name"])}<span class="feature-copy"><strong>{esc(item["name"])}</strong>{edition}</span><span class="feature-arrow" aria-hidden="true">↗</span></a>'
+
+def article_features(a, compact=False):
+    features = a.get('featured_in', [])
+    if not features:
+        return ''
+    first = features[:2] if compact else features
+    links = '<div class="feature-badges">' + ''.join(feature_badge(item) for item in first) + '</div>'
+    if compact and len(features) > 2:
+        links += f'<details class="feature-more"><summary><span class="feature-more-closed">+{len(features)-2} more</span><span class="feature-more-open">Show fewer</span><span class="visually-hidden"> features for {esc(a["title"])}</span></summary><div class="feature-badges">' + ''.join(feature_badge(item) for item in features[2:]) + '</div></details>'
+    style = 'feature-compact' if compact else 'feature-panel'
+    return f'<div class="article-features {style}" aria-label="Featured in newsletters and websites"><p class="feature-label">Featured in</p>{links}</div>'
+
+def feature_credibility():
+    featured = [a for a in articles if a.get('featured_in')]
+    count = len({f['name'] for a in featured for f in a['featured_in']})
+    names = [name for name in publications if any(f['name'] == name for a in featured for f in a['featured_in'])]
+    marks = ''.join(f'<span class="credibility-publication">{publication_mark(name)}<span>{esc(name)}</span></span>' for name in names)
+    return f'<aside class="feature-credibility" aria-label="Articles recognised by the developer community"><div class="credibility-copy"><span class="feature-label">Read. Shared. Featured.</span><p><strong>{len(featured)} articles</strong> featured across <strong>{count} newsletters and developer websites</strong>.</p></div><div class="credibility-publications">{marks}</div></aside>'
+
 def blog_card(a):
     tags=''.join(f'<span class="blog-tag">{esc(t)}</span>' for t in a['tags'][:3])
-    return f'''<article class="blog-card"><a class="blog-card-media" href="{esc(a['url'])}" tabindex="-1" aria-hidden="true"><img src="{esc(a['image'])}" alt="" loading="lazy" width="640" height="360"></a><div class="blog-date">{esc(a['date'])}</div><h2 class="blog-title"><a href="{esc(a['url'])}">{esc(a['title'])}</a></h2><p class="blog-excerpt">{esc(excerpt(a['excerpt']))}</p><div class="blog-tags">{tags}</div></article>'''
+    return f'''<article class="blog-card"><a class="blog-card-media" href="{esc(a['url'])}" tabindex="-1" aria-hidden="true"><img src="{esc(a['image'])}" alt="" loading="lazy" width="640" height="360"></a><div class="blog-date">{esc(a['date'])}</div><h2 class="blog-title"><a href="{esc(a['url'])}">{esc(a['title'])}</a></h2><p class="blog-excerpt">{esc(excerpt(a['excerpt']))}</p><div class="blog-tags">{tags}</div>{article_features(a, compact=True)}</article>'''
 
 def playlist_link():
     return f'<a class="text-link" href="{esc(resources["youtube_playlist"])}">Watch more talks</a>' if resources.get('youtube_playlist') else '<a class="text-link" href="/courses.html">More talks &amp; courses ↗</a>'
 
 home=(ROOT/'templates/home.html').read_text()
 home=home.replace('{{playlist_link}}',playlist_link())
+home_names = ['Android Weekly', 'Kotlin Weekly', 'jetc.dev', 'Gradle Newsletter']
+home_names = [name for name in home_names if any(f['name'] == name for a in articles for f in a.get('featured_in', []))]
+home_mentions = ''.join(f'<span class="credibility-publication">{publication_mark(name)}<span>{esc(name)}</span></span>' for name in home_names)
+home = home.replace('{{publication_strip}}', f'<aside class="home-publications" aria-label="Published engineering expertise"><div><span class="feature-label">Engineering articles featured in</span><div class="home-publication-names">{home_mentions}</div></div><a class="text-link" href="/blog/featured.html">Read the featured articles</a></aside>')
 own_slugs = ['dont-go-to-bed', 'starjar', 'watchful', 'elchem']
 own_cards = []
 for slug in own_slugs:
@@ -91,7 +125,7 @@ for i, slug in enumerate(own_slugs):
         name = next(p['name'] for p in projects if p['slug'] == slug)
         own_cards[i] = own_cards[i].replace('</article>', f'<p><a class="text-link app-download-link" href="{product_paths[slug]}">Explore {esc(name)} &amp; get the app</a></p></article>')
 home=home.replace('{{own_projects}}', ''.join(own_cards))
-write('index.html',page('Freelance Android & Kotlin Multiplatform Developer','Freelance Android and Kotlin Multiplatform development, app security and test automation. Based in Germany, working in English and German.','/',home,schema=load('organization.json')))
+write('index.html',page('Freelance Android & Kotlin Multiplatform Developer','Freelance Android and Kotlin Multiplatform development, app security and test automation. Based in Germany, working in English and German.','/',home,schema=load('organization.json'),scripts='<link rel="stylesheet" href="/assets/article-features.css">'))
 
 intro='<section class="page-intro"><div class="section-inner"><span class="eyebrow">The project catalogue</span><h1>Work, in a little more detail.</h1><p class="lead">Client collaborations, work from employed roles, independent products and public engineering examples. Explore the context, the contribution and the product behind each project.</p><nav class="project-tabs" aria-label="Project categories"><a href="#client-work">Apps &amp; platforms</a><a href="#client-websites">Client websites</a><a href="#own-projects">Own projects</a><a href="#public-code">GitHub projects</a></nav></div></section>'
 groups=''
@@ -253,16 +287,21 @@ write('courses.html',page('Android Courses, Talks & Workshops','Watch James Cull
 
 page_count=math.ceil(len(articles)/12)
 def blog_path(n): return '/blog.html' if n==1 else f'/blog/page-{n}.html'
-for n in range(1,page_count+1):
-    path=blog_path(n)
+for n in [*range(1,page_count+1), 0]:
+    featured_page = n == 0
+    path = '/blog/featured.html' if featured_page else blog_path(n)
+    selection = [a for a in articles if a.get('featured_in')] if featured_page else articles[(n-1)*12:n*12]
+    title = 'Featured engineering articles' if featured_page else 'Notes from the work.'
+    count_label = f'{len(selection)} featured articles' if featured_page else f'{len(articles)} articles · Page {n} of {page_count}'
     pagination='<nav class="pagination" aria-label="Blog pages">'+''.join(f'<a href="{blog_path(i)}"'+(' aria-current="page"' if i==n else '')+f' aria-label="Page {i}">{i}</a>' for i in range(1,page_count+1))+'</nav>'
     if n<page_count: pagination=pagination.replace('</nav>',f'<a href="{blog_path(n+1)}" rel="next">Next →</a></nav>')
-    content=f'''<section class="page-intro"><div class="section-inner"><span class="eyebrow">The engineering notebook</span><h1>Notes from the work.</h1><p class="lead">Android development, architecture, performance, security and the experience of building software.</p><form class="blog-tools" role="search" hidden><label>Search articles<input id="blog-search" type="search" placeholder="Try Kotlin, testing or security…" autocomplete="off"></label><label>Topic<select id="blog-topic"><option value="">All topics</option><option>Security</option><option>Testing</option><option>Performance</option><option>Architecture</option><option>Compose</option><option>IoT &amp; Wear OS</option><option>Developer life</option></select></label></form><p class="blog-status" id="blog-status" role="status">{len(articles)} articles · Page {n} of {page_count}</p></div></section><section class="section"><div class="section-inner"><div class="blog-grid" id="blog-grid">{''.join(blog_card(a) for a in articles[(n-1)*12:n*12])}</div>{pagination}<button class="button secondary" id="more-results" type="button" hidden>Show more results</button></div></section>'''
+    if featured_page: pagination = '<nav class="pagination" aria-label="Blog pages"><a href="/blog.html">All articles</a></nav>'
+    content=f'''<section class="page-intro"><div class="section-inner"><span class="eyebrow">The engineering notebook</span><h1>{title}</h1><p class="lead">Android development, architecture, performance, security and the experience of building software.</p>{feature_credibility() if n == 1 else ""}<form class="blog-tools" role="search" hidden><label>Search articles<input id="blog-search" type="search" placeholder="Try Kotlin, testing or security…" autocomplete="off"></label><label>Topic<select id="blog-topic"><option value="">All topics</option><option>Security</option><option>Testing</option><option>Performance</option><option>Architecture</option><option>Compose</option><option>IoT &amp; Wear OS</option><option>Developer life</option></select></label><label>Show<select id="blog-featured"><option value="">All articles</option><option value="featured"{(" selected" if featured_page else "")}>Featured articles</option></select></label></form><p class="blog-status" id="blog-status" role="status">{count_label}</p><p class="blog-collection-link"><a href="{("/blog.html" if featured_page else "/blog/featured.html")}">{("Browse all articles" if featured_page else "Browse featured articles")}</a></p></div></section><section class="section"><div class="section-inner"><div class="blog-grid" id="blog-grid" data-featured="{str(featured_page).lower()}">{''.join(blog_card(a) for a in selection)}</div>{pagination}<button class="button secondary" id="more-results" type="button" hidden>Show more results</button></div></section>'''
     if n == 1:
         guide_links = ''.join(f'<li><a href="/guides/{guide["slug"]}/">{esc(guide["title"])}</a><p>{esc(guide["description"])}</p></li>' for guide in guides if guide.get('service') and guide.get('lang', 'en') == 'en')
         content += '<section class="section soft"><div class="section-inner"><h2>Planning work on an existing app?</h2><ul>'+guide_links+'</ul></div></section>'
-    schema={'@context':'https://schema.org','@type':'CollectionPage','name':'Engineering articles'+(f' — page {n}' if n>1 else ''),'url':BASE+path,'mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+a['url'],'name':a['title']} for i,a in enumerate(articles[(n-1)*12:n*12])]}}
-    write(path.lstrip('/'),page('Android Engineering Blog'+(f' — Page {n}' if n>1 else ''),'Practical articles on Android, Kotlin, testing, security, architecture and software delivery.'+(f' Browse page {n} of the archive.' if n>1 else ''),path,content,'Blog',schema,scripts='<script defer src="/assets/blog.js"></script>'))
+    schema={'@context':'https://schema.org','@type':'CollectionPage','name':title,'url':BASE+path,'mainEntity':{'@type':'ItemList','itemListElement':[{'@type':'ListItem','position':i+1,'url':BASE+a['url'],'name':a['title']} for i,a in enumerate(selection)]}}
+    write(path.lstrip('/'),page('Featured Engineering Articles' if featured_page else 'Android Engineering Blog'+(f' — Page {n}' if n>1 else ''),'Practical articles on Android, Kotlin, testing, security, architecture and software delivery.'+(f' Browse page {n} of the archive.' if n>1 else ''),path,content,'Blog',schema,scripts='<link rel="stylesheet" href="/assets/article-features.css"><script defer src="/assets/blog.js"></script>'))
 
 def redirect(path,dest,title):
     canonical = BASE + dest.split('#', 1)[0]
@@ -295,6 +334,13 @@ for f in [*(ROOT/'articles').glob('*.html'),ROOT/'impressum.html',ROOT/'datensch
         if '/assets/code-highlight.js' not in s:
             s=s.replace('</head>', '<link rel="stylesheet" href="/assets/code-highlight.css"><script defer src="/assets/vendor/highlight/highlight.min.js"></script><script defer src="/assets/vendor/highlight/kotlin.min.js"></script><script defer src="/assets/vendor/highlight/groovy.min.js"></script><script defer src="/assets/code-highlight.js"></script>\n</head>')
     if f.parent.name == 'articles':
+        s = re.sub(r'<!-- article-features:start -->.*?<!-- article-features:end -->', '', s, flags=re.S)
+        article = next((a for a in articles if a['url'] == '/articles/' + f.name), None)
+        if article and article.get('featured_in'):
+            pills = '<!-- article-features:start -->' + article_features(article) + '<!-- article-features:end -->'
+            s = re.sub(r'(<header class="article-header">.*?)(</header>)', lambda m: m[1] + pills + m[2], s, count=1, flags=re.S)
+            if '/assets/article-features.css' not in s:
+                s = s.replace('</head>', '<link rel="stylesheet" href="/assets/article-features.css">\n</head>')
         for asset in ['analytics-consent.js', 'conversion-analytics.js']:
             if '/assets/' + asset not in s:
                 s = s.replace('</head>', f'<script defer src="/assets/{asset}"></script>\n</head>')
@@ -311,7 +357,7 @@ for f in [*(ROOT/'articles').glob('*.html'),ROOT/'impressum.html',ROOT/'datensch
 ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}
 old=ET.parse(ROOT/'sitemap.xml')
 dates={u.find('s:loc',ns).text:u.find('s:lastmod',ns).text for u in old.findall('s:url',ns) if u.find('s:lastmod',ns) is not None}
-urls=[BASE+'/',BASE+'/apps/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/starjar/de/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
+urls=[BASE+'/',BASE+'/blog/featured.html',BASE+'/apps/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/starjar/de/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
 # Retain existing product URLs, including policy pages without lastmod values.
 urls += [u.find('s:loc', ns).text for u in old.findall('s:url', ns) if any(folder in u.find('s:loc', ns).text for folder in ['/watchful/', '/dontgotobed/', '/elchem/', '/scrumscore/'])]
 urls += [BASE + guide_path(guide) for guide in guides]
@@ -330,7 +376,7 @@ print(f'Built homepage, {len(projects)} project details, courses, {page_count} b
 
 # Content-based asset URLs keep previews and deployed pages current after edits.
 from urllib.parse import urlsplit
-versioned = ['styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/article-service.css', 'assets/guides.css', 'assets/video-preview.css', 'assets/video-preview.js', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
+versioned = ['assets/blog.js', 'assets/article-features.css', 'styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/article-service.css', 'assets/guides.css', 'assets/video-preview.css', 'assets/video-preview.js', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
 asset_versions = {(ROOT/name).resolve(): hashlib.sha256((ROOT/name).read_bytes()).hexdigest()[:12] for name in versioned}
 for f in ROOT.rglob('*.html'):
     if 'templates' in f.relative_to(ROOT).parts or any(part.startswith('.') for part in f.relative_to(ROOT).parts): continue

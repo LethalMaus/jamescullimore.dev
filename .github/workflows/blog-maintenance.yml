@@ -1,0 +1,42 @@
+name: Blog maintenance
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Monthly review, at 08:23 UTC on the first day of the month.
+    - cron: '23 8 1 * *'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: blog-maintenance
+  cancel-in-progress: false
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Prepare missing Medium posts for review
+        run: python3 scripts/import_medium.py --output "$RUNNER_TEMP/blog-maintenance/medium"
+      - name: Check external links without changing them
+        if: always()
+        run: python3 scripts/check_blog_links.py --include-article-links --fail-on-review --output "$RUNNER_TEMP/blog-maintenance/links"
+      - name: Add review summary
+        if: always()
+        run: |
+          if [ -f "$RUNNER_TEMP/blog-maintenance/links/link-report.txt" ]; then
+            cat "$RUNNER_TEMP/blog-maintenance/links/link-report.txt" >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Save reports and staged articles
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: blog-maintenance-review
+          path: ${{ runner.temp }}/blog-maintenance/
+          retention-days: 60
+          if-no-files-found: warn

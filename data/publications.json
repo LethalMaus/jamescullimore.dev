@@ -1,0 +1,31 @@
+{
+  "Android Weekly": {
+    "icon": "/assets/publications/android-weekly.jpg",
+    "icon_source": "https://androidweekly.net/assets/thumb.jpg"
+  },
+  "Kotlin Weekly": {
+    "icon": "/assets/publications/kotlin-weekly.svg",
+    "icon_source": "https://www.kotlinweekly.net/img/logo-navbar.svg",
+    "icon_note": "Original vector symbol extracted from the publisher’s navbar logo; wordmark omitted."
+  },
+  "jetc.dev": {
+    "icon": "/assets/publications/jetc.png",
+    "icon_source": "https://jetc.dev/apple-touch-icon.png"
+  },
+  "Software Testing Weekly": {
+    "icon": "/assets/publications/software-testing-weekly.png",
+    "icon_source": "https://storage.ghost.io/c/0c/e4/0ce4792b-e2e5-4f1a-9f93-b88f3b823672/content/images/size/w256h256/2026/04/stw-logo.png"
+  },
+  "Gradle Newsletter": {
+    "icon": "/assets/publications/gradle.svg",
+    "icon_source": "https://gradle.org/assets/icon/safari-pinned-tab.svg"
+  },
+  "Mobile Automation Newsletter": {
+    "icon": "/assets/publications/testable-apple.png",
+    "icon_source": "https://testableapple.com/assets/images/logo.png"
+  },
+  "Accessible Mobile Apps": {
+    "icon": "/assets/publications/appt.png",
+    "icon_source": "https://storage.ghost.io/c/92/6b/926b02db-ac75-4f61-a5e3-2706bd040f94/content/images/size/w256h256/2025/09/favicon-removebg-preview.png"
+  }
+}

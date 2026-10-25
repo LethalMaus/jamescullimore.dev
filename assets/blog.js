@@ -4,6 +4,8 @@
   if (!form || !grid) return;
   const search = document.getElementById('blog-search');
   const topic = document.getElementById('blog-topic');
+  const featured = document.getElementById('blog-featured');
+  const featuredPage = grid.dataset.featured === 'true';
   const status = document.getElementById('blog-status');
   const pagination = document.querySelector('.pagination');
   const more = document.getElementById('more-results');
@@ -19,6 +21,7 @@
     'Developer life': /interview|work.life|developer life|open.source|doubt|mask|contribut/i
   };
   let all = [];
+  let publications = {};
   let matches = [];
   let visible = 12;
   function element(tag, className, text) {
@@ -45,12 +48,45 @@
     const tags = element('div', 'blog-tags');
     article.tags.slice(0,3).forEach(t => tags.append(element('span','blog-tag',t)));
     node.append(media, element('div','blog-date',article.date), heading, element('p','blog-excerpt',excerpt), tags);
+    if (article.featured_in?.length) {
+      const features = element('div', 'article-features feature-compact');
+      features.setAttribute('aria-label', 'Featured in newsletters and websites');
+      features.append(element('p', 'feature-label', 'Featured in'));
+      function badges(items) {
+        const group = element('div', 'feature-badges');
+        items.forEach(feature => {
+          const pill = element('a', 'feature-pill');
+          pill.href = feature.url;
+          const icon = publications[feature.name]?.icon;
+          const mark = icon ? element('img', 'publication-mark') : element('span', 'publication-mark publication-monogram', feature.name.split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase());
+          if (icon) Object.assign(mark, {src:icon, alt:'', width:24, height:24, loading:'lazy'});
+          else mark.setAttribute('aria-hidden', 'true');
+          const copy = element('span', 'feature-copy');
+          copy.append(element('strong', '', feature.name));
+          if (feature.edition) copy.append(element('small', 'feature-edition', feature.edition));
+          const arrow = element('span', 'feature-arrow', '↗');
+          arrow.setAttribute('aria-hidden', 'true');
+          pill.append(mark, copy, arrow);
+          group.append(pill);
+        });
+        return group;
+      }
+      features.append(badges(article.featured_in.slice(0,2)));
+      if (article.featured_in.length > 2) {
+        const details = element('details', 'feature-more');
+        const summary = element('summary');
+        summary.append(element('span', 'feature-more-closed', `+${article.featured_in.length-2} more`), element('span', 'feature-more-open', 'Show fewer'), element('span', 'visually-hidden', ` features for ${article.title}`));
+        details.append(summary, badges(article.featured_in.slice(2)));
+        features.append(details);
+      }
+      node.append(features);
+    }
     return node;
   }
   function update() {
     const query = search.value.trim().toLocaleLowerCase();
     const selectedTopic = topic.value;
-    if (!query && !selectedTopic) {
+    if (!query && !selectedTopic && !featured.value && !featuredPage) {
       grid.replaceChildren(...originalCards);
       status.textContent = originalStatus;
       pagination.hidden = false;
@@ -59,7 +95,7 @@
     }
     matches = all.filter(a => {
       const text = `${a.title} ${a.excerpt} ${a.tags.join(' ')}`;
-      return query.split(/\s+/).every(word => text.toLocaleLowerCase().includes(word)) && (!selectedTopic || matchers[selectedTopic].test(text));
+      return (!featured.value || a.featured_in?.length) && query.split(/\s+/).every(word => text.toLocaleLowerCase().includes(word)) && (!selectedTopic || matchers[selectedTopic].test(text));
     });
     grid.replaceChildren(...matches.slice(0,visible).map(card));
     status.textContent = matches.length ? `${matches.length} matching article${matches.length === 1 ? '' : 's'} · Showing ${Math.min(visible,matches.length)}` : 'No articles found. Try another search or choose All topics.';
@@ -69,14 +105,17 @@
   form.addEventListener('submit', e => e.preventDefault());
   search.addEventListener('input', () => { visible=12; update(); });
   topic.addEventListener('change', () => { visible=12; update(); });
+  featured.addEventListener('change', () => { visible=12; update(); });
   more.addEventListener('click', () => {
     const firstNew = visible;
     visible += 12;
     update();
     grid.children[firstNew]?.querySelector('.blog-title a')?.focus({preventScroll:true});
   });
-  fetch('/data/articles.json').then(r => { if (!r.ok) throw new Error('Article index unavailable'); return r.json(); }).then(data => {
+  Promise.all(['/data/articles.json', '/data/publications.json'].map(url => fetch(url).then(r => { if (!r.ok) throw new Error('Article index unavailable'); return r.json(); }))).then(([data, brands]) => {
     all=data;
+    publications=brands;
     form.hidden=false;
+    if (featuredPage || featured.value || topic.value || search.value) update();
   }).catch(() => { /* Static archive links remain available if search cannot load. */ });
 })();

@@ -5,6 +5,9 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
+    <loc>https://jamescullimore.dev/blog/featured.html</loc>
+  </url>
+  <url>
     <loc>https://jamescullimore.dev/apps/</loc>
   </url>
   <url>
@@ -408,6 +411,10 @@
     <lastmod>2026-09-28</lastmod>
   </url>
   <url>
+    <loc>https://jamescullimore.dev/starjar/de/</loc>
+    <lastmod>2026-10-25</lastmod>
+  </url>
+  <url>
     <loc>https://jamescullimore.dev/elchem/</loc>
     <lastmod>2026-09-28</lastmod>
   </url>
@@ -521,4 +528,4 @@
   <url>
     <loc>https://jamescullimore.dev/services/android-testing-build-optimisation/</loc>
   </url>
-<url><loc>https://jamescullimore.dev/starjar/de/</loc><lastmod>2026-10-25</lastmod></url></urlset>
+</urlset>

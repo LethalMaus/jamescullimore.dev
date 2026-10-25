@@ -90,7 +90,31 @@ for article in json.loads((ROOT/'data/articles.json').read_text()):
     target,_=resolve(article['url'],ROOT/'index.html')
     for asset in ['analytics-consent.js','conversion-analytics.js']:
         if '/assets/'+asset not in files.get(target,''):errors.append(f'{article["url"]}: missing {asset}')
+    features = article.get('featured_in', [])
+    seen_features = set()
+    for feature in features:
+        url = feature.get('url', '')
+        parsed = urlsplit(url)
+        if not feature.get('name') or parsed.scheme != 'https' or not parsed.netloc or parsed.path in ['', '/']:
+            errors.append(f'{article["url"]}: feature needs a name and an HTTPS edition/page URL')
+        if url in seen_features:
+            errors.append(f'{article["url"]}: duplicate feature URL {url}')
+        seen_features.add(url)
+        if url not in docs[target].links:
+            errors.append(f'{article["url"]}: feature link missing from article: {url}')
+    if files.get(target, '').count('class="feature-pill"') != len(features):
+        errors.append(f'{article["url"]}: rendered features differ from article data')
 # Watch pages must expose the configured video in static HTML, with verified metadata.
+featured_target = ROOT/'blog/featured.html'
+selected_articles = [a['url'] for a in json.loads((ROOT/'data/articles.json').read_text()) if a.get('featured_in')]
+featured_document = docs.get(featured_target)
+if not featured_document or 'https://jamescullimore.dev/blog/featured.html' not in urls:
+    errors.append('Featured article collection missing from sitemap')
+elif set(url for url in featured_document.links if url.startswith('/articles/')) != set(selected_articles):
+    errors.append('Static featured collection differs from selected article data')
+if '/blog/featured.html' not in docs[ROOT/'index.html'].links:
+    errors.append('Homepage missing featured article collection link')
+
 for item in json.loads((ROOT/'data/videos.json').read_text()):
     path='/videos/'+item['slug']+'/'
     target,_=resolve(path,ROOT/'index.html');text=files.get(target,'')
