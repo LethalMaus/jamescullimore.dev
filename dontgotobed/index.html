@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="color-scheme" content="dark">
+<meta name="color-scheme" content="light">
 <meta name="description" content="Don't Go To Bed: a free family adventure for Android, iPhone and iPad. Explore, build and find Mammy before nightfall.">
 <title>Don’t Go To Bed – Free Family Adventure Game for Android &amp; iOS</title>
 <link rel="canonical" href="https://jamescullimore.dev/dontgotobed/">
@@ -28,7 +28,7 @@
   ],
   "image": "https://jamescullimore.dev/dontgotobed/assets/game-icon.png",
   "screenshot": [
-    "https://jamescullimore.dev/dontgotobed/assets/family-banner.png"
+    "https://jamescullimore.dev/dontgotobed/assets/multiplayer.png"
   ],
   "installUrl": [
     "https://play.google.com/store/apps/details?id=dev.jamescullimore.dontgotobed",
@@ -47,8 +47,10 @@
 }
 </script>
 <link rel="stylesheet" href="/assets/video-preview.css?v=d515614cd572"><script defer src="/assets/video-preview.js?v=13da696b3304"></script>
+<link rel="stylesheet" href="/dontgotobed/adventure.css">
+<script defer src="/dontgotobed/adventure.js"></script>
 </head>
-<body>
+<body class="game-landing">
 <a class="skip" href="#main">Skip to content</a>
 <div class="wrap">
 <header>
@@ -60,27 +62,18 @@
 </nav>
 </header>
 <main id="main">
-<section class="hero">
-<div>
-<p class="eyebrow">Made by a dad and his boys</p>
-<h1>One missing Mammy.<br>
-<span>A whole world of adventure.</span>
-</h1>
-<p class="lead">Don’t Go To Bed is a free family adventure game for Android, iPhone and iPad. Play solo or together on the same Wi-Fi. Jump over trouble. Build a way up. Turn the world to see what you missed. Just find Mammy before nightfall.</p>
-<a class="button" href="#trailer">Watch the gameplay trailer</a>
-<p class="note">Available on Android, iPhone and iPad. All gameplay is free.</p>
-<div class="store-downloads">
-<a href="https://apps.apple.com/app/id6812278045"><img src="/assets/app-store-download.svg" alt="Download on the App Store" width="144" height="48"></a>
-<a href="https://play.google.com/store/apps/details?id=dev.jamescullimore.dontgotobed"><img src="/assets/google_play_badge.png" alt="Get it on Google Play" width="162" height="48"></a>
-</div>
-</div>
-<div class="family-key-art"><img src="assets/family-banner.png" alt="Ian and Leo lead the adventure, with Mammy, Daddy, Grace and the cat" width="1792" height="876"></div>
+<section class="hero" aria-labelledby="hero-title">
+<div class="family-key-art"><img src="assets/family-banner.png" alt="Don’t Go To Bed: Ian and Leo lead the family adventure, with Mammy, Daddy, Grace and the cat" width="1793" height="877" fetchpriority="high"></div>
+<div class="hero-copy"><div><p class="eyebrow">A family-made adventure</p><h1 id="hero-title">Turn the world.<br><span>Find your own way.</span></h1></div>
+<div><p class="lead">Mammy’s out there somewhere. Break blocks, build a way through and see what’s around the corner. Just watch out for the neighbours.</p>
+<div class="store-downloads"><a href="https://apps.apple.com/app/id6812278045"><img src="/assets/app-store-download.svg" alt="Download on the App Store" width="144" height="48"></a><a href="https://play.google.com/store/apps/details?id=dev.jamescullimore.dontgotobed"><img src="/assets/google_play_badge.png" alt="Get it on Google Play" width="162" height="48"></a></div>
+<p class="note">Free to play · No ads · Android, iPhone &amp; iPad</p><a class="text-link" href="#trailer">Watch the gameplay ↓</a></div></div>
 </section>
 <div class="pills">
 <span>Three playable characters</span>
 <span>No ads</span>
 <span>No game account</span>
-<span>A fresh world every session</span>
+<span>Solo or same-Wi-Fi co-op</span>
 </div>
 <section id="trailer" class="product-trailer">
 <p class="eyebrow">Official trailer</p>
@@ -94,17 +87,17 @@
 <h2>There’s always another way to go.</h2>
 <div class="grid">
 <article>
-<span class="number">01</span>
+<span class="terrain-icon blocks" aria-hidden="true"><i></i><i></i><i></i></span>
 <h3>Make your own way up</h3>
 <p>Break blocks, collect them and build a route. A pile of grass blocks can become your next staircase.</p>
 </article>
 <article>
-<span class="number">02</span>
+<span class="terrain-icon turn" aria-hidden="true">↔</span>
 <h3>Turn the adventure around</h3>
 <p>Switch direction to explore another slice of the world. There’s more waiting around the corner.</p>
 </article>
 <article>
-<span class="number">03</span>
+<span class="terrain-icon moon-icon" aria-hidden="true">☾</span>
 <h3>Find Mammy before dark</h3>
 <p>Dodge zombies and skeleton arrows on your search. Find Mammy for a few peaceful minutes before the next adventure begins.</p>
 </article>
@@ -113,14 +106,16 @@
 <section>
 <p class="eyebrow">Bring a fellow adventurer</p>
 <h2>Bring the family along.</h2>
-<p class="lead">Play together across Android, iPhone and iPad on the same trusted Wi-Fi. In version 1.1, one player hosts and the others find the game under Nearby games—no address to type. Explore together, build together, and help each other find Mammy.</p>
+<p class="lead">Play together across Android, iPhone and iPad on the same trusted Wi-Fi. One player hosts and the others find the game under Nearby games. Explore together, build together, and help each other find Mammy.</p>
 <figure>
 <img class="screenshot" src="assets/multiplayer.png" alt="Leo and Ian exploring together beside a stone bridge in actual two-player Android gameplay" loading="lazy">
 <figcaption>Actual two-player Android gameplay. Three-player Android and iPhone play has also been tested by our family.</figcaption>
 </figure>
 <p class="note">Multiplayer uses unencrypted local connections. Use a trusted network. There is no internet matchmaking or public chat.</p>
 </section>
-<section id="update"><p class="eyebrow">Available now in version 1.1</p><h2>More ways to make it your adventure.</h2><p class="lead">Choose an outfit, pack ropes and equipment, meet the guide cat and find nearby games automatically. The bag, health potions, arrows and map match the adventure’s illustrated artwork.</p><p>Play in English, German, Spanish, Italian, French, Brazilian Portuguese or Russian. Choose your language in Settings, or follow your device language.</p></section>
+<section id="update"><p class="eyebrow">Pack for the unexpected</p><h2>More ways to make it your adventure.</h2><p class="lead">Choose an outfit, pack ropes and equipment, meet the guide cat and find nearby games automatically. The bag, health potions, arrows and map match the adventure’s illustrated artwork.</p><p>Play in English, German, Spanish, Italian, French, Brazilian Portuguese or Russian. Choose your language in Settings, or follow your device language.</p></section>
+<section class="meet" aria-labelledby="meet-title"><div class="meet-copy"><p class="eyebrow">Meet your adventurers</p><h2 id="meet-title">Little heroes.<br>Big ideas.</h2><p>Play as Ian, Leo or Daddy. Pick an outfit, pack your bag and make a plan. Or just see what happens.</p><p>Bring a second player along on the same Wi-Fi. A helping hand is always useful when your staircase doesn’t quite reach.</p><button type="button" class="jump-button" id="jump-heroes">Give them a jump ↑</button><button type="button" class="motion-button" id="toggle-motion" aria-pressed="false">Pause animation</button><p class="sr-only" id="hero-action-status" aria-live="polite"></p></div>
+<div class="character-scene" aria-label="Illustration of Ian and Leo in a block-built landscape"><div class="scene-sun" aria-hidden="true"></div><div class="scene-cloud cloud-one" aria-hidden="true"></div><div class="scene-cloud cloud-two" aria-hidden="true"></div><div class="scene-hills" aria-hidden="true"></div><div class="hero-character leo-character"><img src="assets/leo-approved.webp" width="1113" height="1419" loading="lazy" alt="Leo with his drumsticks"><span>Leo</span></div><div class="hero-character ian-character"><img src="assets/ian-approved.webp" width="397" height="719" loading="lazy" alt="Ian with his blue rabbit"><span>Ian</span></div><div class="scene-ground" aria-hidden="true"></div></div></section>
 <section class="story">
 <div>
 <p class="eyebrow">From our family to yours</p>
