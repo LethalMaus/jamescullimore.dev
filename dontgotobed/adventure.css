@@ -8,3 +8,20 @@
 .game-landing .analytics-consent-button{flex:1 1 140px;min-width:0}
 .game-landing main .closing{padding:36px;gap:28px}
 @media(max-width:520px){.game-landing main .closing{padding:24px}.game-landing .analytics-consent-banner{padding:16px}}
+
+/* Game characters keep their source artwork; motion is presentation only. */
+.critter-trail{height:190px;position:relative;overflow:hidden;margin:20px 0 48px;border-bottom:5px solid #608142;background:linear-gradient(transparent 60%,#e4e9cf 60%)}
+.trail-ground{position:absolute;bottom:0;left:0;right:0;height:20px;background:repeating-linear-gradient(90deg,#a87543 0 35px,#98633b 35px 39px);border-top:7px solid #7c9b49}
+.zombie-patrol{position:absolute;bottom:20px;left:4%;width:72px;height:115px;animation:zombie-patrol 18s linear infinite;transform-origin:center bottom}
+.zombie-patrol img{height:100%;width:100%;object-fit:contain;animation:zombie-step .6s ease-in-out infinite alternate;transform-origin:center bottom}
+.cat-circle{position:absolute;bottom:22px;right:15%;width:86px;height:86px;animation:cat-circle 20s linear infinite;transform-origin:center bottom}
+.cat-pose{width:100%;height:100%;background:url('assets/guide-cat-sheet.png') 0 0/300% 100% no-repeat;animation:cat-poses 20s steps(1,end) infinite;transform-origin:center bottom}
+.sleep-bubbles{position:absolute;right:0;top:6px;font:900 14px Adventure, sans-serif;color:#67533c;letter-spacing:5px;animation:cat-sleep 20s linear infinite;opacity:0}
+.motion-paused .critter-trail *{animation-play-state:paused!important}
+@keyframes zombie-patrol{0%{left:4%;transform:scaleX(1)}49.9%{left:52%;transform:scaleX(1)}50%{left:52%;transform:scaleX(-1)}99.9%{left:4%;transform:scaleX(-1)}100%{left:4%;transform:scaleX(1)}}
+@keyframes zombie-step{from{transform:translateY(0) rotate(-2deg)}to{transform:translateY(-4px) rotate(2deg)}}
+@keyframes cat-circle{0%{transform:translate(-38px,0) scaleX(1)}11%{transform:translate(0,-14px) scaleX(1)}22%{transform:translate(38px,0) scaleX(1)}22.1%{transform:translate(38px,0) scaleX(-1)}33%{transform:translate(0,14px) scaleX(-1)}44%{transform:translate(-38px,0) scaleX(-1)}46%,100%{transform:translate(-38px,0) scaleX(1)}}
+@keyframes cat-poses{0%,6%,12%,18%,24%,30%,36%,42%{background-position:0 0;transform:translateY(0)}3%,9%,15%,21%,27%,33%,39%{background-position:100% 0;transform:translateY(-2px)}46%{background-position:0 0;transform:scaleY(.92)}50%,80%{background-position:50% 0;transform:scaleY(1)}84%{background-position:0 0;transform:scaleY(.94)}88%,100%{background-position:0 0;transform:scaleY(1)}}
+@keyframes cat-sleep{0%,49%,84%,100%{opacity:0}54%,78%{opacity:1}}
+@media(max-width:520px){.critter-trail{height:155px}.zombie-patrol{width:57px;height:90px}.cat-circle{right:10%;width:66px;height:66px}@keyframes zombie-patrol{0%{left:2%;transform:scaleX(1)}49.9%{left:36%;transform:scaleX(1)}50%{left:36%;transform:scaleX(-1)}99.9%{left:2%;transform:scaleX(-1)}100%{left:2%;transform:scaleX(1)}}}
+@media(prefers-reduced-motion:reduce){.critter-trail *{animation:none!important}.cat-pose{background-position:50% 0}.sleep-bubbles{display:none}}
