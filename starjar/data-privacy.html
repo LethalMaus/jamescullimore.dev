@@ -1,6 +1,6 @@
 <!doctype html>
 <html lang="en">
-  <head>
+  <head><style>body{font:17px/1.65 system-ui;max-width:860px;margin:32px auto;padding:0 22px;background:#fffdf4;color:#263b35}a{color:#126b57}h1,h2{line-height:1.3}nav{margin:20px 0}.brand-logo{width:80px;height:auto}</style>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>StarJar Data Privacy</title>
@@ -14,16 +14,16 @@
       content="Read the StarJar privacy policy covering information collection, third-party services, and data retention."
     />
     <meta property="og:type" content="website" />
-    <link rel="stylesheet" href="styles.css?v=2bb84af2cc77" />
-    <script defer src="../assets/analytics-consent.js?v=39410635d34d"></script>
+    <style>body{font:17px/1.65 system-ui;max-width:860px;margin:32px auto;padding:0 22px;background:#fffdf4;color:#263b35}a{color:#126b57}h1,h2{line-height:1.3}.draft{padding:14px;background:#fff0ad;border-radius:12px}nav{margin:20px 0}</style>
+    
   </head>
-  <body>
+  <body><nav>English · <a href="de/data-privacy.html" lang="de">Deutsch</a></nav>
     <div class="starfield" aria-hidden="true"></div>
 
     <div class="page">
       <header class="hero policy-hero">
         <div class="brand">
-          <img class="brand-logo" src="assets/ic_launcher-playstore.png" alt="StarJar logo" />
+          <img class="brand-logo" src="https://jamescullimore.dev/starjar/assets/ic_launcher-playstore.png" alt="StarJar logo" />
           <div class="brand-text">
             <span class="brand-name">StarJar</span>
             <span class="brand-tag">Data privacy</span>
@@ -32,7 +32,7 @@
         <div class="hero-copy">
           <h1>Android Privacy Policy</h1>
           <p>Using an iPhone or iPad? Read the <a href="data-privacy-ios.html">iOS privacy policy</a>.</p>
-          <p>Effective date: October 2, 2026.</p>
+          <p>Effective date: 28 October 2026.</p>
         </div>
       </header>
 
@@ -41,9 +41,9 @@
         <p>This policy covers StarJar for Android, provided by James Cullimore – Software Engineering.
         StarJar helps parents and children manage family chores, stars and rewards. Parents set up and manage the app.
         Contact <a href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a> or see our
-        <a href="../impressum.html">legal notice</a> for provider details.</p>
+        <a href="https://jamescullimore.dev/impressum.html">legal notice</a> for provider details.</p>
         <p>The iOS app has a <a href="data-privacy-ios.html">separate policy</a>. Visiting this website is also
-        subject to our <a href="../datenschutz.html">website privacy information</a>.</p>
+        subject to our <a href="https://jamescullimore.dev/datenschutz.html">website privacy information</a>.</p>
 
         <h2>Local family data and optional Google Drive sync</h2>
         <p>StarJar stores profiles, chores, rewards, star balances and activity history on your device. Children use
@@ -58,14 +58,13 @@
         <p>Google processes account authorization and stored content under its own terms and
         <a href="https://policies.google.com/privacy">privacy policy</a>. The app retains an account identifier to
         prevent synchronization to the wrong account. Network connections expose technical information such as IP
-        addresses to the receiving service. Sync uses HTTPS and Google’s storage protections; StarJar does not add
-        end-to-end encryption to the family files. Each authorized installation has access to the family folder.
+        addresses to the receiving service. Sync uses HTTPS and Google’s storage protections; optional additional file encryption is described below. Each authorized installation has access to the family folder.
         A parent PIN protects app controls, not a separate child-only cloud credential.</p>
         <p>Cloud credentials are stored separately from family data: encrypted device storage protected by Android Keystore. The sync cache and
         StarJar’s stored cloud credentials are excluded from the app’s ordinary cloud backup. Other local data may
         be included in operating-system backups according to device settings. Keep your device and parent PIN secure.</p>
 
-        <h2>Purchases and Premium</h2>
+        <h2>Optional extra encryption for family sync</h2><p>In versions offering extra cloud encryption, you can encrypt family files on your device before uploading them. This uses AES-256-GCM and a randomly generated family recovery key, separate from your parent PIN. Each connected device stores its key in protected device storage. StarJar does not upload the recovery key to your cloud account.</p><p>Update every family device first. Finish encryption setup on one device, then connect the others using the same Google account and recovery key. Keep a backup of the key in a safe place. If you lose it and every device holding it, StarJar cannot recover your encrypted files. Changing the parent PIN does not change the key. Copying the key puts it on the system clipboard at your request; the clipboard is not a backup and may be accessible to operating-system clipboard features.</p><p>Setup copies and verifies existing family files before removing their readable originals. Interrupted setup can be resumed. This upgrade currently cannot be undone. The cloud provider still processes account information and file metadata. This feature does not encrypt the local database or manually exported recovery files. Deleting cloud content does not remove exported copies or copies on other devices. Without this option, HTTPS and the provider’s storage protection still apply.</p><h2>Local reminders</h2><p>You can configure optional reminders on each device with selected weekdays and a time. Settings stay on that device and are not synchronized through Google Drive. The operating system delivers these local notifications; we do not use a push server for them. Scheduled reminders contain generic text, not child names or task text. Turn them off in StarJar or block notifications in system settings. Clear All Data also removes scheduled local notifications.</p><h2>Purchases and Premium</h2>
         <p>Google Play processes payments and subscriptions. StarJar uses RevenueCat to validate purchases, maintain
         Premium access, restore purchases and provide purchase reporting. RevenueCat initializes at app launch and
         receives a pseudonymous app identifier, purchase history, transaction information and technical information
@@ -79,19 +78,13 @@
         subject to the applicable service agreements and data-processing terms. See
         <a href="https://www.revenuecat.com/privacy">RevenueCat’s privacy policy</a> and <a href="https://policies.google.com/privacy">Google’s privacy policy</a>.</p>
 
-        <h2>Analytics and external services</h2>
-        <p>The Android app includes Google Analytics for Firebase and Firebase Crashlytics. These services process
-        installation identifiers, usage events, device/app information and crash diagnostics to help understand usage
-        and reliability. Google Analytics can derive approximate location from network information. The app does not
-        request precise device location. We do not configure child names, PINs, task text or reward text as analytics
-        attributes. Technical information is not necessarily anonymous merely because reports are aggregated.</p>
-        <p>See <a href="https://firebase.google.com/support/privacy">Firebase’s privacy information</a> for its
-        processing and retention practices. Provider processing may involve countries outside your own under the
-        applicable service terms. StarJar does not include third-party advertising. Opening the Android trailer,
-        support, privacy or terms links contacts external services with their own privacy practices. If you email
-        support, we receive your email address and the information you include; avoid unnecessary child information.</p>
-
-        <h2>Why information is processed</h2>
+        <h2>Optional usage analytics</h2>
+<p>Where available, a parent can choose to share usage statistics through Google Analytics for Firebase. This is off by default. Choosing not to share does not limit StarJar features. Change your choice in Parent Settings at any time.</p>
+<p>If enabled, Firebase processes an app-installation identifier, app and device information, approximate location derived from network information, and usage/session and purchase events. StarJar records setup completion, the first observed approved task and redeemed reward, Premium views and purchase outcomes. These technical data are pseudonymous, not anonymous. We do not send profile names, PINs, task or reward text, Google Drive contents or your email address as analytics events.</p>
+<p>We disable advertising identifier collection, advertising consent and personalised-ad signals for this feature. We do not use these events to build advertising audiences. Google processes analytics under its applicable service and data-processing terms; processing may take place outside your country. See <a href="https://firebase.google.com/support/privacy">Firebase privacy information</a>. The legal basis for this optional analytics is your consent.</p>
+<p>Turning analytics off stops future collection by this feature and resets the local analytics identifier and stored analytics data. It does not automatically erase previously received server data or aggregated reports. For deletion questions contact <a href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a>. RevenueCat purchase processing, optional cloud sync and support correspondence are separate from this choice.</p>
+<p>The Android app also includes Firebase Crashlytics for crash diagnostics. This usage-analytics control does not change that separate service.</p>
+<h2>Why information is processed</h2>
         <p>Family information provides the features configured by parents, including optional synchronization.
         Purchase information provides and restores paid access, supports fraud prevention and purchase reporting.
         Support correspondence is used to answer requests. Applicable grounds include performance of requested
