@@ -25,3 +25,15 @@
 @keyframes cat-sleep{0%,49%,84%,100%{opacity:0}54%,78%{opacity:1}}
 @media(max-width:520px){.critter-trail{height:155px}.zombie-patrol{width:57px;height:90px}.cat-circle{right:10%;width:66px;height:66px}@keyframes zombie-patrol{0%{left:2%;transform:scaleX(1)}49.9%{left:36%;transform:scaleX(1)}50%{left:36%;transform:scaleX(-1)}99.9%{left:2%;transform:scaleX(-1)}100%{left:2%;transform:scaleX(1)}}}
 @media(prefers-reduced-motion:reduce){.critter-trail *{animation:none!important}.cat-pose{background-position:50% 0}.sleep-bubbles{display:none}}
+
+/* Place each character beside the requested content, with its own walking area. */
+.game-landing .cat-trail{height:132px;margin:24px 0 0}
+.game-landing .closing{align-items:center}
+.game-landing .closing>div:not(.closing-zombie){flex:1;min-width:0}
+.closing-zombie{position:relative;overflow:hidden;flex:0 0 220px;min-height:180px;align-self:stretch}
+.closing-zombie .zombie-patrol{bottom:0;height:150px;width:100px}
+.motion-paused .closing-zombie *{animation-play-state:paused!important}
+@media(max-width:800px){.game-landing .closing{flex-wrap:wrap}.closing-zombie{flex-basis:170px;min-height:150px}.closing-zombie .zombie-patrol{height:130px;width:86px}}
+@media(max-width:520px){.game-landing .cat-trail{height:115px}.closing-zombie{flex:none;align-self:flex-end;width:170px;height:140px;min-height:140px}.closing-zombie .zombie-patrol{height:120px;width:80px}}
+
+.game-landing main #adventure{padding-bottom:0}
