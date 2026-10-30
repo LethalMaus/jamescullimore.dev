@@ -1,0 +1,2 @@
+/* Match the original adventure’s paper and woodland palette. */
+.game-landing .button{background:#456738;color:#fff4d1;border:2px solid #243c24;border-radius:4px;box-shadow:0 4px #243c24}.game-landing .button:hover{background:#36552b;color:#fff4d1}.game-landing .number{color:#895021}.game-landing main .hero{padding-top:0}@media(max-width:520px){.game-landing header{flex-wrap:wrap}.game-landing header nav{gap:16px}}

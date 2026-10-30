@@ -27,7 +27,12 @@
     "path": "/starjar/getting-started/",
     "title": "Getting started with StarJar: your first task and reward",
     "description": "Set up a child profile, create a chore, review completed tasks and choose a reward in StarJar. A practical first routine for your family.",
-    "date": "2026-10-22"
+    "date": "2026-10-22",
+    "alternates": {
+      "en": "/starjar/getting-started/",
+      "de": "/starjar/de/erste-schritte/",
+      "x-default": "/starjar/getting-started/"
+    }
   },
   {
     "slug": "watchful-first-watcher",

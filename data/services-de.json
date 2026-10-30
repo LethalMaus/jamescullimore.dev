@@ -46,7 +46,7 @@
     "title": "Android-Testautomatisierung & Gradle-Optimierung",
     "heading": "Schneller wissen, ob eine Änderung funktioniert.",
     "description": "Android-Testautomatisierung sowie Gradle- und CI-Optimierung mit James Cullimore. Langsame Builds untersuchen und zuverlässigere Tests aufbauen.",
-    "intro": "Langsame Builds und unzuverlässige Tests machen selbst kleine Änderungen aufwendig. Ich helfe Android-Teams herauszufinden, wo Rückmeldungen zu lange dauern, und ihre Prüfungen für Releases zu verbessern.",
+    "intro": "Langsame Builds und unzuverlässige Tests machen selbst kleine Änderungen aufwendig. Ich helfe Android-Teams herauszufinden, wo Rückmeldungen zu lange dauern, und ihre Prüfungen für Releases zu verbessern. An der Build-Optimierung habe ich sowohl bei lexoffice als auch bei blackned gearbeitet, jeweils im Rahmen eigener Engagements neben Tests und Android-Entwicklung.",
     "fit": "Für Teams mit langen Gradle- oder CI-Laufzeiten, instabilen UI-Tests oder zu viel wiederkehrender manueller Release-Prüfung.",
     "work": [
       ["Build und CI untersuchen", "Den bestehenden Ablauf messen, langsame Schritte untersuchen und Änderungen anhand einer wiederholbaren Ausgangsmessung bewerten. Prüfungen erhalten, die echte Probleme finden."],

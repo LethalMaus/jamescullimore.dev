@@ -173,7 +173,7 @@ for guide in guides:
     path = guide_path(guide)
     lang = guide.get('lang', 'en')
     content = (ROOT / 'templates/guides' / (guide['slug'] + '.html')).read_text()
-    alternates = None
+    alternates = guide.get('alternates')
     if guide.get('translation'):
         translated = next(g for g in guides if g['slug'] == guide['translation'])
         alternates = {lang: path, translated.get('lang', 'en'): guide_path(translated)}
@@ -357,7 +357,7 @@ for f in [*(ROOT/'articles').glob('*.html'),ROOT/'impressum.html',ROOT/'datensch
 ns={'s':'http://www.sitemaps.org/schemas/sitemap/0.9'}
 old=ET.parse(ROOT/'sitemap.xml')
 dates={u.find('s:loc',ns).text:u.find('s:lastmod',ns).text for u in old.findall('s:url',ns) if u.find('s:lastmod',ns) is not None}
-urls=[BASE+'/',BASE+'/blog/featured.html',BASE+'/apps/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/starjar/de/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
+urls=[BASE+'/',BASE+'/blog/featured.html',BASE+'/apps/',BASE+'/projects.html',BASE+'/courses.html',*[BASE+blog_path(n) for n in range(1,page_count+1)],BASE+'/impressum.html',BASE+'/datenschutz.html',*[BASE+'/projects/'+p['slug']+'.html' for p in projects],*[BASE+a['url'] for a in articles],BASE+'/starjar/',BASE+'/starjar/de/',BASE+'/tiny-racers/',BASE+'/elchem/',BASE+'/android-security-training/',BASE+'/5-minute-bedtime-stories-for-android-devs.html']
 # Retain existing product URLs, including policy pages without lastmod values.
 urls += [u.find('s:loc', ns).text for u in old.findall('s:url', ns) if any(folder in u.find('s:loc', ns).text for folder in ['/watchful/', '/dontgotobed/', '/elchem/', '/scrumscore/', '/starjar/'])]
 urls += [BASE + guide_path(guide) for guide in guides]

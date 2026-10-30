@@ -153,11 +153,12 @@
       "UI testing",
       "Automation"
     ],
-    "summary": "Strengthening Android UI testing and its infrastructure.",
-    "context": "James worked on lexoffice first as a freelance Android developer and later as a full-time senior Android developer. His contributions spanned UI testing and its infrastructure, feature development and engineering improvements across the Android app environment.",
+    "summary": "Android UI testing, test infrastructure and Gradle build optimisation.",
+    "context": "James worked on lexoffice first as a freelance Android developer and later as a full-time senior Android developer. His contributions spanned UI testing and its infrastructure, Gradle build optimisation, and feature development across the Android app environment.",
     "work": [
       "Applied Android UI testing expertise to the application.",
       "Worked on the supporting test infrastructure.",
+      "Worked on Gradle build optimisation alongside the testing improvements.",
       "Helped the team increase automated test coverage.",
       "Delivered features and bug fixes during the later full-time role."
     ],

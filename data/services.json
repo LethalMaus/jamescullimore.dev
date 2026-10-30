@@ -48,7 +48,7 @@
     "title": "Android Test Automation & Gradle Build Optimisation",
     "heading": "Spend less time waiting for confidence in a release.",
     "description": "Android test automation, Gradle and CI optimisation with James Cullimore. Investigate slow builds, improve UI test infrastructure and focus release checks.",
-    "intro": "Slow builds and unreliable tests make even small changes expensive. I help Android teams find where feedback is getting stuck and improve the checks they use to ship.",
+    "intro": "Slow builds and unreliable tests make even small changes expensive. I help Android teams find where feedback is getting stuck and improve the checks they use to ship. My build optimisation work includes separate engagements at lexoffice and blackned, alongside testing and Android development.",
     "fit": "For teams with long Gradle or CI runs, fragile UI tests, or too much repetitive manual release testing.",
     "work": [
       ["Build and CI investigation", "Measure the existing workflow, inspect the slow stages and make changes against a repeatable baseline. Keep the checks that catch real problems."],
