@@ -55,8 +55,10 @@ original sources. Other publications use typographic initials. Archive cards
 show two badges with a native expandable list; article pages show all selected
 badges.
 
-The October 2026 audit checked all 66 articles; eight Kotlin Weekly editions
-were unavailable, so the recorded features are not an exhaustive claim.
+The October 2026 audit checked all 66 articles. On 1 November, six of the eight
+previously unavailable Kotlin Weekly editions were recovered through the
+publisher’s announcements; none linked to an indexed article. Issues #404 and
+#415 remain unverified, so the recorded features are not an exhaustive claim.
 
 Run `node scripts/blog_features_check.cjs` with the preview server and Chrome
 endpoint above to check feature links, search, topic filters, pagination,
@@ -117,14 +119,18 @@ failures. Every result retains its referring articles. Review failures in a
 browser before assuming a link is broken. Links and badges are never removed
 or edited. Repeated missing-page responses for Kotlin Weekly, Android Weekly
 and jetc.dev produce brief message drafts in the report; nothing is sent.
-The eight previously unavailable, unselected Kotlin Weekly editions remain
-in the historical research audit and are not added to the recurring check.
+The unselected Kotlin Weekly editions remain in the historical research audit
+and are not added to the recurring check. The November follow-up records the
+six recovered edition URLs and the two editions still awaiting verification.
 
 `.github/workflows/blog-maintenance.yml` prepares recent Medium imports and
 checks all article/feature links monthly, on the first day at 08:23 UTC, or on
 manual dispatch. It has read-only repository permission and saves reports and
-staged posts in a 60-day Actions artifact. Review failures mark the run as
-failed; notification delivery depends on your GitHub settings. The schedule
+staged posts in a 60-day Actions artifact. Repeated missing-page responses
+mark the run as failed. Access restrictions,
+server errors and network failures produce warnings and remain in the report;
+script errors still fail the run. Notification delivery depends on your GitHub
+settings. The schedule
 starts only after the workflow is on the default branch and Actions is enabled.
 It never applies imports, publishes changes, or contacts newsletter authors.
 

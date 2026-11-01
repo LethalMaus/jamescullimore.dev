@@ -95,13 +95,13 @@
 <ul><li>which exact string is this?</li><li>where is it being used?</li><li>is this usage more shared than we thought?</li><li>if we change it, who else do we need to warn?</li></ul>
 <p>That turns a screenshot review from passive confirmation into something much closer to real collaboration.</p>
 <h2>Font Scale Was The Other Dimension That Made This Worth Doing</h2>
-<p>If you already use `<a href="http://twitter.com/PreviewFontScale" target="_blank" rel="noopener noreferrer">@PreviewFontScale</a>`, this probably sounds obvious.</p>
+<p>If you already use `<a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/tooling/preview/PreviewFontScale" target="_blank" rel="noopener noreferrer">@PreviewFontScale</a>`, this probably sounds obvious.</p>
 <p>I still think it is worth stating plainly: font scale coverage buys you more than people expect.</p>
 <p>A layout can look completely fine at default scale and become much less convincing once the text grows. That does not always mean it is broken, but it often reveals where the UI was only “working” because the content happened to be compact enough in the happy path.</p>
 <p>The useful part here was not accessibility compliance in the abstract. It was being able to show translators and designers the practical consequences of longer content and larger text at the same time.</p>
 <p>That is where the screenshots earned their keep.</p>
 <p>A short label in English at `1.0x` is not a serious test. A longer phrase in another language at `1.5x` or `2.0x` is much closer to reality.</p>
-<p>At the very least, if you are already using `<a href="http://twitter.com/PreviewFontScale" target="_blank" rel="noopener noreferrer">@PreviewFontScale</a>`, I think this is one of the better arguments for taking it seriously.</p>
+<p>At the very least, if you are already using `<a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/tooling/preview/PreviewFontScale" target="_blank" rel="noopener noreferrer">@PreviewFontScale</a>`, I think this is one of the better arguments for taking it seriously.</p>
 <p>It also made review conversations much less theoretical. Nobody had to imagine what “this might get tight at larger sizes” meant. They could just look at the screen and decide whether it still held up.</p>
 <h2>The Output Needed To Be Useful To People, Not Just Diffs</h2>
 <p>One thing I wanted to avoid was generating a pile of screenshots that only engineers could tolerate.</p>
@@ -122,7 +122,7 @@
 <p>There were two practical wrinkles.</p>
 <p>The first was around the preview tooling itself. Early on, there was some confusion around preview configuration, and the fix we ended up contributing was not some deep runtime change. It was much simpler: the documentation needed to be clearer, especially around including `fontScale` in the `deviceConfig` example and showing a sensible file naming convention example in the README.</p>
 <p>That may sound minor. It was still useful.</p>
-<p>A lot of tooling friction is not “the library is broken.” Sometimes it is just that the path to using it correctly is less obvious than it should be. In this case, cleaning that up made the setup much more legible, especially if you are using `<a href="http://twitter.com/PreviewFontScale" target="_blank" rel="noopener noreferrer">@PreviewFontScale</a>` and expect the output naming and device configuration to reflect that properly.</p>
+<p>A lot of tooling friction is not “the library is broken.” Sometimes it is just that the path to using it correctly is less obvious than it should be. In this case, cleaning that up made the setup much more legible, especially if you are using `<a href="https://developer.android.com/reference/kotlin/androidx/compose/ui/tooling/preview/PreviewFontScale" target="_blank" rel="noopener noreferrer">@PreviewFontScale</a>` and expect the output naming and device configuration to reflect that properly.</p>
 <p>The second wrinkle was scrollable content.</p>
 <p>That is one of those things you notice quickly once you start relying on previews for more than just compact components. Some screens do not fit neatly into a single static capture, and previews do not magically solve that for you.</p>
 <p>So I needed a small workaround there.</p>

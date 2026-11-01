@@ -25,7 +25,7 @@ jobs:
         run: python3 scripts/import_medium.py --output "$RUNNER_TEMP/blog-maintenance/medium"
       - name: Check external links without changing them
         if: always()
-        run: python3 scripts/check_blog_links.py --include-article-links --fail-on-review --output "$RUNNER_TEMP/blog-maintenance/links"
+        run: python3 scripts/check_blog_links.py --include-article-links --fail-on-missing --output "$RUNNER_TEMP/blog-maintenance/links"
       - name: Add review summary
         if: always()
         run: |

@@ -5,7 +5,7 @@ import tempfile
 import unittest
 from unittest.mock import patch
 from import_medium import Content, stage, apply
-from check_blog_links import classify, run
+from check_blog_links import classify, run, main
 
 FEED = '''<rss xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><item><title>A new article</title><link>https://levelup.gitconnected.com/a-new-article-abcdef123456</link><pubDate>Mon, 03 Aug 2026 15:29:25 GMT</pubDate><category>Android</category><content:encoded><![CDATA[<figure><img src="https://example.com/image.png"></figure><p>WORDS</p>EMBED]]></content:encoded></item></channel></rss>'''.replace('WORDS','Useful published article text. '*45)
 
@@ -54,5 +54,19 @@ class MaintenanceTests(unittest.TestCase):
         self.assertIn('Kotlin Weekly',report['publisher_message_drafts'])
         self.assertNotIn('Android Weekly',report['publisher_message_drafts'])
         self.assertEqual(report['needs_review'],2)
+        self.assertEqual(report['missing_after_retry'],1)
+    def test_missing_only_exit_policy(self):
+        for missing, expected in [(0, 0), (1, 1)]:
+            with self.subTest(missing=missing), patch('sys.argv', ['check_blog_links.py', '--fail-on-missing']), patch('check_blog_links.run', return_value={'needs_review': 9, 'missing_after_retry': missing}):
+                self.assertEqual(main(), expected)
+        with patch('sys.argv', ['check_blog_links.py', '--fail-on-review']), patch('check_blog_links.run', return_value={'needs_review': 9, 'missing_after_retry': 0}):
+            self.assertEqual(main(), 1)
+    def test_missing_then_blocked_is_not_confirmed_missing(self):
+        (self.root/'data/articles.json').write_text(json.dumps([{'url':'/articles/a.html','source_url':'https://example.com/article'}]))
+        for retry_status in (200, 403, 503):
+            with self.subTest(retry_status=retry_status), patch('check_blog_links.fetch', side_effect=[(404,'https://example.com/article',''),(retry_status,'https://example.com/article','')]):
+                report=run(self.root,self.output)
+            self.assertEqual(report['missing_after_retry'],0)
+            self.assertEqual(report['needs_review'],0 if retry_status==200 else 1)
 
 if __name__=='__main__':unittest.main()

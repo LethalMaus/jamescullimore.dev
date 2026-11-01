@@ -66,10 +66,10 @@ def run(root, output, include_article_links=False, timeout=20):
             if reference['publisher'] in ('Kotlin Weekly', 'Android Weekly', 'jetc.dev'):
                 publisher_urls.setdefault(reference['publisher'], set()).add(result['url'])
     drafts = {name: 'Hey! I noticed these archive links are showing a page-not-found error:\n' + '\n'.join(sorted(urls)) + '\nHave they moved to different URLs?' for name, urls in publisher_urls.items()}
-    report = {'checked_at': datetime.now(timezone.utc).isoformat(), 'scope': 'features, original sources' + (', all article links' if include_article_links else ''), 'checked': len(results), 'needs_review': sum(r['result'] not in ('ok', 'recovered') for r in results), 'results': results, 'publisher_message_drafts': drafts, 'note': 'No badges or articles were changed. No messages were sent. Verify failures in a browser before contacting publishers; access limits and network failures are not proof of a dead link.'}
+    report = {'checked_at': datetime.now(timezone.utc).isoformat(), 'scope': 'features, original sources' + (', all article links' if include_article_links else ''), 'checked': len(results), 'needs_review': sum(r['result'] not in ('ok', 'recovered') for r in results), 'missing_after_retry': len(broken), 'results': results, 'publisher_message_drafts': drafts, 'note': 'No badges or articles were changed. No messages were sent. Verify failures in a browser before contacting publishers; access limits and network failures are not proof of a dead link.'}
     output.mkdir(parents=True, exist_ok=True)
     (output / 'link-report.json').write_text(json.dumps(report, ensure_ascii=False, indent=2) + '\n')
-    lines = [f"Checked {report['checked']} URLs; {report['needs_review']} need review.", report['note'], '']
+    lines = [f"Checked {report['checked']} URLs; {report['needs_review']} need review; {report['missing_after_retry']} still missing after retry.", report['note'], '']
     lines += [f"{r['result']}: {r['url']}" for r in results if r['result'] not in ('ok', 'recovered')]
     for name, draft in drafts.items(): lines += ['', f'DRAFT FOR {name} — NOT SENT', draft]
     (output / 'link-report.txt').write_text('\n'.join(lines) + '\n')
@@ -82,8 +82,11 @@ def main():
     parser.add_argument('--include-article-links', action='store_true', help='Also check every external hyperlink in all indexed articles')
     parser.add_argument('--timeout', type=int, default=20)
     parser.add_argument('--fail-on-review', action='store_true', help='Return a non-zero exit code if any URLs need review')
+    parser.add_argument('--fail-on-missing', action='store_true', help='Fail only for repeated missing-page responses; other review findings remain warnings')
     args = parser.parse_args()
     report = run(ROOT, args.output, args.include_article_links, args.timeout)
-    return 1 if args.fail_on_review and report['needs_review'] else 0
+    if args.fail_on_missing and report['needs_review'] > report['missing_after_retry']:
+        print(f"::warning::{report['needs_review'] - report['missing_after_retry']} URLs could not be verified; see the saved link report.")
+    return 1 if (args.fail_on_review and report['needs_review']) or (args.fail_on_missing and report['missing_after_retry']) else 0
 
 if __name__ == '__main__': raise SystemExit(main())
