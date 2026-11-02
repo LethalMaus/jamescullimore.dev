@@ -1,0 +1,34 @@
+name: TestLens website evidence
+on:
+  workflow_dispatch:
+    inputs:
+      connection:
+        description: Public TestLens connection JSON downloaded from Jira
+        required: true
+        type: string
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  evidence:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - run: npm ci --prefix tools/testlens
+      - run: npx --prefix tools/testlens playwright install --with-deps chromium
+      - name: Prepare local checkout server and public connection
+        env:
+          TESTLENS_CONNECTION: ${{ inputs.connection }}
+        run: |
+          mkdir -p tools/testlens/output
+          node -e 'JSON.parse(process.env.TESTLENS_CONNECTION); require("fs").writeFileSync("tools/testlens/output/connection.json",process.env.TESTLENS_CONNECTION)'
+          python3 -m http.server 8765 --bind 127.0.0.1 > tools/testlens/output/server.log 2>&1 &
+          for attempt in $(seq 1 20); do curl --fail --silent http://127.0.0.1:8765/blog.html > /dev/null && break; sleep 1; done
+      - name: Run checks and submit authenticated evidence
+        run: node tools/testlens/testlens-ci.mjs tools/testlens/output/connection.json tools/testlens/run.json
