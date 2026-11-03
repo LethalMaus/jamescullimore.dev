@@ -1,1 +1,1 @@
-{"sources":["tools/testlens/checks.mjs"],"report":"tools/testlens/output/results.xml","command":["node","tools/testlens/checks.mjs"]}
+{"sources":["tools/testlens/checks.mjs","assets/blog.js"],"report":"tools/testlens/output/results.xml","command":["node","tools/testlens/checks.mjs"]}
