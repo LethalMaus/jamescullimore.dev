@@ -29,6 +29,4 @@ def booking_choices(email, lang='en'):
     cards=[]
     for label,title,body,cta,url,route,note in copy:
         cards.append(f'<article class="booking-card booking-card--{route}"><span class="booking-label">{escape(label)}</span><h3>{escape(title)}</h3><p>{escape(body)}</p><a class="booking-button" data-booking-route="{route}" data-booking-action="{dict(email='project_email', topmate='discovery_call', fiverr='fiverr_services')[route]}" href="{url}">{escape(cta)}</a><p class="booking-note">{escape(note)}</p></article>')
-    catalogue_label = 'Alle Topmate-Angebote ansehen (kostenlos und kostenpflichtig)' if de else 'Explore all Topmate sessions (free and paid)'
-    catalogue = f'<p class="booking-catalogue"><a class="booking-inline" data-booking-route="topmate" data-booking-action="topmate_catalogue" href="https://topmate.io/james_cullimore">{escape(catalogue_label)}</a></p>'
-    return '<div class="booking-grid">'+''.join(cards)+'</div>'+catalogue
+    return '<div class="booking-grid">'+''.join(cards)+'</div>'

@@ -4,7 +4,6 @@
   var actions = {
     project_email: 'email',
     discovery_call: 'topmate',
-    topmate_catalogue: 'topmate',
     fiverr_services: 'fiverr'
   };
   document.addEventListener('click', function (event) {
