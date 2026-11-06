@@ -2,7 +2,7 @@
 from html import escape
 from urllib.parse import quote
 
-TOPMATE = 'https://topmate.io/james_cullimore/1585464'
+TOPMATE = 'https://topmate.io/james_cullimore'
 FIVERR = 'https://www.fiverr.com/cullimorejames'
 
 def enquiry_email(subject, prompt, lang='en'):
