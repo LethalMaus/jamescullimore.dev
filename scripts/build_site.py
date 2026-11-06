@@ -2,6 +2,7 @@
 """Build the static portfolio pages. Run from any directory; no dependencies required."""
 from pathlib import Path
 import html, json, re, math, hashlib, xml.etree.ElementTree as ET
+from booking_components import booking_choices, enquiry_email
 ROOT = Path(__file__).resolve().parents[1]
 BASE = 'https://jamescullimore.dev'
 STYLE_VERSION = hashlib.sha256((ROOT / 'styles.css').read_bytes()).hexdigest()[:12]
@@ -49,6 +50,8 @@ def page(title,description,path,content,active='',schema=None,scripts='',image='
     alternate_tags = ''.join(f'<link rel="alternate" hreflang="{code}" href="{BASE}{route}">' for code,route in (alternates or {}).items())
     if path != '/projects/elchem.html':
         scripts += '<script defer src="/assets/conversion-analytics.js"></script>'
+    if path == '/' or path.startswith(('/services/', '/de/leistungen/')):
+        scripts += '<link rel="stylesheet" href="/assets/booking.css"><script defer src="/assets/booking.js"></script>'
     body_class = 'home-page' if path == '/' else 'portfolio-page service-page' if path.startswith(('/services/', '/de/leistungen/')) else 'portfolio-page'
     extra_styles = '' if path == '/' else '<link rel="stylesheet" href="/assets/portfolio-pages.css">'
     schema=schema or {'@context':'https://schema.org','@type':'WebPage','name':title,'description':description,'url':url}
@@ -110,6 +113,7 @@ def playlist_link():
 
 home=(ROOT/'templates/home.html').read_text()
 home=home.replace('{{playlist_link}}',playlist_link())
+home=home.replace('{{booking_choices}}',booking_choices(enquiry_email('Project enquiry', 'My project:\n\nWhere I need help:\n\nTimeline:')))
 home_names = ['Android Weekly', 'Kotlin Weekly', 'jetc.dev', 'Gradle Newsletter']
 home_names = [name for name in home_names if any(f['name'] == name for a in articles for f in a.get('featured_in', []))]
 home_mentions = ''.join(f'<span class="credibility-publication">{publication_mark(name)}<span>{esc(name)}</span></span>' for name in home_names)
@@ -206,19 +210,19 @@ for service in services:
     translated = next(item for item in services_de if item['slug'] == service['slug'])
     de_path = '/de/leistungen/' + translated['de_slug'] + '/'
     alternates = {'en':path, 'de':de_path, 'x-default':path}
-    email = 'mailto:info@jamescullimore.dev?subject=' + quote(service['subject'])
+    email = enquiry_email(service['subject'], service['prompt'], 'de' if path.startswith('/de/') else 'en')
     work = ''.join(f'<article class="service"><span class="service-number" aria-hidden="true">0{i+1}</span><h3>{esc(title)}</h3><p>{esc(body)}</p></article>' for i, (title, body) in enumerate(service['work']))
     evidence = evidence_block(service['slug'])
     proof = ''.join(project_card(next(p for p in projects if p['slug'] == slug)) for slug in service['proof'])
     questions = ''.join(f'<details><summary>{esc(question)}</summary><p>{esc(answer)}</p></details>' for question, answer in service['questions'])
     guide_link = ''.join(f'<p class="service-reading"><a class="text-link" href="/guides/{guide["slug"]}/">Read the guide: {esc(guide["title"])}</a></p>' for guide in guides if guide.get('service') == service['slug'] and guide.get('lang', 'en') == 'en')
     related = ''.join(f'<a href="/services/{other["slug"]}/">{esc(other["title"])}</a>' for other in services if other != service)
-    content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">Services</a></nav><nav class="language-switch" aria-label="Page language"><span aria-current="page" lang="en">English</span><a href="{de_path}" hreflang="de" lang="de">Deutsch</a></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Discuss your project</a><a class="text-link" href="#relevant-work">See relevant work</a></div><p class="service-byline">James Cullimore <span aria-hidden="true">·</span> Based in Germany <span aria-hidden="true">·</span> English &amp; German</p></div></section>
+    content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/#services">Services</a></nav><nav class="language-switch" aria-label="Page language"><span aria-current="page" lang="en">English</span><a href="{de_path}" hreflang="de" lang="de">Deutsch</a></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="#enquire">Discuss your project</a><a class="text-link" href="#relevant-work">See relevant work</a></div><p class="service-byline">James Cullimore <span aria-hidden="true">·</span> Based in Germany <span aria-hidden="true">·</span> English &amp; German</p></div></section>
 <section class="section"><div class="section-inner"><h2>Where I can help</h2><p class="lead">{esc(service['fit'])}</p><div class="service-deliverables">{work}</div></div></section>
 <section class="section soft"><div class="section-inner"><h2>A manageable first step</h2><p class="service-reading">{esc(service['start'])}</p>{guide_link}</div></section>
 <section class="section" id="relevant-work"><div class="section-inner"><span class="eyebrow">From the project catalogue</span><h2>Relevant work</h2>{evidence}<div class="project-grid">{proof}</div></div></section>
 <section class="section soft"><div class="section-inner service-faq"><h2>Before we start</h2>{questions}</div></section>
-<section class="section service-enquiry"><div class="section-inner"><h2>Tell me where you need help.</h2><p class="service-reading">{esc(service['prompt'])}</p><div class="service-actions"><a class="button" href="{email}">Email James about your project</a><a class="text-link" href="/#contact">Other ways to get in touch</a></div><nav class="related-services" aria-label="Related services">{related}<a href="/android-security-training/">Android security workshops</a></nav></div></section>'''
+<section class="section service-enquiry" id="enquire"><div class="section-inner"><h2>Tell me where you need help.</h2><p class="service-reading">{esc(service['prompt'])}</p>{booking_choices(email)}<nav class="related-services" aria-label="Related services">{related}<a href="/android-security-training/">Android security workshops</a></nav></div></section>'''
     schema = {'@context':'https://schema.org', '@type':'Service', 'name':service['title'], 'description':service['description'], 'url':BASE+path, 'provider':{'@type':'Person','name':'James Cullimore','url':BASE+'/'}}
     write(path.lstrip('/')+'index.html', page(service['title'], service['description'], path, content, schema=schema, alternates=alternates))
 
@@ -227,7 +231,7 @@ for service in services_de:
     original = next(item for item in services if item['slug'] == service['slug'])
     path = '/de/leistungen/' + service['de_slug'] + '/'
     en_path = '/services/' + service['slug'] + '/'
-    email = 'mailto:info@jamescullimore.dev?subject=' + quote(service['subject'])
+    email = enquiry_email(service['subject'], service['prompt'], 'de' if path.startswith('/de/') else 'en')
     work = ''.join(f'<article class="service"><span class="service-number" aria-hidden="true">0{i+1}</span><h3>{esc(title)}</h3><p>{esc(body)}</p></article>' for i,(title,body) in enumerate(service['work']))
     evidence = evidence_block(service['slug'], 'de')
     proof = ''
@@ -237,17 +241,18 @@ for service in services_de:
     questions = ''.join(f'<details><summary>{esc(question)}</summary><p>{esc(answer)}</p></details>' for question,answer in service['questions'])
     guide_link = ''.join(f'<p class="service-reading"><a class="text-link" href="{guide_path(guide)}">Zum Leitfaden: {esc(guide["title"])}</a></p>' for guide in guides if guide.get('service') == service['slug'] and guide.get('lang') == 'de')
     related = ''.join(f'<a href="/de/leistungen/{other["de_slug"]}/">{esc(other["title"])}</a>' for other in services_de if other != service)
-    content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Seitenpfad"><a href="/de/leistungen/">Leistungen</a></nav><nav class="language-switch" aria-label="Seitensprache"><a href="{en_path}" hreflang="en" lang="en">English</a><span aria-current="page" lang="de">Deutsch</span></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="{email}">Projekt besprechen</a><a class="text-link" href="#relevante-projekte">Passende Projekte ansehen</a></div><p class="service-byline">James Cullimore · Standort Deutschland · Deutsch und Englisch</p></div></section>
+    content = f'''<section class="page-intro"><div class="section-inner"><nav class="breadcrumbs" aria-label="Seitenpfad"><a href="/de/leistungen/">Leistungen</a></nav><nav class="language-switch" aria-label="Seitensprache"><a href="{en_path}" hreflang="en" lang="en">English</a><span aria-current="page" lang="de">Deutsch</span></nav><span class="eyebrow">{esc(service['title'])}</span><h1>{esc(service['heading'])}</h1><p class="lead">{esc(service['intro'])}</p><div class="service-actions"><a class="button" href="#enquire">Projekt besprechen</a><a class="text-link" href="#relevante-projekte">Passende Projekte ansehen</a></div><p class="service-byline">James Cullimore · Standort Deutschland · Deutsch und Englisch</p></div></section>
 <section class="section"><div class="section-inner"><h2>Wobei ich helfen kann</h2><p class="lead">{esc(service['fit'])}</p><div class="service-deliverables">{work}</div></div></section>
 <section class="section soft"><div class="section-inner"><h2>Ein überschaubarer erster Schritt</h2><p class="service-reading">{esc(service['start'])}</p>{guide_link}</div></section>
 <section class="section" id="relevante-projekte"><div class="section-inner"><h2>Passende Projekterfahrung</h2>{evidence}<div class="project-grid">{proof}</div></div></section>
 <section class="section soft"><div class="section-inner service-faq"><h2>Vor der Zusammenarbeit</h2>{questions}</div></section>
-<section class="section service-enquiry"><div class="section-inner"><h2>Wo brauchen Sie Unterstützung?</h2><p class="service-reading">{esc(service['prompt'])}</p><div class="service-actions"><a class="button" href="{email}">James zum Projekt schreiben</a><a class="text-link" href="mailto:info@jamescullimore.dev">info@jamescullimore.dev</a></div><nav class="related-services" aria-label="Weitere Leistungen">{related}</nav></div></section>'''
+<section class="section service-enquiry" id="enquire"><div class="section-inner"><h2>Wo brauchen Sie Unterstützung?</h2><p class="service-reading">{esc(service['prompt'])}</p>{booking_choices(email, 'de')}<nav class="related-services" aria-label="Weitere Leistungen">{related}</nav></div></section>'''
     schema = {'@context':'https://schema.org','@type':'Service','name':service['title'],'description':service['description'],'url':BASE+path,'provider':{'@type':'Person','name':'James Cullimore','url':BASE+'/'}}
     write(path.lstrip('/')+'index.html', page(service['title'],service['description'],path,content,schema=schema,lang='de',alternates={'en':en_path,'de':path,'x-default':en_path}))
 
 service_cards_de = ''.join(f'<article class="project-card"><h2><a href="/de/leistungen/{item["de_slug"]}/">{esc(item["title"])}</a></h2><p>{esc(item["fit"])}</p><a class="text-link" href="/de/leistungen/{item["de_slug"]}/">Leistung ansehen</a></article>' for item in services_de)
-content_de = f'<section class="page-intro"><div class="section-inner"><span class="eyebrow">James Cullimore · Freiberuflicher Softwareentwickler</span><h1>Android-Entwicklung, Modernisierung und zuverlässigere Releases.</h1><p class="lead">Ich unterstütze Produktteams bei Android und Kotlin Multiplatform, bei der Übernahme bestehender Apps sowie bei Tests und Build-Prozessen. Standort Deutschland, Zusammenarbeit auf Deutsch und Englisch, überwiegend remote.</p><div class="service-actions"><a class="button" href="mailto:info@jamescullimore.dev?subject=Projektanfrage">Projekt besprechen</a><a class="text-link" href="/#services" hreflang="en" lang="en">Services in English</a></div></div></section><section class="section"><div class="section-inner"><div class="project-grid">{service_cards_de}</div></div></section>'
+content_de = f'<section class="page-intro"><div class="section-inner"><span class="eyebrow">James Cullimore · Freiberuflicher Softwareentwickler</span><h1>Android-Entwicklung, Modernisierung und zuverlässigere Releases.</h1><p class="lead">Ich unterstütze Produktteams bei Android und Kotlin Multiplatform, bei der Übernahme bestehender Apps sowie bei Tests und Build-Prozessen. Standort Deutschland, Zusammenarbeit auf Deutsch und Englisch, überwiegend remote.</p><div class="service-actions"><a class="button" href="/de/leistungen/#contact">Projekt besprechen</a><a class="text-link" href="/#services" hreflang="en" lang="en">Services in English</a></div></div></section><section class="section"><div class="section-inner"><div class="project-grid">{service_cards_de}</div></div></section>'
+content_de += '<section class="section service-enquiry" id="contact"><div class="section-inner"><h2>Wie können wir zusammenarbeiten?</h2><p class="booking-intro">Schreiben Sie uns zu Ihrem Projekt, buchen Sie ein kostenloses Erstgespräch oder sehen Sie sich unsere Angebote auf Fiverr an.</p>' + booking_choices(enquiry_email('Projektanfrage', 'Mein Projekt:\n\nWo ich Unterstützung brauche:\n\nZeitrahmen:', 'de'), 'de') + '<p class="booking-helper">Sie sind unsicher? Schreiben Sie mir kurz, worum es geht. Zusammenarbeit auf Deutsch und Englisch.</p></div></section>'
 write('de/leistungen/index.html', page('Android-Freelancer in Deutschland – Leistungen','Android, Kotlin Multiplatform, App-Modernisierung, Testautomatisierung und Gradle-Optimierung. Freiberufliche Entwicklung mit James Cullimore.','/de/leistungen/',content_de,lang='de'))
 
 # The training landing page shares the company shell and has its own scoped layout.
@@ -376,7 +381,7 @@ print(f'Built homepage, {len(projects)} project details, courses, {page_count} b
 
 # Content-based asset URLs keep previews and deployed pages current after edits.
 from urllib.parse import urlsplit
-versioned = ['assets/blog.js', 'assets/article-features.css', 'styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/article-service.css', 'assets/guides.css', 'assets/video-preview.css', 'assets/video-preview.js', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
+versioned = ['assets/booking.css', 'assets/booking.js', 'assets/blog.js', 'assets/article-features.css', 'styles.css', 'assets/site.js', 'assets/analytics-consent.js', 'assets/book-analytics.js', 'assets/conversion-analytics.js', 'starjar/styles.css', 'watchful/assets/style.css', 'assets/portfolio-pages.css', 'assets/portfolio-links.css', 'assets/article-service.css', 'assets/guides.css', 'assets/video-preview.css', 'assets/video-preview.js', 'assets/code-highlight.js', 'assets/code-highlight.css', 'android-security-training/training.css', 'elchem/style.css', 'dontgotobed/styles.css']
 asset_versions = {(ROOT/name).resolve(): hashlib.sha256((ROOT/name).read_bytes()).hexdigest()[:12] for name in versioned}
 for f in ROOT.rglob('*.html'):
     if 'templates' in f.relative_to(ROOT).parts or any(part.startswith('.') for part in f.relative_to(ROOT).parts): continue
