@@ -4,7 +4,8 @@ Static website served directly from this repository. No frontend framework or de
 
 ## Editing
 
-- `templates/home.html` and `templates/footer.html`: homepage and shared footer.
+- `templates/home-en-review.html` and `templates/home-de-review.html`: complete approved EN/DE homepage documents, loaded by the builder after its legacy home generation. Edit these for current homepage changes; `templates/home.html` remains the legacy section template.
+- `templates/footer.html`: shared footer for other generated pages.
 - `templates/security-training.html` and `android-security-training/training.css`: security workshop landing page.
 - `data/`: project catalogue, article index, courses and organization metadata.
 - `articles/`: authored article pages.

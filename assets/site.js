@@ -50,7 +50,7 @@
     const button = document.createElement('button');
     button.type = 'button';
     button.className = anchor.className;
-    button.setAttribute('aria-label', `Show testimonial ${index + 1} of ${cards.length}`);
+    button.setAttribute('aria-label', document.documentElement.lang === 'de' ? `Kundenstimme ${index + 1} von ${cards.length} anzeigen` : `Show testimonial ${index + 1} of ${cards.length}`);
     button.setAttribute('aria-controls', cards[index].id);
     button.addEventListener('click', () => show(index, true));
     anchor.replaceWith(button);
@@ -60,7 +60,7 @@
     current = (index + cards.length) % cards.length;
     cards.forEach((card, i) => { card.hidden = i !== current; });
     buttons.forEach((button, i) => button.setAttribute('aria-pressed', String(i === current)));
-    if (announce) status.textContent = `Testimonial ${current + 1} of ${cards.length}: ${cards[current].querySelector('.testimonial-meta').textContent.trim()}`;
+    if (announce) status.textContent = `${document.documentElement.lang === 'de' ? 'Kundenstimme' : 'Testimonial'} ${current + 1} / ${cards.length}: ${cards[current].querySelector('.testimonial-meta').textContent.trim()}`;
   }
   carousel.classList.add('enhanced');
   show(current);

@@ -1541,7 +1541,7 @@ main {
   content: "";
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at top left, rgba(33, 128, 141, 0.16), transparent 60%);
+  background: radial-gradient(circle at top left, rgba(33, 128, 141, 0.10), transparent 60%);
   opacity: 0;
   transition: opacity 160ms ease;
 }

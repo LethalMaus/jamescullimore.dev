@@ -131,6 +131,10 @@ for i, slug in enumerate(own_slugs):
 home=home.replace('{{own_projects}}', ''.join(own_cards))
 write('index.html',page('Freelance Android & Kotlin Multiplatform Developer','Freelance Android and Kotlin Multiplatform development, app security and test automation. Based in Germany, working in English and German.','/',home,schema=load('organization.json'),scripts='<link rel="stylesheet" href="/assets/article-features.css">'))
 
+# Local review homepage inputs; preserve EN copy and the natural German page.
+for locale, destination in [('en', 'index.html'), ('de', 'de/index.html')]:
+    write(destination, (ROOT / f'templates/home-{locale}-review.html').read_text())
+
 intro='<section class="page-intro"><div class="section-inner"><span class="eyebrow">The project catalogue</span><h1>Work, in a little more detail.</h1><p class="lead">Client collaborations, work from employed roles, independent products and public engineering examples. Explore the context, the contribution and the product behind each project.</p><nav class="project-tabs" aria-label="Project categories"><a href="#client-work">Apps &amp; platforms</a><a href="#client-websites">Client websites</a><a href="#own-projects">Own projects</a><a href="#public-code">GitHub projects</a></nav></div></section>'
 groups=''
 for kind,anchor,heading in project_groups:

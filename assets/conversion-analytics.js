@@ -28,7 +28,7 @@
     } else if (url.protocol === 'mailto:' || url.protocol === 'tel:') {
       // Omit email addresses, phone numbers, subjects and message bodies.
       parameters.contact_method = url.protocol === 'mailto:' ? 'email' : 'phone';
-      parameters.contact_context = location.pathname === '/' ? 'project' : 'page';
+      parameters.contact_context = ['/', '/de/'].includes(location.pathname) ? 'project' : 'page';
       window.trackAnalyticsEvent('contact_click', parameters);
     }
   });
